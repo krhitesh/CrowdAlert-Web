@@ -19,7 +19,6 @@ import {
   CommentsSection,
 } from '../../components';
 
-import { updateMapCenter, updateMapZoom } from '../../components/Map/actions';
 import { fetchEventData } from './actions';
 
 import styleSheet from './style';
@@ -31,12 +30,26 @@ import styleSheet from './style';
  */
 const MapwithSonar = props => (
   <MapWrapper>
-    <Sonar lat={props.latitude} lng={props.longitude} id={null} type={props.type} />
+    {!props.loading ?
+      <Sonar
+        lat={props.latitude}
+        lng={props.longitude}
+        id={null}
+        type={props.type}
+      />
+      : null}
   </MapWrapper>
+
+
 );
 MapwithSonar.propTypes = {
   latitude: propTypes.number.isRequired,
   longitude: propTypes.number.isRequired,
+  type: propTypes.string,
+  loading: propTypes.bool.isRequired,
+};
+MapwithSonar.defaultProps = {
+  type: undefined,
 };
 /**
  * [EventCard Combines the all the three parts of event cards to form a single
@@ -50,9 +63,13 @@ const EventCard = props => (
       dateTime={props.datetime}
       reverse_geocode={props.reverse_geocode}
     />
+    {(props.spam.count > 2) ?
+      <Event.SpamAlert />
+    : null}
     <Event.Body
       title={props.title}
       description={props.description}
+      spam={props.spam}
       eventType={props.eventType}
     >
       <SemanticImage.Group size={props.viewmode === 'desktop' ? 'small' : 'tiny'}>
@@ -67,10 +84,12 @@ const EventCard = props => (
         }
       </SemanticImage.Group>
     </Event.Body>
-    <Event.Footer title={props.title} />
+    <Event.Footer title={props.title} uuid={props.uuid} />
   </Card>
 );
 EventCard.propTypes = {
+  reportedBy: propTypes.object.isRequired,
+  spam: propTypes.object.isRequired,
   viewmode: propTypes.string.isRequired,
   // reportedBy: propTypes..isRequired,
   datetime: propTypes.number.isRequired,
@@ -95,10 +114,6 @@ EventCard.defaultProps = {
   reverse_geocode: { name: '', admin2: '', admin1: '' },
   description: '',
   eventType: 'N/A',
-  imageUrls: {
-    thumbnail: '',
-    url: '',
-  },
 };
 /**
  * [Viewevents Responsive Viewevents component. Fetches data & renders the
@@ -110,19 +125,25 @@ class Viewevent extends Component {
     const { eventid } = this.props.match.params;
     const shouldRefresh =
       this.props.match.params.eventid !== this.props.event.data.eventid;
-
     this.props.fetchEventData({ eventid, shouldRefresh });
   }
   render() {
-    console.log('ViewEvent Props', this.props);
+    let lat = 0;
+    let lng = 0;
+    if (this.props.event.isLoading) {
+      ({ lat, lng } = this.props.map);
+    } else {
+      ({ latitude: lat, longitude: lng } = this.props.event.data.location.coords);
+    }
     return (
       <div style={{ paddingTop: '1rem', marginBottom: '6rem' }}>
         <Responsive maxWidth={900}>
           <div style={styleSheet.mobile.mapContainer}>
             <MapwithSonar
-              latitude={this.props.map.lat}
-              longitude={this.props.map.lng}
+              latitude={lat}
+              longitude={lng}
               type={this.props.event.data.category}
+              loading={this.props.event.isLoading}
             />
 
           </div>
@@ -140,6 +161,8 @@ class Viewevent extends Component {
                 images={this.props.event.data.images}
                 reverse_geocode={this.props.event.reverse_geocode}
                 eventType={this.props.event.data.category}
+                uuid={this.props.match.params.eventid}
+                spam={this.props.event.data.spam}
               />
           }
             {!this.props.event.isLoading ?
@@ -156,9 +179,10 @@ class Viewevent extends Component {
                 <Grid.Column>
                   <div style={styleSheet.desktop.mapContainer}>
                     <MapwithSonar
-                      latitude={this.props.map.lat}
-                      longitude={this.props.map.lng}
+                      latitude={lat}
+                      longitude={lng}
                       type={this.props.event.data.category}
+                      loading={this.props.event.isLoading}
                     />
                   </div>
                 </Grid.Column>
@@ -177,6 +201,8 @@ class Viewevent extends Component {
                           images={this.props.event.data.images}
                           reverse_geocode={this.props.event.reverse_geocode}
                           eventType={this.props.event.data.category}
+                          spam={this.props.event.data.spam}
+                          uuid={this.props.match.params.eventid}
                         />
                     }
                     {!this.props.event.isLoading ?
@@ -200,11 +226,11 @@ Viewevent.propTypes = {
       eventid: propTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  fetchEventData: propTypes.func.isRequired,
 };
+
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    updateMapCenter,
-    updateMapZoom,
     fetchEventData,
   }, dispatch)
 );

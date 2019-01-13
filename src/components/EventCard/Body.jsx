@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Item, Divider, Label } from 'semantic-ui-react';
 import styleSheet from './styleSheet';
+import { SafeText } from '../';
 
 /**
  * [getEventColor returns event color according event type]
@@ -47,7 +48,9 @@ const Body = props => (
       <Item.Meta>Description</Item.Meta>
     : null}
     <Item.Description>
-      {props.description}
+      <SafeText spam={props.spam}>
+        {props.description}
+      </SafeText>
     </Item.Description>
     <Divider section />
     <Item.Extra>

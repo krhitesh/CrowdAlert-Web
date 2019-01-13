@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
-import { Comment, Image, Card, Icon, Feed, Form, Responsive, Message } from 'semantic-ui-react';
+import { Comment, Image, Card, Icon, Feed, Form, Responsive, Message, Button, Label } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import { LoadingCard } from '../';
+import {
+  LoadingCard,
+  UpvoteButton,
+  SafeText,
+  SpamReport,
+} from '../';
 import {
   fetchCommentsThread,
   fetchCommentsThreadCancel,
@@ -125,15 +130,18 @@ class CommentsSection extends Component {
                   <Comment.Metadata as="a">
                     <span>{calcAge(comment.timestamp)}</span>
                   </Comment.Metadata>
-                  <Comment.Text>{comment.text}</Comment.Text>
+                  <Comment.Text>
+                    <SafeText spam={comment.spam}>
+                      {comment.text}
+                    </SafeText>
+                  </Comment.Text>
                   <Comment.Actions>
-                    <a><Icon name="like" /></a>
-                    <a><Icon name="flag" /></a>
+                    <UpvoteButton basic uuid={comment.key} />
+                    <SpamReport.Flag basic uuid={comment.key} />
                   </Comment.Actions>
                 </Comment.Content>
               </Comment>
             ))}
-            
             {this.props.comments.comments.length ?
               null
             :
