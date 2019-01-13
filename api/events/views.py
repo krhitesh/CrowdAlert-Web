@@ -9,6 +9,8 @@ from rest_framework.views import APIView
 from api.location.gps import distance
 from api.firebase_auth.authentication import TokenAuthentication
 from api.firebase_auth.permissions import FirebasePermissions
+from api.spam.classifier import classify_text
+from api.spam.views import get_spam_report_data
 
 DB = settings.FIREBASE.database()
 
@@ -48,6 +50,7 @@ class EventView(APIView):
                     'displayName': udata['displayName'],
                     'photoURL': udata['photoURL'],
                 }
+        data['spam'] = get_spam_report_data(query)
         return JsonResponse(data, safe=False)
 
     def post(self, request):
@@ -97,6 +100,7 @@ class EventView(APIView):
         DB.child('incidentReports/' + uid).push({
             "incidentId": key,
         })
+        classify_text(decoded_json['description'], key)
         return JsonResponse({"eventId":str(key)}) 
 
 class MultipleEventsView(APIView):

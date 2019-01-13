@@ -25,6 +25,8 @@ urlpatterns = [
     path('api/location/',include('api.location.urls')),
     path('api/users/', include('api.users.urls')),
     path('api/comments/', include('api.comments.urls')),
+    path('api/upvote/', include('api.upvote.urls')),
+    path('api/spam/', include('api.spam.urls')),
     # Static files that needs to be on the project root so that 
     # Chrome recognizes our app as a PWA
     re_path(r'^service-worker.js', TemplateView.as_view(
