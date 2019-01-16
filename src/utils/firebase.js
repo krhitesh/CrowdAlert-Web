@@ -12,4 +12,4 @@ window.firebase = firebase;
 export const Auth = firebase.auth();
 export const FacebookAuth = new firebase.auth.FacebookAuthProvider();
 export const GoogleAuth = new firebase.auth.GoogleAuthProvider();
-
+export const messaging = firebase.messaging();

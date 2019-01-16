@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import styleSheet from './styles';
 import LoginButton from '../../containers/Auth/Loginbutton';
+import { Notifications } from '../';
 
 const BottomBar = (props) => {
   if (props.bottomBarIsVisible) {
@@ -14,7 +15,9 @@ const BottomBar = (props) => {
             <Grid columns="equal" inverted>
               <Grid.Row textAlign="center">
                 <Grid.Column>
-                  <Icon circular color="teal" name="map outline" />
+                  <Link to="/">
+                    <Icon circular color="teal" name="map outline" />
+                  </Link>
                 </Grid.Column>
                 <Grid.Column>
                   <Link to="/create/">
@@ -22,7 +25,9 @@ const BottomBar = (props) => {
                   </Link>
                 </Grid.Column>
                 <Grid.Column>
-                  <Icon circular color="teal" name="bell" />
+                  <Link to="/notifications">
+                    <Notifications.NotificationIcon />
+                  </Link>
                 </Grid.Column>
               </Grid.Row>
             </Grid>

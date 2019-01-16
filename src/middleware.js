@@ -4,6 +4,8 @@ import eventPreviewMiddleware from './components/EventPreviewCard/middleware';
 import geoLocationMiddleware from './components/Geolocator/middleware';
 import createEventsMiddleware from './containers/CreateEvent/middleware';
 import commentsMiddleware from './components/Comments/middleware';
+import notificationsMiddleware from './components/Notifications/middleware';
+
 import {
   authMiddleware,
   emailPasswordAuthMiddleware,
@@ -21,6 +23,7 @@ const middlewares = [
   emailPasswordAuthMiddleware,
   oAuthMiddleware,
   commentsMiddleware,
+  notificationsMiddleware,
 ];
 
 export default middlewares;

@@ -46,6 +46,8 @@ const UPVOTE = `${domainNameL}/api/upvote/upvote`;
 
 const SPAM_REPORT = `${domainNameL}/api/spam/report`;
 
+const FCM_TOKEN = `${domainNameL}/api/notifications/register`;
+
 export {
   GET_LOCATION_BY_IP,
   GET_EVENT_BY_ID,
@@ -58,4 +60,5 @@ export {
   COMMENTS,
   UPVOTE,
   SPAM_REPORT,
+  FCM_TOKEN,
 };

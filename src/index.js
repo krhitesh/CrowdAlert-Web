@@ -13,7 +13,9 @@ import createHistory from 'history/createBrowserHistory';
 import registerServiceWorker from './registerServiceWorker';
 
 import configureStore from './configureStore';
+import { messaging } from './utils/firebase';
 import App from './containers/App';
+import { receivedNewNotification } from './components/Notifications/actions';
 
 /**
  * [initialState initial state for the App]
@@ -31,6 +33,14 @@ const history = createHistory();
  * @type {[type]}
  */
 const store = configureStore(initialState, history);
+/**
+ * Dispatch actions on message is received
+ */
+messaging.onMessage((payload) => {
+  console.log('Message', payload);
+  store.dispatch(receivedNewNotification(payload));
+});
+
 /**
  * [ROOT_NODE is the document reference where the app should be mounted]
  * @type {[type]}
@@ -72,6 +82,7 @@ registerServiceWorker();
       document.body.removeChild(dimmer);
       document.body.setAttribute('class', '');
       window.removeEventListener('load', removeDimmer);
+      alert("Production Build: 04-Aug");
     }, delay);
   }
   

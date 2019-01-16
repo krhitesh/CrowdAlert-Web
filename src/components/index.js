@@ -12,6 +12,7 @@ import CommentsSection from './Comments';
 import UpvoteButton from './Upvote';
 import ShareModal from './Share';
 import * as SpamReport from './SpamReport';
+import * as Notifications from './Notifications';
 import SafeText from './SafeText';
 
 export {
@@ -31,4 +32,5 @@ export {
   ShareModal,
   SpamReport,
   SafeText,
+  Notifications,
 };

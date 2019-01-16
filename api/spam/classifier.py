@@ -17,8 +17,12 @@ def asyncfunc(function):
 @asyncfunc
 def classify_text(text, uuid):
     url = db.child('apipaths/toxic_classifier').get().val()
-    r = requests.post(url, data={'text': text})    
-    response = json.loads(r.text)
-    toxic_data = response['output'][0]
-    db.child('classifier/' + uuid).update({'toxic': toxic_data})
+    try:
+        r = requests.post(url, data={'text': text})
+        response = json.loads(r.text)
+        toxic_data = response['output'][0]
+        db.child('classifier/' + uuid).update({'toxic': toxic_data})
+    except:
+        pass
+    
     return

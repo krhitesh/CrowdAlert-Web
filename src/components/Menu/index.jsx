@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 
 import { toggleSidebarVisibility } from '../Sidebar/actions';
 import LoginButton from '../../containers/Auth/Loginbutton';
-import { UserSettingsMenu } from '../';
+import { UserSettingsMenu, Notifications } from '../';
 import logo from '../../logo.png';
 
 /**
@@ -54,7 +54,7 @@ const MenuBar = props => (
     <Menu.Menu position="right">
       <Responsive as={Menu.Item} minWidth={992}>
         {props.isLoggedIn ?
-          <p>Logged IN</p>
+          <Notifications.NotificationsDropdown />
           :
           <Link to="/login">
             <LoginButton login />
@@ -72,7 +72,7 @@ const MenuBar = props => (
       </Responsive>
       <Responsive as={Menu.Item} {...Responsive.onlyTablet}>
         {props.isLoggedIn ?
-          <p>Logged IN</p>
+          <Notifications.NotificationsDropdown />
           :
           <Link to="/login">
             <LoginButton login />
@@ -83,7 +83,6 @@ const MenuBar = props => (
       <Responsive as={Menu.Item} {...Responsive.onlyMobile}>
         <Icon name="search" />
       </Responsive>
-
     </Menu.Menu>
   </Menu>
 );
