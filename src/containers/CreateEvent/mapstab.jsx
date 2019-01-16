@@ -15,7 +15,7 @@ import {
   Sonar,
   GeoLocator,
 } from '../../components';
-import {saveLocationCreateEvents,} from './actions';
+import { saveLocationCreateEvents } from './actions';
 import getEventColor from '../../utils/eventcolors';
 
 

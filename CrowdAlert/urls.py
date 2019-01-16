@@ -27,12 +27,17 @@ urlpatterns = [
     path('api/comments/', include('api.comments.urls')),
     path('api/upvote/', include('api.upvote.urls')),
     path('api/spam/', include('api.spam.urls')),
+    path('api/notifications/', include('api.notifications.urls')),
     # Static files that needs to be on the project root so that 
     # Chrome recognizes our app as a PWA
     re_path(r'^service-worker.js', TemplateView.as_view(
         template_name="service-worker.js",
         content_type='application/javascript',
     ), name='service-worker.js'),
+    re_path(r'^firebase-messaging-sw.js', TemplateView.as_view(
+        template_name="firebase-messaging-sw.js",
+        content_type='application/javascript',
+    ), name='firebase-messaging-sw.js'),
     re_path(r'^manifest.json', TemplateView.as_view(
         template_name="manifest.json",
     ), name='manifest.json'),

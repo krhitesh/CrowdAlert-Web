@@ -22,6 +22,7 @@ import {
   FacebookAuth,
   GoogleAuth,
   Auth,
+  messaging,
 } from '../../utils/firebase';
 
 const authMiddleware = ({ dispatch }) => next => (action) => {
@@ -29,7 +30,6 @@ const authMiddleware = ({ dispatch }) => next => (action) => {
     // Make sure we are forwarding the action & then doing the async suff
     // in the background
     next(action);
-
     const localStorageUserData = JSON.parse(window.localStorage.getItem('user'));
 
     if (localStorageUserData) {
@@ -38,7 +38,6 @@ const authMiddleware = ({ dispatch }) => next => (action) => {
         user: localStorageUserData,
       }));
     }
-
     Auth.onAuthStateChanged((user) => {
       if (user) {
         const {
