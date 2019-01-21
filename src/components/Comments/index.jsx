@@ -158,7 +158,21 @@ class CommentsSection extends Component {
 }
 
 CommentsSection.propTypes = {
-
+  fetchCommentsThread: PropTypes.func,
+  postCommentToThread: PropTypes.func,
+  fetchCommentsThreadCancel: PropTypes.func,
+  comments: PropTypes.shape({
+    loading: PropTypes.bool,
+    threadId: PropTypes.number,
+    commentButtonLoading: PropTypes.bool,
+    errors: PropTypes.string,
+    message: PropTypes.string,
+    comments: PropTypes.array,
+    userData: PropTypes.object
+  }),
+  auth: PropTypes.shape({
+    user: PropTypes.object,
+  })
 };
 
 const mapStateToProps = state => ({
