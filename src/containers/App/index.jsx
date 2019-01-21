@@ -10,6 +10,8 @@ import {
   Menu,
   Sidebar,
   BottomBar,
+  SpamReport,
+  Notifications,
 } from '../../components';
 import Viewevent from '../Viewevent';
 import Feed from '../Feed';
@@ -63,9 +65,12 @@ class App extends Component {
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/signup" component={SignUpPage} />
           <Route exact path="/auth/confirmEmail" component={ConfirmEmail} />
+          <Route exact path="/notifications" component={Notifications.NotificationsPage} />
 
         </Sidebar>
         <BottomBar />
+        <SpamReport.SpamReportModal />
+        <Notifications.NotificationsModal />
       </div>
 
     );

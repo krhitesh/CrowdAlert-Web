@@ -9,6 +9,11 @@ import EventPreviewCard from './EventPreviewCard';
 import GeoLocator from './Geolocator';
 import UserSettingsMenu from './UserSettingsMenu';
 import CommentsSection from './Comments';
+import UpvoteButton from './Upvote';
+import ShareModal from './Share';
+import * as SpamReport from './SpamReport';
+import * as Notifications from './Notifications';
+import SafeText from './SafeText';
 
 export {
   Image,
@@ -23,4 +28,9 @@ export {
   GeoLocator,
   UserSettingsMenu,
   CommentsSection,
+  UpvoteButton,
+  ShareModal,
+  SpamReport,
+  SafeText,
+  Notifications,
 };

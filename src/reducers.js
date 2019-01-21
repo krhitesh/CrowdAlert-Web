@@ -9,6 +9,9 @@ import geoLocatorReducer from './components/Geolocator/reducers';
 import createEventsReducer from './containers/CreateEvent/reducers';
 import authenticationReducer from './containers/Auth/reducers';
 import commentsReducer from './components/Comments/reducers';
+import upvotesReducer from './components/Upvote/reducers';
+import spamReducer from './components/SpamReport/reducers';
+import notificationReducer from './components/Notifications/reducers';
 
 const rootReducer = combineReducers({
   router: routerReducer,
@@ -21,6 +24,9 @@ const rootReducer = combineReducers({
   createEvents: createEventsReducer,
   auth: authenticationReducer,
   comments: commentsReducer,
+  upvotes: upvotesReducer,
+  spam: spamReducer,
+  notifications: notificationReducer,
 });
 
 export default rootReducer;

@@ -14,6 +14,7 @@ class FirebaseUser(User):
         super().__init__(username=firebase_data.get('uid'))
         self.uid = firebase_data.get('user_id')
         self.name = firebase_data.get('name')
+        self.user_picture = firebase_data.get('picture')
         # Allow activity from verified email
         User.is_authenticated = True
         User.is_email_verified = firebase_data.get('email_verified', False)

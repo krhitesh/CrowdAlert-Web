@@ -4,7 +4,10 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 import json
 import time
+from api.notifications.dispatch import notify_comment
 from api.firebase_auth.authentication import TokenAuthentication
+from api.spam.classifier import classify_text
+from api.spam.views import get_spam_report_data
 
 db = settings.FIREBASE.database()
 
@@ -27,6 +30,9 @@ class CommentView(APIView):
         response = {}
         response['userData'] = user_data
         response['comments'] = thread_data['comments']
+        for comment_uuid in thread_data['comments'].keys():
+            spam_report_data = get_spam_report_data(comment_uuid)
+            response['comments'][comment_uuid]['spam'] = spam_report_data
         return JsonResponse(response, safe=False)
 
     def post(self, request):
@@ -46,5 +52,13 @@ class CommentView(APIView):
         db.child('comments').child(thread).child('participants').update({
             uid: True
         })
+        classify_text(text, val['name'])
+        
+        user_name = request.user.name
+        user_picture = request.user.user_picture
+        
+        notify_comment(sender_uid=uid, datetime=time.time()*1000, 
+            event_id=thread, user_text=text,
+            user_name=user_name, user_picture=user_picture)
         
         return JsonResponse({'id': val['name']}, safe=False)

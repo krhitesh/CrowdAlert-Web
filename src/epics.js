@@ -6,6 +6,9 @@ import eventEpic from './containers/Viewevent/epics';
 import createEventsEpic from './containers/CreateEvent/epics';
 import userEpic from './containers/User/epics';
 import commentsEpics from './components/Comments/epics';
+import upvotesEpics from './components/Upvote/epics';
+import spamReportEpics from './components/SpamReport/epics';
+import notificationsEpics from './components/Notifications/epics';
 
 const rootEpic = combineEpics(
   feedEpic,
@@ -13,6 +16,9 @@ const rootEpic = combineEpics(
   createEventsEpic,
   userEpic,
   commentsEpics,
+  upvotesEpics,
+  spamReportEpics,
+  notificationsEpics,
 );
 
 export default rootEpic;

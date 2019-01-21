@@ -9,6 +9,10 @@ from rest_framework.views import APIView
 from api.location.gps import distance
 from api.firebase_auth.authentication import TokenAuthentication
 from api.firebase_auth.permissions import FirebasePermissions
+from api.spam.classifier import classify_text
+from api.spam.views import get_spam_report_data
+from api.notifications.dispatch import notify_incident
+
 
 DB = settings.FIREBASE.database()
 
@@ -48,6 +52,7 @@ class EventView(APIView):
                     'displayName': udata['displayName'],
                     'photoURL': udata['photoURL'],
                 }
+        data['spam'] = get_spam_report_data(query)
         return JsonResponse(data, safe=False)
 
     def post(self, request):
@@ -97,6 +102,21 @@ class EventView(APIView):
         DB.child('incidentReports/' + uid).push({
             "incidentId": key,
         })
+        # Add the comments section
+        DB.child('comments/' + key + '/participants').update({
+            uid: True
+        })
+        classify_text(decoded_json['description'], key)
+        user_name = request.user.name
+        user_picture = request.user.user_picture
+        if decoded_json['local_assistance']:
+            notify_incident(sender_uid=uid, datetime=int(time.time()*1000),
+                            event_id=key, event_type=decoded_json['category'],
+                            lat=latitude, lng=longitude,
+                            user_text=decoded_json['title'],
+                            user_name=user_name, user_picture=user_picture)
+
+        classify_text(decoded_json['description'], key)
         return JsonResponse({"eventId":str(key)}) 
 
 class MultipleEventsView(APIView):
