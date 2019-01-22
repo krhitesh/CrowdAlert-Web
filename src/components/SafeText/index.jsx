@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'semantic-ui-react';
 
 class SafeText extends Component {
@@ -55,13 +56,23 @@ class SafeText extends Component {
 
     return (
       <div>
-        {this.state.visible? this.props.children :
-         // eslint-disable-next-line
-        <a onClick={this.handleClick}>{alttext}</a>
+        {this.state.visible ? this.props.children :
+          // eslint-disable-next-line
+          <a onClick={this.handleClick}>{alttext}</a>
         }
       </div>
     );
   }
 }
+
+SafeText.propTypes = {
+  spam: PropTypes.shape({
+    errors: PropTypes.bool,
+    message: PropTypes.string,
+    modal: PropTypes.shape({
+      open: PropTypes.bool,
+    }),
+  }),
+};
 
 export default SafeText;
