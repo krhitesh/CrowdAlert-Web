@@ -24,7 +24,7 @@ const UpvoteButton = (props) => {
         :
         <Icon name="thumbs up outline" />
       }
-      {props.count? props.count : null}
+      {props.count ? props.count : null}
     </Button>
   );
 };
@@ -44,14 +44,14 @@ const UpvoteButtonBasic = (props) => {
         :
         <Icon color="grey" name="like" />
       }
-      {props.count?
+      {props.count ?
         <Label.Detail>
-         {props.count} 
+          {props.count}
         </Label.Detail>
       : null}
     </Button>
   );
-}
+};
 
 class Upvote extends Component {
   constructor(props) {
@@ -113,17 +113,11 @@ class Upvote extends Component {
 }
 
 Upvote.propTypes = {
-
+  fetchUpvotesStart: PropTypes.func.isRequired,
+  fetchUpvotesCancel: PropTypes.func.isRequired,
+  updateUpvoteStart: PropTypes.func.isRequired,
+  updateUpvoteCancel: PropTypes.func.isRequired,
 };
-
-const mapDispatchToProps = dispatch => (
-  bindActionCreators({
-    fetchUpvotesStart,
-    fetchUpvotesCancel,
-    updateUpvoteStart,
-    updateUpvoteCancel,
-  }, dispatch)
-);
 
 const mapStateToProps = (state, ownProps) => {
   if (ownProps.hasOwnProperty) {
@@ -139,5 +133,15 @@ const mapStateToProps = (state, ownProps) => {
     },
   };
 };
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    fetchUpvotesStart,
+    fetchUpvotesCancel,
+    updateUpvoteStart,
+    updateUpvoteCancel,
+  }, dispatch)
+);
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(Upvote);
