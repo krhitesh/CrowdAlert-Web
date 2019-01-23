@@ -168,6 +168,16 @@ class ConfirmEmail extends PureComponent {
 }
 
 ConfirmEmail.propTypes = {
+  confirmEmailForm: PropTypes.shape({
+    email: PropTypes.bool,
+    isVerified: PropTypes.bool,
+    isVerifying: PropTypes.bool,
+    errors: PropTypes.bool,
+    message: PropTypes.string,
+  }),
+  user: PropTypes.object,
+  verifyEmailAuth: PropTypes.func,
+  sendEmailVerificationAuth: PropTypes.func,
 };
 const mapStateToProps = (state) => {
   const { confirmEmailForm } = state.auth;
