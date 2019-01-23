@@ -155,7 +155,7 @@ class ConfirmEmail extends PureComponent {
               {!isEmailLink ?
                 <EmailSent
                   sendEmailVerification={this.props.sendEmailVerificationAuth}
-                  user={this. props.user}
+                  user={this.props.user}
                 />
               : null}
 
@@ -168,7 +168,6 @@ class ConfirmEmail extends PureComponent {
 }
 
 ConfirmEmail.propTypes = {
-
 };
 const mapStateToProps = (state) => {
   const { confirmEmailForm } = state.auth;
