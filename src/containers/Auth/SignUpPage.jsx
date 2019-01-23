@@ -17,7 +17,7 @@ class LoginPage extends Component {
   }
   componentWillUnmount() {
     this.props.setBottomBarVisibility();
-  }  
+  }
   render() {
     return (
       <Container>
@@ -80,6 +80,11 @@ class LoginPage extends Component {
   }
 }
 
+LoginPage.propTypes = {
+  removeBottomBarVisibility: PropTypes.func.isRequired,
+  setBottomBarVisibility: PropTypes.func.isRequired,
+};
+
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     removeBottomBarVisibility,
@@ -87,8 +92,5 @@ const mapDispatchToProps = dispatch => (
   }, dispatch)
 );
 
-LoginPage.propTypes = {
-
-};
 
 export default connect(null, mapDispatchToProps)(LoginPage);
