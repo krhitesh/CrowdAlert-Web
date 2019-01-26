@@ -113,6 +113,7 @@ class Upvote extends Component {
 }
 
 Upvote.propTypes = {
+  upvotes: PropTypes.object,
   fetchUpvotesStart: PropTypes.func.isRequired,
   fetchUpvotesCancel: PropTypes.func.isRequired,
   updateUpvoteStart: PropTypes.func.isRequired,
