@@ -29,6 +29,12 @@ const UpvoteButton = (props) => {
   );
 };
 
+UpvoteButton.propTypes = {
+  hasUpvoted: PropTypes.bool.isRequired,
+  click: PropTypes.func.isRequired,
+  count: PropTypes.number.isRequired,
+};
+
 const UpvoteButtonBasic = (props) => {
   const { hasUpvoted } = props;
   return (
@@ -51,6 +57,12 @@ const UpvoteButtonBasic = (props) => {
       : null}
     </Button>
   );
+};
+
+UpvoteButtonBasic.propTypes = {
+  hasUpvoted: PropTypes.bool.isRequired,
+  count: PropTypes.number.isRequired,
+  click: PropTypes.func.isRequired,
 };
 
 class Upvote extends Component {
