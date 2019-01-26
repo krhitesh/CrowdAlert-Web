@@ -68,9 +68,14 @@ const EmailSent = props => (
       </Button>
     </Segment>
   </div>
-
-
 );
+
+EmailSent.propTypes = {
+  sendEmailVerification: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    email: PropTypes.string,
+  }).isRequired,
+};
 const EmailPrompt = props => (
   <div>
     <Message
