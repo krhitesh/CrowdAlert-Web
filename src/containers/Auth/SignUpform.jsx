@@ -100,6 +100,12 @@ const mapDispatchToProps = dispatch => (
 );
 
 SignUpForm.propTypes = {
+    SignUpForm: PropTypes.shape({
+    errors: PropTypes.bool,
+    message: PropTypes.string,
+    loading: PropTypes.bool,
+    }).isRequired,
+    signUpEmailPassword:PropTypes.func.isRequired,
 
 };
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpForm);
