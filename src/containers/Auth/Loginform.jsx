@@ -79,7 +79,12 @@ class LoginForm extends Component {
 }
 
 LoginForm.propTypes = {
-
+    loginForm: PropTypes.shape({
+    errors: PropTypes.bool,
+    message: PropTypes.string,
+    loading: PropTypes.bool,
+    }).isRequired,
+    submitEmailPasswordAuthentication: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => {
   const { loginForm } = state.auth;
