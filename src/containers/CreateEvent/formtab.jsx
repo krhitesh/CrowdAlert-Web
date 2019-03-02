@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Segment,
   Grid,
@@ -216,7 +217,29 @@ const FormTab = (props) => {
     </Segment>
   );
 };
-
+FormTab.propTypes = {
+    reportForm: PropTypes.shape({
+        isFreezed: PropTypes.bool,
+        loading: PropTypes.bool,
+        validationErrors: PropTypes.bool,
+        message: PropTypes.shape({
+            header: PropTypes.string,
+            body: PropTypes.string,
+        }).isRequired,
+    }).isRequired,
+    details: PropTypes.shape({
+    eventType: PropTypes.object,
+    anonymous: PropTypes.bool,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    help: PropTypes.bool,
+    }).isRequired,
+    location: PropTypes.shape({
+        text: PropTypes.string.
+    }).isRequired,
+    handleInputChange: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+};
 const mapStateToProps = state => ({
   tabs: state.createEvents.tabs,
   location: state.createEvents.location,
