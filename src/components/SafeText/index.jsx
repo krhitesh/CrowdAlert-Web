@@ -73,6 +73,7 @@ SafeText.propTypes = {
       open: PropTypes.bool,
     }),
   }),
+  children: PropTypes.node.isRequired,
 };
 
 export default SafeText;
