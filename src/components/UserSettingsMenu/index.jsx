@@ -45,7 +45,8 @@ class UserSettingsMenu extends Component {
 }
 
 UserSettingsMenu.propTypes = {
-
+    user: PropTypes.object,
+    signOut: PropTypes.func,
 };
 const mapStateToProps = (state) => {
   const { user, isLoggedIn } = state.auth;
