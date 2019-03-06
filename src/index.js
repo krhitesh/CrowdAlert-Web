@@ -3,7 +3,6 @@
  * index.js: main entry point of the app
  * eslint is disabled as there are references to window & documnet object.
  */
-/* eslint-disable  */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
