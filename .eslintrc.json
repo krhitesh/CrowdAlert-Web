@@ -6,5 +6,14 @@
             "components": ["Link"],
             "specialLink": ["to"]
         }]
+    },
+    "globals": {
+        "window": true,
+        "document": true,
+        "localStorage": true,
+        "formData": true,
+        "fileReader": true,
+        "Blob": true,
+        "navigator": true
     }
 }
