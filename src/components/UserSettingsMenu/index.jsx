@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Dropdown, Image, Segment, Header, Icon } from 'semantic-ui-react';
+import { Dropdown, Image, Segment, Header } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import user from './man-user.svg';
+import userImage from './man-user.svg';
 import { logoutUserAuthencation } from '../../containers/Auth/actions';
 
 class UserSettingsMenu extends Component {
@@ -16,14 +16,14 @@ class UserSettingsMenu extends Component {
       <Dropdown
         trigger={
           <span>
-            <Image avatar src={photoURL || user} />
+            <Image avatar src={photoURL || userImage} />
           </span>
         }
       >
         <Dropdown.Menu>
           <Segment secondary basic>
             <Header>
-              <Image avatar src={photoURL || user} />
+              <Image avatar src={photoURL || userImage} />
               <Header.Content>
                 {displayName}
                 <Header.Subheader>
@@ -45,9 +45,14 @@ class UserSettingsMenu extends Component {
 }
 
 UserSettingsMenu.propTypes = {
-    user: PropTypes.object,
-    signOut: PropTypes.func,
+  signOut: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    displayName: PropTypes.string,
+    email: PropTypes.string,
+    photoURL: PropTypes.string,
+  }).isRequired,
 };
+
 const mapStateToProps = (state) => {
   const { user, isLoggedIn } = state.auth;
   return {
@@ -55,6 +60,7 @@ const mapStateToProps = (state) => {
     user,
   };
 };
+
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     signOut: logoutUserAuthencation,
