@@ -218,27 +218,27 @@ const FormTab = (props) => {
   );
 };
 FormTab.propTypes = {
-    reportForm: PropTypes.shape({
-        isFreezed: PropTypes.bool,
-        loading: PropTypes.bool,
-        validationErrors: PropTypes.bool,
-        message: PropTypes.shape({
-            header: PropTypes.string,
-            body: PropTypes.string,
-        }).isRequired,
+  reportForm: PropTypes.shape({
+    isFreezed: PropTypes.bool,
+    loading: PropTypes.bool,
+    validationErrors: PropTypes.bool,
+    message: PropTypes.shape({
+      header: PropTypes.string,
+      body: PropTypes.string,
     }).isRequired,
-    details: PropTypes.shape({
+  }).isRequired,
+  details: PropTypes.shape({
     eventType: PropTypes.object,
     anonymous: PropTypes.bool,
     title: PropTypes.string,
     description: PropTypes.string,
     help: PropTypes.bool,
-    }).isRequired,
-    location: PropTypes.shape({
-        text: PropTypes.string.
-    }).isRequired,
-    handleInputChange: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
+  }).isRequired,
+  location: PropTypes.shape({
+    text: PropTypes.string.
+  }).isRequired,
+  handleInputChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
 };
 const mapStateToProps = state => ({
   tabs: state.createEvents.tabs,
