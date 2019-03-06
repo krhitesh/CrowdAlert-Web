@@ -73,6 +73,9 @@ INSTALLED_APPS = [
     'api.comments',
     'corsheaders',
     'api.firebase_auth',
+    'api.upvote',
+    'api.spam',
+    'api.notifications',
 ]
 
 MIDDLEWARE = [
