@@ -86,12 +86,14 @@ LoginForm.propTypes = {
   }).isRequired,
   submitEmailPasswordAuthentication: PropTypes.func.isRequired,
 };
+
 const mapStateToProps = (state) => {
   const { loginForm } = state.auth;
   return {
     loginForm,
   };
 };
+
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     submitEmailPasswordAuthentication,

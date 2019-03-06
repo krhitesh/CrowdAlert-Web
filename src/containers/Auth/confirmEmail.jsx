@@ -77,7 +77,7 @@ EmailSent.propTypes = {
   }).isRequired,
 };
 
-const EmailPrompt = props => (
+const EmailPrompt = () => (
   <div>
     <Message
       attached
@@ -181,8 +181,8 @@ ConfirmEmail.propTypes = {
     errors: PropTypes.bool,
     message: PropTypes.string,
   }).isRequired,
-  user: PropTypes.object,
-  verifyEmailAuth: PropTypes.func,
+  user: PropTypes.shape({
+  }).isRequired,
   sendEmailVerificationAuth: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => {

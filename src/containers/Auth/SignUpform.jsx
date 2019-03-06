@@ -40,7 +40,7 @@ class SignUpForm extends PureComponent {
               <Message.Header>Authentication Error</Message.Header>
               {this.props.signupForm.message}
             </Message>
-            : null}
+           : null}
           <Form.Field>
             <Form.Input
               placeholder="Fullname"
@@ -69,7 +69,7 @@ class SignUpForm extends PureComponent {
               name="password"
               type="password"
               value={this.state.password}
-              onChange={this.handleInputChange} 
+              onChange={this.handleInputChange}
             />
           </Form.Field>
           <Form.Field>
@@ -87,12 +87,14 @@ class SignUpForm extends PureComponent {
     );
   }
 }
+
 const mapStateToProps = (state) => {
   const { signupForm } = state.auth;
   return {
     signupForm,
   };
 };
+
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     signUpEmailPassword,
@@ -100,11 +102,12 @@ const mapDispatchToProps = dispatch => (
 );
 
 SignUpForm.propTypes = {
-  SignUpForm: PropTypes.shape({
-    errors: PropTypes.bool,
-    message: PropTypes.string,
+  signUpEmailPassword: PropTypes.func.isRequired,
+  signupForm: PropTypes.shape({
     loading: PropTypes.bool,
+    message: PropTypes.string,
+    errors: PropTypes.bool,
   }).isRequired,
-  signUpEmailPassword:PropTypes.func.isRequired,
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpForm);

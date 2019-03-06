@@ -21,7 +21,7 @@ const UpvoteButton = (props) => {
     <Button active={hasUpvoted} onClick={props.click}>
       {hasUpvoted ?
         <Icon color="red" name="thumbs up" fitted />
-        :
+       :
         <Icon name="thumbs up outline" />
       }
       {props.count ? props.count : null}
@@ -49,12 +49,12 @@ const UpvoteButtonBasic = (props) => {
         <Icon color="red" name="like" />
         :
         <Icon color="grey" name="like" />
-      }
+        }
       {props.count ?
         <Label.Detail>
           {props.count}
         </Label.Detail>
-      : null}
+        : null}
     </Button>
   );
 };
@@ -125,7 +125,8 @@ class Upvote extends Component {
 }
 
 Upvote.propTypes = {
-  upvotes: PropTypes.object,
+  uuid: PropTypes.string.isRequired,
+  basic: PropTypes.bool.isRequired,
   fetchUpvotesStart: PropTypes.func.isRequired,
   fetchUpvotesCancel: PropTypes.func.isRequired,
   updateUpvoteStart: PropTypes.func.isRequired,

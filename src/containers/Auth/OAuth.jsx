@@ -29,11 +29,6 @@ class OAuth extends PureComponent {
 }
 
 OAuth.propTypes = {
-  loginForm: PropTypes.shape({
-    errors: PropTypes.bool,
-    message: PropTypes.string,
-    loading: PropTypes.bool,
-  }).isRequired,
   signInOAuth: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => {

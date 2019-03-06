@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import {
   Segment,
   Grid,
@@ -14,6 +13,7 @@ import {
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import getEventColor from '../../utils/eventcolors';
 import getEventIcon from '../../utils/eventicon';
@@ -61,7 +61,7 @@ const FormTab = (props) => {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column>            
+          <Grid.Column>
             <Form loading={props.reportForm.loading}>
               <Form.Field>
                 {props.reportForm.validationErrors ?
@@ -71,11 +71,11 @@ const FormTab = (props) => {
                     header={props.reportForm.message.header}
                     content={props.reportForm.message.body}
                   />
-                  : null }
+                : null }
                 <Header as="h4">
                   <Icon name="marker" />
                   <Header.Content>
-                      Incident Location
+                    Incident Location
                     <Header.Subheader>
                       {props.location.text}
                     </Header.Subheader>
@@ -90,7 +90,7 @@ const FormTab = (props) => {
                 <Header as="h4">
                   <Icon
                     color={getEventColor(props.details.eventType)}
-                    name={getEventIcon(props.details.eventType)} 
+                    name={getEventIcon(props.details.eventType)}
                   />
                   <Header.Content style={{ width: '100%' }}>
                     Incident Type
@@ -129,7 +129,7 @@ const FormTab = (props) => {
                         label={{
                           basic: true,
                           content:
-                            `${50 - parseInt(props.details.title.length, 10)}`,
+                          `${50 - parseInt(props.details.title.length, 10)}`,
                         }}
                         labelPosition="right"
                         onChange={props.handleInputChange}
@@ -185,7 +185,7 @@ const FormTab = (props) => {
                   onChange={() => props.handleInputChange({
                       target: {
                         checked:
-                          props.details.public
+                         props.details.public
                           && !props.details.help,
                         name: 'help',
                         type: 'checkbox',
@@ -198,13 +198,13 @@ const FormTab = (props) => {
                 floated="right"
                 color="orange"
                 onClick={(e) => {
-                    e.preventDefault();
-                    props.handleSubmit();
-                  }
+                  e.preventDefault();
+                  props.handleSubmit();
+                }
                 }
                 disabled={
                   props.reportForm.loading || props.reportForm.isFreezed
-                }
+                  }
                 labelPosition="left"
                 icon
               >
@@ -217,41 +217,44 @@ const FormTab = (props) => {
     </Segment>
   );
 };
+
 FormTab.propTypes = {
+  handleInputChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  location: PropTypes.shape({
+    text: PropTypes.string,
+  }).isRequired,
+  details: PropTypes.shape({
+    help: PropTypes.bool,
+    public: PropTypes.bool,
+    title: PropTypes.string,
+    eventType: PropTypes.object,
+    anonymous: PropTypes.bool,
+    description: PropTypes.string,
+  }).isRequired,
   reportForm: PropTypes.shape({
-    isFreezed: PropTypes.bool,
     loading: PropTypes.bool,
+    isFreezed: PropTypes.bool,
     validationErrors: PropTypes.bool,
     message: PropTypes.shape({
       header: PropTypes.string,
       body: PropTypes.string,
     }).isRequired,
   }).isRequired,
-  details: PropTypes.shape({
-    eventType: PropTypes.object,
-    anonymous: PropTypes.bool,
-    title: PropTypes.string,
-    description: PropTypes.string,
-    help: PropTypes.bool,
-  }).isRequired,
-  location: PropTypes.shape({
-    text: PropTypes.string.
-  }).isRequired,
-  handleInputChange: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
 };
+
 const mapStateToProps = state => ({
   tabs: state.createEvents.tabs,
   location: state.createEvents.location,
   details: state.createEvents.details,
   reportForm: state.createEvents.form,
 });
+
 const mapDisptachToProps = dispatch => (
   bindActionCreators({
     handleInputChange: updateEventDetailsCreateEvents,
     handleSubmit: validateFormCreateEvents,
     handleTabChange: changeTabCreateEventsForm,
-
   }, dispatch)
 );
 
