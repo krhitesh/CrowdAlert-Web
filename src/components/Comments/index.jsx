@@ -119,9 +119,19 @@ class CommentsSection extends Component {
           <Comment.Group>
             {this.props.comments.comments.map(comment => (
               <Comment key={comment.key}>
-                <Comment.Avatar
+                <Image
                   src={this.props.comments.userData[comment.user].photoURL ||
-                    `${STATIC_IMAGES}/meerkat.svg`}
+                      `${STATIC_IMAGES}/meerkat.svg`}
+                  style={{
+                    borderRadius: '500rem',
+                    display: 'block',
+                    marginRight: '1rem',
+                    marginBottom: '1rem',
+                    width: '2.5em',
+                    height: 'auto',
+                    float: 'left',
+                    lineHeight: '1.2em',
+                  }}
                 />
                 <Comment.Content>
                   <Comment.Author as="a">

@@ -67,7 +67,6 @@ class ImagesView(APIView):
             [JsonResponse] -- [Containing the url & thumbnail url of image]
 
         """
-
         uuid = request.GET.get('uuid','')
         mode = request.GET.get('mode', 'image')
         if uuid == '':
@@ -96,7 +95,6 @@ class ImagesView(APIView):
 
         Arguments:
             request {[type]} -- [ Contains the django request object]
-
         Returns:
             [HttpResponseBadRequest] -- [If  neither image or base64 parameter 
                                         is provided]

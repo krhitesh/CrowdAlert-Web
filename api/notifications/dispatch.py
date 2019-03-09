@@ -53,6 +53,7 @@ def notify_all(sender_uid, body, user_ids=False):
     notify(keylist, body)
     return keylist
 
+@asyncfunc
 def notify_incident(sender_uid, datetime, event_id, event_type, lat, lng, \
     user_text, user_name, user_picture):
 
@@ -91,6 +92,7 @@ def notify_comment(sender_uid, datetime, event_id, user_text, \
             "click_action":  "https://crowdalert.herokuapp.com/view/" + event_id,
             "link": "/view/" + event_id,
             "uuid": str(uuid.uuid4()),
+            "thread_id": event_id,
             "type": "comment",
             "user_text": user_text,
             "datetime": datetime,

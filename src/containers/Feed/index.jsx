@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import { fetchUserLocation, fetchEventsByLocation } from './actions';
 import style from './style';
-import { MapWrapper, Sonar, BottomBar, EventPreviewCard, GeoLocator } from '../../components';
+import { MapWrapper, Sonar, EventPreviewCard, GeoLocator } from '../../components';
 
 function getEventMarkers(feed, zoom) {
   // Boundary conditions

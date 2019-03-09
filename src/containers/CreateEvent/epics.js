@@ -28,7 +28,7 @@ const fetchReverseGeocodeEpic = action$ =>
           map(response =>
             createEventsUpdateLocationText(response[0].formatted_address)),
           catchError(() =>
-            of(createEventsUpdateLocationText('Google denied to reverse geocode this location without a credit card'))),
+            of(createEventsUpdateLocationText('Location information is unavailable'))),
         );
     }),
   );

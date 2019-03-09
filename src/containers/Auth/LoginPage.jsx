@@ -92,7 +92,7 @@ LoginPage.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { isLoggedIn, authenticating } = state.auth;
+  const { isLoggedIn } = state.auth;
   return {
     isLoggedIn,
   };
@@ -103,6 +103,5 @@ const mapDispatchToProps = dispatch => (
     setBottomBarVisibility,
   }, dispatch)
 );
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

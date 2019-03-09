@@ -11,7 +11,7 @@ const initialState = {
   isVisible: false,
   bottomBarIsVisible: true,
   bottomBarWasVisible: true,
-  animation: 'scale down',
+  animation: 'uncover',
 };
 
 function sidebarVisibilityReducer(state = initialState, action) {
@@ -23,8 +23,7 @@ function sidebarVisibilityReducer(state = initialState, action) {
         bottomBarIsVisible: !state.isVisible ? false : state.bottomBarWasVisible,
         bottomBarWasVisible: state.bottomBarIsVisible,
         animation: action.payload.animation || state.animation,
-      }
-
+      };
     case SIDEBAR_SET_VISIBILITY:
       return {
         ...state,
@@ -52,7 +51,6 @@ function sidebarVisibilityReducer(state = initialState, action) {
         bottomBarWasVisible: state.bottomBarIsVisible,
       };
     case BOTTTOMBAR_REMOVE_VISIBILITY:
-      
       return {
         ...state,
         bottomBarIsVisible: false,

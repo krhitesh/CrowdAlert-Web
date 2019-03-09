@@ -170,6 +170,7 @@ class ImagesTab extends Component {
                     disabled={this.props.reportForm.imageSelectDisabled}
                   />}
                   closeIcon
+                  basic
                 >
                   <Modal.Header>Click a Photo</Modal.Header>
                   <Modal.Content>

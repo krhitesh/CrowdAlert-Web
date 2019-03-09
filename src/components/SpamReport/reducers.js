@@ -5,7 +5,7 @@ import {
   SPAM_REPORT_MODAL_OPEN,
 } from './actionTypes';
 
-const successText = 'Flagging potentially malicous incidents helps other people to use CrowdAlert safely. Thank You!';
+const successText = 'Flagging wrongly or maliciously reported incidents helps other people to use CrowdAlert safely. Thank You!';
 
 const initialState = {
   errors: false,

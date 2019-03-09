@@ -34,9 +34,21 @@ const EventHeader = (props) => {
           <br />
           {props.reverse_geocode ?
             <div>
-              <Label as="a" basic color="purple">{props.reverse_geocode.name}</Label>
-              <Label as="a" basic color="orange">{props.reverse_geocode.admin2}</Label>
-              <Label as="a" basic color="yellow">{props.reverse_geocode.admin1}</Label>
+              {props.reverse_geocode.name ?
+                <Label as="a" basic color="purple">
+                  {props.reverse_geocode.name}
+                </Label>
+                : null}
+              {props.reverse_geocode.admin2 ?
+                <Label as="a" basic color="orange">
+                  {props.reverse_geocode.admin2}
+                </Label>
+                : null}
+              {props.reverse_geocode.admin1 ?
+                <Label as="a" basic color="yellow">
+                  {props.reverse_geocode.admin1}
+                </Label>
+                : null}
             </div>
             : null
           }

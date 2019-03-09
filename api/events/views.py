@@ -106,7 +106,6 @@ class EventView(APIView):
         DB.child('comments/' + key + '/participants').update({
             uid: True
         })
-        classify_text(decoded_json['description'], key)
         user_name = request.user.name
         user_picture = request.user.user_picture
         if decoded_json['local_assistance']:
@@ -115,7 +114,6 @@ class EventView(APIView):
                             lat=latitude, lng=longitude,
                             user_text=decoded_json['title'],
                             user_name=user_name, user_picture=user_picture)
-
         classify_text(decoded_json['description'], key)
         return JsonResponse({"eventId":str(key)}) 
 
