@@ -81,7 +81,10 @@ const MenuBar = props => (
       </Responsive>
 
       <Responsive as={Menu.Item} {...Responsive.onlyMobile}>
-        <Icon name="search" />
+        <Link to="/notifications" style={{ marginRight: '1em' }}>
+          <Notifications.NotificationIcon />
+        </Link>
+        <Icon name="search" circular />
       </Responsive>
     </Menu.Menu>
   </Menu>

@@ -12,6 +12,7 @@ import {
   showNotificationPermissionClose,
   sendFCMTokenToServer,
 } from './actions';
+import { fetchCommentsThread } from '../Comments/actions';
 
 import { messaging } from '../../utils/firebase';
 
@@ -44,6 +45,10 @@ const notificationsMiddleware = store => next => (action) => {
           datetime: parseInt(data['gcm.notification.datetime'], 10),
         }],
       }));
+    }
+    if (data['gcm.notification.type'] === 'comment') {
+      // If there is a comment, fetch the thread again
+      dispatch(fetchCommentsThread(data['gcm.notification.thread_id'], false));
     }
   }
   if (action.type === NOTIFICATIONS_SHOW_NOTIFICATIONS_PERMISSION_ASK) {

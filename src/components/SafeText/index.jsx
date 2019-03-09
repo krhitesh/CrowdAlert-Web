@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'semantic-ui-react';
 
 class SafeText extends Component {
   constructor(props) {
     super(props);
     let visible = true;
-    let user_flagged = false;
+    let userFlagged = false;
     let toxic = false;
     const { spam } = this.props;
 
     if (spam.count && spam.count > 2) {
       visible = false;
-      user_flagged = true;
+      userFlagged = true;
     }
     if (spam.toxic && spam.toxic.toxic > 0.9) {
       visible = false;
@@ -20,7 +19,7 @@ class SafeText extends Component {
     }
     this.state = {
       visible,
-      user_flagged,
+      userFlagged,
       toxic,
       spam: this.props.spam,
     };
@@ -34,7 +33,7 @@ class SafeText extends Component {
   }
   render() {
     let alttext = 'This text was hidden. ';
-    if (this.state.user_flagged) {
+    if (this.state.userFlagged) {
       alttext += 'Some users found the text inappropriate. ';
     }
     if (this.state.toxic) {

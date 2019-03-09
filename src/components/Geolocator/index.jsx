@@ -70,7 +70,7 @@ GeoLocator.propTypes = {
     modalText: PropTypes.string.isRequired,
     isOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
-  }).isRequired,
+  }),
 };
 GeoLocator.defaultProps = {
   static: false,
@@ -78,6 +78,12 @@ GeoLocator.defaultProps = {
   circular: true,
   fetchOnLoad: false,
   floated: 'right',
+  closeModal: () => {},
+  modal: {
+    modalText: null,
+    isOpen: false,
+    closeModal: () => {},
+  },
 };
 
 const mapDispatchToProps = dispatch => (

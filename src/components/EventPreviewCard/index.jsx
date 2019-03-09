@@ -100,15 +100,15 @@ const EventPreviewCard = (props) => {
 
 EventPreviewCard.propTypes = {
   closeEventPreview: proptypes.func.isRequired,
-  eventPreview: {
+  eventPreview: proptypes.shape({
     event: proptypes.shape({
       key: proptypes.string,
       lat: proptypes.number,
       long: proptypes.number,
       category: proptypes.string,
       title: proptypes.string,
-    }).isRequired,
-  },
+    }),
+  }),
 };
 
 EventPreviewCard.defaultProps = {

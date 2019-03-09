@@ -7,7 +7,8 @@ export const updateUserData = functions.auth.user().onCreate((user) => { // esli
   const { uid } = user;
   const photoURL = user.photoURL || "https://crowdalert.herokuapp.com/static/images/meerkat.svg";
   const displayName = user.displayName || "Anonymous Meerkat";
-
+  // Log: recommended
+  console.log(`New User, uid: ${uid}`)
   return admin.database().ref(`/users/${uid}`).update({
     displayName,
     photoURL,

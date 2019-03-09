@@ -3,7 +3,7 @@ const styles = {
     background: '#333333',
   },
   fitContainer: {
-    height: '100vh',
+    minHeight: '100vh',
   },
   sidebar: {
     // width: '300px',

@@ -15,6 +15,16 @@ const initialState = {
   userData: {},
 };
 
+const sortComments = (a, b) => {
+  if (a.timestamp < b.timestamp) {
+    return -1;
+  }
+  if (a.timestamp > b.timestamp) {
+    return 1;
+  }
+  return 0;
+}
+
 function commentsReducer(state = initialState, action) {
   if (action.type === COMMENTS_FETCH_THREAD) {
     const loading = action.payload.showLoader && state.threadId !== action.payload.threadId
@@ -30,6 +40,9 @@ function commentsReducer(state = initialState, action) {
       key,
       ...objComments[key],
     }));
+
+    comments.sort(sortComments);
+
     return {
       ...state,
       loading: false,

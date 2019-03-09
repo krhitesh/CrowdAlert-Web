@@ -24,8 +24,10 @@ class CommentView(APIView):
         if not thread_data or not thread_data.get('comments', False):
             return JsonResponse({'comments': {}, 'userData': {}}, safe=False)
         user_data = {}
+
         for user in thread_data['participants']:
             tmp_user = db.child('users').child(user).get().val()
+            print(user)
             user_data[user] = dict(tmp_user)
         response = {}
         response['userData'] = user_data

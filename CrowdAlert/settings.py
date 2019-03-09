@@ -19,25 +19,26 @@ import firebase_admin
 
 # Generate the Firebase Service Account Credential json file
 with open('serviceAccountCredentials.json','w') as f:
-    JSON_DATA = {}
+    jsonData = {}
     for key in os.environ.keys():
         if 'DJANGO_FIREBASE_' in key:
-            JSON_DATA[key.strip('DJANGO_FIREBASE_')] = os.environ[key].replace("\\n",'\n')
-    f.writelines(json.dumps(JSON_DATA))
+            jsonData[key.strip('DJANGO_FIREBASE_')] = os.environ[key].replace("\\n",'\n')
+    # print(jsonData)
+    f.writelines(json.dumps(jsonData))
 
-CONFIG = {
-    "apiKey": os.environ['REACT_APP_FIREBASE_API_KEY'],
-    "authDomain": os.environ['REACT_APP_FIREBASE_AUTH_DOMAIN'],
-    "databaseURL": os.environ['REACT_APP_FIREBASE_DATABASE_URL'],
-    "storageBucket": os.environ['REACT_APP_FIREBASE_PROJECT_ID'] + ".appspot.com",
-    "serviceAccount": "./serviceAccountCredentials.json"
+config = {
+  "apiKey": os.environ['REACT_APP_FIREBASE_API_KEY'],
+  "authDomain": os.environ['REACT_APP_FIREBASE_AUTH_DOMAIN'],
+  "databaseURL": os.environ['REACT_APP_FIREBASE_DATABASE_URL'],
+  "storageBucket": os.environ['REACT_APP_FIREBASE_PROJECT_ID'] + ".appspot.com",
+  "serviceAccount": "./serviceAccountCredentials.json"
 }
 
 cred = firebase_admin.credentials.Certificate(CONFIG["serviceAccount"])
 FIREBASE_ADMIN = firebase_admin.initialize_app(cred)
 
 # Instantiate a Firebase - Pyrebase object so that we can import later
-FIREBASE = pyrebase.initialize_app(CONFIG)
+FIREBASE = pyrebase.initialize_app(config)
 GMAPS = googlemaps.Client(key=os.environ['REACT_APP_GOOGLE_MAPS_KEY'])
 
 
@@ -178,7 +179,10 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CORS_ORIGIN_WHITELIST = (    
     'crowdalert.herokuapp.com',
+    'crowdalert-dev.herokuapp.com',
     'localhost:3000',
+    '127.0.0.1:3000'
+    '127.0.0.1:8000',
 )
 CORS_ALLOW_HEADERS = (
     'accept',

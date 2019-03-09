@@ -18,7 +18,6 @@ export default class ImageModal extends Component {
     };
   }
   componentWillMount() {
-    // The whole code is removed in a future.
     if (this.state.uuid) {
       this.setState({
         ...this.state,
