@@ -34,7 +34,7 @@ config = {
   "serviceAccount": "./serviceAccountCredentials.json"
 }
 
-cred = firebase_admin.credentials.Certificate(CONFIG["serviceAccount"])
+cred = firebase_admin.credentials.Certificate(config["serviceAccount"])
 FIREBASE_ADMIN = firebase_admin.initialize_app(cred)
 
 # Instantiate a Firebase - Pyrebase object so that we can import later
