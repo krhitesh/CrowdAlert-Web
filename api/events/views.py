@@ -12,7 +12,7 @@ from api.firebase_auth.permissions import FirebasePermissions
 from api.spam.classifier import classify_text
 from api.spam.views import get_spam_report_data
 from api.notifications.dispatch import notify_incident
-
+from api.events.util import toGeoHash, fromGeoHash, getPrecisionForRadius
 
 DB = settings.FIREBASE.database()
 
@@ -71,7 +71,7 @@ class EventView(APIView):
 
         latitude = decoded_json['location']['coords']['latitude']
         longitude = decoded_json['location']['coords']['longitude']
-
+        geohash = toGeoHash(latitude, longitude)
         incident_data = {
             "category": decoded_json['category'],
             "datetime": int(time.time()*1000),
@@ -82,6 +82,7 @@ class EventView(APIView):
                     "latitude": latitude,
                     "longitude": longitude,
                 },
+                "geohash": geohash
             },
             "public": {
                 "share": decoded_json['public']['share'],
@@ -96,7 +97,12 @@ class EventView(APIView):
             "title": decoded_json['title']
         }
 
-        data = DB.child('incidents').push(incident_data)
+        # Build the path
+        path = ''
+        for i in range(0, 12):
+            path += '/' + geohash[i]
+
+        data = DB.child('incidents' + path).push(incident_data)
 
         key = data['name']
         DB.child('incidentReports/' + uid).push({
@@ -144,61 +150,104 @@ class MultipleEventsView(APIView):
         # Should use API View here
         lat = float(request.GET.get('lat', ''))
         lng = float(request.GET.get('long', ''))
-        thresold = float(request.GET.get('dist', ''))
-        if lat == '' or lng == '' or thresold == '':
+        threshold = float(request.GET.get('dist', ''))
+        if lat == '' or lng == '' or threshold == '':
             return HttpResponseBadRequest("Bad request")
 
-        incidents = DB.child('incidents').get()
+        geohash = toGeoHash(lat, lng)
+        geohash_matching_length = getPrecisionForRadius(threshold)
         data = []
 
-        # Find events which are inside the circle
+        # Build the path
+        path = ''
+        for i in range(0, geohash_matching_length): 
+            path += '/' + geohash[i]
 
-        # This method is highly inefficient
-        # In takes O(n) time for each request
-        # Should use a GeoHash based solution instead of this
+        incidents = DB.child('incidents' + path).get()
+        
+        # Safe call: Check if required node exists
+        if incidents.each() is None:
+            return JsonResponse(data, safe=False)
+
+        # Cluster parameter
+        cluster_threshold = float(request.GET.get('min', 0))
+
+        # Represents how many characters in incident's GeoHash should we neglect for a cluster
+        cluster_threshold_geohash_length = getPrecisionForRadius(cluster_threshold)
+
         for incident in incidents.each():
-            event = dict(incident.val())
-            temp = {}
-            temp['key'] = incident.key()
-            temp['lat'] = event['location']['coords']['latitude']
-            temp['long'] = event['location']['coords']['longitude']
-            temp['category'] = event['category']
-            temp['title'] = event['title']
-            temp['datetime'] = event['datetime']
-            tmplat = float(event['location']['coords']['latitude'])
-            tmplng = float(event['location']['coords']['longitude'])
-            dist = distance(tmplat, tmplng, lat, lng)
-            if dist < thresold:
-                data.append(temp)
+            temp = self.get_data_recursively(incident.val(), 11 - geohash_matching_length, cluster_threshold_geohash_length)
+            data += temp
 
-        # Cluster the events
-        cluster_thresold = float(request.GET.get('min', 0))
-        # This code should also be present on client side
-        if cluster_thresold:
-            # clustered incidents data
-            clustered_data = []
-            # Consider each node as root for now
-            for root in data:
-                # If is clustered flag is not present
-                if not root.get('isClustered', False):
-                    # Loop though the points
-                    for child in data:
-                        # Base case
-                        if child['key'] == root['key']:
-                            continue
-                        # If node is not clustered
-                        if not child.get('isClustered', False):
-                            # Calculate the distance
-                            temp_distance = distance(root['lat'], root['long'],
-                                                     child['lat'], child['long'])
-                            # If two points are too close on map cluster them
-                            if temp_distance < cluster_thresold:
-                                # Update root
-                                root['isClustered'] = True
-                                root['lat'] = (root['lat'] + child['lat'])/2
-                                root['long'] = (root['long'] + child['long'])/2
-                                # Mark child
-                                child['isClustered'] = True
-                    clustered_data.append(root)
-            return JsonResponse(clustered_data, safe=False)
+        if (11 - geohash_matching_length) <= cluster_threshold_geohash_length:
+            # If the cluster threshold exceeds the radial threshold, wrap all incidents into a single cluster
+            data = self.create_cluster(data)
+
         return JsonResponse(data, safe=False)
+
+
+    def get_data_recursively(self, fetched_data, depth, clustering_depth):
+        """Returns a list of events extracted recursively from a nested dictionary and does conditional clustering
+
+        Arguments:
+                [fetched_data] -- [Nested dictionary having event as its leaf node]
+                [depth] -- [Depth up to which the dictionary is to be traversed]
+                [clustering_depth] -- [Depth below which all the events have to be clustered]
+        """
+        if isinstance(fetched_data, list):
+            # Handling unknown Firebase issue that returns list instead of dictionary
+            temp = {}
+            for i in range(0, len(fetched_data)):
+                if fetched_data[i] is not None:
+                    temp[str(i)] = fetched_data[i]
+
+            fetched_data = temp
+
+        data = []
+        if fetched_data is None or len(fetched_data) is 0:
+            return data
+        elif depth == 0:
+            for key, event in fetched_data.items():
+                temp = {}
+                temp['key'] = key
+                temp['lat'] = event['location']['coords']['latitude']
+                temp['long'] = event['location']['coords']['longitude']
+                temp['category'] = event['category']
+                temp['title'] = event['title']
+                temp['datetime'] = event['datetime']
+                data.append(temp)
+            return data
+
+        for key, level_data in fetched_data.items():
+            incidents = self.get_data_recursively(level_data, depth - 1, clustering_depth)
+            data = data + incidents
+
+        if depth <= clustering_depth and len(data) > 0:
+            return self.create_cluster(data)
+
+        return data
+
+
+    def create_cluster(self, data):
+        """Returns a unit sized list having a clustered event.
+        
+        Arguments:
+                    [data] -- [List of all events that need to be aggregated into one single event]
+        """
+        clustered_data = []
+        temp = {}
+        temp['isClustered'] = True
+        temp['key'] = data[0]['key']
+        temp['lat'] = 0.0
+        temp['long'] = 0.0
+        temp['category'] = data[0]['category']
+        temp['title'] = data[0]['title']
+        temp['datetime'] = data[0]['datetime']
+        for incident in data:
+            temp['lat'] += incident['lat']
+            temp['long'] = incident['long']
+
+        temp['lat'] = temp['lat']/float(len(data))
+        temp['long'] = temp['long']/float(len(data))
+        clustered_data.append(temp)
+        return clustered_data
