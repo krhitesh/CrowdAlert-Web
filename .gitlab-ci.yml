@@ -36,18 +36,6 @@ installpydeps:
     paths:
     - env/
 
-server_unit_test:
-  image: python:3.5
-  stage: testserver
-  dependencies:
-  - setuppyenv
-  - installpydeps
-  script:
-  - . env/bin/activate
-  - python manage.py test
-  - python manage.py testserver
-  when: on_success
-
 install_dependencies:
   image: node:10.15.0
   stage: installnpmdeps
