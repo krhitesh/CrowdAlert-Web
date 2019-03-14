@@ -63,6 +63,7 @@ frontend_unit_test:
   dependencies:
   - install_dependencies
   script:
+  - yarn lint
   - yarn test
   when: on_success
 
