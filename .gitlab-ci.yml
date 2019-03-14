@@ -1,0 +1,79 @@
+# Environment variables set in GitLab
+stages:
+  - setuppyenv
+  - installpydeps
+  - testserver
+  - installnpmdeps
+  - test
+  - build
+
+cache:
+  paths:
+  - node_modules/
+  - env/
+
+setuppyenv:
+  image: python:3.5
+  stage: setuppyenv
+  script:
+  - apt-get update -q -y
+  - apt-get install -y python-pip
+  - pip install virtualenv
+  - virtualenv env --python=python3.5
+  artifacts:
+    paths:
+    - env/
+
+installpydeps:
+  image: python:3.5
+  dependencies:
+  - setuppyenv
+  stage: installpydeps
+  script:
+  - . env/bin/activate
+  - pip install -r requirements.txt
+  artifacts:
+    paths:
+    - env/
+
+server_unit_test:
+  image: python:3.5
+  stage: testserver
+  dependencies:
+  - setuppyenv
+  - installpydeps
+  script:
+  - . env/bin/activate
+  - python manage.py test
+  - python manage.py testserver
+  when: on_success
+
+install_dependencies:
+  image: node:10.15.0
+  stage: installnpmdeps
+  script:
+  - yarn
+  artifacts:
+    paths:
+    - node_modules/
+
+frontend_unit_test:
+  image: node:10.15.0
+  stage: test
+  dependencies:
+  - install_dependencies
+  script:
+  - yarn test
+  when: on_success
+
+build_frontend:
+  image: node:10.15.0
+  stage: build
+  dependencies:
+  - install_dependencies
+  script:
+  - yarn build
+  artifacts:
+    paths:
+    - build/
+  when: on_success
