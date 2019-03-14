@@ -5,6 +5,7 @@ import {
   CREATE_EVENTS_FORM_UPDATE_LOCATION_TEXT,
   CREATE_EVENTS_FORM_SAVE_LOCATION,
   CREATE_EVENTS_FORMS_UPDATE_EVENT_DETAILS,
+  CREATE_EVENT_AUTH_ERROR,
   CREATE_EVENTS_FORM_VALIDATION_ERRORS,
   CREATE_EVENTS_FORM_VALIDATION_SUCCESS,
   CREATE_EVENTS_FORM_SUBMIT,
@@ -139,6 +140,18 @@ function reportFormReducer(state = reportFormInitialState, action) {
       loading: false,
       validationErrors: false,
       eventID: action.payload.eventId,
+    };
+  }
+  if (action.type === CREATE_EVENT_AUTH_ERROR) {
+    return {
+      ...state,
+      validationErrors: true,
+      message: {
+        header: action.payload.message.header,
+        body: action.payload.message.body,
+      },
+      loading: false,
+      isFreezed: false,
     };
   }
   if (action.type === CREATE_EVENTS_FORM_SUBMIT_ERROR) {

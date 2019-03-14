@@ -5,6 +5,7 @@ import {
   CREATE_EVENTS_FORM_SAVE_LOCATION,
   CREATE_EVENTS_FORMS_UPDATE_EVENT_DETAILS,
   CREATE_EVENTS_FORM_VALIDATE_FORM,
+  CREATE_EVENT_AUTH_ERROR,
   CREATE_EVENTS_FORM_VALIDATION_ERRORS,
   CREATE_EVENTS_FORM_VALIDATION_SUCCESS,
   CREATE_EVENTS_FORM_SUBMIT,
@@ -74,6 +75,16 @@ export function updateEventDetailsCreateEvents(event) {
       name,
       value,
     },
+  };
+}
+/**
+ * Whether there auth errors when user is trying to submit the form
+ * @param {*} payload : Object
+ */
+export function authErrorCreateEvents(payload = {}) {
+  return {
+    type: CREATE_EVENT_AUTH_ERROR,
+    payload,
   };
 }
 /**

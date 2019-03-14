@@ -2,6 +2,7 @@ import formValidator from './validator';
 import {
   changeTabCreateEventsForm,
   changeTabValidationCreateEventsForm,
+  authErrorCreateEvents,
   formValidationErrorsCreateEvents,
   acceptFormCreateEvents,
   submitFormCreateEvents,
@@ -31,15 +32,26 @@ const createEventsMiddleware = store => next => (action) => {
   }
   if (action.type === CREATE_EVENTS_FORM_VALIDATE_FORM) {
     const state = store.getState();
-    const status = formValidator(state.createEvents);
-    const eventData = state.createEvents;
-    if (!status.validationErrors) {
-      // dispatch post request
-      dispatch(acceptFormCreateEvents());
-      dispatch(submitFormCreateEvents(eventData));
+    if (!state.auth.user.emailVerified) {
+      dispatch(authErrorCreateEvents({
+        validationErrors: true,
+        message: {
+          header: 'Email not verified',
+          body: 'Please verify your email to report incidents.',
+        },
+      }));
     } else {
-      // dispatch error handler
-      dispatch(formValidationErrorsCreateEvents(status));
+      // User is verified so now proceed to form validation
+      const status = formValidator(state.createEvents);
+      const eventData = state.createEvents;
+      if (!status.validationErrors) {
+        // dispatch post request
+        dispatch(acceptFormCreateEvents());
+        dispatch(submitFormCreateEvents(eventData));
+      } else {
+        // dispatch error handler
+        dispatch(formValidationErrorsCreateEvents(status));
+      }
     }
   }
   if (action.type === CREATE_EVENTS_FORM_SUBMIT_SUCCESS) {

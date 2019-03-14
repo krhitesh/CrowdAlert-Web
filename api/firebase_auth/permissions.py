@@ -20,11 +20,9 @@ class FirebasePermissions(permissions.BasePermission):
         elif request.method == 'POST':
             # Make sure email is verified
             if request.user and not request.user.is_authenticated or not request.user.is_email_verified:
-                self.message = 'Please verify your email to report incidents.'
-                return False
+                return True  
+            return False
             
-            return True
-
     def has_object_permission(self, request, view, obj):
         """
         Return `True` if permission is granted, `False` otherwise.
