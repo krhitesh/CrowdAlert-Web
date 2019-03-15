@@ -144,8 +144,8 @@ class MultipleEventsView(APIView):
         # Should use API View here
         lat = float(request.GET.get('lat', ''))
         lng = float(request.GET.get('long', ''))
-        thresold = float(request.GET.get('dist', ''))
-        if lat == '' or lng == '' or thresold == '':
+        threshold = float(request.GET.get('dist', ''))
+        if lat == '' or lng == '' or threshold == '':
             return HttpResponseBadRequest("Bad request")
 
         incidents = DB.child('incidents').get()
@@ -165,16 +165,16 @@ class MultipleEventsView(APIView):
             temp['category'] = event['category']
             temp['title'] = event['title']
             temp['datetime'] = event['datetime']
-            tmplat = float(event['location']['coords']['latitude'])
-            tmplng = float(event['location']['coords']['longitude'])
-            dist = distance(tmplat, tmplng, lat, lng)
-            if dist < thresold:
+            tmpLat = float(event['location']['coords']['latitude'])
+            tmpLng = float(event['location']['coords']['longitude'])
+            dist = distance(tmpLat, tmpLng, lat, lng)
+            if dist < threshold:
                 data.append(temp)
 
         # Cluster the events
-        cluster_thresold = float(request.GET.get('min', 0))
+        cluster_threshold = float(request.GET.get('min', 0))
         # This code should also be present on client side
-        if cluster_thresold:
+        if cluster_threshold:
             # clustered incidents data
             clustered_data = []
             # Consider each node as root for now
@@ -192,7 +192,7 @@ class MultipleEventsView(APIView):
                             temp_distance = distance(root['lat'], root['long'],
                                                      child['lat'], child['long'])
                             # If two points are too close on map cluster them
-                            if temp_distance < cluster_thresold:
+                            if temp_distance < cluster_threshold:
                                 # Update root
                                 root['isClustered'] = True
                                 root['lat'] = (root['lat'] + child['lat'])/2

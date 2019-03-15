@@ -15,7 +15,7 @@ STORAGE = settings.FIREBASE.storage()
 DB = settings.FIREBASE.database()
 
 def asyncfunc(function):
-    """ Wrapper for async behaviour. Executes function in a separate new thread
+    """ Wrapper for async behavior. Executes function in a separate new thread
     """
     def decorated_function(*args, **kwargs):
         threads = Thread(target=function, args=args, kwargs=kwargs)
@@ -85,10 +85,10 @@ class ImagesView(APIView):
             [REQUIRED]
             image: containing a file object for the image to be uploaded
                 or
-            base64: containig the base64 equivalent of the image to be uploaded
+            base64: containing the base64 equivalent of the image to be uploaded
 
             [OPTIONAL]
-            eventId: containg the event id of the event where the image will be
+            eventId: containing the event id of the event where the image will be
                     rendered
             isTrusted: whether the image came from a trusted source or not
 
@@ -100,7 +100,7 @@ class ImagesView(APIView):
                                         is provided]
             [JsonResponse] -- [Containing the uuid of image]     
         """
-        print("Request Recieved", time.time())
+        print("Request Received", time.time())
         # Generate uuid for the file. Never trust user.
         name = str(uuid4())
         print()
