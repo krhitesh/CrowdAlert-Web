@@ -7,8 +7,8 @@ import {
 const initialState = {
   isVisible: false,
   // Values are hard coded. Just a subtle AOSSIE branding
-  lat: 26.77,
-  lng: 80.17,
+  lat: -26.77,
+  lng: 153.17,
   zoom: 4,
   polyline: {
     isVisible: false,
