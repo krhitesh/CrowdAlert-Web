@@ -1,11 +1,8 @@
-/* global google */
-import { EVENT_FETCH_EVENT_DATA_FINISHED, EVENT_FETCH_DIRECTIONS_FINISHED } from './actionTypes';
-import { updateMapCenter, updateMapZoom, updateMapPolyline } from '../../components/Map/actions';
-import { fetchReverseGeocode, fetchDirections } from './actions';
+import { EVENT_FETCH_EVENT_DATA_FINISHED } from './actionTypes';
+import { updateMapCenter, updateMapZoom } from '../../components/Map/actions';
+import { fetchReverseGeocode } from './actions';
 
-const fetchEventDataMiddleware = store => next => (action) => {
-  const { dispatch } = store;
-  const state = store.getState();
+const fetchEventDataMiddleware = ({ dispatch }) => next => (action) => {
   if (action.type === EVENT_FETCH_EVENT_DATA_FINISHED) {
     const { payload } = action;
     let formattedImages = [];
@@ -42,31 +39,7 @@ const fetchEventDataMiddleware = store => next => (action) => {
     // Dipatch reverse geocode
     dispatch(fetchReverseGeocode(lat, lng));
 
-    const { locationHistory } = state.geoLocator;
-    if (locationHistory !== null) {
-      const recentCoords = locationHistory[0];
-      dispatch(fetchDirections(recentCoords.lat, recentCoords.lng, lat, lng));
-    }
-
     next(newAction);
-  } else if (action.type === EVENT_FETCH_DIRECTIONS_FINISHED) {
-    const { payload } = action;
-    // eslint-disable-next-line camelcase
-    const { polyline_points, html_instructions, distance } = payload;
-    const bounds = new google.maps.LatLngBounds();
-    for (let i = 0; i < polyline_points.length; i += 1) {
-      bounds.extend(polyline_points[i]);
-    }
-
-    dispatch(updateMapPolyline({
-      data: polyline_points,
-      bounds,
-      fitBounds: false,
-      isVisible: true,
-      htmlInstructions: html_instructions,
-      distance,
-    }));
-    next(action);
   } else {
     next(action);
   }

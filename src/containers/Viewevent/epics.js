@@ -4,20 +4,17 @@ import { mergeMap, map, takeUntil } from 'rxjs/operators';
 import {
   fetchEventDataFinished,
   fetchReverseGeocodeSuccess,
-  fetchDirectionsSuccess,
 } from './actions';
 
 import {
   GET_EVENT_BY_ID,
   REVERSE_GEOCODE,
-  GET_DIRECTIONS,
 } from '../../utils/apipaths';
 
 import {
   EVENT_FETCH_EVENT_DATA,
   EVENT_FETCH_EVENT_DATA_CANCEL,
   EVENT_FETCH_REVERSE_GEOCODE,
-  EVENT_FETCH_DIRECTIONS,
 } from './actionTypes';
 
 const fetchEventDataEpic = action$ =>
@@ -47,20 +44,6 @@ const fetchReverseGeocodeEpic = action$ =>
     }),
   );
 
-const fetchDirections = action$ =>
-  action$.pipe(
-    ofType(EVENT_FETCH_DIRECTIONS),
-    mergeMap((action) => {
-      const {
-        startLat, startLon, endLat, endLon,
-      } = action.payload;
-      const apiUrl = `${GET_DIRECTIONS}?startLat=${startLat}&startLong=${startLon}&endLat=${endLat}&endLong=${endLon}`;
-      return ajax
-        .getJSON(apiUrl)
-        .pipe(map(response => fetchDirectionsSuccess(response)));
-    }),
-  );
-
-const epics = combineEpics(fetchEventDataEpic, fetchReverseGeocodeEpic, fetchDirections);
+const epics = combineEpics(fetchEventDataEpic, fetchReverseGeocodeEpic);
 
 export default epics;
