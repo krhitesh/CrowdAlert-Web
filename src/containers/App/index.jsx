@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Dimmer, Loader } from 'semantic-ui-react';
 import { checkUserAuthenticationStatus } from '../Auth/actions';
+import { updateMapPolyline } from '../../components/Map/actions';
 
 // import propTypes from 'prop-types';
 import {
@@ -42,7 +43,7 @@ class App extends Component {
     this.state = {};
   }
   componentWillMount() {
-    if (window.localStorage.getItem('shouldBeLoggedIn') === "true") {
+    if (window.localStorage.getItem('shouldBeLoggedIn') === 'true') {
       this.props.checkUserAuthenticationStatus();
     }
   }
@@ -61,7 +62,21 @@ class App extends Component {
           </div>
           <Route exact path="/view/:eventid" component={Viewevent} />
           <PrivateRoute path="/create" component={CreateEvent} auth={this.props.isLoggedIn} />
-          <Route exact path="/" component={Feed} />
+          <Route
+            exact
+            path="/"
+            render={(props) => {
+              if (!this.props.eventPreview.isOpen) {
+                this.props.updateMapPolyline({
+                  polyline: null,
+                  bounds: null,
+                  fitBounds: false,
+                  isVisible: false,
+                });
+              }
+              return <Feed {...props} />;
+            }}
+          />
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/signup" component={SignUpPage} />
           <Route exact path="/auth/confirmEmail" component={ConfirmEmail} />
@@ -78,14 +93,17 @@ class App extends Component {
 }
 const mapStateToProps = (state) => {
   const { isLoggedIn, authenticating } = state.auth;
+  const { eventPreview } = state;
   return {
     isLoggedIn,
     authenticating,
+    eventPreview,
   };
 };
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     checkUserAuthenticationStatus,
+    updateMapPolyline,
   }, dispatch)
 );
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

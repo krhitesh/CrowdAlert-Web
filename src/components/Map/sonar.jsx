@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { updateMapCenter, updateMapZoom } from './actions';
+import { updateMapCenter, updateMapZoom, updateMapPolyline } from './actions';
 import { MarkerWithLabel } from 'react-google-maps/lib/components/addons/MarkerWithLabel';
 import { openEventPreview } from '../EventPreviewCard/actions';
 import './pulseRed.css';
@@ -42,6 +42,13 @@ const Sonar = props => (
             zoom: Math.min(props.map.zoom + 3, 16),
           });
         } else if (props.id) {
+          props.updateMapPolyline({
+            data: props.map.polyline.data,
+            isVisible: false,
+            bounds: props.map.polyline.bounds,
+            fitBounds: false,
+          });
+          // eslint-disable-next-line react/prop-types
           props.openEventPreview({ ...props.payload });
         }
       }}
@@ -61,9 +68,14 @@ Sonar.propTypes = {
   clustered: PropTypes.bool,
   updateMapCenter: PropTypes.func,
   updateMapZoom: PropTypes.func,
+  updateMapPolyline: PropTypes.func,
   openEventPreview: PropTypes.func,
   map: PropTypes.shape({
     zoom: PropTypes.number,
+    polyline: PropTypes.shape({
+      data: PropTypes.array,
+      bounds: PropTypes.object,
+    }).isRequired,
   }),
 };
 Sonar.defaultProps = {
@@ -73,6 +85,7 @@ Sonar.defaultProps = {
   updateMapCenter: () => {},
   updateMapZoom: () => {},
   openEventPreview: () => {},
+  updateMapPolyline: () => {},
   map: {
     zoom: 4,
   },
@@ -82,6 +95,7 @@ const mapDispatchToProps = dispatch => (
     updateMapCenter,
     updateMapZoom,
     openEventPreview,
+    updateMapPolyline,
   }, dispatch)
 );
 const mapStateToProps = state => ({

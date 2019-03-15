@@ -62,6 +62,7 @@ const EventCard = props => (
       reportedBy={props.reportedBy}
       dateTime={props.datetime}
       reverse_geocode={props.reverse_geocode}
+      distance={props.polyline.distance}
     />
     {(props.spam.count > 2) ?
       <Event.SpamAlert />
@@ -84,10 +85,19 @@ const EventCard = props => (
         }
       </SemanticImage.Group>
     </Event.Body>
-    <Event.Footer title={props.title} uuid={props.uuid} />
+    <Event.Footer title={props.title} uuid={props.uuid} htmlInstructions={props.polyline.htmlInstructions} />
   </Card>
 );
 EventCard.propTypes = {
+  polyline: propTypes.shape({
+    fitBounds: propTypes.bool,
+    bounds: propTypes.object,
+    data: propTypes.array,
+    isVisible: propTypes.bool,
+    htmlInstructions: propTypes.arrayOf(propTypes.string),
+    distance: propTypes.string,
+  }).isRequired,
+  uuid: propTypes.string.isRequired,
   reportedBy: propTypes.object.isRequired,
   spam: propTypes.object.isRequired,
   viewmode: propTypes.string.isRequired,
@@ -156,6 +166,7 @@ class Viewevent extends Component {
                 viewmode="mobile"
                 reportedBy={this.props.event.data.reportedBy}
                 datetime={this.props.event.data.datetime}
+                polyline={this.props.map.polyline}
                 title={this.props.event.data.title}
                 description={this.props.event.data.description}
                 images={this.props.event.data.images}
@@ -196,6 +207,7 @@ class Viewevent extends Component {
                           viewmode="desktop"
                           reportedBy={this.props.event.data.reportedBy}
                           datetime={this.props.event.data.datetime}
+                          polyline={this.props.map.polyline}
                           title={this.props.event.data.title}
                           description={this.props.event.data.description}
                           images={this.props.event.data.images}

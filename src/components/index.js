@@ -11,6 +11,7 @@ import UserSettingsMenu from './UserSettingsMenu';
 import CommentsSection from './Comments';
 import UpvoteButton from './Upvote';
 import ShareModal from './Share';
+import DirectionsModal from './DirectionsModal';
 import * as SpamReport from './SpamReport';
 import * as Notifications from './Notifications';
 import SafeText from './SafeText';
@@ -22,6 +23,7 @@ export {
   Menu,
   Sidebar,
   LoadingCard,
+  DirectionsModal,
   Event,
   BottomBar,
   EventPreviewCard,

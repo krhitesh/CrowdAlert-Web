@@ -34,6 +34,10 @@ const EventHeader = (props) => {
           <br />
           {props.reverse_geocode ?
             <div>
+              {props.distance &&
+              <Label as="a" basic color="purple">
+                {`${props.distance} away`}
+              </Label>}
               {props.reverse_geocode.name ?
                 <Label as="a" basic color="purple">
                   {props.reverse_geocode.name}
@@ -71,9 +75,14 @@ EventHeader.propTypes = {
   // user_id: PropTypes.string.isRequired,
   /* timestamp of the event */
   dateTime: PropTypes.number.isRequired,
+  /* Distance string of the route. Example: 43.2 km */
+  distance: PropTypes.string,
 };
 EventHeader.defaultProps = {
-  reverse_geocode: { name: '', admin2: '', admin1: '' },
+  reverse_geocode: {
+    name: '', admin2: '', admin1: '',
+  },
+  distance: null,
 };
 
 export default EventHeader;

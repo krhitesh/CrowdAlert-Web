@@ -2,6 +2,7 @@ import {
   MAP_UPDATE_CENTER,
   MAP_UPDATE_ZOOM,
   MAP_ONCLICK,
+  MAP_UPDATE_POLYLINE,
 } from './actionTypes';
 
 /**
@@ -22,6 +23,23 @@ export function updateMapCenter(payload = {}) {
 export function updateMapZoom(payload = {}) {
   return {
     type: MAP_UPDATE_ZOOM,
+    payload,
+  };
+}
+/**
+ * Updates the polyline on map
+ * @param {*} payload : Object of {
+ *  data: Array of Object { lat: number, lng: number }
+ *  isVisible: Is the polyline visible
+ *  bounds: Polyline google.maps.LatLngBounds
+ *  fitBounds: Does the polyline fits into the map's viewport
+ *  distance?: Distance of so represented polyline
+ *  htmlInstructions?: Directional instructions of the route represented by the polyline
+ *  }
+ */
+export function updateMapPolyline(payload = {}) {
+  return {
+    type: MAP_UPDATE_POLYLINE,
     payload,
   };
 }
