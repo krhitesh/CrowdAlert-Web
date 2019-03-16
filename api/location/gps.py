@@ -30,13 +30,13 @@ def distance(lat1, long1, lat2, long2):
 
     radius = 6371
 
-    dLat = deg_to_rad(lat2 - lat1)
-    dLng = deg_to_rad(long2 - long1)
+    deg_lat = deg_to_rad(lat2 - lat1)
+    deg_lng = deg_to_rad(long2 - long1)
 
     lat1 = deg_to_rad(lat1)
     lat2 = deg_to_rad(lat2)
 
-    angle = (math.sin(dLat/2) * math.sin(dLat/2)
-             + math.sin(dLng/2) * math.sin(dLng/2) * math.cos(lat1) * math.cos(lat2))
+    angle = (math.sin(deg_lat/2) * math.sin(deg_lat/2)
+             + math.sin(deg_lng/2) * math.sin(deg_lng/2) * math.cos(lat1) * math.cos(lat2))
 
     return radius * 2 * math.atan2(math.sqrt(angle), math.sqrt(1-angle))

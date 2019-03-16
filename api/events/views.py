@@ -165,9 +165,9 @@ class MultipleEventsView(APIView):
             temp['category'] = event['category']
             temp['title'] = event['title']
             temp['datetime'] = event['datetime']
-            tmpLat = float(event['location']['coords']['latitude'])
-            tmpLng = float(event['location']['coords']['longitude'])
-            dist = distance(tmpLat, tmpLng, lat, lng)
+            tmp_lat = float(event['location']['coords']['latitude'])
+            tmp_lng = float(event['location']['coords']['longitude'])
+            dist = distance(tmp_lat, tmp_lng, lat, lng)
             if dist < threshold:
                 data.append(temp)
 
