@@ -25,8 +25,8 @@ def asyncfunc(function):
     return decorated_function
 
 @asyncfunc
-def add_thumbnail(name):
-    """ Starts the job of creating svg based thumbnail for a given file
+def add_blurred_placeholder(name):
+    """ Starts the job of creating svg based blurred placeholder for a given file
 
     Arguments:
         name {string} -- [ target file name ]
@@ -35,8 +35,10 @@ def add_thumbnail(name):
     # After we get enough traffic we should use a redis based solution.
     # Where an event would be pushed and a job id is to be returned
     # and expose another endpoint where we can check the status
-    print("Generating Thumbnail", time.time())
+    print("Generating Placeholder", time.time())
     subprocess.run(['node_modules/.bin/sqip', name, '-o', name+'.svg'])
+    # Do not touch this storage path otherwise existing image paths will break.
+    # Follow a proper migration first.
     STORAGE.child('thumbnails/'+name+'.svg').put(name+'.svg')
     # Remove the uploaded files for two good reasons:
     # Keep our dyno clean
