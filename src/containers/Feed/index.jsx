@@ -26,12 +26,12 @@ function getEventMarkers(feed, zoom) {
   for (let i = 1; i < 18;) {
     if ((zoom + i > 4 && zoom + i < 18)
       && feedData[zoom + i] && feedData[zoom + i].length) {
-      console.log(feedData[zoom + i], i, zoom+i);
+      console.log(feedData[zoom + i], i, zoom + i);
       return feedData[zoom + i] || [];
     }
     if ((zoom - i > 4 && zoom - i < 18)
       && feedData[zoom - i] && feedData[zoom - i].length) {
-      console.log(feedData[zoom - i], i, zoom-i);
+      console.log(feedData[zoom - i], i, zoom - i);
       return feedData[zoom - i];
     }
     i += 1;
@@ -45,10 +45,10 @@ function getEventMarkers(feed, zoom) {
  */
 class Feed extends Component {
   /**
-   * [componentWillMount fetch  the event as soon as the component will mount]
+   * [componentDidMount fetch  the event as soon as the component will mount]
    * @return {[type]} [description]
    */
-  componentWillMount() {
+  componentDidMount() {
     // Fetch the users current approximate location using API
     this.props.fetchUserLocation({
       oldLat: this.props.mapProps.lat,

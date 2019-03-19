@@ -121,7 +121,7 @@ EventCard.defaultProps = {
  * @type {Object}
  */
 class Viewevent extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const { eventid } = this.props.match.params;
     const shouldRefresh =
       this.props.match.params.eventid !== this.props.event.data.eventid;

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-mount-set-state */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Image, Modal, Responsive } from 'semantic-ui-react';
@@ -17,7 +18,7 @@ export default class ImageModal extends Component {
       base64: this.props.base64,
     };
   }
-  componentWillMount() {
+  componentDidMount() {
     if (this.state.uuid) {
       this.setState({
         ...this.state,

@@ -84,7 +84,7 @@ registerServiceWorker();
       alert("Production Build: 11-Aug");
     }, delay);
   }
-  
+
   window.addEventListener('load', removeDimmer);
 }());
 /**

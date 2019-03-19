@@ -41,8 +41,8 @@ class App extends Component {
     super(props);
     this.state = {};
   }
-  componentWillMount() {
-    if (window.localStorage.getItem('shouldBeLoggedIn') === "true") {
+  componentDidMount() {
+    if (window.localStorage.getItem('shouldBeLoggedIn') === 'true') {
       this.props.checkUserAuthenticationStatus();
     }
   }

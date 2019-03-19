@@ -31,7 +31,7 @@ ConfirmationModal.propTypes = {
 };
 
 class GeoLocator extends Component {
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.fetchOnLoad) {
       this.props.getLocation();
     }
