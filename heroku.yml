@@ -1,0 +1,4 @@
+build:
+  docker:
+    web: Dockerfile
+    worker: open_nsfw--/Dockerfile
