@@ -1,0 +1,8 @@
+# React App
+node_modules/
+env/
+build/
+functions/
+public/
+src/
+staticfiles/
