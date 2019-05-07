@@ -57,6 +57,7 @@
     "webpack-node-externals": "1.6.0"
   },
   "scripts": {
+    "dev:build:server": "webpack --config webpack.server.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
