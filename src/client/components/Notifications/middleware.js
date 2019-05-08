@@ -51,7 +51,8 @@ const notificationsMiddleware = store => next => (action) => {
       dispatch(fetchCommentsThread(data['gcm.notification.thread_id'], false));
     }
   }
-  if (action.type === NOTIFICATIONS_SHOW_NOTIFICATIONS_PERMISSION_ASK) {
+  if (action.type === NOTIFICATIONS_SHOW_NOTIFICATIONS_PERMISSION_ASK
+      && process.env.BROWSER) {
     // Continue to the next middleware
     next(action);
     messaging.requestPermission()

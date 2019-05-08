@@ -1,31 +1,32 @@
 module.exports = {
-  // Tell webpack to run babel on every file it runs through
   module: {
     rules: [
       {
-        test: /\.js?$/,
-        loader: 'babel-loader',
+        test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
-        options: {
-          presets: [
-            'react',
-            'stage-0',
-            ['env', { targets: { browsers: ['last 2 versions'] } }]
-          ]
-        }
+        loaders: [
+          'babel-loader?presets[]=react,presets[]=es2015,presets[]=stage-0',
+        ],
       },
       {
-        test: /\.jsx?$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        options: {
-          presets: [
-            'react',
-            'stage-0',
-            ['env', { targets: { browsers: ['last 2 versions'] } }]
-          ]
-        }
-      }
-    ]
-  }
+        test: /\.(jpg|jpeg|png|woff|woff2|eot|ttf|svg)$/,
+        loader: 'url-loader?limit=100000',
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'isomorphic-style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+            },
+          },
+        ],
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
 };

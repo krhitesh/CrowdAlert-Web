@@ -18,7 +18,7 @@ import middlewares from './middleware';
 export default function configureStore(initialState = {}, history) {
   const appRouterMiddleware = routerMiddleware(history);
   const epicMiddleware = createEpicMiddleware();
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  const composeEnhancers = process.env.BROWSER ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : (args) => {};
 
   const store = createStore(
     rootReducer, // Root reducer
