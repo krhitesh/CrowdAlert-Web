@@ -37,7 +37,7 @@ const store = configureStore(initialState, history);
  */
 if (process.env.BROWSER) {
   messaging.onMessage((payload) => {
-    console.log('Message', payload);
+    console.log('Message new', payload);
     store.dispatch(receivedNewNotification(payload));
   });
 }
