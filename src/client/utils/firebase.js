@@ -8,7 +8,9 @@ firebase.initializeApp(firebaseConfig);
  * @type {[type]}
  */
 // TODO: Need this firebase in window on client-side.
-// window.firebase = firebase;
+if (process.env.BROWSER) {
+  window.firebase = firebase;
+}
 // const database = firebase.database();
 export const Auth = firebase.auth();
 export const FacebookAuth = new firebase.auth.FacebookAuthProvider();

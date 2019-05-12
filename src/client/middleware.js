@@ -12,7 +12,7 @@ import {
   oAuthMiddleware,
 } from './containers/Auth/middleware';
 
-const middlewares = [
+const middleware = [
   authMiddleware,
   updateLocationMiddleware,
   fetchEventsOnMapUpdateMiddleware,
@@ -26,4 +26,4 @@ const middlewares = [
   notificationsMiddleware,
 ];
 
-export default middlewares;
+export default middleware;

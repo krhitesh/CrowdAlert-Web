@@ -6,7 +6,7 @@ import { createEpicMiddleware } from 'redux-observable';
 
 import rootReducer from './reducers';
 import rootEpic from './epics'
-import middlewares from './middleware';
+import middleware from './middleware';
 
 /**
  * [configureStore initiates the global redux store. Combines the initial state
@@ -18,18 +18,25 @@ import middlewares from './middleware';
 export default function configureStore(initialState = {}, history) {
   const appRouterMiddleware = routerMiddleware(history);
   const epicMiddleware = createEpicMiddleware();
-  const composeEnhancers = process.env.BROWSER ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : (args) => {};
+  
+  let composeEnhancers = args => {};
+  if (process.env.BROWSER) {
+    composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  }
+
+  console.log('process.env.BROWSER', process.env.BROWSER);
+  // console.log('Middleware', middleware);
 
   const store = createStore(
     rootReducer, // Root reducer
-    initialState, // Initial state
-    composeEnhancers(
-      applyMiddleware(
-        appRouterMiddleware,        
-        ...middlewares,
-        epicMiddleware,
-      )  
-    )
+    initialState//, // Initial state
+    // composeEnhancers(
+    //   applyMiddleware(
+    //     appRouterMiddleware,        
+    //     ...middleware,
+    //     epicMiddleware,
+    //   )  
+    // )
   )
   epicMiddleware.run(rootEpic);
   return store;

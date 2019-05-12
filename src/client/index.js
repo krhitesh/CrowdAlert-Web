@@ -8,7 +8,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+// Using StaticRouter for SSR
+// import { ConnectedRouter } from 'react-router-redux';
+import { StaticRouter } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './configureStore';
@@ -44,29 +46,28 @@ if (process.env.BROWSER) {
 
 const exportComponent = (
   <Provider store={store}>
-    <ConnectedRouter history={history}>
+    <StaticRouter context={{}}>
       <App />
-    </ConnectedRouter>
+    </StaticRouter>
   </Provider>
 );
 
-export class Main extends React.Component {
-  render() {
-    return exportComponent;
-  }
-}
+export const main = exportComponent;
 
 // Export the index component
 // export const Main = <ExportComponent />;
 
-if (process.env.BROWSER) {
+// No use of ReactDOM.render() on server
+if (false) {
   /**
  * [ROOT_NODE is the document reference where the app should be mounted]
  * @type {[type]}
  */
   const ROOT_NODE = document.getElementById('root');
   // Render the app to the specified mount point
-  ReactDOM.render(<ExportComponent />, ROOT_NODE);
+  ReactDOM.render(exportComponent, ROOT_NODE);
+
+  console.log('ReactDOM.render(exportComponent, ROOT_NODE);');
 }
 /**
  * [registerServiceWorker register the service worker. Required for the PWA

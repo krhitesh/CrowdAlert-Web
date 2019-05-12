@@ -2,7 +2,14 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)?$/,
+        test: /\.js?$/,
+        exclude: /node_modules/,
+        loaders: [
+          'babel-loader?presets[]=react,presets[]=es2015,presets[]=stage-0',
+        ],
+      },
+      {
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         loaders: [
           'babel-loader?presets[]=react,presets[]=es2015,presets[]=stage-0',
