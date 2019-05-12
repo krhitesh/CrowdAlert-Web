@@ -32,6 +32,10 @@
     "type-detect": "^4.0.8"
   },
   "scripts": {
+    "dev": "npm-run-all --parallel dev:*",
+    "dev:build:client": "webpack --config webpack.client.js --watch",
+    "dev:server": "nodemon --watch build --exec \"node build/bundle.js\"",
+    "dev:build:server": "webpack --config webpack.server.js --watch",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
