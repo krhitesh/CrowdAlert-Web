@@ -1,6 +1,3 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import {
@@ -21,16 +18,10 @@ import {
   Sonar,
   CommentsSection,
 } from '../../components';
-import { WS_NEW_COMMENT_RECEIVED } from '../../components/Comments/actionTypes';
-import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
-import { geolocatoretLocationPermission } from '../../components/Geolocator/actions';
-import { fetchCommentsThreadSSR, fetchCommentThreadSuccessViaWebSocket } from '../../components/Comments/actions';
-import { updateUpvotesLongPollStatus } from '../../components/Upvote/actions';
-import getWidth from '../../utils/width';
-import { DOMAIN_NAME, GET_IMAGE_URLS, WS_COMMENTS } from '../../utils/apipaths';
-import SEO from '../../components/SEO';
-import styleSheet from './style';
 
+import { fetchEventData } from './actions';
+
+import styleSheet from './style';
 
 /**
  * [MapwithSonar Combines the MapWrapper & Sonar component to view a single marker
@@ -71,7 +62,6 @@ const EventCard = props => (
       reportedBy={props.reportedBy}
       dateTime={props.datetime}
       reverse_geocode={props.reverse_geocode}
-      distance={props.polyline.distance}
     />
     {(props.spam.count > 2) ?
       <Event.SpamAlert />
@@ -94,26 +84,14 @@ const EventCard = props => (
         }
       </SemanticImage.Group>
     </Event.Body>
-    <Event.Footer
-      title={props.title}
-      uuid={props.uuid}
-      editOption={props.editOption}
-      htmlInstructions={props.polyline.htmlInstructions}
-    />
+    <Event.Footer title={props.title} uuid={props.uuid} />
   </Card>
 );
 EventCard.propTypes = {
-  polyline: propTypes.shape({
-    fitBounds: propTypes.bool,
-    bounds: propTypes.object,
-    data: propTypes.array,
-    isVisible: propTypes.bool,
-    htmlInstructions: propTypes.arrayOf(propTypes.string),
-    distance: propTypes.string,
-  }).isRequired,
   reportedBy: propTypes.object.isRequired,
   spam: propTypes.object.isRequired,
   viewmode: propTypes.string.isRequired,
+  // reportedBy: propTypes..isRequired,
   datetime: propTypes.number.isRequired,
   title: propTypes.string.isRequired,
   description: propTypes.string,
@@ -131,8 +109,6 @@ EventCard.propTypes = {
     isTrusted: propTypes.bool.isRequired,
     uuid: propTypes.string.isRequired,
   })).isRequired,
-  uuid: propTypes.string.isRequired,
-  editOption: propTypes.bool.isRequired,
 };
 EventCard.defaultProps = {
   reverse_geocode: { name: '', admin2: '', admin1: '' },
@@ -145,111 +121,11 @@ EventCard.defaultProps = {
  * @type {Object}
  */
 class Viewevent extends Component {
-  constructor(props) {
-    super(props);
-    this.setupSocket = this.setupSocket.bind(this);
-  }
-  componentDidMount() {
+  componentWillMount() {
     const { eventid } = this.props.match.params;
     const shouldRefresh =
-     this.props.match.params.eventid !== this.props.event.data.eventid;
+      this.props.match.params.eventid !== this.props.event.data.eventid;
     this.props.fetchEventData({ eventid, shouldRefresh });
-
-    if (!this.props.map.polyline.isVisible && process.env.JEST_WORKER_ID === undefined) {
-      this.props.getUserLocation({ fromViewevent: true });
-    }
-
-    if (this.props.isLoggedIn) {
-      this.props.updateUpvotesLongPollStatus(true);
-      this.setupSocket();
-    }
-  }
-  componentWillUnmount() {
-    console.log('unmount');
-
-    if (this.state !== null && this.state.socket && this.state.socket !== null) {
-      window.localStorage.setItem('noReconnect', true);
-      this.state.socket.close(1000, 'socket closed inside componentWillUnmount');
-    }
-    this.props.updateUpvotesLongPollStatus(false);
-  }
-  setupSocket() {
-    // eslint-disable-next-line no-undef
-    const socket = new WebSocket(`${WS_COMMENTS}/${this.props.match.params.eventid}/`);
-
-    socket.onclose = () => {
-      if (window.localStorage.getItem('noReconnect') === 'false') {
-        console.log('Socket is closed. Reconnect will be attempted in 5 seconds.');
-        setTimeout(this.setupSocket, 5000);
-      } else {
-        console.log('closing socket conn.');
-      }
-    };
-
-    socket.onerror = (err) => {
-      console.log('socket.onerror', err);
-    };
-
-    socket.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (message.actionType === WS_NEW_COMMENT_RECEIVED) {
-        this.props.fetchCommentThreadSuccessViaWebSocket(message.data);
-      }
-    };
-    // eslint-disable-next-line react/no-did-mount-set-state
-    this.setState({ socket });
-    window.localStorage.removeItem('noReconnect');
-  }
-  // eslint-disable-next-line class-methods-use-this
-  head() {
-    let image = '';
-    if (this.props.event.data.images !== undefined && this.props.event.data.images.length > 0) {
-      if (this.props.event.data.images[0].isNsfw) {
-        image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}&mode=thumbnail`;
-      } else {
-        image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}`;
-      }
-    }
-
-    const place = this.props.event.reverse_geocode !== undefined ? this.props.event.reverse_geocode.name : '';
-    let coords = {
-      latitude: 0.0,
-      longitude: 0.0,
-    };
-    if (this.props.event.data.location !== undefined) {
-      coords = this.props.event.data.location.coords;
-    }
-    return (
-      <SEO
-        title={`${this.props.event.data.title} near ${place} | Incident Details`}
-        url={`${DOMAIN_NAME}/view/${this.props.event.data.eventid}`}
-        description={`Incident description: ${this.props.event.data.description} | Geo location: Latitude=${coords.latitude} Longitude=${coords.longitude}`}
-        image={image}
-      />
-    );
-  }
-  // eslint-disable-next-line class-methods-use-this
-  head() {
-    let image = '';
-    // console.log(this.props.event);
-    if (this.props.event.data.images !== undefined && this.props.event.data.images.length > 0) {
-      if (this.props.event.data.images[0].isNsfw) {
-        image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}&mode=thumbnail`;
-      } else {
-        image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}`;
-      }
-      const place = this.props.event.reverse_geocode !== undefined ? this.props.event.reverse_geocode.name : '';
-      return (
-        <SEO
-          title={`${this.props.event.data.title} near ${place} | Incident Details`}
-          url={`${DOMAIN_NAME}/view/${this.props.event.data.eventid}`}
-          description={`Incident description: ${this.props.event.data.description} | Geo location: Latitude=${this.props.event.data.location.coords.latitude} Longitude=${this.props.event.data.location.coords.longitude}`}
-          image={image}
-        />
-      );
-    }
-
-    return <React.Fragment></React.Fragment>;
   }
   render() {
     let lat = 0;
@@ -260,29 +136,26 @@ class Viewevent extends Component {
       ({ latitude: lat, longitude: lng } = this.props.event.data.location.coords);
     }
     return (
-      <div style={{ paddingTop: '1rem', marginBottom: '6rem' }} data-test="component-viewevent">
-        {this.head()}
-        <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
+      <div style={{ paddingTop: '1rem', marginBottom: '6rem' }}>
+        <Responsive maxWidth={900}>
           <div style={styleSheet.mobile.mapContainer}>
             <MapwithSonar
               latitude={lat}
               longitude={lng}
               type={this.props.event.data.category}
               loading={this.props.event.isLoading}
-              data-test="component-mapwithsonar"
             />
 
           </div>
           <Item style={styleSheet.mobile.itemContainer}>
             {
               this.props.event.isLoading
-              ? <LoadingCard loading data-test="component-loadingcard" />
+              ? <LoadingCard loading />
               :
               <EventCard
                 viewmode="mobile"
                 reportedBy={this.props.event.data.reportedBy}
                 datetime={this.props.event.data.datetime}
-                polyline={this.props.map.polyline}
                 title={this.props.event.data.title}
                 description={this.props.event.data.description}
                 images={this.props.event.data.images}
@@ -290,19 +163,16 @@ class Viewevent extends Component {
                 eventType={this.props.event.data.category}
                 uuid={this.props.match.params.eventid}
                 spam={this.props.event.data.spam}
-                editOption={this.props.editOption}
-                data-test="component-event-card"
               />
           }
             {!this.props.event.isLoading ?
               <CommentsSection
                 threadId={this.props.match.params.eventid}
-                data-test="component-comments-section"
               />
             : null }
           </Item>
         </Responsive>
-        <Responsive fireOnMount getWidth={getWidth} minWidth={901}>
+        <Responsive minWidth={901}>
           <Container>
             <Grid columns={2}>
               <Grid.Row>
@@ -313,7 +183,6 @@ class Viewevent extends Component {
                       longitude={lng}
                       type={this.props.event.data.category}
                       loading={this.props.event.isLoading}
-                      data-test="component-mapwithsonar"
                     />
                   </div>
                 </Grid.Column>
@@ -321,13 +190,12 @@ class Viewevent extends Component {
                   <Item style={styleSheet.desktop.itemContainer}>
                     {
                       this.props.event.isLoading
-                        ? <LoadingCard loading data-test="component-loadingcard" />
+                        ? <LoadingCard loading />
                         :
                         <EventCard
                           viewmode="desktop"
                           reportedBy={this.props.event.data.reportedBy}
                           datetime={this.props.event.data.datetime}
-                          polyline={this.props.map.polyline}
                           title={this.props.event.data.title}
                           description={this.props.event.data.description}
                           images={this.props.event.data.images}
@@ -335,14 +203,11 @@ class Viewevent extends Component {
                           eventType={this.props.event.data.category}
                           spam={this.props.event.data.spam}
                           uuid={this.props.match.params.eventid}
-                          data-test="component-event-card"
-                          editOption={this.props.editOption}
                         />
                     }
                     {!this.props.event.isLoading ?
                       <CommentsSection
                         threadId={this.props.match.params.eventid}
-                        data-test="component-comments-section"
                       />
                     : null }
                   </Item>
@@ -356,68 +221,21 @@ class Viewevent extends Component {
   }
 }
 Viewevent.propTypes = {
-  isLoggedIn: propTypes.bool.isRequired,
-  fetchCommentThreadSuccessViaWebSocket: propTypes.func.isRequired,
-  updateUpvotesLongPollStatus: propTypes.func.isRequired,
   match: propTypes.shape({
     params: propTypes.shape({
       eventid: propTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  event: propTypes.shape({
-    reverse_geocode: propTypes.object,
-    isLoading: propTypes.bool,
-    data: propTypes.shape({
-      reportedBy: propTypes.object.isRequired,
-      datetime: propTypes.number,
-      title: propTypes.string,
-      description: propTypes.string,
-      images: propTypes.arrayOf(propTypes.shape({
-        isNsfw: propTypes.bool.isRequired,
-        isTrusted: propTypes.bool.isRequired,
-        uuid: propTypes.string.isRequired,
-      })).isRequired,
-      spam: propTypes.object,
-      eventid: propTypes.string,
-      location: propTypes.shape({
-        coords: propTypes.shape({
-          latitude: propTypes.number,
-          longitude: propTypes.number,
-        }),
-      }),
-      category: propTypes.string,
-    }).isRequired,
-  }).isRequired,
-  map: propTypes.shape({
-    lat: propTypes.number,
-    lng: propTypes.number,
-    polyline: propTypes.object.isRequired,
-  }).isRequired,
-  getUserLocation: propTypes.func.isRequired,
-  editOption: propTypes.bool.isRequired,
   fetchEventData: propTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     fetchEventData,
-    fetchCommentThreadSuccessViaWebSocket,
-    updateUpvotesLongPollStatus,
-    getUserLocation: geolocatoretLocationPermission,
   }, dispatch)
 );
-const mapStateToProps = (state) => {
-  let editOption = false;
-  if (JSON.stringify(state.event.data) !== '{}' && JSON.stringify(state.auth.user) !== '{}' && process.env.JEST_WORKER_ID === undefined) {
-    editOption = state.event.data.reportedBy.original.uid === state.auth.user.uid;
-  }
-  return {
-    map: state.map,
-    event: state.event,
-    isLoggedIn: state.auth.isLoggedIn,
-    editOption,
-  };
-};
-export default {
-  component: connect(mapStateToProps, mapDispatchToProps)(Viewevent),
-};
+const mapStateToProps = state => ({
+  map: state.map,
+  event: state.event,
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Viewevent);
