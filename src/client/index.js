@@ -1,52 +1,93 @@
-/* eslint-disable react/jsx-filename-extension */
-// Startup point for the client side application
 /**
  * CrowdAlert
  * index.js: main entry point of the app
  * eslint is disabled as there are references to window & documnet object.
  */
 
-import 'babel-polyfill';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
-import { renderRoutes } from 'react-router-config';
-import StyleContext from 'isomorphic-style-loader/StyleContext';
-import Routes from './Routes';
-import history from '../helpers/history';
+import createHistory from 'history/createBrowserHistory';
+import registerServiceWorker from './registerServiceWorker';
 
 import configureStore from './configureStore';
+import { messaging } from './utils/firebase';
+import App from './containers/App';
+import { receivedNewNotification } from './components/Notifications/actions';
 
 /**
  * [initialState initial state for the App]
  * @type {Object}
  */
-const initialState = window.__INITIAL_STATE__;
-
-delete window.__INITIAL_STATE__;
-
+const initialState = {};
+/**
+ * [history instantiate a history object containing the browser history
+ *  used to push & pop pages using react-router]
+ * @type {[type]}
+ */
+const history = createHistory();
 /**
  * [store contains the redux store for the app]
  * @type {[type]}
  */
 const store = configureStore(initialState, history);
+/**
+ * Dispatch actions on message is received
+ */
+messaging.onMessage((payload) => {
+  console.log('Message', payload);
+  store.dispatch(receivedNewNotification(payload));
+});
 
-const insertCss = (...styles) => {
-  const removeCss = styles.map(style => style._insertCss());
-  return () => removeCss.forEach(dispose => dispose());
-};
+/**
+ * [ROOT_NODE is the document reference where the app should be mounted]
+ * @type {[type]}
+ */
+const ROOT_NODE = document.getElementById('root');
 
-const Client = () => (
-  <StyleContext.Provider value={{ insertCss }} data-test="component-client">
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <div>{renderRoutes(Routes)}</div>
-      </ConnectedRouter>
-    </Provider>
-  </StyleContext.Provider>
-);
+// Render the app to the specified mount point
+ReactDOM.render(
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <App />
+    </ConnectedRouter>
+  </Provider>, ROOT_NODE);
+/**
+ * [registerServiceWorker register the service worker. Required for the PWA
+ * behaviour]
+ * @param  {none} function [description]
+ * @return {none}          [description]
+ */
+registerServiceWorker();
 
-export default {
-  Component: Client,
-  store,
-};
+/**
+ * [Manages the initial loading spinner. Shows the spinner until document is
+ * rendered. ]
+ * @return {[none]} [description]
+ */
+(function () {
+  const delay = 500;
+  const dimmer = document.querySelector('#docs-loading-dimmer');
+  dimmer.style.pointerEvents = 'none';
+  dimmer.style.transition = `opacity ${delay}ms linear`;
+
+  function removeDimmer() {
+    dimmer.style.opacity = '0';
+
+    setTimeout(() => {
+      const dimmer = document.querySelector('#docs-loading-dimmer');
+
+      document.body.removeChild(dimmer);
+      document.body.setAttribute('class', '');
+      window.removeEventListener('load', removeDimmer);
+      alert("Production Build: 11-Aug");
+    }, delay);
+  }
+  
+  window.addEventListener('load', removeDimmer);
+}());
+/**
+ * export the browser history instance so that it could be imported later
+ */
+export default history;
