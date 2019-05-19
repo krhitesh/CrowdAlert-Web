@@ -1,18 +1,19 @@
 /* eslint-disable quotes */
 import express from 'express';
-import React from 'react';
-import { renderToString } from 'react-dom/server';
+import renderer from './helpers/renderer';
+import serverConfigureStore from './client/serverConfigureStore';
 
 const app = express();
 
 app.use(express.static('public'));
 
-app.get('**', (req, res) => {
-  // const content = renderToString(main);
+app.get('*', (req, res) => {
+  const store = serverConfigureStore(req);
+  const context = {};
+  // Some logic to initialize data and
+  // load data into the store.
 
-  const html = ``;
-
-  res.send(html);
+  res.send(renderer(req, store, context));
 });
 
 app.listen(3000, () => {
