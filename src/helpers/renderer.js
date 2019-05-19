@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable function-paren-newline */
 /* eslint-disable react/jsx-filename-extension */
 import 'babel-polyfill';
@@ -6,17 +7,23 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { renderRoutes } from 'react-router-config';
+import StyleContext from 'isomorphic-style-loader/StyleContext';
 import serialize from 'serialize-javascript';
 import Routes from '../client/Routes';
 
 
 export default (req, store, context) => {
+  const css = new Set();
+  const insertCss = (...styles) => styles.forEach(style => css.add(style._getCss()));
+
   const content = renderToString(
-    <Provider store={store}>
-      <StaticRouter location={req.path} context={context}>
-        <div>{renderRoutes(Routes)}</div>
-      </StaticRouter>
-    </Provider>);
+    <StyleContext.Provider value={{ insertCss }}>
+      <Provider store={store}>
+        <StaticRouter location={req.path} context={context}>
+          <div>{renderRoutes(Routes)}</div>
+        </StaticRouter>
+      </Provider>
+    </StyleContext.Provider>);
 
   // const helmet = Helmet.renderStatic();
 
@@ -61,6 +68,7 @@ export default (req, store, context) => {
         Learn how to configure a non-root public URL by running 'npm run build'.
       -->
       <title>CrowdAlert</title>
+      <style>${[...css].join('')}</style>
     </head>
     <body class="dimmed dimmable" style="background: #f3f2f2">    
       <div class="ui active page dimmer" id="docs-loading-dimmer">

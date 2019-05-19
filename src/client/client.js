@@ -12,6 +12,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { renderRoutes } from 'react-router-config';
+import StyleContext from 'isomorphic-style-loader/StyleContext';
 import createHistory from 'history/createBrowserHistory';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -57,6 +58,11 @@ const removeDimmer = () => {
   }, delay);
 };
 
+const insertCss = (...styles) => {
+  const removeCss = styles.map(style => style._insertCss());
+  return () => removeCss.forEach(dispose => dispose());
+};
+
 /**
  * [ROOT_NODE is the document reference where the app should be mounted]
  * @type {[type]}
@@ -65,11 +71,13 @@ const ROOT_NODE = document.getElementById('root');
 
 // Render the app to the specified mount point
 ReactDOM.hydrate(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <div>{renderRoutes(Routes)}</div>
-    </ConnectedRouter>
-  </Provider>,
+  <StyleContext.Provider value={{ insertCss }}>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <div>{renderRoutes(Routes)}</div>
+      </ConnectedRouter>
+    </Provider>
+  </StyleContext.Provider>,
   ROOT_NODE,
   removeDimmer,
 );

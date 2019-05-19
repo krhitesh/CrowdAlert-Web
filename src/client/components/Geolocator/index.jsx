@@ -69,7 +69,7 @@ GeoLocator.propTypes = {
   modal: PropTypes.shape({
     modalText: PropTypes.string.isRequired,
     isOpen: PropTypes.bool.isRequired,
-    closeModal: PropTypes.func.isRequired,
+    closeModal: PropTypes.func,
   }),
 };
 GeoLocator.defaultProps = {
