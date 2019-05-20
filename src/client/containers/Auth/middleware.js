@@ -101,6 +101,8 @@ const authMiddleware = ({ dispatch }) => next => (action) => {
           window.localStorage.setItem('shouldBeLoggedIn', false);
           window.localStorage.removeItem('user');
           window.sessionStorage.removeItem('token');
+
+          document.cookie = 'token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
         dispatch(updateUserAuthenticationData({
           loggedIn: false,
@@ -178,6 +180,7 @@ const emailPasswordAuthMiddleware = ({ dispatch }) => next => (action) => {
         dispatch(checkUserAuthenticationStatus());
         window.sessionStorage.removeItem('token');
         // history.push('/login/');
+        document.cookie = 'token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
       })
       .catch((err) => { console.log('Error sign out', err); });
   }
