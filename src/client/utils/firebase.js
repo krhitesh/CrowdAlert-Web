@@ -3,7 +3,6 @@ import { firebaseConfig } from '../config';
 
 // Initiate the firebase app
 firebase.initializeApp(firebaseConfig);
-console.log(firebaseConfig);
 /**
  * [database contains a reference to firebase database]
  * @type {[type]}

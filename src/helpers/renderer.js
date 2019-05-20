@@ -26,7 +26,6 @@ export default (req, store, context) => {
     </StyleContext.Provider>);
 
   // const helmet = Helmet.renderStatic();
-
   return `
   <!DOCTYPE html>
   <html lang="en">

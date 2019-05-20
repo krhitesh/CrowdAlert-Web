@@ -3,6 +3,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import { createEpicMiddleware } from 'redux-observable';
 // import { fromJS } from 'immutable';
+import { createLogger } from 'redux-logger';
 
 import rootReducer from './reducers';
 import rootEpic from './epics'
@@ -20,6 +21,10 @@ export default function configureStore(initialState = {}, history) {
   const epicMiddleware = createEpicMiddleware();
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+  const logger = createLogger({
+    diff: true,
+  });
+
   const store = createStore(
     rootReducer, // Root reducer
     initialState, // Initial state
@@ -28,6 +33,7 @@ export default function configureStore(initialState = {}, history) {
         appRouterMiddleware,        
         ...middlewares,
         epicMiddleware,
+        logger,
       )  
     )
   )
