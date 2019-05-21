@@ -25,7 +25,7 @@ app.get('*', async (req, res) => {
   // redux action with that user data.
 
   const history = createMemoryHistory();
-  const store = serverConfigureStore(req, {}, history);
+  const { store, closableEpic } = serverConfigureStore(req, {}, history);
   if (token && token !== '') {
     await performAuthentication(store, token);
   } else {
@@ -37,31 +37,53 @@ app.get('*', async (req, res) => {
   // Then use the new state to render the application.
 
   // console.log(matchRoutes(Routes, req.path));
-  const promises = matchRoutes(Routes, req.path).map(({ route }) => {
+  matchRoutes(Routes, req.path).map(({ route }) => {
     return route.loadData ? route.loadData(store) : null;
-  })
-    .map((promise) => {
-      if (promise) {
-        return new Promise((resolve, reject) => {
-          promise.then(resolve).catch(reject);
-        });
-      }
-    });
+  });
 
-  Promise.all(promises)
-    .then(() => {
-      const context = {};
-      const content = renderer(req, store, context);
+  closableEpic.close((err) => {
+    console.log("All epics completed");
+    if (err) {
+      console.log(err);
+    }
 
-      if (context.url) {
-        return res.redirect(301, context.url);
-      }
-      if (context.notFound) {
-        res.status(404);
-      }
+    const context = {};
+    const content = renderer(req, store, context);
+    if (context.url) {
+      return res.redirect(301, context.url);
+    }
+    if (context.notFound) {
+      res.status(404);
+    }
 
-      res.send(content);
-    });
+    res.send(content);
+  });
+
+  // const promises = matchRoutes(Routes, req.path).map(({ route }) => {
+  //   return route.loadData ? route.loadData(store) : null;
+  // })
+  //   .map((promise) => {
+  //     if (promise) {
+  //       return new Promise((resolve, reject) => {
+  //         promise.then(resolve).catch(reject);
+  //       });
+  //     }
+  //   });
+
+  // Promise.all(promises)
+  //   .then(() => {
+  //     const context = {};
+  //     const content = renderer(req, store, context);
+
+  //     if (context.url) {
+  //       return res.redirect(301, context.url);
+  //     }
+  //     if (context.notFound) {
+  //       res.status(404);
+  //     }
+
+  //     res.send(content);
+  //   });
 });
 
 app.listen(3000, () => {
