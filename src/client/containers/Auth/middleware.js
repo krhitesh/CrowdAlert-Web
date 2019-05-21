@@ -23,7 +23,6 @@ import {
   GoogleAuth,
   Auth,
 } from '../../utils/firebase';
-// import history from '../../client';
 
 const authMiddleware = ({ dispatch }) => next => (action) => {
   if (action.type === AUTH_CHECK_USER_STATUS) {

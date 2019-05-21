@@ -5,12 +5,12 @@
 import 'babel-polyfill';
 import express from 'express';
 import { matchRoutes } from 'react-router-config';
+import { createMemoryHistory } from 'history';
 import { getCookie } from './utils';
-import { authByIdToken } from './helpers/auth';
-import { updateUserAuthenticationData } from './client/containers/Auth/actions';
+import { performAuthentication, handleNoUser } from './helpers/auth';
 import Routes from './client/Routes';
 import renderer from './helpers/renderer';
-import serverConfigureStore from './client/serverConfigureStore';
+import serverConfigureStore from './helpers/serverConfigureStore';
 
 const app = express();
 
@@ -24,53 +24,12 @@ app.get('*', async (req, res) => {
   // valid, fetch the user then dispatch appropriate
   // redux action with that user data.
 
-  const store = serverConfigureStore(req);
+  const history = createMemoryHistory();
+  const store = serverConfigureStore(req, {}, history);
   if (token && token !== '') {
-    try {
-      const user = await authByIdToken(token);
-      if (user) {
-        const {
-          displayName,
-          email,
-          emailVerified,
-          uid,
-          providerData,
-        } = user;
-        const photoURL = user.photoURL || 'https://crowdalert.herokuapp.com/static/images/meerkat.svg';
-
-        store.dispatch(updateUserAuthenticationData({
-          loggedIn: true,
-          user: {
-            displayName,
-            email,
-            emailVerified,
-            photoURL,
-            uid,
-            providerData,
-          },
-        }));
-        console.log('RendererServer: Logged IN');
-      } else {
-        store.dispatch(updateUserAuthenticationData({
-          loggedIn: false,
-          user: null,
-        }));
-        console.log('RendererServer: NOT Logged IN');
-      }
-    } catch (err) {
-      console.log('User authentication failed on rendered server', err);
-      store.dispatch(updateUserAuthenticationData({
-        loggedIn: false,
-        user: null,
-      }));
-      console.log('RendererServer: NOT Logged IN');
-    }
+    await performAuthentication(store, token);
   } else {
-    store.dispatch(updateUserAuthenticationData({
-      loggedIn: false,
-      user: null,
-    }));
-    console.log('RendererServer: NOT Logged IN');
+    handleNoUser(store);
   }
 
   // UserAuth(TODO) -> Dispatch apt action to inform redux (and state) that hey,

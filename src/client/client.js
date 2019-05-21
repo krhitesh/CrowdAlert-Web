@@ -13,7 +13,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { renderRoutes } from 'react-router-config';
 import StyleContext from 'isomorphic-style-loader/StyleContext';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import registerServiceWorker from './registerServiceWorker';
 
 import Routes from './Routes';
@@ -31,7 +31,7 @@ const initialState = window.__INITIAL_STATE__;
  *  used to push & pop pages using react-router]
  * @type {[type]}
  */
-const history = createHistory();
+const history = createBrowserHistory();
 /**
  * [store contains the redux store for the app]
  * @type {[type]}
@@ -54,7 +54,8 @@ const removeDimmer = () => {
 
     document.body.removeChild(dimmer);
     document.body.setAttribute('class', '');
-    window.alert('Production Build: 11-Aug');
+    // Uncomment the following line
+    // window.alert('Production Build: 11-Aug');
   }, delay);
 };
 

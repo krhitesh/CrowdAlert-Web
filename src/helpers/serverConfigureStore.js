@@ -4,9 +4,9 @@ import { routerMiddleware } from 'react-router-redux';
 import { createEpicMiddleware } from 'redux-observable';
 // import { fromJS } from 'immutable';
 
-import rootReducer from './reducers';
-import rootEpic from './epics'
-import middlewares from './middleware';
+import rootReducer from '../client/reducers';
+import rootEpic from '../client/epics'
+import middlewares from '../client/middleware';
 
 /**
  * [Initiates the global redux store. Combines the initial state
@@ -15,9 +15,9 @@ import middlewares from './middleware';
  * @param  {Object} [initialState={}] [initial state for the app]
  * @return {[type]}                   [an instance of the redux store]
  */
-export default (req, initialState = {}) => {
-  // No appRouterMiddleware on server.
-  // const appRouterMiddleware = routerMiddleware(history);
+export default (req, initialState = {}, history) => {
+
+  const appRouterMiddleware = routerMiddleware(history);
   const epicMiddleware = createEpicMiddleware();
   
   // window object is undefined on server.
@@ -30,10 +30,10 @@ export default (req, initialState = {}) => {
     initialState, // Initial state
     composeEnhancers(
       applyMiddleware(
-        // appRouterMiddleware,        
+        appRouterMiddleware,
         ...middlewares,
         epicMiddleware,
-      )  
+      )
     )
   )
   epicMiddleware.run(rootEpic);
