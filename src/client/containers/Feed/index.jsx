@@ -48,7 +48,7 @@ class Feed extends Component {
    * [componentWillMount fetch  the event as soon as the component will mount]
    * @return {[type]} [description]
    */
-  componentWillMount() {
+  componentDidMount() {
     // Fetch the users current approximate location using API
     this.props.fetchUserLocation({
       oldLat: this.props.mapProps.lat,
@@ -104,4 +104,21 @@ const mapDispatchToProps = dispatch => (
     fetchEventsByLocation,
   }, dispatch)
 );
-export default connect(mapStateToProps, mapDispatchToProps)(Feed);
+export default {
+  component: connect(mapStateToProps, mapDispatchToProps)(Feed),
+  loadData: ({ dispatch }) => {
+    // Need to await these actions somehow.
+    console.log('Inside loadData of Feed');
+    // Fetches user location by IP
+    dispatch(fetchUserLocation({
+      oldLat: 0,
+      oldLng: 0,
+    }));
+
+    dispatch(fetchEventsByLocation({
+      lat: 0,
+      lng: 0,
+      zoom: 4,
+    }));
+  },
+};

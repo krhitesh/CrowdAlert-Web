@@ -80,7 +80,7 @@ ReactDOM.hydrate(
     </Provider>
   </StyleContext.Provider>,
   ROOT_NODE,
-  removeDimmer,
+  // removeDimmer,
 );
 /**
  * [registerServiceWorker register the service worker. Required for the PWA

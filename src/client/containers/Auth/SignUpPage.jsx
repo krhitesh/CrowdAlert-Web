@@ -92,4 +92,6 @@ const mapDispatchToProps = dispatch => (
   }, dispatch)
 );
 
-export default connect(null, mapDispatchToProps)(LoginPage);
+export default {
+  component: connect(null, mapDispatchToProps)(LoginPage),
+};

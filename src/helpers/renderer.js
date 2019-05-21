@@ -69,7 +69,8 @@ export default (req, store, context) => {
       <title>CrowdAlert</title>
       <style>${[...css].join('')}</style>
     </head>
-    <body class="dimmed dimmable" style="background: #f3f2f2">    
+    <body class="dimmed dimmable" style="background: #f3f2f2">
+    <!--
       <div class="ui active page dimmer" id="docs-loading-dimmer">
         <div class="content">
           <div class="center">         
@@ -81,6 +82,7 @@ export default (req, store, context) => {
           </div>
         </div>
       </div>
+    -->
       <noscript>
         You need to enable JavaScript to run this app.
       </noscript>

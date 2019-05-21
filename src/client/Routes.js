@@ -13,32 +13,32 @@ export default [
     ...App,
     routes: [
       {
-        component: Feed,
+        ...Feed,
         path: '/',
         exact: true,
       },
       {
-        component: Viewevent,
+        ...Viewevent,
         path: '/view/:eventid',
         exact: true,
       },
       {
-        component: LoginPage,
+        ...LoginPage,
         path: '/login',
         exact: true,
       },
       {
-        component: SignUpPage,
+        ...SignUpPage,
         path: '/signup',
         exact: true,
       },
       {
-        component: ConfirmEmail,
+        ...ConfirmEmail,
         path: '/auth/confirmEmail',
         exact: true,
       },
       {
-        component: NotificationsPage,
+        ...NotificationsPage,
         path: '/notifications',
         exact: true,
       },
