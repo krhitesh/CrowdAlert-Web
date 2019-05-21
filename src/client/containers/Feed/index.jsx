@@ -44,6 +44,10 @@ function getEventMarkers(feed, zoom) {
  * @extends Component
  */
 class Feed extends Component {
+  constructor(props) {
+    super(props);
+    console.log(this.props.feedProps);
+  }
   /**
    * [componentWillMount fetch  the event as soon as the component will mount]
    * @return {[type]} [description]

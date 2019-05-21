@@ -16,18 +16,18 @@ import {
 } from '../../components';
 import CreateEvent from '../CreateEvent';
 
-const PrivateRoute = ({ component: Cmp, auth: Auth, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) => {
-      if (Auth) {
-        return (<Cmp {...props} />);
-      }
-      return (<Redirect to="/login/" />);
-    }
-  }
-  />
-);
+// const PrivateRoute = ({ component: Cmp, auth: Auth, ...rest }) => (
+//   <Route
+//     {...rest}
+//     render={(props) => {
+//       if (Auth) {
+//         return (<Cmp {...props} />);
+//       }
+//       return (<Redirect to="/login/" />);
+//     }
+//   }
+//   />
+// );
 /**
  * [App Main entry point of the App]
  * @extends Component
@@ -60,8 +60,8 @@ class App extends Component {
           <div>
             <Menu />
           </div>
-          {/* Move this private route to requireAuth */}
-          <PrivateRoute path="/create" component={CreateEvent} auth={this.props.isLoggedIn} />
+          {/* Moved this private route to requireAuth and inside Routes */}
+          {/* <PrivateRoute path="/create" component={CreateEvent} auth={this.props.isLoggedIn} /> */}
           {renderRoutes(this.props.route.routes)}
 
         </Sidebar>

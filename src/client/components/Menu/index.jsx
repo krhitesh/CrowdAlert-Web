@@ -10,6 +10,13 @@ import LoginButton from '../../containers/Auth/Loginbutton';
 import { UserSettingsMenu, Notifications } from '../';
 import logo from '../../logo.png';
 
+const isBrowser = () => typeof window !== 'undefined';
+
+const getWidth = () => {
+  if (isBrowser()) return window.innerWidth;
+  return Infinity;
+};
+
 /**
  * [MenuBar top menu bar for the app. Responsive according to the viewport]
  * @param {[type]} props [description]
@@ -17,7 +24,7 @@ import logo from '../../logo.png';
 const MenuBar = props => (
   <Menu size="small">
     <Menu.Menu position="left">
-      <Responsive as={Menu.Item} {...Responsive.onlyMobile}>
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyMobile}>
         <Icon
           name="content"
           onClick={() => props.toggleSidebarVisibility({
@@ -25,7 +32,7 @@ const MenuBar = props => (
           })}
         />
       </Responsive>
-      <Responsive as={Menu.Item} {...Responsive.onlyTablet}>
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyTablet}>
         <Menu.Item>
           <Icon
             name="content"
@@ -35,7 +42,7 @@ const MenuBar = props => (
           />
         </Menu.Item>
       </Responsive>
-      <Responsive as={Menu.Item} minWidth={992}>
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} minWidth={992}>
         <Image src={logo} style={{ height: '4vh' }} />
         <Link to="/">
           <Menu.Item>
@@ -52,7 +59,7 @@ const MenuBar = props => (
       </Responsive>
     </Menu.Menu>
     <Menu.Menu position="right">
-      <Responsive as={Menu.Item} minWidth={992}>
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} minWidth={992}>
         {props.isLoggedIn ?
           <Notifications.NotificationsDropdown />
           :
@@ -61,7 +68,7 @@ const MenuBar = props => (
           </Link>
         }
       </Responsive>
-      <Responsive as={Menu.Item} minWidth={992}>
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} minWidth={992}>
         {props.isLoggedIn ?
           <UserSettingsMenu />
           :
@@ -70,7 +77,7 @@ const MenuBar = props => (
           </Link>
         }
       </Responsive>
-      <Responsive as={Menu.Item} {...Responsive.onlyTablet}>
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyTablet}>
         {props.isLoggedIn ?
           <Notifications.NotificationsDropdown />
           :
@@ -80,7 +87,7 @@ const MenuBar = props => (
         }
       </Responsive>
 
-      <Responsive as={Menu.Item} {...Responsive.onlyMobile}>
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyMobile}>
         <Link to="/notifications" style={{ marginRight: '1em' }}>
           <Notifications.NotificationIcon />
         </Link>
