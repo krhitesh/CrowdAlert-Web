@@ -94,10 +94,12 @@ export default (req, store, context) => {
       <div id="root">${content}</div>
       <script>
         window.__INITIAL_STATE__ = ${serialize(store.getState())}
+        /* 
         var delay = 500;
         var dimmer = document.querySelector('#docs-loading-dimmer');
         dimmer.style.pointerEvents = 'none';
         dimmer.style.transition = 'opacity ' + delay +'ms linear';
+        */
       </script>
       <script src="bundle.js"></script>
       <!--
