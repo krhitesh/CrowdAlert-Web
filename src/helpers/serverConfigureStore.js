@@ -2,7 +2,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import { createEpicMiddleware } from 'redux-observable';
-import logger from 'redux-logger';
+import loggerMiddleware from 'redux-logger';
 // import { fromJS } from 'immutable';
 
 import wrapClosableEpic from './wrapClosableEpic';
@@ -36,7 +36,7 @@ export default (req, initialState = {}, history) => {
         appRouterMiddleware,
         ...middlewares,
         epicMiddleware,
-        // logger,
+        loggerMiddleware,
       )
     )
   )
