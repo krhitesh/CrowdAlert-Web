@@ -83,6 +83,7 @@ class IPLocationView(APIView):
         """
 
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        print(x_forwarded_for)
         if x_forwarded_for:
             user_ip = x_forwarded_for.split(',')[-1]
         else:

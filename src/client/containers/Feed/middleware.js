@@ -11,10 +11,8 @@ const updateLocationMiddleware = ({ dispatch }) => next => (action) => {
     const oldLat = parseFloat(action.payload.oldLat);
     const oldLng = parseFloat(action.payload.oldLng);
     const zoom = 12;
-
     if (!action.payload.forced) {
       const distance = distanceCoordinates(lat, lng, oldLat, oldLng);
-      // console.log(distance);
       if (distance > 500) {
         // Make sure that if the target location is somewhat near to the current
         // location, don't update location

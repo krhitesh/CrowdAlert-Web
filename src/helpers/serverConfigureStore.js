@@ -3,9 +3,9 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import { createEpicMiddleware } from 'redux-observable';
 import loggerMiddleware from 'redux-logger';
+import thunkMiddleware from 'redux-thunk';
 // import { fromJS } from 'immutable';
 
-import wrapClosableEpic from './wrapClosableEpic';
 import rootReducer from '../client/reducers';
 import rootEpic from '../client/epics'
 import middlewares from '../client/middleware';
@@ -20,7 +20,6 @@ import middlewares from '../client/middleware';
 export default (req, initialState = {}, history) => {
 
   const appRouterMiddleware = routerMiddleware(history);
-  const closableEpic = wrapClosableEpic(rootEpic);
   const epicMiddleware = createEpicMiddleware();
   
   // window object is undefined on server.
@@ -33,16 +32,14 @@ export default (req, initialState = {}, history) => {
     initialState, // Initial state
     composeEnhancers(
       applyMiddleware(
+        thunkMiddleware,
         appRouterMiddleware,
         ...middlewares,
         epicMiddleware,
-        loggerMiddleware,
+        // loggerMiddleware,
       )
     )
   )
-  epicMiddleware.run(closableEpic);
-  return {
-    store,
-    closableEpic,
-  };
+  epicMiddleware.run(rootEpic);
+  return store;
 };
