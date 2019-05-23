@@ -26,13 +26,6 @@ app.use(
   proxy({ target: 'http://localhost:8000', changeOrigin: true }),
 );
 
-app.get('*.js', (req, res, next) => {
-  req.url = req.url + '.br';
-  res.set('Content-Encoding', 'br');
-  res.set('Content-Type', 'text/javascript');
-  next();
-});
-
 app.use(express.static('public'));
 app.get('*', async (req, res) => {
   const cookie = req.get('cookie') || '';
