@@ -60,7 +60,9 @@
     "webpack": "3.5.6",
     "webpack-dev-server": "2.8.2",
     "webpack-merge": "4.1.0",
-    "webpack-node-externals": "1.6.0"
+    "webpack-node-externals": "1.6.0",
+    "brotli-webpack-plugin": "^1.1.0",
+    "compression-webpack-plugin": "1.1.12"
   },
   "scripts": {
     "dev": "npm-run-all --parallel dev:*",
@@ -69,8 +71,8 @@
     "dev:build-server": "webpack --config webpack.server.js --watch",
     "prod": "npm-run-all --parallel prod:*",
     "prod:server": "nodemon --watch build --exec \"node build/bundle.js\"",
-    "prod:build-client": "webpack --mode production --config webpack.client.js --watch",
-    "prod:build-server": "webpack --mode production --config webpack.server.js --watch",
+    "prod:build-client": "webpack -p --config webpack.client.js --watch",
+    "prod:build-server": "webpack -p --config webpack.server.js --watch",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
@@ -79,8 +81,6 @@
     "lint": "eslint src"
   },
   "devDependencies": {
-    "brotli-webpack-plugin": "^1.1.0",
-    "compression-webpack-plugin": "1.1.12",
     "dotenv-webpack": "^1.7.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",

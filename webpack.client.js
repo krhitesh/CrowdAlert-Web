@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const BrotliPlugin = require('brotli-webpack-plugin');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.js');
 
@@ -30,7 +29,7 @@ const config = {
         pure_getters: true,
         unsafe: true,
         unsafe_comps: true,
-        screw_ie8: true
+        screw_ie8: true,
       },
       output: {
         comments: false,
@@ -40,12 +39,6 @@ const config = {
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.IgnorePlugin(/^\.\/locale$/, [/moment$/]),
     new webpack.NoEmitOnErrorsPlugin(),
-    new BrotliPlugin({
-			asset: '[path].br[query]',
-			test: /\.(js|css|html|svg)$/,
-			threshold: 10240,
-			minRatio: 0
-		}),
   ],
 };
 
