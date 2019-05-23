@@ -68,7 +68,7 @@ const notificationsMiddleware = store => next => (action) => {
         dispatch(sendFCMTokenToServer(token));
         // Save as permission granted
         dispatch(showNotificationPermissionGranted(token));
-        console.log(token);
+        // console.log(token);
       })
       .catch((err) => {
         // Show error prompt

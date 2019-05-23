@@ -11,7 +11,6 @@ import { UserSettingsMenu, Notifications } from '../';
 import logo from '../../logo.png';
 
 const isBrowser = () => typeof window !== 'undefined';
-
 const getWidth = () => {
   if (isBrowser()) return window.innerWidth;
   return Infinity;

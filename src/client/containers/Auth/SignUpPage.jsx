@@ -10,6 +10,14 @@ import { setBottomBarVisibility, removeBottomBarVisibility } from '../../compone
 import SignUpForm from './SignUpform';
 import style from './styles';
 import OAuth from './OAuth';
+import { domainName } from '../../utils/apipaths';
+import SEO from '../../components/SEO';
+
+const isBrowser = () => typeof window !== 'undefined';
+const getWidth = () => {
+  if (isBrowser()) return window.innerWidth;
+  return Infinity;
+};
 
 class LoginPage extends Component {
   componentDidMount() {
@@ -18,10 +26,21 @@ class LoginPage extends Component {
   componentWillUnmount() {
     this.props.setBottomBarVisibility();
   }
+  // eslint-disable-next-line class-methods-use-this
+  head() {
+    return (
+      <SEO
+        title="Sign Up | CrowdAlert"
+        url={`${domainName}/signup`}
+        description="Sign Up for CrowdAlert."
+      />
+    );
+  }
   render() {
     return (
       <Container>
-        <Responsive minWidth={900}>
+        {this.head()}
+        <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
           <Grid columns={3} stackable verticalAlign="middle" centered>
             <Grid.Row>
               <Grid.Column width={3} />
@@ -49,7 +68,7 @@ class LoginPage extends Component {
             </Grid.Row>
           </Grid>
         </Responsive>
-        <Responsive maxWidth={900}>
+        <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
           <Grid style={{ padding: '1.4rem' }}>
             <Grid.Row>
               <Grid.Column>

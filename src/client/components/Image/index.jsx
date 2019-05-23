@@ -112,11 +112,12 @@ export default class ImageModal extends Component {
 ImageModal.propTypes = {
   uuid: PropTypes.string,
   base64: PropTypes.string,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   isTrusted: PropTypes.bool,
 };
 ImageModal.defaultProps = {
   uuid: null,
   base64: null,
+  children: null,
   isTrusted: false,
 };

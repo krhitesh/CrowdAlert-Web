@@ -2,7 +2,8 @@
  * Contains API paths, which can be imported as required
  */
 // const domainName = 'https://crowdalert.herokuapp.com';
-const domainName = 'http://127.0.0.1:8000';
+// const domainName = 'http://127.0.0.1:8000';
+const domainName = 'http://127.0.0.1:3000';
 // const domainNameL = 'https://192.168.0.4:8000';
 const domainNameL = domainName;
 
@@ -49,6 +50,7 @@ const SPAM_REPORT = `${domainNameL}/api/spam/report`;
 const FCM_TOKEN = `${domainNameL}/api/notifications/register`;
 
 export {
+  domainName,
   GET_LOCATION_BY_IP,
   GET_EVENT_BY_ID,
   GET_IMAGE_URLS,

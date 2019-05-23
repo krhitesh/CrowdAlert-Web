@@ -19,9 +19,18 @@ import {
   CommentsSection,
 } from '../../components';
 
-import { fetchEventData } from './actions';
+import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
+import { fetchCommentsThreadSSR } from '../../components/Comments/actions';
+import { domainName, GET_IMAGE_URLS } from '../../utils/apipaths';
+import SEO from '../../components/SEO';
 
 import styleSheet from './style';
+
+const isBrowser = () => typeof window !== 'undefined';
+const getWidth = () => {
+  if (isBrowser()) return window.innerWidth;
+  return Infinity;
+};
 
 /**
  * [MapwithSonar Combines the MapWrapper & Sonar component to view a single marker
@@ -121,11 +130,28 @@ EventCard.defaultProps = {
  * @type {Object}
  */
 class Viewevent extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const { eventid } = this.props.match.params;
     const shouldRefresh =
       this.props.match.params.eventid !== this.props.event.data.eventid;
     this.props.fetchEventData({ eventid, shouldRefresh });
+  }
+  // eslint-disable-next-line class-methods-use-this
+  head() {
+    let image = '';
+    if (this.props.event.data.images[0].isNsfw) {
+      image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}&mode=thumbnail`;
+    } else {
+      image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}`;
+    }
+    return (
+      <SEO
+        title={`${this.props.event.data.title} near ${this.props.event.reverse_geocode.name} | Incident Details`}
+        url={`${domainName}/view/${this.props.event.data.eventid}`}
+        description={`Incident description: ${this.props.event.data.description} | Geo location: Latitude=${this.props.event.data.location.coords.latitude} Longitude=${this.props.event.data.location.coords.longitude}`}
+        image={image}
+      />
+    );
   }
   render() {
     let lat = 0;
@@ -137,7 +163,8 @@ class Viewevent extends Component {
     }
     return (
       <div style={{ paddingTop: '1rem', marginBottom: '6rem' }}>
-        <Responsive maxWidth={900}>
+        {this.head()}
+        <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
           <div style={styleSheet.mobile.mapContainer}>
             <MapwithSonar
               latitude={lat}
@@ -172,7 +199,7 @@ class Viewevent extends Component {
             : null }
           </Item>
         </Responsive>
-        <Responsive minWidth={901}>
+        <Responsive fireOnMount getWidth={getWidth} minWidth={901}>
           <Container>
             <Grid columns={2}>
               <Grid.Row>
@@ -240,4 +267,16 @@ const mapStateToProps = state => ({
 });
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Viewevent),
+  loadData: (store, match) => {
+    const { dispatch } = store;
+
+    return Promise.all([
+      dispatch(fetchEventDataSSR({ eventid: match.params.eventid, shouldRefresh: true }))
+        .then(() => {
+          const { lat, lng } = store.getState().map;
+          return dispatch(fetchReverseGeocodeSSR(lat, lng));
+        }),
+      dispatch(fetchCommentsThreadSSR(match.params.eventid, false)),
+    ]);
+  },
 };

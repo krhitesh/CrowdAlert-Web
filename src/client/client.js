@@ -13,7 +13,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { renderRoutes } from 'react-router-config';
 import StyleContext from 'isomorphic-style-loader/StyleContext';
-import { createBrowserHistory } from 'history';
+import history from '../helpers/history';
 import registerServiceWorker from './registerServiceWorker';
 
 import Routes from './Routes';
@@ -26,12 +26,15 @@ import { receivedNewNotification } from './components/Notifications/actions';
  * @type {Object}
  */
 const initialState = window.__INITIAL_STATE__;
+
+delete window.__INITIAL_STATE__;
+
 /**
  * [history instantiate a history object containing the browser history
  *  used to push & pop pages using react-router]
  * @type {[type]}
  */
-const history = createBrowserHistory();
+
 /**
  * [store contains the redux store for the app]
  * @type {[type]}
@@ -41,7 +44,7 @@ const store = configureStore(initialState, history);
  * Dispatch actions on message is received
  */
 messaging.onMessage((payload) => {
-  console.log('Message', payload);
+  // console.log('Message', payload);
   store.dispatch(receivedNewNotification(payload));
 });
 

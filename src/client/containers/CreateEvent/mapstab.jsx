@@ -17,10 +17,20 @@ import {
 } from '../../components';
 import {saveLocationCreateEvents,} from './actions';
 import getEventColor from '../../utils/eventcolors';
+import { domainName } from '../../utils/apipaths';
+import SEO from '../../components/SEO';
 
+const head = () => (
+  <SEO
+    title="Add Location | Report Incident"
+    url={`${domainName}/create/location`}
+    description="Report an incident near you."
+  />
+);
 
 const MapTab = props => (
   <Segment>
+    {head()}
     <Progress
       percent={33}
       attached="top"

@@ -7,6 +7,7 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { renderRoutes } from 'react-router-config';
+import { Helmet } from 'react-helmet';
 import StyleContext from 'isomorphic-style-loader/StyleContext';
 import serialize from 'serialize-javascript';
 import Routes from '../client/Routes';
@@ -25,11 +26,13 @@ export default (req, store, context) => {
       </Provider>
     </StyleContext.Provider>);
 
-  // const helmet = Helmet.renderStatic();
+  const helmet = Helmet.renderStatic();
   return `
   <!DOCTYPE html>
   <html lang="en">
     <head>
+      ${helmet.title.toString()}
+      ${helmet.meta.toString()}
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <meta name="theme-color" content="#000000">
@@ -52,8 +55,8 @@ export default (req, store, context) => {
         manifest.json provides metadata used when your web app is added to the
         homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
       -->
-      <link rel="manifest" href="manifest.json">
-      <link rel="shortcut icon" href="favicon.ico">
+      <link rel="manifest" href="/manifest.json">
+      <link rel="shortcut icon" href="/favicon.ico">
 
       <meta name="msapplication-TileColor" content="#9f00a7">
       <!-- <meta name="msapplication-config" content="/static/icons/browserconfig.xml"> -->
@@ -69,7 +72,7 @@ export default (req, store, context) => {
       <title>CrowdAlert</title>
       <style>${[...css].join('')}</style>
     </head>
-    <body class="dimmed dimmable" style="background: #f3f2f2">
+    <body style="background: #f3f2f2">
     <!--
       <div class="ui active page dimmer" id="docs-loading-dimmer">
         <div class="content">
@@ -101,7 +104,7 @@ export default (req, store, context) => {
         dimmer.style.transition = 'opacity ' + delay +'ms linear';
         */
       </script>
-      <script src="bundle.js"></script>
+      <script type="text/javascript" src="/bundle.js"></script>
       <!--
         This HTML file is a template.
         If you open it directly in the browser, you will see an empty page.

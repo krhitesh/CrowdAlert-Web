@@ -4,8 +4,10 @@
 /* eslint-disable quotes */
 import 'babel-polyfill';
 import express from 'express';
+import proxy from 'http-proxy-middleware';
 import { matchRoutes } from 'react-router-config';
-import { createMemoryHistory } from 'history';
+import compression from 'compression';
+import history from './helpers/history';
 import { getCookie } from './utils';
 import { performAuthentication, handleNoUser } from './helpers/auth';
 import Routes from './client/Routes';
@@ -13,9 +15,25 @@ import renderer from './helpers/renderer';
 import serverConfigureStore from './helpers/serverConfigureStore';
 
 const app = express();
+app.use(compression());
+
+app.use(
+  '/api',
+  proxy({ target: 'http://localhost:8000', changeOrigin: true }),
+);
+app.use(
+  '/static',
+  proxy({ target: 'http://localhost:8000', changeOrigin: true }),
+);
+
+app.get('*.js', (req, res, next) => {
+  req.url = req.url + '.br';
+  res.set('Content-Encoding', 'br');
+  res.set('Content-Type', 'text/javascript');
+  next();
+});
 
 app.use(express.static('public'));
-
 app.get('*', async (req, res) => {
   const cookie = req.get('cookie') || '';
   const token = getCookie(cookie, 'token');
@@ -24,7 +42,6 @@ app.get('*', async (req, res) => {
   // valid, fetch the user then dispatch appropriate
   // redux action with that user data.
 
-  const history = createMemoryHistory();
   const store = serverConfigureStore(req, {}, history);
   if (token && token !== '') {
     await performAuthentication(store, token);
@@ -37,9 +54,24 @@ app.get('*', async (req, res) => {
   // Then use the new state to render the application.
 
   // console.log(matchRoutes(Routes, req.path));
+  const promises = matchRoutes(Routes, req.path).map(({ route, match }) => {
+    if (route.loadData) {
+      if (route.component.displayName === 'Connect(Feed)') {
+        return route.loadData(
+          store,
+          req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+        );
+      } else if (route.component.displayName === 'Connect(Viewevent)') {
+        return route.loadData(
+          store,
+          match,
+        );
+      }
 
-  const promises = matchRoutes(Routes, req.path).map(({ route }) => {
-    return route.loadData ? route.loadData(store, req.headers['x-forwarded-for'] || req.connection.remoteAddress) : null;
+      return route.loadData(store);
+    }
+
+    return null;
   })
     .map((promise) => {
       if (promise) {

@@ -1,10 +1,14 @@
+import axios from 'axios';
 import {
+  EVENT_FETCH_EVENT_DATA_SSR,
   EVENT_FETCH_EVENT_DATA,
   EVENT_FETCH_EVENT_DATA_CANCEL,
   EVENT_FETCH_EVENT_DATA_FINISHED,
+  EVENT_FETCH_REVERSE_GEOCODE_SSR,
   EVENT_FETCH_REVERSE_GEOCODE,
   EVENT_FETCH_REVERSE_GEOCODE_FINISHED,
 } from './actionTypes';
+import { GET_EVENT_BY_ID, REVERSE_GEOCODE } from '../../utils/apipaths';
 
 export function fetchEventData(payload = {}) {
   return {
@@ -24,6 +28,17 @@ export function fetchEventDataCanceled(payload = {}) {
     payload,
   };
 }
+export const fetchEventDataSSR = (payload = {}) => async (dispatch, getState) => {
+  const apiUrl = `${GET_EVENT_BY_ID}?id=${payload.eventid}`;
+  const { data } = await axios.get(apiUrl);
+
+  dispatch({
+    type: EVENT_FETCH_EVENT_DATA_SSR,
+    payload,
+  });
+
+  dispatch(fetchEventDataFinished({ ...payload, ...data }));
+};
 export function fetchReverseGeocode(lat, lng) {
   return {
     type: EVENT_FETCH_REVERSE_GEOCODE,
@@ -39,3 +54,17 @@ export function fetchReverseGeocodeSuccess(payload = {}) {
     payload,
   };
 }
+export const fetchReverseGeocodeSSR = (lat, lng) => async (dispatch, getState) => {
+  const apiUrl = `${REVERSE_GEOCODE}?lat=${lat}&long=${lng}`;
+  const { data } = await axios.get(apiUrl);
+
+  dispatch({
+    type: EVENT_FETCH_REVERSE_GEOCODE_SSR,
+    payload: {
+      lat,
+      lng,
+    },
+  });
+
+  dispatch(fetchReverseGeocodeSuccess(data));
+};

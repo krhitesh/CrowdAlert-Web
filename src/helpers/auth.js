@@ -43,7 +43,12 @@ export const performAuthentication = ({ dispatch }, token) => {
       }
     })
     .catch((err) => {
-      console.log('User authentication failed on rendered server');
+      if (err.code === 'auth/id-token-expired') {
+        console.log('RendererServer: Token has been expired. User is NOT Logged IN');
+      } else {
+        console.log('User authentication failed on rendered server', err);
+      }
+      
       handleNoUser({ dispatch });
     });
 };

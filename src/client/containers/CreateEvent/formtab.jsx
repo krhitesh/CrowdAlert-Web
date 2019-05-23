@@ -17,6 +17,8 @@ import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import getEventColor from '../../utils/eventcolors';
 import getEventIcon from '../../utils/eventicon';
+import { domainName } from '../../utils/apipaths';
+import SEO from '../../components/SEO';
 
 import {
   updateEventDetailsCreateEvents,
@@ -32,12 +34,21 @@ const eventOptions = [
   { key: 'nt', text: 'Nature', value: 'nature' },
 ];
 
+const head = () => (
+  <SEO
+    title="Add Incident Details | Report Incident"
+    url={`${domainName}/create/details`}
+    description="Report an incident near you."
+  />
+);
+
 const FormTab = (props) => {
   if (props.reportForm.isFreezed && !props.reportForm.loading) {
     return (<Redirect to="/create/images" />);
   }
   return (
     <Segment>
+      {head()}
       <Progress
         percent={66}
         attached="top"

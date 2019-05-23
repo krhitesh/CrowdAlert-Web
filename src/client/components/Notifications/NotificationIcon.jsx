@@ -4,7 +4,6 @@ import { Icon } from 'semantic-ui-react';
 
 
 const NotificationIcon = (props) => {
-  console.log(props);
   return (
     <div>
       <Icon circular>

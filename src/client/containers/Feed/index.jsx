@@ -5,6 +5,8 @@ import { bindActionCreators } from 'redux';
 import { fetchUserLocation, fetchEventsByLocation, fetchUserLocationSSR, fetchEventsByLocationSSR } from './actions';
 import style from './style';
 import { MapWrapper, Sonar, EventPreviewCard, GeoLocator } from '../../components';
+import { domainName } from '../../utils/apipaths';
+import SEO from '../../components/SEO';
 
 function getEventMarkers(feed, zoom) {
   // Boundary conditions
@@ -63,6 +65,29 @@ class Feed extends Component {
   componentWillUnmount() {
     console.log('UNMOUNT');
   }
+  // eslint-disable-next-line class-methods-use-this
+  head() {
+    let types = [];
+    getEventMarkers(this.props.feedProps, this.props.mapProps.zoom)
+      .forEach((event) => {
+        if (event.isClustered === true) {
+          if (types.indexOf('other') === -1) {
+            types.push('other');
+          }
+        } else if (types.indexOf(event.category) === -1) {
+          types.push(event.category);
+        }
+      });
+
+    const count = types.length;
+    let ogDesc = `${count} incidents of ${types} have been reported in your area. Stay safe.`;
+    if (types.indexOf('other') !== -1) {
+      types = types.filter(type => type !== 'other');
+      ogDesc = `${count}+ incidents of ${types.join(', ')} and others have been reported in your area. Stay safe.`;
+    }
+
+    return <SEO title="Feed | CrowdAlert" url={domainName} description={ogDesc} />;
+  }
   render() {
     // console.log(this.props);
     const Markers =
@@ -80,6 +105,7 @@ class Feed extends Component {
         ));
     return (
       <div style={style}>
+        {this.head()}
         <MapWrapper shouldFetch>
           { Markers }
         </MapWrapper>
@@ -109,7 +135,6 @@ export default {
   loadData: (store, ip = '') => {
     const { dispatch } = store;
     // Need to await these actions somehow.
-    console.log('Started executing loadData of Feed');
     // To check that even though we are unable to detect
     // action completion via promise, the action must be
     // executed without an issue as per wrapClosableEpic thing.

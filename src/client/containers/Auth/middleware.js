@@ -17,7 +17,7 @@ import {
   sendEmailVerificationAuth,
 } from './actions';
 import { updateUserData } from '../User/actions';
-// import history from '../../';
+import history from '../../../helpers/history';
 import {
   FacebookAuth,
   GoogleAuth,
@@ -83,12 +83,11 @@ const authMiddleware = ({ dispatch }) => next => (action) => {
           // Make sure we are not trying to authenticate on next load
           if (typeof window !== 'undefined') {
             window.localStorage.setItem('shouldBeLoggedIn', false);
-            // history.push('/auth/confirmEmail');
+            history.push('/auth/confirmEmail');
           }
         }
         // Token is used only in ajax requests
         Auth.currentUser.getIdToken().then((token) => {
-          console.log('Got a firebase token: ', token);
           if (typeof window !== 'undefined') {
             window.sessionStorage.setItem('token', token);
             document.cookie = `token=${token}`;
@@ -146,7 +145,7 @@ const emailPasswordAuthMiddleware = ({ dispatch }) => next => (action) => {
       .then(() => {
         dispatch(successEmailPasswordAuthentication());
         dispatch(checkUserAuthenticationStatus());
-        // history.push('/');
+        history.push('/');
       })
       .catch((err) => {
         dispatch(errorEmailPasswordAuthentication(err.message));
@@ -178,7 +177,7 @@ const emailPasswordAuthMiddleware = ({ dispatch }) => next => (action) => {
       .then(() => {
         dispatch(checkUserAuthenticationStatus());
         window.sessionStorage.removeItem('token');
-        // history.push('/login/');
+        history.push('/login/');
         document.cookie = 'token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
       })
       .catch((err) => { console.log('Error sign out', err); });
@@ -189,7 +188,7 @@ const oAuthMiddleware = ({ dispatch }) => next => (action) => {
     window.localStorage.setItem('shouldBeLoggedIn', true);
     switch (action.payload.provider) {
       case 'facebook':
-        Auth.signInWithPopup(FacebookAuth)
+        Auth.signInWithRedirect(FacebookAuth)
           .then(result => dispatch(checkUserAuthenticationStatus()));
         break;
       case 'google':
