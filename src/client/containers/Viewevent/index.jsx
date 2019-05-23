@@ -139,10 +139,13 @@ class Viewevent extends Component {
   // eslint-disable-next-line class-methods-use-this
   head() {
     let image = '';
-    if (this.props.event.data.images[0].isNsfw) {
-      image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}&mode=thumbnail`;
-    } else {
-      image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}`;
+    // console.log(this.props.event);
+    if (this.props.event.data.images.length > 0) {
+      if (this.props.event.data.images[0].isNsfw) {
+        image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}&mode=thumbnail`;
+      } else {
+        image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}`;
+      }
     }
     return (
       <SEO

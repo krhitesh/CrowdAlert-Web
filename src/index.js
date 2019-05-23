@@ -3,10 +3,10 @@
 /* eslint-disable consistent-return */
 /* eslint-disable quotes */
 import 'babel-polyfill';
+import { gzip } from 'zlib';
 import express from 'express';
 import proxy from 'http-proxy-middleware';
 import { matchRoutes } from 'react-router-config';
-import compression from 'compression';
 import history from './helpers/history';
 import { getCookie } from './utils';
 import { performAuthentication, handleNoUser } from './helpers/auth';
@@ -15,7 +15,12 @@ import renderer from './helpers/renderer';
 import serverConfigureStore from './helpers/serverConfigureStore';
 
 const app = express();
-app.use(compression());
+app.use('*.js', (req, res, next) => {
+  req.url += '.br';
+  res.set('Content-Encoding', 'br');
+  res.set('Content-Type', 'text/javascript');
+  next();
+});
 
 app.use(
   '/api',
@@ -86,7 +91,15 @@ app.get('*', async (req, res) => {
         res.status(404);
       }
 
-      res.send(content);
+      gzip(content, (err, gzipped) => {
+        if (err) {
+          res.send(content);
+        } else {
+          res.set('Content-Encoding', 'gzip');
+          res.set('Content-Type', 'text/html');
+          res.send(gzipped);
+        }
+      });
     });
 });
 
