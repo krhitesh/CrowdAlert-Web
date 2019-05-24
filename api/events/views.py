@@ -16,6 +16,62 @@ from api.notifications.dispatch import notify_incident
 
 DB = settings.FIREBASE.database()
 
+async def multiple_events_view_root_func(lat, lng, thresold, cluster_thresold):
+    incidents = DB.child('incidents').get()
+    data = []
+
+    # Find events which are inside the circle
+
+    # This method is highly inefficient
+    # In takes O(n) time for each request
+    # Should use a GeoHash based solution instead of this
+    for incident in incidents.each():
+        event = dict(incident.val())
+        temp = {}
+        temp['key'] = incident.key()
+        temp['lat'] = event['location']['coords']['latitude']
+        temp['long'] = event['location']['coords']['longitude']
+        temp['category'] = event['category']
+        temp['title'] = event['title']
+        temp['datetime'] = event['datetime']
+        tmplat = float(event['location']['coords']['latitude'])
+        tmplng = float(event['location']['coords']['longitude'])
+        dist = distance(tmplat, tmplng, lat, lng)
+        if dist < thresold:
+            data.append(temp)
+
+    # Cluster the events
+    # cluster_thresold = float(request.GET.get('min', 0))
+    # This code should also be present on client side
+    if cluster_thresold:
+        # clustered incidents data
+        clustered_data = []
+        # Consider each node as root for now
+        for root in data:
+            # If is clustered flag is not present
+            if not root.get('isClustered', False):
+                # Loop though the points
+                for child in data:
+                    # Base case
+                    if child['key'] == root['key']:
+                        continue
+                    # If node is not clustered
+                    if not child.get('isClustered', False):
+                        # Calculate the distance
+                        temp_distance = distance(root['lat'], root['long'],
+                                                    child['lat'], child['long'])
+                        # If two points are too close on map cluster them
+                        if temp_distance < cluster_thresold:
+                            # Update root
+                            root['isClustered'] = True
+                            root['lat'] = (root['lat'] + child['lat'])/2
+                            root['long'] = (root['long'] + child['long'])/2
+                            # Mark child
+                            child['isClustered'] = True
+                clustered_data.append(root)
+        return clustered_data
+    return data
+
 class EventView(APIView):
     """ API view class for events
     """
