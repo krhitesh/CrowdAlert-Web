@@ -12,6 +12,8 @@ from api.firebase_auth.permissions import FirebasePermissions
 from api.spam.classifier import classify_text
 from api.spam.views import get_spam_report_data
 from api.notifications.dispatch import notify_incident
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 
 DB = settings.FIREBASE.database()
@@ -127,10 +129,10 @@ class EventView(APIView):
 
         latitude = decoded_json['location']['coords']['latitude']
         longitude = decoded_json['location']['coords']['longitude']
-
+        datetime = int(time.time()*1000)
         incident_data = {
             "category": decoded_json['category'],
-            "datetime": int(time.time()*1000),
+            "datetime": datetime,
             "description": decoded_json['description'],
             "local_assistance": decoded_json['local_assistance'],
             "location": {
@@ -165,12 +167,33 @@ class EventView(APIView):
         user_name = request.user.name
         user_picture = request.user.user_picture
         if decoded_json['local_assistance']:
-            notify_incident(sender_uid=uid, datetime=int(time.time()*1000),
+            notify_incident(sender_uid=uid, datetime=datetime,
                             event_id=key, event_type=decoded_json['category'],
                             lat=latitude, lng=longitude,
                             user_text=decoded_json['title'],
                             user_name=user_name, user_picture=user_picture)
         classify_text(decoded_json['description'], key)
+
+        channel_layer = get_channel_layer()
+        # Send the event to all the ws channels
+        # New action type on client WS_NEW_EVENT_RECEIVED
+        async_to_sync(channel_layer.group_send)(
+            'geteventsbylocation_', {
+                "type": "chat_message",
+                "message": {
+                    'actionType': 'WS_NEW_EVENT_RECEIVED',
+                    'data': {
+                        'lat': latitude,
+                        'long': longitude,
+                        'key': str(key),
+                        'datetime': datetime,
+                        'category': decoded_json['category'],
+                        'title': decoded_json['title']
+                    }
+                }
+            }
+        )
+
         return JsonResponse({"eventId":str(key)}) 
 
 class MultipleEventsView(APIView):
