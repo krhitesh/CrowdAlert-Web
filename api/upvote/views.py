@@ -76,6 +76,8 @@ class UpvoteView(APIView):
                 'count': count - 1,
             })
             new_count -= 1
+
+        
         # Return the count and the uuid
         return JsonResponse({
             'uuid': uuid,

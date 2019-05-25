@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "aphrodite": "^2.2.2",
-    "firebase": "^4.13.1",
+    "firebase": "4.12.1",
     "google-maps-react": "^2.0.2",
     "history": "^4.7.2",
     "immutable": "^3.8.2",
@@ -29,7 +29,8 @@
     "rxjs-compat": "^6.2.1",
     "semantic-ui-react": "^0.80.0",
     "sqip": "^0.3.3",
-    "type-detect": "^4.0.8"
+    "type-detect": "^4.0.8",
+    "redux-saga": "^0.15.6"
   },
   "scripts": {
     "start": "react-scripts start",

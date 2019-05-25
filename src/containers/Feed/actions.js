@@ -2,6 +2,7 @@ import {
   FEED_FETCH_USER_LOCATION,
   FEED_FETCH_USER_LOCATION_FINISHED,
   FEED_FETCH_USER_LOCATION_CANCEL,
+  WS_FEED_FETCH_EVENTS_BY_LOCATION,
   FEED_FETCH_EVENTS_BY_LOCATION,
   FEED_FETCH_EVENTS_BY_LOCATION_FINISHED,
 } from './actionTypes';
@@ -34,6 +35,12 @@ export function fetchEventsByLocation(payload = {}) {
 export function fetchEventsByLocationFinished(payload = {}) {
   return {
     type: FEED_FETCH_EVENTS_BY_LOCATION_FINISHED,
+    payload,
+  };
+}
+export function fetchEventsByLocationOverWebSocket(payload = {}) {
+  return {
+    type: WS_FEED_FETCH_EVENTS_BY_LOCATION,
     payload,
   };
 }

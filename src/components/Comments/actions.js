@@ -1,4 +1,5 @@
 import {
+  WS_NEW_COMMENT_RECEIVED,
   COMMENTS_FETCH_THREAD,
   COMMENTS_FETCH_THREAD_SUCCESS,
   COMMENTS_FETCH_THREAD_CANCEL,
@@ -19,6 +20,12 @@ export function fetchCommentsThread(threadId, showLoader) {
     meta: {
       ajax: true,
     },
+  };
+}
+export function fetchCommentThreadSuccessViaWebSocket(payload) {
+  return {
+    type: WS_NEW_COMMENT_RECEIVED,
+    payload,
   };
 }
 export function fetchCommentsThreadSuccess(payload) {

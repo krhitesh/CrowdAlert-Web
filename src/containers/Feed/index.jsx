@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { fetchUserLocation, fetchEventsByLocation } from './actions';
+import { fetchUserLocation, fetchEventsByLocation, fetchEventsByLocationOverWebSocket } from './actions';
 import style from './style';
 import { MapWrapper, Sonar, EventPreviewCard, GeoLocator } from '../../components';
 
@@ -54,7 +54,12 @@ class Feed extends Component {
       oldLat: this.props.mapProps.lat,
       oldLng: this.props.mapProps.lng,
     });
-    this.props.fetchEventsByLocation({
+    // this.props.fetchEventsByLocation({
+    //   lat: this.props.mapProps.lat,
+    //   lng: this.props.mapProps.lng,
+    //   zoom: this.props.mapProps.zoom,
+    // });
+    this.props.fetchEventsByLocationOverWebSocket({
       lat: this.props.mapProps.lat,
       lng: this.props.mapProps.lng,
       zoom: this.props.mapProps.zoom,
@@ -102,6 +107,7 @@ const mapDispatchToProps = dispatch => (
   bindActionCreators({
     fetchUserLocation,
     fetchEventsByLocation,
+    fetchEventsByLocationOverWebSocket,
   }, dispatch)
 );
 export default connect(mapStateToProps, mapDispatchToProps)(Feed);

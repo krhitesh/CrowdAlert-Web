@@ -5,6 +5,7 @@
 const domainNameL = 'http://127.0.0.1:8000';
 // const domainNameL = 'https://192.168.0.4:8000';
 const domainName = domainNameL;
+const websocketURL = 'ws://127.0.0.1:8000';
 
 /**
  * [GET_LOCATION_BY_IP: request to get approximate location information]
@@ -36,9 +37,19 @@ const REVERSE_GEOCODE = `${domainNameL}/api/location/reverse_geocode`;
  */
 const GET_EVENTS_BY_LOCATION = `${domainNameL}/api/events/geteventsbylocation`;
 
+/**
+ * [GET_EVENTS_BY_LOCATION opens a socket connection for the
+ * events app
+ * coordinates with a valid proximity]
+ * @type {String}
+ */
+const WS_GET_EVENTS_BY_LOCATION = `${websocketURL}/ws/events/geteventsbylocation`;
+
 const STATIC_IMAGES = `${domainNameL}/static/images`;
 
 const USER_PROFILES = `${domainNameL}/api/users/user`;
+
+const WS_COMMENTS = `${websocketURL}/ws/comments`;
 
 const COMMENTS = `${domainNameL}/api/comments/comment`;
 
@@ -54,9 +65,11 @@ export {
   GET_IMAGE_URLS,
   REVERSE_GEOCODE,
   GET_EVENTS_BY_LOCATION,
+  WS_GET_EVENTS_BY_LOCATION,
   UPLOAD_IMAGES,
   STATIC_IMAGES,
   USER_PROFILES,
+  WS_COMMENTS,
   COMMENTS,
   UPVOTE,
   SPAM_REPORT,

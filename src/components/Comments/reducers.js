@@ -1,4 +1,5 @@
 import {
+  WS_NEW_COMMENT_RECEIVED,
   COMMENTS_FETCH_THREAD,
   COMMENTS_FETCH_THREAD_SUCCESS,
   COMMENTS_POST_TO_THREAD,
@@ -32,6 +33,33 @@ function commentsReducer(state = initialState, action) {
       ...state,
       threadId: action.payload.threadId,
       loading,
+    };
+  }
+  if (action.type === WS_NEW_COMMENT_RECEIVED) {
+    console.log('initialState', state);
+    const objComments = action.payload.comments;
+    const comment = Object.keys(objComments).map(key => ({
+      key,
+      ...objComments[key],
+    }));
+
+    const comments = [comment[0], ...state.comments];
+    const { userData } = state;
+    const userDataKey = Object.keys(action.payload.userData)[0];
+    console.log(userDataKey);
+    const insert = Object.keys(state.userData).filter(key => key === userDataKey).length === 0;
+    console.log(insert, action.payload);
+    if (insert) {
+      console.log('inserting');
+      userData[userDataKey] = action.payload.userData[userDataKey];
+    }
+    comments.sort(sortComments);
+    return {
+      ...state,
+      loading: false,
+      comments,
+      userData,
+      commentButtonLoading: false,
     };
   }
   if (action.type === COMMENTS_FETCH_THREAD_SUCCESS) {

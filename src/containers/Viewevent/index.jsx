@@ -19,7 +19,11 @@ import {
   CommentsSection,
 } from '../../components';
 
+import { WS_NEW_COMMENT_RECEIVED } from '../../components/Comments/actionTypes';
+import { WS_COMMENTS } from '../../utils/apipaths';
+
 import { fetchEventData } from './actions';
+import { fetchCommentThreadSuccessViaWebSocket } from '../../components/Comments/actions';
 
 import styleSheet from './style';
 
@@ -121,11 +125,47 @@ EventCard.defaultProps = {
  * @type {Object}
  */
 class Viewevent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   componentWillMount() {
     const { eventid } = this.props.match.params;
     const shouldRefresh =
       this.props.match.params.eventid !== this.props.event.data.eventid;
     this.props.fetchEventData({ eventid, shouldRefresh });
+  }
+  componentDidMount() {
+    // open a new socket connection to
+    // /ws/comments/{threadId}
+    // eslint-disable-next-line no-undef
+    const socket = new WebSocket(`${WS_COMMENTS}/${this.props.match.params.eventid}/`);
+    socket.onopen = () => {
+      console.log('socket.open');
+    };
+
+    socket.onclose = () => {
+      console.log('socket.onclose');
+    };
+
+    socket.onerror = (err) => {
+      console.log('socket.onerror', err);
+    };
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      if (message.actionType === WS_NEW_COMMENT_RECEIVED) {
+        console.log('socket.onmessage', message.data);
+        // dispatch action to add this message to the state
+        // Need to write that action
+        this.props.fetchCommentThreadSuccessViaWebSocket(message.data);
+      }
+    };
+    // eslint-disable-next-line react/no-did-mount-set-state
+    this.setState({ socket });
+  }
+  componentWillUnmount() {
+    // Close the socket connection
+    // this.state.socket.close(0, 'socket closed inside componentWillUnmount');
   }
   render() {
     let lat = 0;
@@ -232,6 +272,7 @@ Viewevent.propTypes = {
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     fetchEventData,
+    fetchCommentThreadSuccessViaWebSocket,
   }, dispatch)
 );
 const mapStateToProps = state => ({

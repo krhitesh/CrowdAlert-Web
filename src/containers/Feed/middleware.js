@@ -2,7 +2,7 @@ import { FEED_FETCH_USER_LOCATION_FINISHED } from './actionTypes';
 import { MAP_UPDATE_CENTER, MAP_UPDATE_ZOOM } from '../../components/Map/actionTypes';
 import distanceCoordinates from '../../utils/gps';
 import { updateMapCenter, updateMapZoom } from '../../components/Map/actions';
-import { fetchEventsByLocation } from './actions';
+import { fetchEventsByLocation, fetchEventsByLocationOverWebSocket } from './actions';
 
 const updateLocationMiddleware = ({ dispatch }) => next => (action) => {
   if (action.type === FEED_FETCH_USER_LOCATION_FINISHED) {
@@ -36,7 +36,8 @@ const updateLocationMiddleware = ({ dispatch }) => next => (action) => {
       dispatch(updateMapZoom({ lat, lng, zoom }));
     }
 
-    dispatch(fetchEventsByLocation({ lat, lng, zoom }));
+    // dispatch(fetchEventsByLocation({ lat, lng, zoom }));
+    dispatch(fetchEventsByLocationOverWebSocket({ lat, lng, zoom }));
   }
   next(action);
 };
@@ -48,7 +49,8 @@ const fetchEventsOnMapUpdateMiddleware = ({ dispatch }) => next => (action) => {
     const { zoom } = action.payload;
     const { fetch } = action.payload;
     if (fetch !== false) {
-      dispatch(fetchEventsByLocation({ lat, lng, zoom }));
+      // dispatch(fetchEventsByLocation({ lat, lng, zoom }));
+      dispatch(fetchEventsByLocationOverWebSocket({ lat, lng, zoom }));
     }
   }
   next(action);

@@ -1,15 +1,28 @@
 from channels.auth import AuthMiddlewareStack
 from channels.security.websocket import AllowedHostsOriginValidator, OriginValidator
 from channels.routing import ProtocolTypeRouter, URLRouter
-from api.events import routing
+# from django.urls import path, include
+from api.events import routing as events_routing
+from api.comments import routing as comments_routing
+from api.upvote import routing as upvote_routing
 
 application = ProtocolTypeRouter({
     # (http->django views is added by default)
+    'http': AuthMiddlewareStack(
+        URLRouter(
+            upvote_routing.websocket_urlpatterns
+        )
+    ),
     'websocket': AllowedHostsOriginValidator(
         AuthMiddlewareStack(
             URLRouter(
-                routing.websocket_urlpatterns
+                # [
+                #     path('ws/events/', include('api.events.routing')),
+                #     path('ws/comments/', include('api.comments.routing')),
+                # ]
+                events_routing.websocket_urlpatterns +
+                comments_routing.websocket_urlpatterns
             )
         )
-    ),
+    )
 })
