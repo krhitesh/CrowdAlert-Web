@@ -22,6 +22,7 @@ import {
 import { WS_NEW_COMMENT_RECEIVED } from '../../components/Comments/actionTypes';
 import { WS_COMMENTS } from '../../utils/apipaths';
 
+import { updateUpvotesLongPollStatus } from '../../components/Upvote/actions';
 import { fetchEventData } from './actions';
 import { fetchCommentThreadSuccessViaWebSocket } from '../../components/Comments/actions';
 
@@ -134,6 +135,7 @@ class Viewevent extends Component {
     const shouldRefresh =
       this.props.match.params.eventid !== this.props.event.data.eventid;
     this.props.fetchEventData({ eventid, shouldRefresh });
+    this.props.updateUpvotesLongPollStatus(true);
   }
   componentDidMount() {
     // open a new socket connection to
@@ -165,7 +167,8 @@ class Viewevent extends Component {
   }
   componentWillUnmount() {
     // Close the socket connection
-    // this.state.socket.close(0, 'socket closed inside componentWillUnmount');
+    this.state.socket.close(1000, 'socket closed inside componentWillUnmount');
+    this.props.updateUpvotesLongPollStatus(false);
   }
   render() {
     let lat = 0;
@@ -273,6 +276,7 @@ const mapDispatchToProps = dispatch => (
   bindActionCreators({
     fetchEventData,
     fetchCommentThreadSuccessViaWebSocket,
+    updateUpvotesLongPollStatus,
   }, dispatch)
 );
 const mapStateToProps = state => ({
