@@ -117,7 +117,6 @@ class CommentsSection extends Component {
         </Card.Content>
         <Card.Content>
           <Comment.Group>
-            {console.log(this.props.comments.comments)}
             {this.props.comments.comments.map(comment => (
               <Comment key={comment.key}>
                 <Image

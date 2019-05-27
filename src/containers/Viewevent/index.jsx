@@ -129,34 +129,45 @@ class Viewevent extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.setupSocket = this.setupSocket.bind(this);
   }
   componentWillMount() {
     const { eventid } = this.props.match.params;
     const shouldRefresh =
       this.props.match.params.eventid !== this.props.event.data.eventid;
     this.props.fetchEventData({ eventid, shouldRefresh });
-    this.props.updateUpvotesLongPollStatus(true);
   }
   componentDidMount() {
-    // open a new socket connection to
-    // /ws/comments/{threadId}
+    if (this.props.isLoggedIn) {
+      this.props.updateUpvotesLongPollStatus(true);
+      this.setupSocket();
+    }
+  }
+  componentWillUnmount() {
+    // Close the socket connection
+    if (this.props.isLoggedIn) {
+      this.state.socket.close(1000, 'socket closed inside componentWillUnmount');
+      this.props.updateUpvotesLongPollStatus(false);
+    }
+  }
+  setupSocket() {
     // eslint-disable-next-line no-undef
     const socket = new WebSocket(`${WS_COMMENTS}/${this.props.match.params.eventid}/`);
-    socket.onopen = () => {
-      console.log('socket.open');
-    };
 
     socket.onclose = () => {
-      console.log('socket.onclose');
+      console.log('Socket is closed. Reconnect will be attempted in 5 seconds.');
+      setTimeout(this.setupSocket, 5000);
     };
 
     socket.onerror = (err) => {
       console.log('socket.onerror', err);
     };
+
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       if (message.actionType === WS_NEW_COMMENT_RECEIVED) {
-        console.log('socket.onmessage', message.data);
+        // console.log('socket.onmessage', message.data);
+
         // dispatch action to add this message to the state
         // Need to write that action
         this.props.fetchCommentThreadSuccessViaWebSocket(message.data);
@@ -164,11 +175,6 @@ class Viewevent extends Component {
     };
     // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ socket });
-  }
-  componentWillUnmount() {
-    // Close the socket connection
-    this.state.socket.close(1000, 'socket closed inside componentWillUnmount');
-    this.props.updateUpvotesLongPollStatus(false);
   }
   render() {
     let lat = 0;
@@ -282,5 +288,6 @@ const mapDispatchToProps = dispatch => (
 const mapStateToProps = state => ({
   map: state.map,
   event: state.event,
+  isLoggedIn: state.auth.isLoggedIn,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Viewevent);

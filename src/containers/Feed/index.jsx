@@ -54,16 +54,20 @@ class Feed extends Component {
       oldLat: this.props.mapProps.lat,
       oldLng: this.props.mapProps.lng,
     });
-    // this.props.fetchEventsByLocation({
-    //   lat: this.props.mapProps.lat,
-    //   lng: this.props.mapProps.lng,
-    //   zoom: this.props.mapProps.zoom,
-    // });
-    this.props.fetchEventsByLocationOverWebSocket({
-      lat: this.props.mapProps.lat,
-      lng: this.props.mapProps.lng,
-      zoom: this.props.mapProps.zoom,
-    });
+
+    if (this.props.isLoggedIn) {
+      this.props.fetchEventsByLocationOverWebSocket({
+        lat: this.props.mapProps.lat,
+        lng: this.props.mapProps.lng,
+        zoom: this.props.mapProps.zoom,
+      });
+    } else {
+      this.props.fetchEventsByLocation({
+        lat: this.props.mapProps.lat,
+        lng: this.props.mapProps.lng,
+        zoom: this.props.mapProps.zoom,
+      });
+    }
   }
   componentWillUnmount() {
     console.log('UNMOUNT');
@@ -98,9 +102,11 @@ class Feed extends Component {
 const mapStateToProps = (state) => {
   const { map } = state;
   const { feed } = state;
+  const { isLoggedIn } = state.auth;
   return {
     mapProps: map,
     feedProps: feed,
+    isLoggedIn,
   };
 };
 const mapDispatchToProps = dispatch => (

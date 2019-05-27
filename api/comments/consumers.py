@@ -1,12 +1,18 @@
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
-import uuid
-from urllib import parse
-from api.comments.views import get_comments_root_func
 
 class CommentsConsumer(WebsocketConsumer):
+  """
+  Change this consumer to AsyncWebsocketConsumer
+
+  """
   def connect(self):
+    """
+    Adds current channel to the room group of the name 'comments_{room_name}' where
+    room name is the thread_id. Finally it accepts the websocket connection
+
+    """
     self.room_name = self.scope['url_route']['kwargs']['thread_id']
     self.room_group_name = 'comments_%s' % self.room_name
 
@@ -17,16 +23,14 @@ class CommentsConsumer(WebsocketConsumer):
     )
 
     self.accept()
-    # Send comments data to the client
-    # based on thread_id
-    # comments = get_comments_root_func(self.room_name)
-    # self.send(text_data=json.dumps({
-    #   'actionType': 'COMMENTS_FETCH_THREAD_SUCCESS',
-    #   'data': comments
-    # }))
 
   def disconnect(self, close_code):
-    # Leave room group
+    """
+    Disconnects the client of the current channel. Also removes current channel
+    from the room group of the name 'comments_{room_name}' where
+    room name is the thread_id.
+
+    """
     async_to_sync(self.channel_layer.group_discard)(
         self.room_group_name,
         self.channel_name
@@ -35,9 +39,19 @@ class CommentsConsumer(WebsocketConsumer):
   def receive(self, text_data):
     pass
 
-  # Receive message from room group
   def comments_message(self, event):
+    """
+    Handler function to send data from server to client in an open
+    websocket connection.
+
+    For example, inside an async function from anywhere in the app:
+    await channel_layer.send({
+      'type': 'comments_message',
+      'message': 'your data'
+    })
+
+    """
     data = event['message']
 
-    # Send message to WebSocket
+    # Finally shovel data to the client
     self.send(text_data=json.dumps(data))

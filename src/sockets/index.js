@@ -1,20 +1,16 @@
 import { WS_GET_EVENTS_BY_LOCATION } from '../utils/apipaths';
 import { FEED_FETCH_EVENTS_BY_LOCATION_FINISHED, WS_NEW_EVENT_RECEIVED } from '../containers/Feed/actionTypes';
 import { fetchEventsByLocationFinished } from '../containers/Feed/actions';
-import { WS_COMMENTS_FETCH_THREAD } from '../components/Comments/actionTypes';
 import distanceCoordinates from '../utils/gps';
 
-export default (store) => {
+const connect = (store) => {
   const { dispatch } = store;
   // eslint-disable-next-line no-undef
   const socket = new WebSocket(WS_GET_EVENTS_BY_LOCATION);
 
-  socket.onopen = () => {
-    console.log('socket.open');
-  };
-
   socket.onclose = () => {
-    console.log('socket.onclose');
+    console.log('Socket is closed. Reconnect will be attempted in 5 seconds.');
+    setTimeout(connect, 5000);
   };
 
   socket.onerror = (err) => {
@@ -23,7 +19,7 @@ export default (store) => {
 
   socket.onmessage = (event) => {
     const message = JSON.parse(event.data);
-    console.log('socket.onmessage', message);
+    // console.log('socket.onmessage', message);
     if (message.actionType === FEED_FETCH_EVENTS_BY_LOCATION_FINISHED) {
       dispatch(fetchEventsByLocationFinished({
         payload: message.actionPayload,
@@ -51,10 +47,10 @@ export default (store) => {
           response: [message.data],
         }));
       }
-    } else if (message.actionType === WS_COMMENTS_FETCH_THREAD) {
-      console.log(message);
     }
   };
 
   return socket;
 };
+
+export default connect;

@@ -36,7 +36,6 @@ function commentsReducer(state = initialState, action) {
     };
   }
   if (action.type === WS_NEW_COMMENT_RECEIVED) {
-    console.log('initialState', state);
     const objComments = action.payload.comments;
     const comment = Object.keys(objComments).map(key => ({
       key,
@@ -46,11 +45,9 @@ function commentsReducer(state = initialState, action) {
     const comments = [comment[0], ...state.comments];
     const { userData } = state;
     const userDataKey = Object.keys(action.payload.userData)[0];
-    console.log(userDataKey);
     const insert = Object.keys(state.userData).filter(key => key === userDataKey).length === 0;
-    console.log(insert, action.payload);
+
     if (insert) {
-      console.log('inserting');
       userData[userDataKey] = action.payload.userData[userDataKey];
     }
     comments.sort(sortComments);

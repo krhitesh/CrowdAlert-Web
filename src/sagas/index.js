@@ -11,13 +11,11 @@ const sendData = (params, lat, lng, zoom, distance, MPP) => {
       dist: distance,
       min: MPP,
     });
-    console.log(data);
     params.socket.send(data);
   } else if (params.socket.readyState === WebSocket.CONNECTING) {
-    // okay
     console.log('WebSocket not ready yet');
   } else if (params.socket.readyState === WebSocket.CLOSED) {
-    console.log('WebSocket is closed');
+    console.log('WebSocket is disconnected.');
   }
 };
 

@@ -3,7 +3,8 @@ import { fetchCommentsThread } from './actions';
 
 const commentsMiddleware = store => next => (action) => {
   if (action.type === COMMENTS_POST_TO_THREAD_SUCCESS) {
-    const state = store.getState();
+    // Deprecated as for the use case is not valid anymore.
+    // const state = store.getState();
     // store.dispatch(fetchCommentsThread(state.comments.threadId));
   }
   next(action);

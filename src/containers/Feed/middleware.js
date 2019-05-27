@@ -4,7 +4,8 @@ import distanceCoordinates from '../../utils/gps';
 import { updateMapCenter, updateMapZoom } from '../../components/Map/actions';
 import { fetchEventsByLocation, fetchEventsByLocationOverWebSocket } from './actions';
 
-const updateLocationMiddleware = ({ dispatch }) => next => (action) => {
+const updateLocationMiddleware = store => next => (action) => {
+  const { dispatch } = store;
   if (action.type === FEED_FETCH_USER_LOCATION_FINISHED) {
     const lat = parseFloat(action.payload.lat);
     const lng = parseFloat(action.payload.lng);
@@ -36,21 +37,30 @@ const updateLocationMiddleware = ({ dispatch }) => next => (action) => {
       dispatch(updateMapZoom({ lat, lng, zoom }));
     }
 
-    // dispatch(fetchEventsByLocation({ lat, lng, zoom }));
-    dispatch(fetchEventsByLocationOverWebSocket({ lat, lng, zoom }));
+    const { isLoggedIn } = store.getState().auth;
+    if (isLoggedIn) {
+      dispatch(fetchEventsByLocationOverWebSocket({ lat, lng, zoom }));
+    } else {
+      dispatch(fetchEventsByLocation({ lat, lng, zoom }));
+    }
   }
   next(action);
 };
 
-const fetchEventsOnMapUpdateMiddleware = ({ dispatch }) => next => (action) => {
+const fetchEventsOnMapUpdateMiddleware = store => next => (action) => {
+  const { dispatch } = store;
   if (action.type === MAP_UPDATE_CENTER || action.type === MAP_UPDATE_ZOOM) {
     const lat = parseFloat(action.payload.lat);
     const lng = parseFloat(action.payload.lng);
     const { zoom } = action.payload;
     const { fetch } = action.payload;
     if (fetch !== false) {
-      // dispatch(fetchEventsByLocation({ lat, lng, zoom }));
-      dispatch(fetchEventsByLocationOverWebSocket({ lat, lng, zoom }));
+      const { isLoggedIn } = store.getState().auth;
+      if (isLoggedIn) {
+        dispatch(fetchEventsByLocationOverWebSocket({ lat, lng, zoom }));
+      } else {
+        dispatch(fetchEventsByLocation({ lat, lng, zoom }));
+      }
     }
   }
   next(action);

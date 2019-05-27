@@ -13,7 +13,12 @@ from channels.layers import get_channel_layer
 
 db = settings.FIREBASE.database()
 
-def get_comments_root_func(thread):
+
+def get_comments_from_thread(thread):
+    """
+    This function should be encapsulated inside a Comment model
+
+    """
     thread_data = db.child('comments').child(thread).get().val()
     if not thread_data or not thread_data.get('comments', False):
         return {'comments': {}, 'userData': {}}
@@ -41,7 +46,7 @@ class CommentView(APIView):
         if not thread:
             return HttpResponseBadRequest('No thread specified')
 
-        response = get_comments_root_func(thread)
+        response = get_comments_from_thread(thread)
         return JsonResponse(response, safe=False)
 
     def post(self, request):
@@ -74,7 +79,7 @@ class CommentView(APIView):
             user_name=user_name, user_picture=user_picture)
 
         channel_layer = get_channel_layer()
-        comment_data = {
+        comments_data = {
             "type": "comments_message",
             "message": {
                 'actionType': 'WS_NEW_COMMENT_RECEIVED',
@@ -84,7 +89,7 @@ class CommentView(APIView):
                 }
             }
         }
-        comment_data['message']['data']['comments'][val['name']] = {
+        comments_data['message']['data']['comments'][val['name']] = {
             'text': text,
             'spam': {
                 'uuid': val['name'],
@@ -94,15 +99,16 @@ class CommentView(APIView):
             'user': uid,
             'timestamp': timestamp
         }
-        comment_data['message']['data']['userData'][uid] = {
+        comments_data['message']['data']['userData'][uid] = {
             'photoURL': user_picture,
             'displayName': user_name
         }
         room_name = 'comments_%s' % thread
         print('room_name', room_name)
+        # Try removing async_to_sync
         async_to_sync(channel_layer.group_send)(
             room_name,
-            comment_data
+            comments_data
         )
         
         return JsonResponse({'id': val['name']}, safe=False)
