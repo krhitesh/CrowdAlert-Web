@@ -16,7 +16,6 @@ import dj_database_url
 import pyrebase
 import googlemaps
 import firebase_admin
-from firebase_admin import firestore
 
 # Generate the Firebase Service Account Credential json file
 with open('serviceAccountCredentials.json','w') as f:
@@ -37,7 +36,6 @@ config = {
 
 cred = firebase_admin.credentials.Certificate(config["serviceAccount"])
 FIREBASE_ADMIN = firebase_admin.initialize_app(cred)
-FIRESTORE = firestore.client()
 
 # Instantiate a Firebase - Pyrebase object so that we can import later
 FIREBASE = pyrebase.initialize_app(config)
