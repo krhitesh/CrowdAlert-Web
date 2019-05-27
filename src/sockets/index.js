@@ -10,7 +10,7 @@ const connect = (store) => {
 
   socket.onclose = () => {
     console.log('Socket is closed. Reconnect will be attempted in 5 seconds.');
-    setTimeout(connect, 5000);
+    setTimeout(() => connect(store), 5000);
   };
 
   socket.onerror = (err) => {

@@ -182,7 +182,7 @@ class EventView(APIView):
         # Send the event to all the websocket channels
         async_to_sync(channel_layer.group_send)(
             'geteventsbylocation_', {
-                "type": "events_message",
+                "type": "event_message",
                 "message": {
                     'actionType': 'WS_NEW_EVENT_RECEIVED',
                     'data': {

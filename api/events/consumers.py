@@ -57,7 +57,7 @@ class EventsConsumer(WebsocketConsumer):
     async_to_sync(self.channel_layer.group_send)(
         self.room_group_name,
         {
-            'type': 'chat_message',
+            'type': 'event_message',
             'message': {
               'data': data,
               'actionPayload': {
@@ -70,14 +70,14 @@ class EventsConsumer(WebsocketConsumer):
         }
     )
 
-  def events_message(self, event):
+  def event_message(self, event):
     """
     Handler function to send data from server to client in an open
     websocket connection.
 
     For example, inside an async function from anywhere in the app:
     await channel_layer.send({
-      'type': 'events_message',
+      'type': 'event_message',
       'message': 'your data'
     })
 

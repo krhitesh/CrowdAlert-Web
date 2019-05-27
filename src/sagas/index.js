@@ -27,11 +27,10 @@ const handleNewMessage = function* handleNewMessage(params) {
     } catch (error) {
       maxPixels = 1920;
     }
-
     let { lat, lng, zoom } = action.payload;
     if (!lat || !lng || !zoom) {
       // Use default australia's values and proceed
-      console.log('Invalid values', lat, lng, zoom);
+      // console.log('Invalid values', lat, lng, zoom);
       lat = -26.77;
       lng = 135.17;
       zoom = 4;
