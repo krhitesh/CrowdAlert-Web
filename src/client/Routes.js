@@ -4,13 +4,9 @@ import { NotificationsPage } from './components/Notifications';
 import App from './containers/App/index';
 import Viewevent from './containers/Viewevent/index';
 import Feed from './containers/Feed/index';
-import UserMenu from './containers/User/index';
 import LoginPage from './containers/Auth/LoginPage';
 import SignUpPage from './containers/Auth/SignUpPage';
 import ConfirmEmail from './containers/Auth/confirmEmail';
-import CreateEvent from './containers/CreateEvent';
-import EditEvent from './containers/EditEvent';
-import NotFound from './components/NotFound';
 
 export default [
   {
@@ -20,14 +16,6 @@ export default [
         ...Feed,
         path: '/',
         exact: true,
-      },
-      {
-        ...CreateEvent,
-        path: '/create',
-      },
-      {
-        ...EditEvent,
-        path: '/edit/:eventid',
       },
       {
         ...Viewevent,
@@ -52,13 +40,6 @@ export default [
         ...NotificationsPage,
         path: '/notifications',
         exact: true,
-      },
-      {
-        ...UserMenu,
-        path: '/user',
-      },
-      {
-        ...NotFound,
       },
     ],
   },
