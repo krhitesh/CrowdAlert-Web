@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { Route, Redirect, withRouter } from 'react-router-dom';
 import { renderRoutes } from 'react-router-config';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -15,6 +14,7 @@ import {
   SpamReport,
   Notifications,
 } from '../../components';
+import CreateEvent from '../CreateEvent';
 
 /**
  * [App Main entry point of the App]
@@ -44,6 +44,8 @@ class App extends Component {
           <div>
             <Menu />
           </div>
+          {/* Moved this private route to requireAuth and inside Routes */}
+          <PrivateRoute path="/create" component={CreateEvent} auth={this.props.isLoggedIn} />
           {renderRoutes(this.props.route.routes)}
 
         </Sidebar>
