@@ -18,4 +18,6 @@ const NotificationsPage = () => (
   </Container>
 );
 
-export default NotificationsPage;
+export default {
+  component: NotificationsPage,
+};

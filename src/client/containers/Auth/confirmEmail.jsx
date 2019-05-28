@@ -201,4 +201,6 @@ const mapDispatchToProps = dispatch => (
 );
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConfirmEmail);
+export default {
+  component: connect(mapStateToProps, mapDispatchToProps)(ConfirmEmail),
+};

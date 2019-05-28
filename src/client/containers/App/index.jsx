@@ -88,4 +88,6 @@ const mapDispatchToProps = dispatch => (
     checkUserAuthenticationStatus,
   }, dispatch)
 );
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default {
+  component: withRouter(connect(mapStateToProps, mapDispatchToProps)(App)),
+};
