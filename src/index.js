@@ -9,6 +9,12 @@ import { matchRoutes } from 'react-router-config';
 import Routes from './client/Routes';
 
 const app = express();
+app.use('*.js', (req, res, next) => {
+  req.url += '.br';
+  res.set('Content-Encoding', 'br');
+  res.set('Content-Type', 'text/javascript');
+  next();
+});
 
 app.use(express.static('public'));
 app.get('*', async (req, res) => {
