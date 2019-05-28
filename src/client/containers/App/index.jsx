@@ -14,6 +14,7 @@ import {
   SpamReport,
   Notifications,
 } from '../../components';
+import CreateEvent from '../CreateEvent';
 
 /**
  * [App Main entry point of the App]
@@ -47,6 +48,8 @@ class App extends Component {
           <div>
             <Menu />
           </div>
+          {/* Moved this private route to requireAuth and inside Routes */}
+          <PrivateRoute path="/create" component={CreateEvent} auth={this.props.isLoggedIn} />
           {renderRoutes(this.props.route.routes)}
 
         </Sidebar>
