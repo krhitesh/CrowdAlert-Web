@@ -7,8 +7,6 @@ import Feed from './containers/Feed/index';
 import LoginPage from './containers/Auth/LoginPage';
 import SignUpPage from './containers/Auth/SignUpPage';
 import ConfirmEmail from './containers/Auth/confirmEmail';
-import CreateEvent from './containers/CreateEvent';
-import NotFound from './components/NotFound';
 
 export default [
   {
@@ -18,10 +16,6 @@ export default [
         ...Feed,
         path: '/',
         exact: true,
-      },
-      {
-        ...CreateEvent,
-        path: '/create',
       },
       {
         ...Viewevent,
@@ -46,9 +40,6 @@ export default [
         ...NotificationsPage,
         path: '/notifications',
         exact: true,
-      },
-      {
-        ...NotFound,
       },
     ],
   },
