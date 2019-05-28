@@ -361,15 +361,4 @@ const mapStateToProps = state => ({
 });
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Viewevent),
-  loadData: (store, ip = '', match = { params: { eventid: '' } }) => {
-    const { dispatch } = store;
-    return Promise.all([
-      dispatch(fetchEventDataSSR({ eventid: match.params.eventid, shouldRefresh: true }))
-        .then(() => {
-          const { lat, lng } = store.getState().map;
-          return dispatch(fetchReverseGeocodeSSR(lat, lng));
-        }),
-      dispatch(fetchCommentsThreadSSR(match.params.eventid, false)),
-    ]);
-  },
 };
