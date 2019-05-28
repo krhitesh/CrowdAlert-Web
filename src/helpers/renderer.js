@@ -7,6 +7,8 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import StyleContext from 'isomorphic-style-loader/StyleContext';
+import { renderRoutes } from 'react-router-config';
+import Routes from '../client/Routes';
 
 
 export default (req, store, context) => {
@@ -17,7 +19,7 @@ export default (req, store, context) => {
     <StyleContext.Provider value={{ insertCss }}>
       <Provider store={store}>
         <StaticRouter location={req.path} context={context}>
-          <div>{/* Render routes here */}</div>
+          <div>{renderRoutes(Routes)}</div>
         </StaticRouter>
       </Provider>
     </StyleContext.Provider>);
