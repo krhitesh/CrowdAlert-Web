@@ -4,6 +4,9 @@
 /* eslint-disable quotes */
 import 'babel-polyfill';
 import express from 'express';
+import { gzip } from 'zlib';
+import { matchRoutes } from 'react-router-config';
+import Routes from './client/Routes';
 
 const app = express();
 
@@ -19,7 +22,31 @@ app.get('*', async (req, res) => {
   // "this" is the auth status of the user who requested the application.
   // Then use the new state to render the application.
 
-  res.send('<div>Server rendered HTML</div>');
+  // console.log(matchRoutes(Routes, req.path));
+  const promises = matchRoutes(Routes, req.path).map(({ route, match }) => {
+    // Crank up loadData function from all the 'to be' rendered here and 
+    // return all the dispatches
+    // as promises, when completed will allow us to render the application
+    // on server
+  });
+
+  Promise.all(promises)
+    .then(() => {
+      // Now is the time to render the application
+
+      const content = `<div>Server rendered HTML will come here</div>`;
+
+      gzip(content, (err, gzipped) => {
+        if (err) {
+          // Send the uncompressed content as it is
+          res.send(content);
+        } else {
+          res.set('Content-Encoding', 'gzip');
+          res.set('Content-Type', 'text/html');
+          res.send(gzipped);
+        }
+      });
+    });
 });
 
 app.listen(3000, () => {
