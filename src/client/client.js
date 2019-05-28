@@ -11,12 +11,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
-import { renderRoutes } from 'react-router-config';
 import StyleContext from 'isomorphic-style-loader/StyleContext';
-import Routes from './Routes';
 import history from '../helpers/history';
 import registerServiceWorker from './registerServiceWorker';
-import runtime from 'serviceworker-webpack-plugin/lib/runtime';
 
 import configureStore from './configureStore';
 import { messaging } from './utils/firebase';
@@ -26,9 +23,7 @@ import { receivedNewNotification } from './components/Notifications/actions';
  * [initialState initial state for the App]
  * @type {Object}
  */
-const initialState = window.__INITIAL_STATE__;
-
-delete window.__INITIAL_STATE__;
+const initialState = {};
 
 /**
  * [history instantiate a history object containing the browser history
@@ -79,7 +74,7 @@ ReactDOM.hydrate(
   <StyleContext.Provider value={{ insertCss }}>
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <div>{renderRoutes(Routes)}</div>
+        <div>{/* Render routes here */}</div>
       </ConnectedRouter>
     </Provider>
   </StyleContext.Provider>,
@@ -93,9 +88,6 @@ ReactDOM.hydrate(
  * @return {none}          [description]
  */
 registerServiceWorker();
-if ('serviceWorker' in navigator) {
-  const registration = runtime.register();
-}
 
 /**
  * [Manages the initial loading spinner. Shows the spinner until document is
