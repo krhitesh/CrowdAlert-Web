@@ -11,7 +11,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
+import { renderRoutes } from 'react-router-config';
 import StyleContext from 'isomorphic-style-loader/StyleContext';
+import Routes from './Routes';
 import history from '../helpers/history';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -74,7 +76,7 @@ ReactDOM.hydrate(
   <StyleContext.Provider value={{ insertCss }}>
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <div>{/* Render routes here */}</div>
+        <div>{renderRoutes(Routes)}</div>
       </ConnectedRouter>
     </Provider>
   </StyleContext.Provider>,
