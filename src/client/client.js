@@ -1,31 +1,67 @@
-/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/jsx-filename-extension */
 // Startup point for the client side application
 /**
  * CrowdAlert
  * index.js: main entry point of the app
- * client.js: main entry point of client rendered application
  * eslint is disabled as there are references to window & documnet object.
  */
 
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import runtime from 'serviceworker-webpack-plugin/lib/runtime';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'react-router-redux';
+import StyleContext from 'isomorphic-style-loader/StyleContext';
 import history from '../helpers/history';
 import registerServiceWorker from './registerServiceWorker';
 
-import client from './index';
+import configureStore from './configureStore';
 import { messaging } from './utils/firebase';
 import { receivedNewNotification } from './components/Notifications/actions';
 
+/**
+ * [initialState initial state for the App]
+ * @type {Object}
+ */
+const initialState = {};
+
+/**
+ * [history instantiate a history object containing the browser history
+ *  used to push & pop pages using react-router]
+ * @type {[type]}
+ */
+
+/**
+ * [store contains the redux store for the app]
+ * @type {[type]}
+ */
+const store = configureStore(initialState, history);
 /**
  * Dispatch actions on message is received
  */
 messaging.onMessage((payload) => {
   // console.log('Message', payload);
-  client.store.dispatch(receivedNewNotification(payload));
+  store.dispatch(receivedNewNotification(payload));
 });
+
+const removeDimmer = () => {
+  const delay = 500;
+  const dimmer = document.querySelector('#docs-loading-dimmer');
+  dimmer.style.opacity = '0';
+  setTimeout(() => {
+    const dimmer = document.querySelector('#docs-loading-dimmer');
+
+    document.body.removeChild(dimmer);
+    document.body.setAttribute('class', '');
+    // Uncomment the following line
+    // window.alert('Production Build: 11-Aug');
+  }, delay);
+};
+
+const insertCss = (...styles) => {
+  const removeCss = styles.map(style => style._insertCss());
+  return () => removeCss.forEach(dispose => dispose());
+};
 
 /**
  * [ROOT_NODE is the document reference where the app should be mounted]
@@ -35,7 +71,13 @@ const ROOT_NODE = document.getElementById('root');
 
 // Render the app to the specified mount point
 ReactDOM.hydrate(
-  <client.Component />,
+  <StyleContext.Provider value={{ insertCss }}>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <div>{/* Render routes here */}</div>
+      </ConnectedRouter>
+    </Provider>
+  </StyleContext.Provider>,
   ROOT_NODE,
   // removeDimmer,
 );
@@ -46,10 +88,6 @@ ReactDOM.hydrate(
  * @return {none}          [description]
  */
 registerServiceWorker();
-if ('serviceWorker' in navigator) {
-  // eslint-disable-next-line no-unused-vars
-  const registration = runtime.register();
-}
 
 /**
  * [Manages the initial loading spinner. Shows the spinner until document is
