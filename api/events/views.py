@@ -14,9 +14,13 @@ from api.spam.views import get_spam_report_data
 from api.notifications.dispatch import notify_incident
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from firebase_admin.firestore import GeoPoint
+from .models import Event, IncidentReport
+from api.comments.models import Comment
 
 
 DB = settings.FIREBASE.database()
+db = settings.FIRESTORE
 
 def get_multiple_events(lat, lng, thresold, cluster_thresold):
     incidents = DB.child('incidents').get()
@@ -95,19 +99,21 @@ class EventView(APIView):
         if query == '':
             return HttpResponseBadRequest("Bad request: No Id specified")
 
-        data = DB.child('incidents').child(query).get().val()
+        # data = DB.child('incidents').child(query).get().val()
+        data = db.document('incidents/' + query).get().to_dict()
         for key in data['reportedBy']:
             if data['reportedBy'][key]['anonymous']:
                 data['reportedBy'][key] = {
-                    'displayName': "Anonymous",
-                    'photoURL': 'https://crowdalert.herokuapp.com/static/images/meerkat.svg',
+                    "displayName": "Anonymous",
+                    "photoURL": 'https://crowdalert.herokuapp.com/static/images/meerkat.svg',
                 }
             else:
                 user_id = data['reportedBy'][key]['userId']
-                udata = DB.child('users/' + user_id).get().val()
+                # udata = DB.child('users/' + user_id).get().val()
+                udata = db.document('users/' + user_id).get().to_dict()
                 data['reportedBy'][key] = {
-                    'displayName': udata['displayName'],
-                    'photoURL': udata['photoURL'],
+                    "displayName": udata['displayName'],
+                    "photoURL": udata['photoURL'],
                 }
         data['spam'] = get_spam_report_data(query)
         return JsonResponse(data, safe=False)
@@ -118,7 +124,7 @@ class EventView(APIView):
         and check among all channels if this newly added event
         is in the proximity of that channel. If it is, then shovel that
         event to that channel. It is for the clients to decide whether or
-        not this event satifies their current distance criterion.
+        not this event satisfies their current distance criterion.
 
         Potential required features:
             Custom validation
@@ -134,64 +140,66 @@ class EventView(APIView):
         latitude = decoded_json['location']['coords']['latitude']
         longitude = decoded_json['location']['coords']['longitude']
         datetime = int(time.time()*1000)
-        incident_data = {
-            "category": decoded_json['category'],
-            "datetime": datetime,
-            "description": decoded_json['description'],
-            "local_assistance": decoded_json['local_assistance'],
-            "location": {
-                "coords": {
-                    "latitude": latitude,
-                    "longitude": longitude,
-                },
+
+        """
+        Compute geohash
+        """
+        event = Event(
+            category=decoded_json['category'],
+            datetime=datetime,
+            description=decoded_json['description'],
+            local_assistance=decoded_json['local_assistance'],
+            location={
+                "coords": GeoPoint(latitude, longitude),
+                "geohash": ''
             },
-            "public": {
+            public={
                 "share": decoded_json['public']['share'],
                 "view":  decoded_json['public']['view'],
             },
-            "reportedBy": {
+            reported_by={
                 "original": {
                     "userId": uid,
                     "anonymous": decoded_json['anonymous'],
-                },
+                }
             },
-            "title": decoded_json['title']
-        }
+            title=decoded_json['title'],
+            images=[]
+        )
 
-        data = DB.child('incidents').push(incident_data)
+        key = event.save(db)
 
-        key = data['name']
-        DB.child('incidentReports/' + uid).push({
-            "incidentId": key,
-        })
-        # Add the comments section
-        DB.child('comments/' + key + '/participants').update({
-            uid: True
-        })
+        incident_report = IncidentReport(uid, [key])
+        incident_report.save(db)
+
+        comment = Comment([uid])
+        comment.save(key, db)
+
         user_name = request.user.name
         user_picture = request.user.user_picture
-        if decoded_json['local_assistance']:
+        if event.local_assistance:
             notify_incident(sender_uid=uid, datetime=datetime,
-                            event_id=key, event_type=decoded_json['category'],
+                            event_id=key, event_type=event.category,
                             lat=latitude, lng=longitude,
-                            user_text=decoded_json['title'],
+                            user_text=event.title,
                             user_name=user_name, user_picture=user_picture)
-        classify_text(decoded_json['description'], key)
+
+        classify_text(event.description, key)
 
         channel_layer = get_channel_layer()
         # Send the event to all the websocket channels
         async_to_sync(channel_layer.group_send)(
-            'geteventsbylocation_', {
-                "type": "event_message",
+            "geteventsbylocation_", {
+                "type": 'event_message',
                 "message": {
-                    'actionType': 'WS_NEW_EVENT_RECEIVED',
-                    'data': {
-                        'lat': latitude,
-                        'long': longitude,
-                        'key': str(key),
-                        'datetime': datetime,
-                        'category': decoded_json['category'],
-                        'title': decoded_json['title']
+                    "actionType": 'WS_NEW_EVENT_RECEIVED',
+                    "data": {
+                        "lat": latitude,
+                        "long": longitude,
+                        "key": str(key),
+                        "datetime": datetime,
+                        "category": event.category,
+                        "title": event.title
                     }
                 }
             }

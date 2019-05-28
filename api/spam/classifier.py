@@ -16,6 +16,9 @@ def asyncfunc(function):
 
 @asyncfunc
 def classify_text(text, uuid):
+    """
+    TODO: Unknown structure of toxic node in realtime database
+    """
     url = db.child('apipaths/toxic_classifier').get().val()
     try:
         r = requests.post(url, data={'text': text})
