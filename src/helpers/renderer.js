@@ -6,10 +6,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { renderRoutes } from 'react-router-config';
 import StyleContext from 'isomorphic-style-loader/StyleContext';
-import serialize from 'serialize-javascript';
-import Routes from '../client/Routes';
 
 
 export default (req, store, context) => {
@@ -20,7 +17,7 @@ export default (req, store, context) => {
     <StyleContext.Provider value={{ insertCss }}>
       <Provider store={store}>
         <StaticRouter location={req.path} context={context}>
-          <div>{renderRoutes(Routes)}</div>
+          <div>{/* Render routes here */}</div>
         </StaticRouter>
       </Provider>
     </StyleContext.Provider>);
@@ -92,7 +89,6 @@ export default (req, store, context) => {
       </style>
       <div id="root">${content}</div>
       <script>
-        window.__INITIAL_STATE__ = ${serialize(store.getState())}
         /* 
         var delay = 500;
         var dimmer = document.querySelector('#docs-loading-dimmer');
