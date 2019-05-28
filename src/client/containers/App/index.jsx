@@ -67,15 +67,6 @@ const mapDispatchToProps = dispatch => (
     checkUserAuthenticationStatus,
   }, dispatch)
 );
-
-App.propTypes = {
-  checkUserAuthenticationStatus: PropTypes.func.isRequired,
-  authenticating: PropTypes.bool.isRequired,
-  route: PropTypes.shape({
-    routes: PropTypes.array.isRequired,
-  }).isRequired,
-};
-
 export default {
   component: withRouter(connect(mapStateToProps, mapDispatchToProps)(App)),
 };
