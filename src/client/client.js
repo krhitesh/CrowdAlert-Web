@@ -11,9 +11,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
-import { renderRoutes } from 'react-router-config';
 import StyleContext from 'isomorphic-style-loader/StyleContext';
-import Routes from './Routes';
 import history from '../helpers/history';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -25,9 +23,7 @@ import { receivedNewNotification } from './components/Notifications/actions';
  * [initialState initial state for the App]
  * @type {Object}
  */
-const initialState = window.__INITIAL_STATE__;
-
-delete window.__INITIAL_STATE__;
+const initialState = {};
 
 /**
  * [history instantiate a history object containing the browser history
@@ -78,7 +74,7 @@ ReactDOM.hydrate(
   <StyleContext.Provider value={{ insertCss }}>
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <div>{renderRoutes(Routes)}</div>
+        <div>{/* Render routes here */}</div>
       </ConnectedRouter>
     </Provider>
   </StyleContext.Provider>,
