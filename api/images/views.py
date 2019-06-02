@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 
 STORAGE = settings.FIREBASE.storage()
 DB = settings.FIREBASE.database()
+db = settings.FIRESTORE
 
 def asyncfunc(function):
     """ Wrapper for async behaviour. Executes function in a separate new thread
@@ -40,7 +41,7 @@ def add_thumbnail(name):
     STORAGE.child('thumbnails/'+name+'.svg').put(name+'.svg')
     # Remove the uploaded files for two good reasons:
     # Keep our dyno clean
-    # remove malicious code before anything wrong goes.
+    # remove malicious code before anything goes wrong.
     os.remove(name)
     os.remove(name+'.svg')
     print("Finished", time.time())

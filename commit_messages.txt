@@ -1,0 +1,24 @@
+1. helpers/renderer.js Setting up the renderer that binds ES6 stringified HTML with server side JSX and returns it.
+2. Added new file .env.local and commit_messages.txt to gitignore
+3. Added new packages:
+    1. brotli webpack compression plugin
+    2. Standard webpack compression plugin for fallback
+    3. Gzip express middleware for HTML compression
+    4. firebase-admin for serverside user authentication
+    5. http-proxy-middleware for proxying backend requests
+    6. postcss-loader for writing isomorphic css
+    7. dotenv-webpack to load environment variables from .env file
+    8. redux-logger for logging related to redux
+4. Updated packages:
+    1. Semantic UI react for Responsive rendering on server
+5. Added new yarn scripts for production
+
+1. Cleaned server entry point
+2. Created isomorphic history module
+3. Exported an object with component as key from the components on the root route
+4. Created client entry point and hydrate server HTML
+
+1. Created main Route file client/Routes.js
+2. User req.path to match route on the react-router and find out the component to be rendered from the Routes.js file
+3. Await for all the loadData functions (in subsequent commits) and render the application. Then gzip the rendered HTML and shovel it down to the user
+4. render routes in helpers/renderer.js, client/containers/App/index.jsx and client/client.js

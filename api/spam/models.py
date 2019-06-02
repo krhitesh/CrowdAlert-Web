@@ -9,6 +9,7 @@ class Classifier(object):
 
   def save(self, incident_id, db):
     db.collection(Classifier.collection_name).document(incident_id).set(self.to_dict())
+    return incident_id
 
   def update(self, new_flag_count, flag_user, incident_id, db):
     self.flag_users.append(flag_user)
@@ -31,7 +32,7 @@ class Classifier(object):
   def to_dict(self):
     classifier_dict = {
       'flag_users': self.flag_users,
-      'flag_users': self.flag_users
+      'flag_count': self.flag_count
     }
 
     return classifier_dict

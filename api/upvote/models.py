@@ -15,6 +15,7 @@ class Upvote(object):
 
     def save(self, incident_id, db):
         db.collection(Upvote.collection_name).document(incident_id).set(self.to_dict())
+        return incident_id
 
     def update_add_upvote(self, uid, new_count, incident_id, db):
         self.upvoters.append(uid)
