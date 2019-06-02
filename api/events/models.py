@@ -3,8 +3,6 @@
 from django.conf import settings
 from google.cloud.firestore_v1beta1 import ArrayUnion, ArrayRemove
 
-db = settings.FIRESTORE
-
 class Event(object):
     """Django model for user reports
     """

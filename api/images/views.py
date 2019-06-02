@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseRedirect
 from rest_framework.views import APIView
+from .models import Image
 
 STORAGE = settings.FIREBASE.storage()
 DB = settings.FIREBASE.database()
@@ -105,7 +106,7 @@ class ImagesView(APIView):
         # Generate uuid for the file. Never trust user.
         name = str(uuid4())
         print()
-        if request.FILES.get('image', False):            
+        if request.FILES.get('image', False):
             uploaded_file = request.FILES['image']
             file_system = FileSystemStorage()
             # save
@@ -132,8 +133,9 @@ class ImagesView(APIView):
         if request.POST.get("eventId", False):
             event_id = request.POST.get("eventId", False)
             is_trusted = request.POST.get('isValid', '') == 'true'
-            image_data = {"isNsfw": False, "isTrusted": is_trusted, "uuid": firebase_name}
-            DB.child('incidents').child(event_id).child("images").push(image_data)
+            image = Image(is_nsfw=False, is_trusted=is_trusted, uuid=firebase_name)
+            image.save(event_id, db)
+            # DB.child('incidents').child(event_id).child("images").push(image_data)
             print("Image Added")
         # Return file id for future reference
         print("Returning From Request", time.time())
