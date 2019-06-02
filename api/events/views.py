@@ -17,11 +17,15 @@ from channels.layers import get_channel_layer
 from firebase_admin.firestore import GeoPoint
 from .models import Event, IncidentReport
 from api.comments.models import Comment
+from api.users.models import User
 
 
 DB = settings.FIREBASE.database()
 db = settings.FIRESTORE
 
+"""
+Geohash optimization required
+"""
 def get_multiple_events(lat, lng, thresold, cluster_thresold):
     incidents = DB.child('incidents').get()
     data = []
@@ -100,22 +104,40 @@ class EventView(APIView):
             return HttpResponseBadRequest("Bad request: No Id specified")
 
         # data = DB.child('incidents').child(query).get().val()
-        data = db.document('incidents/' + query).get().to_dict()
-        for key in data['reportedBy']:
-            if data['reportedBy'][key]['anonymous']:
-                data['reportedBy'][key] = {
+        # data = db.document('incidents/' + query).get().to_dict()
+        event = Event.get(query, db)
+        for key in event.reported_by:
+            if event.reported_by[key]['anonymous']:
+                event.reported_by[key] = {
                     "displayName": "Anonymous",
                     "photoURL": 'https://crowdalert.herokuapp.com/static/images/meerkat.svg',
                 }
             else:
-                user_id = data['reportedBy'][key]['userId']
+                user_id = event.reported_by[key]['userId']
                 # udata = DB.child('users/' + user_id).get().val()
-                udata = db.document('users/' + user_id).get().to_dict()
-                data['reportedBy'][key] = {
-                    "displayName": udata['displayName'],
-                    "photoURL": udata['photoURL'],
+                # udata = db.document('users/' + user_id).get().to_dict()
+                udata = User.get(user_id, db)
+                event.reported_by[key] = {
+                    "displayName": udata.display_name,
+                    "photoURL": udata.photo_url,
                 }
+        data = event.to_dict()
         data['spam'] = get_spam_report_data(query)
+        # for key in data['reportedBy']:
+        #     if data['reportedBy'][key]['anonymous']:
+        #         data['reportedBy'][key] = {
+        #             "displayName": "Anonymous",
+        #             "photoURL": 'https://crowdalert.herokuapp.com/static/images/meerkat.svg',
+        #         }
+        #     else:
+        #         user_id = data['reportedBy'][key]['userId']
+        #         # udata = DB.child('users/' + user_id).get().val()
+        #         udata = db.document('users/' + user_id).get().to_dict()
+        #         data['reportedBy'][key] = {
+        #             "displayName": udata['displayName'],
+        #             "photoURL": udata['photoURL'],
+        #         }
+        # data['spam'] = get_spam_report_data(query)
         return JsonResponse(data, safe=False)
 
     def post(self, request):
@@ -172,7 +194,7 @@ class EventView(APIView):
         incident_report = IncidentReport(uid, [key])
         incident_report.save(db)
 
-        comment = Comment([uid])
+        comment = Comment(participants=[uid])
         comment.save(key, db)
 
         user_name = request.user.name

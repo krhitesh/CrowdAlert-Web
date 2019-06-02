@@ -21,6 +21,14 @@ class Event(object):
         self.title = title
         self.images = images
 
+    @staticmethod
+    def get(incident_id, db):
+        doc = db.collection(Event.collection_name).document(incident_id).get()
+        if doc.exists:
+            return Event.from_dict(doc.to_dict())
+        else:
+            return None
+
     def save(self, db):
         doc_ref = db.collection(self.collection_name).document()
         doc_ref.set(self.to_dict())
@@ -67,6 +75,7 @@ class IncidentReport(object):
     collection_name = 'incident_reports'
 
     def __init__(self, user_uuid, reports):
+        db = settings.FIRESTORE
         self.user_uuid = user_uuid
         self.reports = []
         for report in reports:

@@ -9,6 +9,14 @@ class User(object):
     self.display_name = display_name
     self.photo_url = photo_url
 
+  @staticmethod
+  def get(uid, db):
+    doc = db.collection(User.collection_name).document(uid).get()
+    if doc.exists:
+      return User.from_dict(uid, doc.to_dict())
+    else:
+      return None
+
   def save(self, db):
     db.collection(User.collection_name).document(self.uid).set(self.to_dict())
     return self.uid
