@@ -7,6 +7,8 @@ import express from 'express';
 import { gzip } from 'zlib';
 import { matchRoutes } from 'react-router-config';
 import Routes from './client/Routes';
+import history from './helpers/history';
+import serverConfigureStore from './helpers/serverConfigureStore';
 
 const app = express();
 app.use('*.js', (req, res, next) => {
@@ -22,7 +24,7 @@ app.get('*', async (req, res) => {
   // the retrieved ID token. If that ID token is
   // valid, fetch the user then dispatch appropriate
   // redux action with that user data.
-
+  const store = serverConfigureStore(req, {}, history);
 
   // UserAuth(TODO) -> Dispatch apt action to inform redux (and state) that hey,
   // "this" is the auth status of the user who requested the application.
