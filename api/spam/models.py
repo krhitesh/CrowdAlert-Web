@@ -22,7 +22,7 @@ class Classifier(object):
   @staticmethod
   def get(incident_id, db):
     doc = db.collection(Classifier.collection_name).document(incident_id).get()
-    return doc.to_dict()
+    return Classifier.from_dict(doc.to_dict())
 
   @staticmethod
   def from_dict(source_dict):

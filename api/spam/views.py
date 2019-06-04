@@ -15,10 +15,10 @@ def get_spam_report_data(uuid):
     TODO: Unknown structure of toxic node in realtime database
     """
     toxic = db.child(path + '/toxic').get().val()
-    user_flag_count = DB.collection('classifiers').document(uuid).get().to_dict()['flag_count']
-
-    if not user_flag_count:
-        user_flag_count = 0
+    user_flag_count_dict = DB.collection('classifiers').document(uuid).get().to_dict()
+    user_flag_count = 0
+    if user_flag_count_dict is not None:
+        user_flag_count = user_flag_count_dict['flag_count']
 
     data = {
         'uuid': uuid,
@@ -55,7 +55,7 @@ class SpamReportView(APIView):
         
         # path = 'classifier/' + uuid + '/flags'
         # user_flags = db.child(path).get().val()
-        classifier = Classifier.from_dict(Classifier.get(uuid, DB))
+        classifier = Classifier.get(uuid, DB)
 
         user_id = str(request.user)
         

@@ -58,8 +58,8 @@ class UpvoteView(APIView):
             # count = db.child(path + '/count').get().val()
             upvote = Upvote.from_dict(Upvote.get(uuid, DB))
             has_upvoted = self.get_has_upvoted(upvote, request)
-            if upvote.count is None:
-                upvote.count = 0
+            # if upvote.count is None:
+            #     upvote.count = 0
 
             if current_count == -1:
                 # send the reponse of the initial request immediately

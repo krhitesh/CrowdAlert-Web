@@ -32,6 +32,6 @@ class UserView(APIView):
             
         uid = str(request.user)
         if user_data.get('displayName', False):
-            DB.document('users/' + uid).update({u"displayName": user_data.get('displayName', ' ')})
+            DB.document('users/' + uid).set({u"displayName": user_data.get('displayName', ' ')})
 
         return JsonResponse({"status": "ok"}, safe=False)

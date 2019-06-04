@@ -17,7 +17,7 @@ class Comment(object):
         query = comments_ref.order_by(u"timestamp", direction=firestore.Query.DESCENDING)
         comment_data_docs = query.get()
         thread_data = {}
-        for comment_data_doc in comment_data_doc:
+        for comment_data_doc in comment_data_docs:
             thread_data[comment_data_doc.id] = comment_data_doc.to_dict()
 
         return thread_data

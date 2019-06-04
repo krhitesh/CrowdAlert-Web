@@ -18,6 +18,7 @@ from firebase_admin.firestore import GeoPoint
 from .models import Event, IncidentReport
 from api.comments.models import Comment
 from api.users.models import User
+from api.utils.geohash_util import encode
 
 
 DB = settings.FIREBASE.database()
@@ -26,60 +27,60 @@ db = settings.FIRESTORE
 """
 Geohash optimization required
 """
-def get_multiple_events(lat, lng, thresold, cluster_thresold):
-    incidents = DB.child('incidents').get()
-    data = []
-
-    # Find events which are inside the circle
-
-    # This method is highly inefficient
-    # In takes O(n) time for each request
-    # Should use a GeoHash based solution instead of this
-    for incident in incidents.each():
-        event = dict(incident.val())
-        temp = {}
-        temp['key'] = incident.key()
-        temp['lat'] = event['location']['coords']['latitude']
-        temp['long'] = event['location']['coords']['longitude']
-        temp['category'] = event['category']
-        temp['title'] = event['title']
-        temp['datetime'] = event['datetime']
-        tmplat = float(event['location']['coords']['latitude'])
-        tmplng = float(event['location']['coords']['longitude'])
-        dist = distance(tmplat, tmplng, lat, lng)
-        if dist < thresold:
-            data.append(temp)
-
-    # Cluster the events
-    # This code should also be present on client side
-    if cluster_thresold:
-        # clustered incidents data
-        clustered_data = []
-        # Consider each node as root for now
-        for root in data:
-            # If is clustered flag is not present
-            if not root.get('isClustered', False):
-                # Loop though the points
-                for child in data:
-                    # Base case
-                    if child['key'] == root['key']:
-                        continue
-                    # If node is not clustered
-                    if not child.get('isClustered', False):
-                        # Calculate the distance
-                        temp_distance = distance(root['lat'], root['long'],
-                                                    child['lat'], child['long'])
-                        # If two points are too close on map cluster them
-                        if temp_distance < cluster_thresold:
-                            # Update root
-                            root['isClustered'] = True
-                            root['lat'] = (root['lat'] + child['lat'])/2
-                            root['long'] = (root['long'] + child['long'])/2
-                            # Mark child
-                            child['isClustered'] = True
-                clustered_data.append(root)
-        return clustered_data
-    return data
+# def get_multiple_events(lat, lng, thresold, cluster_thresold):
+#     incidents = DB.child('incidents').get()
+#     data = []
+#
+#     # Find events which are inside the circle
+#
+#     # This method is highly inefficient
+#     # In takes O(n) time for each request
+#     # Should use a GeoHash based solution instead of this
+#     for incident in incidents.each():
+#         event = dict(incident.val())
+#         temp = {}
+#         temp['key'] = incident.key()
+#         temp['lat'] = event['location']['coords']['latitude']
+#         temp['long'] = event['location']['coords']['longitude']
+#         temp['category'] = event['category']
+#         temp['title'] = event['title']
+#         temp['datetime'] = event['datetime']
+#         tmplat = float(event['location']['coords']['latitude'])
+#         tmplng = float(event['location']['coords']['longitude'])
+#         dist = distance(tmplat, tmplng, lat, lng)
+#         if dist < thresold:
+#             data.append(temp)
+#
+#     # Cluster the events
+#     # This code should also be present on client side
+#     if cluster_thresold:
+#         # clustered incidents data
+#         clustered_data = []
+#         # Consider each node as root for now
+#         for root in data:
+#             # If is clustered flag is not present
+#             if not root.get('isClustered', False):
+#                 # Loop though the points
+#                 for child in data:
+#                     # Base case
+#                     if child['key'] == root['key']:
+#                         continue
+#                     # If node is not clustered
+#                     if not child.get('isClustered', False):
+#                         # Calculate the distance
+#                         temp_distance = distance(root['lat'], root['long'],
+#                                                     child['lat'], child['long'])
+#                         # If two points are too close on map cluster them
+#                         if temp_distance < cluster_thresold:
+#                             # Update root
+#                             root['isClustered'] = True
+#                             root['lat'] = (root['lat'] + child['lat'])/2
+#                             root['long'] = (root['long'] + child['long'])/2
+#                             # Mark child
+#                             child['isClustered'] = True
+#                 clustered_data.append(root)
+#         return clustered_data
+#     return data
 
 class EventView(APIView):
     """ API view class for events
@@ -121,7 +122,7 @@ class EventView(APIView):
                     "displayName": udata.display_name,
                     "photoURL": udata.photo_url,
                 }
-        data = event.to_dict()
+        data = event.to_response_dict()
         data['spam'] = get_spam_report_data(query)
         # for key in data['reportedBy']:
         #     if data['reportedBy'][key]['anonymous']:
@@ -173,7 +174,7 @@ class EventView(APIView):
             local_assistance=decoded_json['local_assistance'],
             location={
                 "coords": GeoPoint(latitude, longitude),
-                "geohash": ''
+                "geohash": encode(location=[latitude, longitude], precision=12)
             },
             public={
                 "share": decoded_json['public']['share'],
@@ -263,5 +264,11 @@ class MultipleEventsView(APIView):
             return HttpResponseBadRequest("Bad request")
         
         cluster_thresold = float(request.GET.get('min', 0))
-        data = get_multiple_events(lat, lng, thresold, cluster_thresold)
+        # data = get_multiple_events(lat, lng, thresold, cluster_thresold)
+        data = Event.get_events_around(
+            center={"latitude": lat, "longitude": lng},
+            max_distance=thresold,
+            cluster_threshold=cluster_thresold,
+            db=db
+        )
         return JsonResponse(data, safe=False)
