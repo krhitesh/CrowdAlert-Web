@@ -19,6 +19,12 @@ import { STATIC_IMAGES } from '../../utils/apipaths';
 import calcAge from '../../utils/time';
 import getWidth from '../../utils/width';
 
+const isBrowser = () => typeof window !== 'undefined';
+const getWidth = () => {
+  if (isBrowser()) return window.innerWidth;
+  return Infinity;
+};
+
 class CommentsSection extends Component {
   constructor(props) {
     super(props);
