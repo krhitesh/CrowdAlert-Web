@@ -36,8 +36,16 @@ const fetchEventDataMiddleware = ({ dispatch }) => next => (action) => {
       zoom: 16,
       fetch: false,
     }));
-    // Dipatch reverse geocode
-    dispatch(fetchReverseGeocode(lat, lng));
+
+    if (typeof window !== 'undefined') {
+      // Only dispatch this action in the browser.
+      // When rendering the app on server, fetchReverseGeocode(lat, lng)
+      // action is dispatched after fetchEventData({ eventid, shouldRefresh }) finishes
+      // in the then callback inside loadData function of ViewEvent container.
+
+      // Dipatch reverse geocode
+      dispatch(fetchReverseGeocode(lat, lng));
+    }
 
     next(newAction);
   } else {
