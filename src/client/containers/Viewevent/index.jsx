@@ -21,10 +21,14 @@ import {
 
 import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
 import { fetchCommentsThreadSSR } from '../../components/Comments/actions';
-import getWidth from '../../utils/width';
 
 import styleSheet from './style';
 
+const isBrowser = () => typeof window !== 'undefined';
+const getWidth = () => {
+  if (isBrowser()) return window.innerWidth;
+  return Infinity;
+};
 
 /**
  * [MapwithSonar Combines the MapWrapper & Sonar component to view a single marker
@@ -243,4 +247,16 @@ const mapStateToProps = state => ({
 });
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Viewevent),
+  loadData: (store, match) => {
+    const { dispatch } = store;
+
+    return Promise.all([
+      dispatch(fetchEventDataSSR({ eventid: match.params.eventid, shouldRefresh: true }))
+        .then(() => {
+          const { lat, lng } = store.getState().map;
+          return dispatch(fetchReverseGeocodeSSR(lat, lng));
+        }),
+      dispatch(fetchCommentsThreadSSR(match.params.eventid, false)),
+    ]);
+  },
 };

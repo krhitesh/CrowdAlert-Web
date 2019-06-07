@@ -12,6 +12,12 @@ import style from './styles';
 import OAuth from './OAuth';
 import getWidth from '../../utils/width';
 
+const isBrowser = () => typeof window !== 'undefined';
+const getWidth = () => {
+  if (isBrowser()) return window.innerWidth;
+  return Infinity;
+};
+
 class LoginPage extends Component {
   componentDidMount() {
     this.props.removeBottomBarVisibility();
