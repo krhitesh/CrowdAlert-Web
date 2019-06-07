@@ -20,7 +20,7 @@ const notificationsMiddleware = store => next => (action) => {
   const { dispatch } = store;
   if (action.type === AUTH_CHECK_USER_STATUS) {
     // Check if fcm token is not present
-    if (!window.localStorage.getItem('fcmtoken')) {
+    if (typeof window !== 'undefined' && !window.localStorage.getItem('fcmtoken')) {
       // Show modal to promt the user to subscribe to notificaitons
       dispatch(showNotificationPermissionInit());
     }
@@ -68,7 +68,7 @@ const notificationsMiddleware = store => next => (action) => {
         dispatch(sendFCMTokenToServer(token));
         // Save as permission granted
         dispatch(showNotificationPermissionGranted(token));
-        console.log(token);
+        // console.log(token);
       })
       .catch((err) => {
         // Show error prompt

@@ -11,6 +11,12 @@ import SignUpForm from './SignUpform';
 import style from './styles';
 import OAuth from './OAuth';
 
+const isBrowser = () => typeof window !== 'undefined';
+const getWidth = () => {
+  if (isBrowser()) return window.innerWidth;
+  return Infinity;
+};
+
 class LoginPage extends Component {
   componentDidMount() {
     this.props.removeBottomBarVisibility();
@@ -21,7 +27,7 @@ class LoginPage extends Component {
   render() {
     return (
       <Container>
-        <Responsive minWidth={900}>
+        <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
           <Grid columns={3} stackable verticalAlign="middle" centered>
             <Grid.Row>
               <Grid.Column width={3} />
@@ -49,7 +55,7 @@ class LoginPage extends Component {
             </Grid.Row>
           </Grid>
         </Responsive>
-        <Responsive maxWidth={900}>
+        <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
           <Grid style={{ padding: '1.4rem' }}>
             <Grid.Row>
               <Grid.Column>

@@ -17,6 +17,12 @@ import {
 import { STATIC_IMAGES } from '../../utils/apipaths';
 import calcAge from '../../utils/time';
 
+const isBrowser = () => typeof window !== 'undefined';
+const getWidth = () => {
+  if (isBrowser()) return window.innerWidth;
+  return Infinity;
+};
+
 class CommentsSection extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +32,7 @@ class CommentsSection extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchCommentsThread(this.props.threadId, true);
   }
   handleInputChange(event) {
@@ -74,7 +80,7 @@ class CommentsSection extends Component {
                     <Form.Group>
                       <Form.Field width={13}>
                         <Form.TextArea
-                          autoHeight
+                          autoheight="true"
                           placeholder="Comment.."
                           name="comment"
                           onChange={this.handleInputChange}
@@ -82,12 +88,12 @@ class CommentsSection extends Component {
                         />
                       </Form.Field>
                       <Form.Field width={3} style={{ paddingLeft: '0rem' }}>
-                        <Responsive minWidth={901}>
+                        <Responsive fireOnMount getWidth={getWidth} minWidth={901}>
                           <Form.Button width={2} color="teal">
                             <Icon name="comment" />
                           </Form.Button>
                         </Responsive>
-                        <Responsive maxWidth={900}>
+                        <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
                           <Form.Button
                             width={2}
                             color="teal"
@@ -98,6 +104,7 @@ class CommentsSection extends Component {
                             disabled={this.props.comments.commentButtonLoading}
                           >
                             <Icon name="comment" />
+                            {/* Warning: Did not expect server HTML to contain the text node "Post" in <button>. */}
                             Post
                           </Form.Button>
                         </Responsive>
@@ -181,9 +188,9 @@ CommentsSection.propTypes = {
   threadId: PropTypes.string.isRequired,
   comments: PropTypes.shape({
     loading: PropTypes.bool,
-    threadId: PropTypes.number,
+    threadId: PropTypes.string,
     commentButtonLoading: PropTypes.bool,
-    errors: PropTypes.string,
+    errors: PropTypes.bool,
     message: PropTypes.string,
     comments: PropTypes.array,
     userData: PropTypes.object,

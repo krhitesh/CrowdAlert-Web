@@ -17,7 +17,7 @@ import {
   sendEmailVerificationAuth,
 } from './actions';
 import { updateUserData } from '../User/actions';
-import history from '../../';
+import history from '../../../helpers/history';
 import {
   FacebookAuth,
   GoogleAuth,
@@ -30,15 +30,18 @@ const authMiddleware = ({ dispatch }) => next => (action) => {
     // in the background
     next(action);
     // Load previously saved data to reduce authentication lag
-    const localStorageUserData = JSON.parse(window.localStorage.getItem('user'));
+    if (typeof window !== 'undefined') {
+      const localStorageUserData = JSON.parse(window.localStorage.getItem('user'));
 
-    if (localStorageUserData) {
-      dispatch(updateUserAuthenticationData({
-        loggedIn: true,
-        user: localStorageUserData,
-      }));
+      if (localStorageUserData) {
+        dispatch(updateUserAuthenticationData({
+          loggedIn: true,
+          user: localStorageUserData,
+        }));
+      }
     }
     // Do async user validation
+
     Auth.onAuthStateChanged((user) => {
       if (user) {
         const {
@@ -50,7 +53,6 @@ const authMiddleware = ({ dispatch }) => next => (action) => {
         } = user;
         const photoURL = user.photoURL || 'https://crowdalert.herokuapp.com/static/images/meerkat.svg';
         // Hint the app on the next load to fetch the user data
-        window.localStorage.setItem('shouldBeLoggedIn', true);
         // Update the store
         dispatch(updateUserAuthenticationData({
           loggedIn: true,
@@ -65,28 +67,38 @@ const authMiddleware = ({ dispatch }) => next => (action) => {
         }));
         // Save the user data in localStorage so that we can retrieve it
         // when the app loads up next
-        window.localStorage.setItem('user', JSON.stringify({
-          displayName,
-          email,
-          emailVerified,
-          photoURL,
-          uid,
-          providerData,
-        }));
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem('shouldBeLoggedIn', true);
+          window.localStorage.setItem('user', JSON.stringify({
+            displayName,
+            email,
+            emailVerified,
+            photoURL,
+            uid,
+            providerData,
+          }));
+        }
+
         if (!emailVerified) {
           // Make sure we are not trying to authenticate on next load
-          window.localStorage.setItem('shouldBeLoggedIn', false);
-          history.push('/auth/confirmEmail');
+          if (typeof window !== 'undefined') {
+            window.localStorage.setItem('shouldBeLoggedIn', false);
+            history.push('/auth/confirmEmail');
+          }
         }
         // Token is used only in ajax requests
         Auth.currentUser.getIdToken().then((token) => {
-          window.sessionStorage.setItem('token', token);
+          if (typeof window !== 'undefined') {
+            window.sessionStorage.setItem('token', token);
+          }
         });
         console.log('User Logged IN');
       } else {
-        window.localStorage.setItem('shouldBeLoggedIn', false);
-        window.localStorage.removeItem('user');
-        window.sessionStorage.removeItem('token');
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem('shouldBeLoggedIn', false);
+          window.localStorage.removeItem('user');
+          window.sessionStorage.removeItem('token');
+        }
         dispatch(updateUserAuthenticationData({
           loggedIn: false,
           user: null,
