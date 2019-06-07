@@ -47,28 +47,24 @@ function getEventMarkers(feed, zoom) {
  * @extends Component
  */
 class Feed extends Component {
-  // eslint-disable-next-line class-methods-use-this
-  head() {
-    let types = [];
-    getEventMarkers(this.props.feedProps, this.props.mapProps.zoom)
-      .forEach((event) => {
-        if (event.isClustered === true) {
-          if (types.indexOf('other') === -1) {
-            types.push('other');
-          }
-        } else if (types.indexOf(event.category) === -1) {
-          types.push(event.category);
-        }
-      });
-
-    const count = types.length;
-    let ogDesc = `${count} incidents of ${types} have been reported in your area. Stay safe.`;
-    if (types.indexOf('other') !== -1) {
-      types = types.filter(type => type !== 'other');
-      ogDesc = `${count}+ incidents of ${types.join(', ')} and others have been reported in your area. Stay safe.`;
-    }
-
-    return <SEO title="Feed | CrowdAlert" url={DOMAIN_NAME} description={ogDesc} />;
+  /**
+   * [componentWillMount fetch  the event as soon as the component will mount]
+   * @return {[type]} [description]
+   */
+  componentDidMount() {
+    // Fetch the users current approximate location using API
+    // this.props.fetchUserLocation({
+    //   oldLat: this.props.mapProps.lat,
+    //   oldLng: this.props.mapProps.lng,
+    // });
+    // this.props.fetchEventsByLocation({
+    //   lat: this.props.mapProps.lat,
+    //   lng: this.props.mapProps.lng,
+    //   zoom: this.props.mapProps.zoom,
+    // });
+  }
+  componentWillUnmount() {
+    console.log('UNMOUNT');
   }
   render() {
     // console.log(this.props);
@@ -113,18 +109,28 @@ const mapDispatchToProps = dispatch => (
     fetchEventsByLocation,
   }, dispatch)
 );
-
-Feed.propTypes = {
-  feedProps: PropTypes.object.isRequired,
-  mapProps: PropTypes.shape({
-    zoom: PropTypes.number,
-  }).isRequired,
-};
-
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Feed),
-  loadData: (store, ip = '', match = {}) => {
+  loadData: (store, ip = '') => {
     const { dispatch } = store;
+    // Need to await these actions somehow.
+    // To check that even though we are unable to detect
+    // action completion via promise, the action must be
+    // executed without an issue as per wrapClosableEpic thing.
+    // and must provide data to state. Use redux-logger on server to
+    // check the dispatch status.
+    // Fetches user location by IP
+
+    // dispatch(fetchUserLocation({
+    //   oldLat: 26.512840,
+    //   oldLng: 80.234894,
+    // }));
+
+    // dispatch(fetchEventsByLocation({
+    //   lat: 26.512840,
+    //   lng: 80.234894,
+    //   zoom: 4,
+    // }));
 
     return dispatch(fetchUserLocationSSR(
       {

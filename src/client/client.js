@@ -25,7 +25,9 @@ import { receivedNewNotification } from './components/Notifications/actions';
  * [initialState initial state for the App]
  * @type {Object}
  */
-const initialState = {};
+const initialState = window.__INITIAL_STATE__;
+
+delete window.__INITIAL_STATE__;
 
 /**
  * [history instantiate a history object containing the browser history
