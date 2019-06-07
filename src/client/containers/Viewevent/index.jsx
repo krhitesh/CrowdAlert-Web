@@ -18,15 +18,17 @@ import {
   Sonar,
   CommentsSection,
 } from '../../components';
-import { WS_NEW_COMMENT_RECEIVED } from '../../components/Comments/actionTypes';
+
 import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
-import { fetchCommentsThreadSSR, fetchCommentThreadSuccessViaWebSocket } from '../../components/Comments/actions';
-import { updateUpvotesLongPollStatus } from '../../components/Upvote/actions';
-import getWidth from '../../utils/width';
-import { DOMAIN_NAME, GET_IMAGE_URLS, WS_COMMENTS } from '../../utils/apipaths';
-import SEO from '../../components/SEO';
+import { fetchCommentsThreadSSR } from '../../components/Comments/actions';
+
 import styleSheet from './style';
 
+const isBrowser = () => typeof window !== 'undefined';
+const getWidth = () => {
+  if (isBrowser()) return window.innerWidth;
+  return Infinity;
+};
 
 /**
  * [MapwithSonar Combines the MapWrapper & Sonar component to view a single marker
@@ -222,8 +224,7 @@ class Viewevent extends Component {
       ({ latitude: lat, longitude: lng } = this.props.event.data.location.coords);
     }
     return (
-      <div style={{ paddingTop: '1rem', marginBottom: '6rem' }} data-test="component-viewevent">
-        {this.head()}
+      <div style={{ paddingTop: '1rem', marginBottom: '6rem' }}>
         <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
           <div style={styleSheet.mobile.mapContainer}>
             <MapwithSonar
@@ -367,4 +368,16 @@ const mapStateToProps = state => ({
 });
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Viewevent),
+  loadData: (store, match) => {
+    const { dispatch } = store;
+
+    return Promise.all([
+      dispatch(fetchEventDataSSR({ eventid: match.params.eventid, shouldRefresh: true }))
+        .then(() => {
+          const { lat, lng } = store.getState().map;
+          return dispatch(fetchReverseGeocodeSSR(lat, lng));
+        }),
+      dispatch(fetchCommentsThreadSSR(match.params.eventid, false)),
+    ]);
+  },
 };

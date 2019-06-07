@@ -11,14 +11,20 @@ import { UserSettingsMenu, Notifications } from '../';
 import logo from '../../logo.png';
 import getWidth from '../../utils/width';
 
+const isBrowser = () => typeof window !== 'undefined';
+const getWidth = () => {
+  if (isBrowser()) return window.innerWidth;
+  return Infinity;
+};
+
 /**
  * [MenuBar top menu bar for the app. Responsive according to the viewport]
  * @param {[type]} props [description]
  */
 const MenuBar = props => (
-  <Menu size="small" data-test="component-menu">
-    <Menu.Menu position="left" data-test="left-menu">
-      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyMobile} data-test="resp-only-mobile">
+  <Menu size="small">
+    <Menu.Menu position="left">
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyMobile}>
         <Icon
           name="content"
           onClick={() => props.toggleSidebarVisibility({
@@ -26,7 +32,7 @@ const MenuBar = props => (
           })}
         />
       </Responsive>
-      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyTablet} data-test="resp-only-tabs">
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyTablet}>
         <Menu.Item>
           <Icon
             name="content"
@@ -36,10 +42,10 @@ const MenuBar = props => (
           />
         </Menu.Item>
       </Responsive>
-      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} minWidth={992} data-test="resp-menu">
-        <Image src={logo} style={{ height: '4vh' }} data-test="component-image-logo" />
-        <Link to="/" data-test="link-root">
-          <Menu.Item data-test="component-link-root">
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} minWidth={992}>
+        <Image src={logo} style={{ height: '4vh' }} />
+        <Link to="/">
+          <Menu.Item>
             <Icon name="browser" />
             Feed
           </Menu.Item>
@@ -82,8 +88,8 @@ const MenuBar = props => (
       </Responsive>
 
       <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyMobile}>
-        <Link to="/notifications" style={{ marginRight: '1em' }} data-test="link-notifications">
-          <Notifications.NotificationIcon data-test="component-link-notifications" />
+        <Link to="/notifications" style={{ marginRight: '1em' }}>
+          <Notifications.NotificationIcon />
         </Link>
         <Icon name="search" circular />
       </Responsive>

@@ -14,9 +14,8 @@ test_image.jpg
 
 # production
 /build
-**/bundle.js
-**/bundle.js.br
-**/sw.js
+public/bundle.js
+public/bundle.js.br
 
 # misc
 .DS_Store

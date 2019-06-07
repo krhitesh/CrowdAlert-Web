@@ -13,6 +13,12 @@ import getWidth from '../../utils/width';
 import { DOMAIN_NAME } from '../../utils/apipaths';
 import SEO from '../../components/SEO';
 
+const isBrowser = () => typeof window !== 'undefined';
+const getWidth = () => {
+  if (isBrowser()) return window.innerWidth;
+  return Infinity;
+};
+
 class LoginPage extends Component {
   componentDidMount() {
     this.props.removeBottomBarVisibility();
@@ -37,8 +43,7 @@ class LoginPage extends Component {
       );
     }
     return (
-      <Container data-test="component-login-page">
-        {this.head()}
+      <Container>
         <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
           <Grid columns={3} stackable verticalAlign="middle" centered>
             <Grid.Row>
