@@ -38,9 +38,9 @@ class App extends Component {
     this.state = {};
   }
   componentWillMount() {
-    if (window.localStorage.getItem('shouldBeLoggedIn') === "true") {
-      this.props.checkUserAuthenticationStatus();
-    }
+    // if (window.localStorage.getItem('shouldBeLoggedIn') === "true") {
+    //   this.props.checkUserAuthenticationStatus();
+    // }
   }
   render() {
     // console.log(this.state);
