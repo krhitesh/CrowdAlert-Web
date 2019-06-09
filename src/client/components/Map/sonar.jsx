@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import { updateMapCenter, updateMapZoom } from './actions';
 import { MarkerWithLabel } from 'react-google-maps/lib/components/addons/MarkerWithLabel';
 import { openEventPreview } from '../EventPreviewCard/actions';
-import './pulseRed.css';
+import withStyles from 'isomorphic-style-loader/withStyles';
+import s from './pulseRed.css';
 
 // 1x1 transparent png image as we don't want to show the default marker image
 const markerImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII=';
@@ -88,4 +89,4 @@ const mapStateToProps = state => ({
   map: state.map,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sonar);
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(s)(Sonar));
