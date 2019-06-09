@@ -25,11 +25,10 @@ class App extends Component {
     super(props);
     this.state = {};
   }
-
-  componentDidMount() {
-    if (window.localStorage.getItem('shouldBeLoggedIn') === 'true') {
-      this.props.checkUserAuthenticationStatus();
-    }
+  componentWillMount() {
+    // if (window.localStorage.getItem('shouldBeLoggedIn') === "true") {
+    //   this.props.checkUserAuthenticationStatus();
+    // }
   }
   render() {
 
