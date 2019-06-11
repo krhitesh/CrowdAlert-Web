@@ -27,5 +27,5 @@ const mapStateToProps = state => ({
 });
 
 export default {
-  component: withRouter(connect(mapStateToProps)(CreateEvent)),
+  component: withRouter(connect(mapStateToProps)(requireAuth(CreateEvent))),
 };
