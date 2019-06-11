@@ -10,14 +10,6 @@ import LoginForm from './Loginform';
 import style from './styles';
 import OAuth from './OAuth';
 import getWidth from '../../utils/width';
-import { DOMAIN_NAME } from '../../utils/apipaths';
-import SEO from '../../components/SEO';
-
-const isBrowser = () => typeof window !== 'undefined';
-const getWidth = () => {
-  if (isBrowser()) return window.innerWidth;
-  return Infinity;
-};
 
 class LoginPage extends Component {
   componentDidMount() {
