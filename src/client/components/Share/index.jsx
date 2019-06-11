@@ -16,6 +16,7 @@ import {
   TwitterShareButton,
   WhatsappShareButton,
 } from 'react-share';
+import getWidth from '../../utils/width';
 
 /**
 * [ShareModal ShareModal conponent for event sharing events across
@@ -30,7 +31,7 @@ const ShareModal = (props) => {
     <Modal trigger={props.children} basic size="small">
       <Header icon="external share" content="Share" />
       <Modal.Content>
-        <Responsive maxWidth={900}>
+        <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
           <FacebookShareButton url={shareUrl} quote={title}>
             <Button color="facebook" fluid>
               <Icon name="facebook" />
@@ -52,7 +53,7 @@ const ShareModal = (props) => {
             </Button>
           </WhatsappShareButton>
         </Responsive>
-        <Responsive minWidth={900}>
+        <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
           <Grid columns={3}>
             <Grid.Column>
               <FacebookShareButton url={shareUrl} quote={title}>
