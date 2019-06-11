@@ -7,7 +7,7 @@ import getWidth from '../../utils/width';
 // Moved to Bottombar in a later MR
 
 const BottomBar = () => (
-  <Responsive fireOnMount getWidth={getWidth} maxWidth={900} data-test="component-bottombar">
+  <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
     <Segment style={styleSheet}>
       <Grid columns="equal" inverted>
         <Grid.Row textAlign="center">
