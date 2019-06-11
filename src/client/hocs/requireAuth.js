@@ -3,16 +3,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import propTypes from 'prop-types';
 
 export default (ChildComponent) => {
   class RequireAuth extends Component {
     render() {
       if (!this.props.isLoggedIn) {
-        return <Redirect to="/login/" data-test="component-redirect" />;
+        return <Redirect to="/login/" />;
       }
 
-      return <ChildComponent {...this.props} data-test="component-child-component" />;
+      return <ChildComponent {...this.props} />;
     }
   }
 
@@ -21,10 +20,6 @@ export default (ChildComponent) => {
     return {
       isLoggedIn,
     };
-  };
-
-  RequireAuth.propTypes = {
-    isLoggedIn: propTypes.bool.isRequired,
   };
 
   return connect(mapStateToProps)(RequireAuth);
