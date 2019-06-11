@@ -20,11 +20,9 @@ import {
 } from '../../components';
 import { WS_NEW_COMMENT_RECEIVED } from '../../components/Comments/actionTypes';
 import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
-import { fetchCommentsThreadSSR, fetchCommentThreadSuccessViaWebSocket } from '../../components/Comments/actions';
-import { updateUpvotesLongPollStatus } from '../../components/Upvote/actions';
+import { fetchCommentsThreadSSR } from '../../components/Comments/actions';
 import getWidth from '../../utils/width';
-import { DOMAIN_NAME, GET_IMAGE_URLS, WS_COMMENTS } from '../../utils/apipaths';
-import SEO from '../../components/SEO';
+
 import styleSheet from './style';
 
 

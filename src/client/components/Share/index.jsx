@@ -17,7 +17,6 @@ import {
   WhatsappShareButton,
 } from 'react-share';
 import getWidth from '../../utils/width';
-import { DOMAIN_NAME } from '../../utils/apipaths';
 
 /**
 * [ShareModal ShareModal conponent for event sharing events across
@@ -31,12 +30,12 @@ const ShareModal = (props) => {
   const shareUrl = `${DOMAIN_NAME}/view/${props.uuid}`;
   const { title } = props;
   return (
-    <Modal open={props.open} trigger={props.children} basic size="small" data-test="component-share-modal">
-      <Header icon="external share" content="Share" data-test="component-header" />
-      <Modal.Content data-test="component-modal-content">
+    <Modal trigger={props.children} basic size="small">
+      <Header icon="external share" content="Share" />
+      <Modal.Content>
         <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
-          <FacebookShareButton url={shareUrl} quote={title} data-test="component-fb-share">
-            <Button color="facebook" fluid data-test="fb-share-content">
+          <FacebookShareButton url={shareUrl} quote={title}>
+            <Button color="facebook" fluid>
               <Icon name="facebook" />
               Facebook
             </Button>
