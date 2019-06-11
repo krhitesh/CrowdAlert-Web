@@ -17,7 +17,6 @@ import {
   WhatsappShareButton,
 } from 'react-share';
 import getWidth from '../../utils/width';
-import { DOMAIN_NAME } from '../../utils/apipaths';
 
 /**
 * [ShareModal ShareModal conponent for event sharing events across
