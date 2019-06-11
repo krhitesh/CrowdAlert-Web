@@ -11,12 +11,6 @@ import { UserSettingsMenu, Notifications } from '../';
 import logo from '../../logo.png';
 import getWidth from '../../utils/width';
 
-const isBrowser = () => typeof window !== 'undefined';
-const getWidth = () => {
-  if (isBrowser()) return window.innerWidth;
-  return Infinity;
-};
-
 /**
  * [MenuBar top menu bar for the app. Responsive according to the viewport]
  * @param {[type]} props [description]
