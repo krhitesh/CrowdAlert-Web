@@ -5,6 +5,7 @@ import { Route, withRouter, Redirect, Switch } from 'react-router-dom';
 import MapTab from './mapstab';
 import FormTab from './formtab';
 import ImageTab from './imagestab';
+import requireAuth from '../../hocs/requireAuth';
 
 const CreateEvent = (props) => {
   return (
@@ -26,5 +27,5 @@ const mapStateToProps = state => ({
 });
 
 export default {
-  component: withRouter(connect(mapStateToProps)(CreateEvent)),
+  component: withRouter(connect(mapStateToProps)(requireAuth(CreateEvent))),
 };

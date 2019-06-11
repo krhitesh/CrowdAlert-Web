@@ -14,6 +14,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { sendEmailVerificationAuth, verifyEmailAuth } from './actions';
 import { Auth } from '../../utils/firebase';
+import requireAuth from '../../hocs/requireAuth';
 
 const Verifying = () => (
   <Message icon>
@@ -202,5 +203,5 @@ const mapDispatchToProps = dispatch => (
 
 
 export default {
-  component: connect(mapStateToProps, mapDispatchToProps)(ConfirmEmail),
+  component: connect(mapStateToProps, mapDispatchToProps)(requireAuth(ConfirmEmail)),
 };
