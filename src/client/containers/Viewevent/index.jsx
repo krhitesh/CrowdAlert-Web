@@ -19,9 +19,12 @@ import {
   CommentsSection,
 } from '../../components';
 
-import { fetchEventData } from './actions';
+import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
+import { fetchCommentsThreadSSR } from '../../components/Comments/actions';
+import getWidth from '../../utils/width';
 
 import styleSheet from './style';
+
 
 /**
  * [MapwithSonar Combines the MapWrapper & Sonar component to view a single marker

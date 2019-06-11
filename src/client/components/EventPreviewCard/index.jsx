@@ -26,7 +26,7 @@ const EventPreviewCard = (props) => {
     return null;
   }
   return (
-    <div data-test="component-event-preview-card">
+    <div>
       <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
         <div style={style.widescreen}>
           {/* Animation isn't working as it requires component to be mounted

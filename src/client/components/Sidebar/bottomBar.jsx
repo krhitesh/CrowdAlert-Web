@@ -11,7 +11,7 @@ import getWidth from '../../utils/width';
 const BottomBar = (props) => {
   if (props.bottomBarIsVisible && typeof window !== 'undefined') {
     return (
-      <Responsive fireOnMount getWidth={getWidth} maxWidth={900} data-test="component-bottombar">
+      <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
         <Segment style={styleSheet.bottomBar}>
           {props.auth.isLoggedIn ?
             <Grid columns="equal" inverted data-test="component-logged-in-grid">
