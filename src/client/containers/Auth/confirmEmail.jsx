@@ -15,16 +15,6 @@ import PropTypes from 'prop-types';
 import { sendEmailVerificationAuth, verifyEmailAuth } from './actions';
 import { Auth } from '../../utils/firebase';
 import requireAuth from '../../hocs/requireAuth';
-import { DOMAIN_NAME } from '../../utils/apipaths';
-import SEO from '../../components/SEO';
-
-const head = () => (
-  <SEO
-    title="Confirm Email | CrowdAlert"
-    url={`${DOMAIN_NAME}/auth/confirmEmail`}
-    description="An email verification link has been sent to your registered email. Click on the link in the email to verify your registered email address."
-  />
-);
 
 const Verifying = () => (
   <Message icon>
@@ -214,5 +204,5 @@ const mapDispatchToProps = dispatch => (
 
 
 export default {
-  component: connect(mapStateToProps, mapDispatchToProps)(ConfirmEmail),
+  component: connect(mapStateToProps, mapDispatchToProps)(requireAuth(ConfirmEmail)),
 };
