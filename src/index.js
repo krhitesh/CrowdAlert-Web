@@ -4,6 +4,7 @@
 /* eslint-disable quotes */
 import 'babel-polyfill';
 import express from 'express';
+import proxy from 'http-proxy-middleware';
 import { gzip } from 'zlib';
 import { matchRoutes } from 'react-router-config';
 import Routes from './client/Routes';
@@ -18,6 +19,15 @@ app.use('*.js', (req, res, next) => {
   res.set('Content-Type', 'text/javascript');
   next();
 });
+
+app.use(
+  '/api',
+  proxy({ target: 'http://localhost:8000', changeOrigin: true }),
+);
+app.use(
+  '/static',
+  proxy({ target: 'http://localhost:8000', changeOrigin: true }),
+);
 
 app.use(express.static('public'));
 app.get('*', async (req, res) => {
