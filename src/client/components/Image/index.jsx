@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Image, Modal, Responsive } from 'semantic-ui-react';
 import { GET_IMAGE_URLS } from '../../utils/apipaths';
+import getWidth from '../../utils/width';
 
 /**
  * [ImageModal Displays a small thumbnail & opens a large modal onclick]
@@ -65,7 +66,7 @@ export default class ImageModal extends Component {
             </div>
           </Modal.Header>
           <Modal.Content>
-            <Responsive maxWidth={900}>
+            <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
               <Image
                 fluid
                 label={this.props.isTrusted ? null : {
@@ -82,7 +83,7 @@ export default class ImageModal extends Component {
                 }}
               />
             </Responsive>
-            <Responsive minWidth={900}>
+            <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
               <Image
                 size="massive"
                 label={this.props.isTrusted ? null : {
