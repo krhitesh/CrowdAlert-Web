@@ -11,6 +11,7 @@ import Routes from './client/Routes';
 import renderer from './helpers/renderer';
 import history from './helpers/history';
 import serverConfigureStore from './helpers/serverConfigureStore';
+import { domainName } from './client/utils/apipaths';
 
 const app = express();
 app.use('*.js', (req, res, next) => {
@@ -22,11 +23,11 @@ app.use('*.js', (req, res, next) => {
 
 app.use(
   '/api',
-  proxy({ target: 'http://localhost:8000', changeOrigin: true }),
+  proxy({ target: domainName, changeOrigin: true }),
 );
 app.use(
   '/static',
-  proxy({ target: 'http://localhost:8000', changeOrigin: true }),
+  proxy({ target: domainName, changeOrigin: true }),
 );
 
 app.use(express.static('public'));
