@@ -52,8 +52,15 @@ app.get('*', async (req, res) => {
   Promise.all(promises)
     .then(() => {
       // Now is the time to render the application
+      const context = {};
+      const content = renderer(req, store, context);
 
-      const content = `<div>Server rendered HTML will come here</div>`;
+      if (context.url) {
+        return res.redirect(301, context.url);
+      }
+      if (context.notFound) {
+        res.status(404);
+      }
 
       gzip(content, (err, gzipped) => {
         if (err) {
