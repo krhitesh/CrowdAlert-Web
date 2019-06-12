@@ -61,6 +61,5 @@ export {
   UPVOTE,
   SPAM_REPORT,
   FCM_TOKEN,
-  DOMAIN_NAME,
-  DOMAIN_NAME_TO_PROXY,
+  domainName,
 };
