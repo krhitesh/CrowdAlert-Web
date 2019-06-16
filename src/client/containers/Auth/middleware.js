@@ -90,6 +90,7 @@ const authMiddleware = ({ dispatch }) => next => (action) => {
         Auth.currentUser.getIdToken().then((token) => {
           if (typeof window !== 'undefined') {
             window.sessionStorage.setItem('token', token);
+            document.cookie = `token=${token}`;
           }
         });
         console.log('User Logged IN');
@@ -98,6 +99,8 @@ const authMiddleware = ({ dispatch }) => next => (action) => {
           window.localStorage.setItem('shouldBeLoggedIn', false);
           window.localStorage.removeItem('user');
           window.sessionStorage.removeItem('token');
+
+          document.cookie = 'token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
         dispatch(updateUserAuthenticationData({
           loggedIn: false,
