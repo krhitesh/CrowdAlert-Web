@@ -90,6 +90,7 @@ const authMiddleware = ({ dispatch }) => next => (action) => {
         Auth.currentUser.getIdToken().then((token) => {
           if (typeof window !== 'undefined') {
             window.sessionStorage.setItem('token', token);
+            document.cookie = `token=${token}`;
           }
         });
         console.log('User Logged IN');
@@ -98,6 +99,8 @@ const authMiddleware = ({ dispatch }) => next => (action) => {
           window.localStorage.setItem('shouldBeLoggedIn', false);
           window.localStorage.removeItem('user');
           window.sessionStorage.removeItem('token');
+
+          document.cookie = 'token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
         dispatch(updateUserAuthenticationData({
           loggedIn: false,
@@ -175,19 +178,22 @@ const emailPasswordAuthMiddleware = ({ dispatch }) => next => (action) => {
         dispatch(checkUserAuthenticationStatus());
         window.sessionStorage.removeItem('token');
         history.push('/login/');
+        document.cookie = 'token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
       })
       .catch((err) => { console.log('Error sign out', err); });
   }
 };
-const oAuthMiddleware = () => next => (action) => {
+const oAuthMiddleware = ({ dispatch }) => next => (action) => {
   if (action.type === AUTH_OAUTH_SIGNIN) {
     window.localStorage.setItem('shouldBeLoggedIn', true);
     switch (action.payload.provider) {
       case 'facebook':
-        Auth.signInWithRedirect(FacebookAuth);
+        Auth.signInWithRedirect(FacebookAuth)
+          .then(result => dispatch(checkUserAuthenticationStatus()));
         break;
       case 'google':
-        Auth.signInWithRedirect(GoogleAuth);
+        Auth.signInWithRedirect(GoogleAuth)
+          .then(result => dispatch(checkUserAuthenticationStatus()));
         break;
       default:
         break;
