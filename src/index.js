@@ -7,6 +7,8 @@ import express from 'express';
 import proxy from 'http-proxy-middleware';
 import { gzip } from 'zlib';
 import { matchRoutes } from 'react-router-config';
+import { getCookie } from './utils/cookie';
+import { performAuthentication, handleNoUser } from './helpers/auth';
 import Routes from './client/Routes';
 import renderer from './helpers/renderer';
 import history from './helpers/history';
@@ -32,11 +34,20 @@ app.use(
 
 app.use(express.static('public'));
 app.get('*', async (req, res) => {
+  const cookie = req.get('cookie') || '';
+  const token = getCookie(cookie, 'token');
+
   // Use firebase Admin SDK on server to verify
   // the retrieved ID token. If that ID token is
   // valid, fetch the user then dispatch appropriate
   // redux action with that user data.
+
   const store = serverConfigureStore(req, {}, history);
+  if (token && token !== '') {
+    await performAuthentication(store, token);
+  } else {
+    handleNoUser(store);
+  }
 
   // UserAuth(TODO) -> Dispatch apt action to inform redux (and state) that hey,
   // "this" is the auth status of the user who requested the application.
