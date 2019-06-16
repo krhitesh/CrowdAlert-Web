@@ -25,9 +25,14 @@ class App extends Component {
     this.state = {};
   }
   componentWillMount() {
-    // if (window.localStorage.getItem('shouldBeLoggedIn') === "true") {
+    // if (window.localStorage.getItem('shouldBeLoggedIn') === 'true') {
     //   this.props.checkUserAuthenticationStatus();
     // }
+  }
+  componentDidMount() {
+    if (window.localStorage.getItem('shouldBeLoggedIn') === 'true') {
+      this.props.checkUserAuthenticationStatus();
+    }
   }
   render() {
 
@@ -42,7 +47,6 @@ class App extends Component {
           <div>
             <Menu />
           </div>
-          {/* Moved all route to requireAuth and inside Routes */}
           {renderRoutes(this.props.route.routes)}
 
         </Sidebar>
