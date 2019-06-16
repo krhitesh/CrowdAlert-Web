@@ -189,10 +189,12 @@ const oAuthMiddleware = ({ dispatch }) => next => (action) => {
     window.localStorage.setItem('shouldBeLoggedIn', true);
     switch (action.payload.provider) {
       case 'facebook':
-        Auth.signInWithRedirect(FacebookAuth);
+        Auth.signInWithRedirect(FacebookAuth)
+          .then(result => dispatch(checkUserAuthenticationStatus()));
         break;
       case 'google':
-        Auth.signInWithRedirect(GoogleAuth);
+        Auth.signInWithRedirect(GoogleAuth)
+          .then(result => dispatch(checkUserAuthenticationStatus()));
         break;
       default:
         break;
