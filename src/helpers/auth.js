@@ -1,11 +1,5 @@
 import { Auth } from '../utils/firebaseAdmin';
 import { updateUserAuthenticationData } from '../client/containers/Auth/actions';
-import { userGetInfoSSR } from '../client/containers/User/actions';
-
-/*
-Use firebase Admin SDK on server to verify the retrieved ID token. If that ID token is
-valid, fetch the user then dispatch appropriate redux action with that user data.
-*/
 
 const authByIdToken = idToken => Auth.verifyIdToken(idToken)
   .then(decodedToken => decodedToken.uid)
@@ -16,16 +10,12 @@ export const handleNoUser = ({ dispatch }) => {
     loggedIn: false,
     user: null,
   }));
-  console.log('handleNoUser/RendererServer: NOT Logged IN');
+  console.log('RendererServer: NOT Logged IN');
 };
 
-export default ({ dispatch, getState }, token) => {
-  if (!token || token === '' || typeof token !== 'string') {
-    return handleNoUser({ dispatch });
-  }
-
+export const performAuthentication = ({ dispatch }, token) => {
   return authByIdToken(token)
-    .then(async (user) => {
+    .then((user) => {
       if (user) {
         const {
           displayName,
@@ -47,19 +37,16 @@ export default ({ dispatch, getState }, token) => {
             providerData,
           },
         }));
-        console.log('authByIdToken.then/RendererServer: Logged IN');
-
-        // Get user's home location if any
-        await dispatch(userGetInfoSSR({ key: 'home_location' }, token));
+        console.log('RendererServer: Logged IN');
       } else {
         handleNoUser({ dispatch });
       }
     })
     .catch((err) => {
       if (err.code === 'auth/id-token-expired') {
-        console.log('authByIdToken.catch/RendererServer: Token has been expired. User is NOT Logged IN');
+        console.log('RendererServer: Token has been expired. User is NOT Logged IN');
       } else {
-        console.log('authByIdToken.catch/User authentication failed on rendered server', err);
+        console.log('User authentication failed on rendered server', err);
       }
 
       handleNoUser({ dispatch });
