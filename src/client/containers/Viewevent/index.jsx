@@ -125,10 +125,6 @@ EventCard.defaultProps = {
  * @type {Object}
  */
 class Viewevent extends Component {
-  constructor(props) {
-    super(props);
-    this.setupSocket = this.setupSocket.bind(this);
-  }
   componentDidMount() {
     const { eventid } = this.props.match.params;
     const shouldRefresh =
