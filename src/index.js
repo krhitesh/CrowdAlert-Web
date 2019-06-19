@@ -9,7 +9,7 @@ import { matchRoutes } from 'react-router-config';
 import { getCookie } from './utils/cookie';
 import { performAuthentication, handleNoUser } from './helpers/auth';
 import Routes from './client/Routes';
-import renderer from './helpers/renderer';
+import { renderApp, renderStatus } from './helpers/renderer';
 import history from './helpers/history';
 import serverConfigureStore from './helpers/serverConfigureStore';
 import { domainName } from './client/utils/apipaths';
@@ -74,6 +74,31 @@ app.get('*', async (req, res) => {
       if (context.notFound) {
         res.status(404);
       }
+    });
+
+  promises.push(authenticateUserPromise);
+
+  let content = '';
+  try {
+    await Promise.all(promises);
+    // Now is the time to render the application
+    const context = {};
+    content = renderApp(req, store, context);
+
+    if (context.url) {
+      return res.redirect(301, context.url);
+    }
+    if (context.notFound) {
+      res.status(404);
+    }
+  } catch (err) {
+    let code = 500;
+    if (err.code === 'ECONNREFUSED') {
+      code = 404;
+    }
+    content = renderStatus(code, err.message);
+    res.status(500);
+  }
 
       gzip(content, (err, gzipped) => {
         if (err) {
