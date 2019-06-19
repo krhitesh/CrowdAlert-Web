@@ -8,7 +8,7 @@ import proxy from 'http-proxy-middleware';
 import { gzip } from 'zlib';
 import { matchRoutes } from 'react-router-config';
 import { getCookie } from './utils/cookie';
-import { performAuthentication, handleNoUser } from './helpers/auth';
+import authenticateUser from './helpers/auth';
 import Routes from './client/Routes';
 import renderer from './helpers/renderer';
 import history from './helpers/history';
@@ -45,11 +45,7 @@ app.get('*', async (req, res) => {
   // redux action with that user data.
 
   const store = serverConfigureStore(req, {}, history);
-  if (token && token !== '') {
-    await performAuthentication(store, token);
-  } else {
-    handleNoUser(store);
-  }
+  const authenticateUserPromise = authenticateUser(store, token);
 
   // UserAuth(TODO) -> Dispatch apt action to inform redux (and state) that hey,
   // "this" is the auth status of the user who requested the application.
@@ -83,31 +79,32 @@ app.get('*', async (req, res) => {
       }
     });
 
-  Promise.all(promises)
-    .then(() => {
-      // Now is the time to render the application
-      const context = {};
-      const content = renderer(req, store, context);
+  promises.push(authenticateUserPromise);
 
-      if (context.url) {
-        return res.redirect(301, context.url);
-      }
-      if (context.notFound) {
-        res.status(404);
-      }
+  await Promise.all(promises);
 
-      gzip(content, (err, gzipped) => {
-        if (err) {
-          // Send the uncompressed content as it is
-          res.set('Content-Type', 'text/html');
-          res.send(content);
-        } else {
-          res.set('Content-Encoding', 'gzip');
-          res.set('Content-Type', 'text/html');
-          res.send(gzipped);
-        }
-      });
-    });
+  // Now is the time to render the application
+  const context = {};
+  const content = renderer(req, store, context);
+
+  if (context.url) {
+    return res.redirect(301, context.url);
+  }
+  if (context.notFound) {
+    res.status(404);
+  }
+
+  gzip(content, (err, gzipped) => {
+    if (err) {
+      // Send the uncompressed content as it is
+      res.set('Content-Type', 'text/html');
+      res.send(content);
+    } else {
+      res.set('Content-Encoding', 'gzip');
+      res.set('Content-Type', 'text/html');
+      res.send(gzipped);
+    }
+  });
 });
 
 app.listen(3000, () => {
