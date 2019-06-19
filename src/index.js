@@ -16,8 +16,10 @@ import { domainName } from './client/utils/apipaths';
 
 const app = express();
 app.use('*.js', (req, res, next) => {
-  req.url += '.br';
-  res.set('Content-Encoding', 'br');
+  if (process.env.NODE_ENV === "production") {
+    req.url += '.br';
+    res.set('Content-Encoding', 'br');
+  }
   res.set('Content-Type', 'text/javascript');
   next();
 });
