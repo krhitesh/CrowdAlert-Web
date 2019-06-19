@@ -10,10 +10,14 @@ export const handleNoUser = ({ dispatch }) => {
     loggedIn: false,
     user: null,
   }));
-  console.log('RendererServer: NOT Logged IN');
+  console.log('handleNoUser/RendererServer: NOT Logged IN');
 };
 
-export const performAuthentication = ({ dispatch }, token) => {
+export default ({ dispatch }, token) => {
+  if (!token || token === '' || typeof token !== 'string') {
+    return handleNoUser({ dispatch });
+  }
+
   return authByIdToken(token)
     .then((user) => {
       if (user) {
@@ -37,16 +41,16 @@ export const performAuthentication = ({ dispatch }, token) => {
             providerData,
           },
         }));
-        console.log('RendererServer: Logged IN');
+        console.log('authByIdToken.then/RendererServer: Logged IN');
       } else {
         handleNoUser({ dispatch });
       }
     })
     .catch((err) => {
       if (err.code === 'auth/id-token-expired') {
-        console.log('RendererServer: Token has been expired. User is NOT Logged IN');
+        console.log('authByIdToken.catch/RendererServer: Token has been expired. User is NOT Logged IN');
       } else {
-        console.log('User authentication failed on rendered server', err);
+        console.log('authByIdToken.catch/User authentication failed on rendered server', err);
       }
 
       handleNoUser({ dispatch });
