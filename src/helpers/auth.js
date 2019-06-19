@@ -5,7 +5,7 @@ const authByIdToken = idToken => Auth.verifyIdToken(idToken)
   .then(decodedToken => decodedToken.uid)
   .then(uid => Auth.getUser(uid));
 
-export const handleNoUser = ({ dispatch }) => {
+const handleNoUser = ({ dispatch }) => {
   dispatch(updateUserAuthenticationData({
     loggedIn: false,
     user: null,
@@ -13,7 +13,11 @@ export const handleNoUser = ({ dispatch }) => {
   console.log('RendererServer: NOT Logged IN');
 };
 
-export const performAuthentication = ({ dispatch }, token) => {
+export default ({ dispatch }, token) => {
+  if (!token || token === '') {
+    return handleNoUser({ dispatch });
+  }
+
   return authByIdToken(token)
     .then((user) => {
       if (user) {
