@@ -19,8 +19,9 @@ import Dropzone from 'react-dropzone';
 import { Link } from 'react-router-dom';
 import { Image } from '../../components';
 import Webcam from './webcam';
-import { UPLOAD_IMAGES } from '../../utils/apipaths';
+import { UPLOAD_IMAGES, DOMAIN_NAME } from '../../utils/apipaths';
 import { toggleImageUpload } from './actions';
+import SEO from '../../components/SEO';
 
 class ImagesTab extends Component {
   constructor(props) {
@@ -129,6 +130,16 @@ class ImagesTab extends Component {
         });
       });
   }
+  // eslint-disable-next-line class-methods-use-this
+  head() {
+    return (
+      <SEO
+        title="Add Incident Images | Report Incident"
+        url={`${DOMAIN_NAME}/create/images`}
+        description="Report an incident near you."
+      />
+    );
+  }
   render() {
     let uploaded = 0;
     const total = Object.keys(this.state.images).length;
@@ -136,6 +147,7 @@ class ImagesTab extends Component {
     // console.log(this.state);
     return (
       <div>
+        {this.head()}
         <Dimmer active={false}>
           <Loader />
         </Dimmer>

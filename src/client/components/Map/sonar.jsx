@@ -74,7 +74,7 @@ Sonar.propTypes = {
     lat: PropTypes.number,
     long: PropTypes.number,
     title: PropTypes.string,
-  }).isRequired,
+  }),
 };
 Sonar.defaultProps = {
   id: null,
@@ -85,6 +85,15 @@ Sonar.defaultProps = {
   openEventPreview: () => {},
   map: {
     zoom: 4,
+  },
+  payload: {
+    category: '',
+    datetime: 0,
+    isClustered: false,
+    key: '',
+    lat: 0.0,
+    long: 0.0,
+    title: '',
   },
 };
 const mapDispatchToProps = dispatch => (
