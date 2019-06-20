@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Responsive, Segment, Grid, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -12,7 +13,7 @@ const BottomBar = (props) => {
     return (
       <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
         <Segment style={styleSheet.bottomBar}>
-          {props.auth.isLoggedIn?
+          {props.auth.isLoggedIn ?
             <Grid columns="equal" inverted>
               <Grid.Row textAlign="center">
                 <Grid.Column>
@@ -59,5 +60,12 @@ const mapStateToProps = state => ({
   ...state.sidebar,
   auth: state.auth,
 });
+
+BottomBar.propTypes = {
+  bottomBarIsVisible: PropTypes.bool.isRequired,
+  auth: PropTypes.shape({
+    isLoggedIn: PropTypes.bool,
+  }).isRequired,
+};
 
 export default connect(mapStateToProps)(BottomBar);

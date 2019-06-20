@@ -78,7 +78,6 @@ GeoLocator.defaultProps = {
   circular: true,
   fetchOnLoad: false,
   floated: 'right',
-  closeModal: () => {},
   modal: {
     modalText: null,
     isOpen: false,
