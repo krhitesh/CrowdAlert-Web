@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import { fetchUserLocation, fetchEventsByLocation } from './actions';
 import style from './style';
 import { MapWrapper, Sonar, EventPreviewCard, GeoLocator } from '../../components';
+import { DOMAIN_NAME } from '../../utils/apipaths';
+import SEO from '../../components/SEO';
 
 function getEventMarkers(feed, zoom) {
   // Boundary conditions
@@ -45,24 +47,28 @@ function getEventMarkers(feed, zoom) {
  * @extends Component
  */
 class Feed extends Component {
-  /**
-   * [componentWillMount fetch  the event as soon as the component will mount]
-   * @return {[type]} [description]
-   */
-  componentWillMount() {
-    // Fetch the users current approximate location using API
-    this.props.fetchUserLocation({
-      oldLat: this.props.mapProps.lat,
-      oldLng: this.props.mapProps.lng,
-    });
-    this.props.fetchEventsByLocation({
-      lat: this.props.mapProps.lat,
-      lng: this.props.mapProps.lng,
-      zoom: this.props.mapProps.zoom,
-    });
-  }
-  componentWillUnmount() {
-    console.log('UNMOUNT');
+  // eslint-disable-next-line class-methods-use-this
+  head() {
+    let types = [];
+    getEventMarkers(this.props.feedProps, this.props.mapProps.zoom)
+      .forEach((event) => {
+        if (event.isClustered === true) {
+          if (types.indexOf('other') === -1) {
+            types.push('other');
+          }
+        } else if (types.indexOf(event.category) === -1) {
+          types.push(event.category);
+        }
+      });
+
+    const count = types.length;
+    let ogDesc = `${count} incidents of ${types} have been reported in your area. Stay safe.`;
+    if (types.indexOf('other') !== -1) {
+      types = types.filter(type => type !== 'other');
+      ogDesc = `${count}+ incidents of ${types.join(', ')} and others have been reported in your area. Stay safe.`;
+    }
+
+    return <SEO title="Feed | CrowdAlert" url={DOMAIN_NAME} description={ogDesc} />;
   }
   render() {
     // console.log(this.props);
@@ -81,6 +87,7 @@ class Feed extends Component {
         ));
     return (
       <div style={style}>
+        {this.head()}
         <MapWrapper shouldFetch>
           { Markers }
         </MapWrapper>

@@ -96,7 +96,7 @@ Sonar.propTypes = {
     lat: PropTypes.number,
     long: PropTypes.number,
     title: PropTypes.string,
-  }).isRequired,
+  }),
 };
 Sonar.defaultProps = {
   id: null,
