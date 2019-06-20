@@ -82,7 +82,6 @@ EventHeader.propTypes = {
       displayName: PropTypes.string,
     }),
   }).isRequired,
-  distance: PropTypes.string,
 };
 EventHeader.defaultProps = {
   reverse_geocode: { name: '', admin2: '', admin1: '' },
