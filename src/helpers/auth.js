@@ -1,6 +1,11 @@
 import { Auth } from '../utils/firebaseAdmin';
 import { updateUserAuthenticationData } from '../client/containers/Auth/actions';
 
+/*
+Use firebase Admin SDK on server to verify the retrieved ID token. If that ID token is
+valid, fetch the user then dispatch appropriate redux action with that user data.
+*/
+
 const authByIdToken = idToken => Auth.verifyIdToken(idToken)
   .then(decodedToken => decodedToken.uid)
   .then(uid => Auth.getUser(uid));
