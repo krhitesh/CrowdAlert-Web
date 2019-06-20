@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
+const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin');
 const baseConfig = require('./webpack.base.js');
 
 const config = {
@@ -19,6 +20,9 @@ const config = {
       'process.env.REACT_APP_FIREBASE_PROJECT_ID': JSON.stringify(process.env.REACT_APP_FIREBASE_PROJECT_ID),
       'process.env.REACT_APP_FIREBASE_SENDER_ID': JSON.stringify(process.env.REACT_APP_FIREBASE_SENDER_ID),
       'process.env.REACT_APP_FACEBOOK_APP_ID': JSON.stringify(process.env.REACT_APP_FACEBOOK_APP_ID),
+    }),
+    new ServiceWorkerWebpackPlugin({
+      entry: path.join(__dirname, './public/firebase-messaging-sw.js'),
     }),
   ],
 };
