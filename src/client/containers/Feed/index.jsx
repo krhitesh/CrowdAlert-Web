@@ -118,24 +118,6 @@ export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Feed),
   loadData: (store, ip = '') => {
     const { dispatch } = store;
-    // Need to await these actions somehow.
-    // To check that even though we are unable to detect
-    // action completion via promise, the action must be
-    // executed without an issue as per wrapClosableEpic thing.
-    // and must provide data to state. Use redux-logger on server to
-    // check the dispatch status.
-    // Fetches user location by IP
-
-    // dispatch(fetchUserLocation({
-    //   oldLat: 26.512840,
-    //   oldLng: 80.234894,
-    // }));
-
-    // dispatch(fetchEventsByLocation({
-    //   lat: 26.512840,
-    //   lng: 80.234894,
-    //   zoom: 4,
-    // }));
 
     return dispatch(fetchUserLocationSSR(
       {
