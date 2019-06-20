@@ -14,7 +14,7 @@ const BottomBar = (props) => {
       <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
         <Segment style={styleSheet.bottomBar}>
           {props.auth.isLoggedIn ?
-            <Grid columns="equal" inverted data-test="component-logged-in-grid">
+            <Grid columns="equal" inverted>
               <Grid.Row textAlign="center">
                 <Grid.Column data-test="component-grid-map-outline">
                   <Link to="/" data-test="link-root">

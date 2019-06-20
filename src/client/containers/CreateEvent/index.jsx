@@ -27,6 +27,15 @@ const mapStateToProps = state => ({
   tabs: state.createEvents.tabs,
 });
 
+CreateEvent.propTypes = {
+  match: PropTypes.shape({
+    path: PropTypes.string,
+    isExact: PropTypes.bool,
+    params: PropTypes.object,
+    url: PropTypes.string,
+  }).isRequired,
+};
+
 export default {
   component: withRouter(connect(mapStateToProps)(requireAuth(CreateEvent))),
 };

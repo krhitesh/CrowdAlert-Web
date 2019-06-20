@@ -17,7 +17,7 @@ import {
   WhatsappShareButton,
 } from 'react-share';
 import getWidth from '../../utils/width';
-import { domainName } from '../../utils/apipaths';
+import { DOMAIN_NAME } from '../../utils/apipaths';
 
 /**
 * [ShareModal ShareModal conponent for event sharing events across
@@ -27,8 +27,8 @@ import { domainName } from '../../utils/apipaths';
 */
 const ShareModal = (props) => {
   // Note that in development environment (i.e. localhost)
-  // domainName points to the django server at localhost:8000
-  const shareUrl = `${domainName}/view/${props.uuid}`;
+  // DOMAIN_NAME points to the django server at localhost:8000
+  const shareUrl = `${DOMAIN_NAME}/view/${props.uuid}`;
   const { title } = props;
   return (
     <Modal trigger={props.children} basic size="small">
@@ -93,10 +93,5 @@ ShareModal.propTypes = {
   /* Should be a single element which triggers the modal */
   children: PropTypes.element.isRequired,
   uuid: PropTypes.string.isRequired,
-  open: PropTypes.bool,
-};
-
-ShareModal.defaultProps = {
-  open: false,
 };
 export default ShareModal;

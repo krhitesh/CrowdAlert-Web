@@ -29,9 +29,9 @@ const NotificationsModal = props => (
         {props.modal.text}
       </center>
     </Modal.Content>
-    <Modal.Actions data-test="component-modal-actions">
+    <Modal.Actions>
       {props.permission === false ? null :
-      <Button color="green" inverted onClick={props.showNotificationPermissionAsk} data-test="component-allow-btn">
+      <Button color="green" inverted onClick={props.showNotificationPermissionAsk}>
         <Icon name="checkmark" /> Allow
       </Button>
       }

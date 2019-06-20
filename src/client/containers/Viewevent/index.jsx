@@ -112,6 +112,7 @@ EventCard.propTypes = {
     isTrusted: propTypes.bool.isRequired,
     uuid: propTypes.string.isRequired,
   })).isRequired,
+  uuid: propTypes.string.isRequired,
 };
 EventCard.defaultProps = {
   reverse_geocode: { name: '', admin2: '', admin1: '' },
@@ -230,6 +231,30 @@ Viewevent.propTypes = {
     }).isRequired,
   }).isRequired,
   fetchEventData: propTypes.func.isRequired,
+  event: propTypes.shape({
+    reverse_geocode: propTypes.object,
+    isLoading: propTypes.bool,
+    data: propTypes.shape({
+      reportedBy: propTypes.object.isRequired,
+      datetime: propTypes.number,
+      title: propTypes.string,
+      description: propTypes.string,
+      images: propTypes.object,
+      spam: propTypes.object,
+      eventid: propTypes.string,
+      location: propTypes.shape({
+        coords: propTypes.shape({
+          lat: propTypes.number,
+          lng: propTypes.number,
+        }),
+      }),
+      category: propTypes.string,
+    }).isRequired,
+  }).isRequired,
+  map: propTypes.shape({
+    lat: propTypes.number,
+    lng: propTypes.number,
+  }).isRequired,
 };
 
 const mapDispatchToProps = dispatch => (
