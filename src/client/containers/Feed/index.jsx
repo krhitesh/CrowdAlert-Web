@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 
 import { fetchUserLocation, fetchEventsByLocation, fetchUserLocationSSR, fetchEventsByLocationSSR } from './actions';
 import style from './style';
@@ -26,12 +27,12 @@ function getEventMarkers(feed, zoom) {
   for (let i = 1; i < 18;) {
     if ((zoom + i > 4 && zoom + i < 18)
       && feedData[zoom + i] && feedData[zoom + i].length) {
-      console.log(feedData[zoom + i], i, zoom+i);
+      console.log(feedData[zoom + i], i, zoom + i);
       return feedData[zoom + i] || [];
     }
     if ((zoom - i > 4 && zoom - i < 18)
       && feedData[zoom - i] && feedData[zoom - i].length) {
-      console.log(feedData[zoom - i], i, zoom-i);
+      console.log(feedData[zoom - i], i, zoom - i);
       return feedData[zoom - i];
     }
     i += 1;
@@ -98,12 +99,21 @@ const mapStateToProps = (state) => {
     feedProps: feed,
   };
 };
+
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     fetchUserLocation,
     fetchEventsByLocation,
   }, dispatch)
 );
+
+Feed.propTypes = {
+  feedProps: PropTypes.object.isRequired,
+  mapProps: PropTypes.shape({
+    zoom: PropTypes.number,
+  }).isRequired,
+};
+
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Feed),
   loadData: (store, ip = '') => {
