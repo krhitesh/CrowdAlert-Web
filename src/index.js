@@ -12,7 +12,7 @@ import Routes from './client/Routes';
 import { renderApp, renderStatus } from './helpers/renderer';
 import history from './helpers/history';
 import serverConfigureStore from './helpers/serverConfigureStore';
-import { domainName } from './client/utils/apipaths';
+import { DOMAIN_NAME } from './client/utils/apipaths';
 
 const app = express();
 app.use('*.js', (req, res, next) => {
@@ -26,11 +26,11 @@ app.use('*.js', (req, res, next) => {
 
 app.use(
   '/api',
-  proxy({ target: domainName, changeOrigin: true }),
+  proxy({ target: DOMAIN_NAME, changeOrigin: true }),
 );
 app.use(
   '/static',
-  proxy({ target: domainName, changeOrigin: true }),
+  proxy({ target: DOMAIN_NAME, changeOrigin: true }),
 );
 
 app.use(express.static('public'));
