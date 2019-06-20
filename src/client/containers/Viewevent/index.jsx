@@ -22,7 +22,8 @@ import {
 import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
 import { fetchCommentsThreadSSR } from '../../components/Comments/actions';
 import getWidth from '../../utils/width';
-
+import { DOMAIN_NAME, GET_IMAGE_URLS } from '../../utils/apipaths';
+import SEO from '../../components/SEO';
 import styleSheet from './style';
 
 
@@ -207,6 +208,26 @@ class Viewevent extends Component {
       />
     );
   }
+  // eslint-disable-next-line class-methods-use-this
+  head() {
+    let image = '';
+    // console.log(this.props.event);
+    if (this.props.event.data.images.length > 0) {
+      if (this.props.event.data.images[0].isNsfw) {
+        image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}&mode=thumbnail`;
+      } else {
+        image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}`;
+      }
+    }
+    return (
+      <SEO
+        title={`${this.props.event.data.title} near ${this.props.event.reverse_geocode.name} | Incident Details`}
+        url={`${DOMAIN_NAME}/view/${this.props.event.data.eventid}`}
+        description={`Incident description: ${this.props.event.data.description} | Geo location: Latitude=${this.props.event.data.location.coords.latitude} Longitude=${this.props.event.data.location.coords.longitude}`}
+        image={image}
+      />
+    );
+  }
   render() {
     let lat = 0;
     let lng = 0;
@@ -217,6 +238,7 @@ class Viewevent extends Component {
     }
     return (
       <div style={{ paddingTop: '1rem', marginBottom: '6rem' }}>
+        {this.head()}
         <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
           <div style={styleSheet.mobile.mapContainer}>
             <MapwithSonar
@@ -318,13 +340,17 @@ Viewevent.propTypes = {
       datetime: propTypes.number,
       title: propTypes.string,
       description: propTypes.string,
-      images: propTypes.object,
+      images: propTypes.arrayOf(propTypes.shape({
+        isNsfw: propTypes.bool.isRequired,
+        isTrusted: propTypes.bool.isRequired,
+        uuid: propTypes.string.isRequired,
+      })).isRequired,
       spam: propTypes.object,
       eventid: propTypes.string,
       location: propTypes.shape({
         coords: propTypes.shape({
-          lat: propTypes.number,
-          lng: propTypes.number,
+          latitude: propTypes.number,
+          longitude: propTypes.number,
         }),
       }),
       category: propTypes.string,
