@@ -10,13 +10,21 @@ import { Provider } from 'react-redux';
 import StyleContext from 'isomorphic-style-loader/StyleContext';
 import rootTemplate from './templates';
 import Routes from '../client/Routes';
+import SEO from '../client/components/SEO';
+import { DOMAIN_NAME } from '../client/utils/apipaths';
 
 const Status = ({ statusCode, message }) => {
   const style = { textAlign: 'center' };
+  const title = `Error ${statusCode} - Sorry, something went wrong.`;
   return (
     <div className="ui message" style={{ maxWidth: '550px', margin: '0 auto', marginTop: '2em' }}>
+      <SEO
+        title={title}
+        url={DOMAIN_NAME}
+        description={message}
+      />
       <div className="header" style={style}>
-        Error {statusCode} - Sorry, something went wrong.
+        {title}
       </div>
       <p style={style}>{message}</p>
       <p style={style}>We&apos;re working on getting this fixed as soon as we can.</p>
