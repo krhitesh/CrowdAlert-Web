@@ -16,6 +16,7 @@ import StyleContext from 'isomorphic-style-loader/StyleContext';
 import Routes from './Routes';
 import history from '../helpers/history';
 import registerServiceWorker from './registerServiceWorker';
+import runtime from 'serviceworker-webpack-plugin/lib/runtime';
 
 import configureStore from './configureStore';
 import { messaging } from './utils/firebase';
@@ -92,6 +93,9 @@ ReactDOM.hydrate(
  * @return {none}          [description]
  */
 registerServiceWorker();
+if ('serviceWorker' in navigator) {
+  const registration = runtime.register();
+}
 
 /**
  * [Manages the initial loading spinner. Shows the spinner until document is
