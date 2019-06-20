@@ -11,6 +11,8 @@ import SignUpForm from './SignUpform';
 import style from './styles';
 import OAuth from './OAuth';
 import getWidth from '../../utils/width';
+import { DOMAIN_NAME } from '../../utils/apipaths';
+import SEO from '../../components/SEO';
 
 class LoginPage extends Component {
   componentDidMount() {
@@ -32,6 +34,7 @@ class LoginPage extends Component {
   render() {
     return (
       <Container>
+        {this.head()}
         <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
           <Grid columns={3} stackable verticalAlign="middle" centered>
             <Grid.Row>

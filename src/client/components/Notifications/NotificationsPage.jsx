@@ -13,7 +13,7 @@ const head = () => (
 );
 
 const NotificationsPage = () => (
-  <Container style={{ paddingTop: '1rem' }} data-test="component-notifications-page">
+  <Container style={{ paddingTop: '1rem' }}>
     {head()}
     <Header as="h2">
       <Icon name="bell" />
