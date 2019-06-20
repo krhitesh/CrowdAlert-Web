@@ -1,7 +1,7 @@
 /**
  * Contains API paths, which can be imported as required
  */
-const DOMAIN_NAME = 'https://crowdalert.herokuapp.com';
+const DOMAIN_NAME = 'https://test-ssr-20.herokuapp.com';
 // const DOMAIN_NAME = 'http://127.0.0.1:8000';
 // const domainNameL = 'https://192.168.0.4:8000';
 const domainNameL = DOMAIN_NAME;
