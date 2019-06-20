@@ -1,5 +1,5 @@
-import { EVENT_PREVIEW_OPEN, EVENT_PREVIEW_CLOSE } from './actionTypes';
-import { updateMapCenter, updateMapPolyline } from '../../components/Map/actions';
+import { EVENT_PREVIEW_OPEN } from './actionTypes';
+import { updateMapCenter } from '../../components/Map/actions';
 import { fetchEventData } from '../../containers/Viewevent/actions';
 
 const eventPreviewMiddleware = ({ dispatch }) => next => (action) => {
