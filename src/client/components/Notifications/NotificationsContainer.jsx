@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Image, List } from 'semantic-ui-react';
@@ -45,6 +46,18 @@ const NotificationItem = (props) => {
   );
 };
 
+NotificationItem.propTypes = {
+  data: PropTypes.shape({
+    userPicture: PropTypes.string,
+    link: PropTypes.string,
+    type: PropTypes.string,
+    userName: PropTypes.string,
+    category: PropTypes.string,
+    title: PropTypes.string,
+    datetime: PropTypes.number,
+  }).isRequired,
+};
+
 class NotificationsContainer extends Component {
   componentDidMount() {
     this.props.markNotificationAsRead();
@@ -89,5 +102,10 @@ const mapDispatchToProps = dispatch => (
     markNotificationAsRead,
   }, dispatch)
 );
+
+NotificationsContainer.propTypes = {
+  notifications: PropTypes.shape({}).isRequired,
+  markNotificationAsRead: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsContainer);

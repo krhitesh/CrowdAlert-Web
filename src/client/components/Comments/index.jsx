@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React, { Component } from 'react';
 import { Comment, Image, Card, Icon, Feed, Form, Responsive, Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';

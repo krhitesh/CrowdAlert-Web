@@ -66,6 +66,15 @@ Sonar.propTypes = {
   map: PropTypes.shape({
     zoom: PropTypes.number,
   }),
+  payload: PropTypes.shape({
+    category: PropTypes.string,
+    datetime: PropTypes.number,
+    isClustered: PropTypes.bool,
+    key: PropTypes.string,
+    lat: PropTypes.number,
+    long: PropTypes.number,
+    title: PropTypes.string,
+  }).isRequired,
 };
 Sonar.defaultProps = {
   id: null,

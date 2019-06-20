@@ -70,6 +70,13 @@ Body.propTypes = {
   children: PropTypes.node.isRequired,
   //  Event type
   eventType: PropTypes.string,
+  spam: PropTypes.shape({
+    errors: PropTypes.bool,
+    message: PropTypes.string,
+    modal: PropTypes.shape({
+      open: PropTypes.bool,
+    }),
+  }).isRequired,
 };
 Body.defaultProps = {
   desktop: false,

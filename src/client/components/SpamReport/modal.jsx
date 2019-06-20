@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Modal,
   Header,
@@ -17,7 +18,7 @@ const SpamReportModal = props => (
     size="small"
   >
     <Header icon>
-      <Icon name={`${props.errors?"meh":"smile"}`} />
+      <Icon name={`${props.errors ? 'meh' : 'smile'}`} />
 
       {props.errors ?
       'We are unable to process your request'
@@ -47,4 +48,19 @@ const mapDispatchToProps = dispatch => (
     reportSpamModalClose,
   }, dispatch)
 );
+
+SpamReportModal.propTypes = {
+  modal: PropTypes.shape({
+    open: PropTypes.bool,
+  }).isRequired,
+  errors: PropTypes.bool,
+  message: PropTypes.string,
+  reportSpamModalClose: PropTypes.func.isRequired,
+};
+
+SpamReportModal.defaultProps = {
+  errors: false,
+  message: 'Empty message',
+};
+
 export default connect(mapStateToProps, mapDispatchToProps)(SpamReportModal);

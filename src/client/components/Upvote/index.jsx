@@ -32,7 +32,11 @@ const UpvoteButton = (props) => {
 UpvoteButton.propTypes = {
   hasUpvoted: PropTypes.bool.isRequired,
   click: PropTypes.func.isRequired,
-  count: PropTypes.number.isRequired,
+  count: PropTypes.number,
+};
+
+UpvoteButton.defaultProps = {
+  count: 0,
 };
 
 const UpvoteButtonBasic = (props) => {
@@ -108,15 +112,15 @@ class Upvote extends Component {
     if (this.props.basic) {
       return (
         <UpvoteButtonBasic
-          hasUpvoted={this.state.hasUpvoted}
-          count={this.state.count}
+          hasUpvoted={this.state.hasUpvoted || false}
+          count={this.state.count || 0}
           click={this.handleClick}
         />
       );
     }
     return (
       <UpvoteButton
-        hasUpvoted={this.state.hasUpvoted}
+        hasUpvoted={this.state.hasUpvoted || false}
         count={this.state.count}
         click={this.handleClick}
       />
@@ -126,11 +130,15 @@ class Upvote extends Component {
 
 Upvote.propTypes = {
   uuid: PropTypes.string.isRequired,
-  basic: PropTypes.bool.isRequired,
+  basic: PropTypes.bool,
   fetchUpvotesStart: PropTypes.func.isRequired,
   fetchUpvotesCancel: PropTypes.func.isRequired,
   updateUpvoteStart: PropTypes.func.isRequired,
   updateUpvoteCancel: PropTypes.func.isRequired,
+};
+
+Upvote.defaultProps = {
+  basic: false,
 };
 
 const mapStateToProps = (state, ownProps) => {

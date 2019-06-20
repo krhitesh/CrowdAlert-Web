@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -72,5 +73,23 @@ const mapDisptachToProps = dispatch => (
     handleTabChange: changeTabCreateEventsForm,
   }, dispatch)
 );
+
+Tabs.propTypes = {
+  tabs: PropTypes.shape({
+    isValid: PropTypes.shape({
+      location: PropTypes.bool,
+      details: PropTypes.bool,
+      images: PropTypes.bool,
+    }),
+    activeTab: PropTypes.number,
+  }).isRequired,
+  handleTabChange: PropTypes.func.isRequired,
+  location: PropTypes.shape({
+    text: PropTypes.string,
+  }).isRequired,
+  details: PropTypes.shape({
+    eventType: PropTypes.string,
+  }).isRequired,
+};
 
 export default connect(mapStateToProps, mapDisptachToProps)(Tabs);

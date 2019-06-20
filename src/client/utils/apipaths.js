@@ -1,16 +1,16 @@
 /**
  * Contains API paths, which can be imported as required
  */
-const domainName = 'https://crowdalert.herokuapp.com';
-// const domainNameL = 'http://127.0.0.1:8000';
+const DOMAIN_NAME = 'https://crowdalert.herokuapp.com';
+// const DOMAIN_NAME = 'http://127.0.0.1:8000';
 // const domainNameL = 'https://192.168.0.4:8000';
-const domainNameL = domainName;
+const domainNameL = DOMAIN_NAME;
 
 /**
  * [GET_LOCATION_BY_IP: request to get approximate location information]
  * @type {String}
  */
-const GET_LOCATION_BY_IP = `${domainName}/api/location/get_location`;
+const GET_LOCATION_BY_IP = `${DOMAIN_NAME}/api/location/get_location`;
 /**
  * [GET_EVENT_BY_ID: Do GET request with event id as a url parameter]
  * @type {String}
@@ -61,5 +61,5 @@ export {
   UPVOTE,
   SPAM_REPORT,
   FCM_TOKEN,
-  domainName,
+  DOMAIN_NAME,
 };

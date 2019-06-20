@@ -1,10 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Icon } from 'semantic-ui-react';
 
 
 const NotificationIcon = (props) => {
-  console.log(props);
   return (
     <div>
       <Icon circular>
@@ -22,5 +22,9 @@ const NotificationIcon = (props) => {
 const mapStateToProps = state => ({
   unread: state.notifications.unread,
 });
+
+NotificationIcon.propTypes = {
+  unread: PropTypes.bool.isRequired,
+};
 
 export default connect(mapStateToProps)(NotificationIcon);

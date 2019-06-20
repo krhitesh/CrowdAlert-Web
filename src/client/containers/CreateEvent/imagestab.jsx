@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Dimmer,
   Grid,
@@ -296,7 +297,7 @@ class ImagesTab extends Component {
                           <Icon name="check" />
                           Finish
                         </Button>
-                      : null 
+                      : null
                       }
                       {(!parseInt((uploaded / total), 10) &&
                         !this.props.reportForm.uploading) ?
@@ -333,4 +334,15 @@ const mapDisptachToProps = dispatch => (
     toggleImageUpload,
   }, dispatch)
 );
+
+ImagesTab.propTypes = {
+  reportForm: PropTypes.shape({
+    eventID: PropTypes.string,
+    imageSelectDisabled: PropTypes.bool,
+    uploading: PropTypes.bool,
+  }).isRequired,
+  toggleImageUpload: PropTypes.func.isRequired,
+
+};
+
 export default connect(mapStateToProps, mapDisptachToProps)(ImagesTab);
