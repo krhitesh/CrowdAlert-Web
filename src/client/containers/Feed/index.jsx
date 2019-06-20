@@ -109,6 +109,14 @@ const mapDispatchToProps = dispatch => (
     fetchEventsByLocation,
   }, dispatch)
 );
+
+Feed.propTypes = {
+  feedProps: PropTypes.object.isRequired,
+  mapProps: PropTypes.shape({
+    zoom: PropTypes.number,
+  }).isRequired,
+};
+
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Feed),
   loadData: (store, ip = '') => {

@@ -268,17 +268,13 @@ Viewevent.propTypes = {
       datetime: propTypes.number,
       title: propTypes.string,
       description: propTypes.string,
-      images: propTypes.arrayOf(propTypes.shape({
-        isNsfw: propTypes.bool.isRequired,
-        isTrusted: propTypes.bool.isRequired,
-        uuid: propTypes.string.isRequired,
-      })).isRequired,
+      images: propTypes.object,
       spam: propTypes.object,
       eventid: propTypes.string,
       location: propTypes.shape({
         coords: propTypes.shape({
-          latitude: propTypes.number,
-          longitude: propTypes.number,
+          lat: propTypes.number,
+          lng: propTypes.number,
         }),
       }),
       category: propTypes.string,
