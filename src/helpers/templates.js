@@ -1,10 +1,12 @@
 import serialize from 'serialize-javascript';
+import { Helmet } from 'react-helmet';
 
 export default (css, content, state = {}, inclBundle = false) => {
   let bundleScript = '<script type="text/javascript" src="/bundle.js"></script>';
   if (!inclBundle) {
     bundleScript = '';
   }
+  const helmet = Helmet.renderStatic();
   return `
   <!DOCTYPE html>
   <html lang="en">
@@ -12,6 +14,8 @@ export default (css, content, state = {}, inclBundle = false) => {
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <meta name="theme-color" content="#000000">
+      ${helmet.title.toString()}
+      ${helmet.meta.toString()}
       <script>
         // Redirect to HTTPS
         if (location.hostname === 'crowdalert.herokuapp.com' && location.protocol !== 'https:') {
