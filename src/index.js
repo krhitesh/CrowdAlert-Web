@@ -39,19 +39,9 @@ app.get('*', async (req, res) => {
   const cookie = req.get('cookie') || '';
   const token = getCookie(cookie, 'token');
 
-  // Use firebase Admin SDK on server to verify
-  // the retrieved ID token. If that ID token is
-  // valid, fetch the user then dispatch appropriate
-  // redux action with that user data.
-
   const store = serverConfigureStore(req, {}, history);
   const authenticateUserPromise = authenticateUser(store, token);
 
-  // UserAuth(TODO) -> Dispatch apt action to inform redux (and state) that hey,
-  // "this" is the auth status of the user who requested the application.
-  // Then use the new state to render the application.
-
-  // console.log(matchRoutes(Routes, req.path));
   const promises = matchRoutes(Routes, req.path).map(({ route, match }) => {
     if (route.loadData) {
       if (route.component.displayName === 'Connect(Feed)') {
