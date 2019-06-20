@@ -17,7 +17,11 @@ import { DOMAIN_NAME } from './client/utils/apipaths';
 
 const app = express();
 app.use('*.js', (req, res, next) => {
-  if (process.env.NODE_ENV === "production") {
+  if (req.params['0'].includes('undefined')) {
+    // BUG: File on /undefined/service-worker.js service-worker path being requested by the browser
+    return res.status(404);
+  }
+  if (process.env.NODE_ENV === "production" && !req.params['0'].includes('sw')) {
     req.url += '.br';
     res.set('Content-Encoding', 'br');
   }
@@ -35,6 +39,11 @@ app.use(
 );
 
 app.use(express.static('public'));
+
+if (process.env.NODE_ENV !== "production") {
+  app.get('*of.js.map', async (req, res) => res.status(404));
+}
+
 app.get('*', async (req, res) => {
   const cookie = req.get('cookie') || '';
   const token = getCookie(cookie, 'token');
@@ -90,7 +99,7 @@ app.get('*', async (req, res) => {
       code = 404;
     }
     content = renderStatus(code, err.message);
-    res.status(500);
+    res.status(code);
   }
 
   gzip(content, (err, gzipped) => {
