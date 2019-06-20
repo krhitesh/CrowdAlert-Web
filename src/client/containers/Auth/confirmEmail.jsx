@@ -16,6 +16,16 @@ import PropTypes from 'prop-types';
 import { sendEmailVerificationAuth, verifyEmailAuth } from './actions';
 import { Auth } from '../../utils/firebase';
 import requireAuth from '../../hocs/requireAuth';
+import { DOMAIN_NAME } from '../../utils/apipaths';
+import SEO from '../../components/SEO';
+
+const head = () => (
+  <SEO
+    title="Confirm Email | CrowdAlert"
+    url={`${DOMAIN_NAME}/auth/confirmEmail`}
+    description="An email verification link has been sent to your registered email. Click on the link in the email to verify your registered email address."
+  />
+);
 
 const Verifying = () => (
   <Message icon>
@@ -141,7 +151,7 @@ class ConfirmEmail extends PureComponent {
     const isEmailLink = Auth.isSignInWithEmailLink(window.location.href);
     const email = window.localStorage.getItem('email');
     return (
-      <Container data-test="component-confirm-email">
+      <Container>
         {head()}
         <Grid stackable columns="equal" style={{ padding: '1rem' }}>
           <Grid.Row style={{ marginTop: '5%', position: 'inherit', textAlign: 'center' }} >
