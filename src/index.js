@@ -12,7 +12,7 @@ import Routes from './client/Routes';
 import { renderApp, renderStatus } from './helpers/renderer';
 import history from './helpers/history';
 import serverConfigureStore from './helpers/serverConfigureStore';
-import { DOMAIN_NAME } from './client/utils/apipaths';
+import { DOMAIN_NAME_TO_PROXY } from './client/utils/apipaths';
 
 const app = express();
 app.use('*.js', (req, res, next) => {
@@ -26,11 +26,11 @@ app.use('*.js', (req, res, next) => {
 
 app.use(
   '/api',
-  proxy({ target: DOMAIN_NAME, changeOrigin: true }),
+  proxy({ target: DOMAIN_NAME_TO_PROXY, changeOrigin: true }),
 );
 app.use(
   '/static',
-  proxy({ target: DOMAIN_NAME, changeOrigin: true }),
+  proxy({ target: DOMAIN_NAME_TO_PROXY, changeOrigin: true }),
 );
 
 app.use(express.static('public'));
@@ -103,6 +103,6 @@ app.get('*', async (req, res) => {
     });
 });
 
-app.listen(3000, () => {
-  console.log('listening on port 3000');
+app.listen(parseInt(process.env.PORT, 10), () => {
+  console.log(`listening on port ${process.env.PORT}`);
 });
