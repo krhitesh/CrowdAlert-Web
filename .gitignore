@@ -1,7 +1,7 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # docker build configuration
-Dockerfile.web
+Dockerfile
 
 # dependencies
 /node_modules
@@ -16,6 +16,7 @@ test_image.jpg
 /build
 public/bundle.js
 public/bundle.js.br
+public/sw.js
 
 # misc
 .DS_Store
