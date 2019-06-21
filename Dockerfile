@@ -27,13 +27,8 @@ WORKDIR /app
 
 COPY package.json /app
 
-RUN npm install
-
-COPY public /app/public
-COPY src /app/src
-COPY *.js /app/
-
-RUN npm run-script build
+RUN npm install && \
+    npm cache clean --force
 
 #############################################################################
 # Python: Install updates, build files, dependencies, finally cleanup
@@ -60,6 +55,19 @@ RUN  apt-get update && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
+#############################################################################
+# Copy files
+
+WORKDIR /app
+
+COPY public /app/public
+COPY src /app/src
+COPY *.js /app/
+
+RUN npm run-script build
+
+WORKDIR /django
+
 COPY api /django/api
 COPY CrowdAlert /django/CrowdAlert
 COPY staticfiles /django/staticfiles
@@ -74,6 +82,6 @@ EXPOSE $PORT
 
 WORKDIR /
 
-COPY wrapper.sh /
+COPY bootWrapper.sh /
 
 CMD chmod +x bootWrapper.sh && ./bootWrapper.sh
