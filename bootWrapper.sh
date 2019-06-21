@@ -9,8 +9,8 @@ cd app && node build/bundle.js &
 
 
 # Start the helper process
-echo "Starting asgi server"
-cd app && daphne -b 0.0.0.0 -p 8000 CrowdAlert.asgi:application
+echo "Starting django server"
+cd ../django && gunicorn -b 127.0.0.1:8000 CrowdAlert.wsgi
 
 # now we bring the primary process back into the foreground
 # and leave it there

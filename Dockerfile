@@ -1,37 +1,5 @@
 FROM nikolaik/python-nodejs:python3.6-nodejs10
 
-#############################################################################
-# Python: Install updates, build files, dependencies, finally cleanup
-
-WORKDIR /app
-
-ADD requirements.txt /app
-
-RUN  apt-get update && \
-    apt-get install -y \
-        build-essential \
-        make \
-        gcc \
-        locales \
-        libgdal20 libgdal-dev && \
-    python -m pip install -r /app/requirements.txt && \
-    rm -r /root/.cache/pip && \
-    apt-get remove -y --purge libgdal-dev make gcc build-essential && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
-
-#############################################################################
-# NodeJS: Install dependencies, copy files and build production environment
-
-WORKDIR /app
-
-COPY package.json /app
-
-RUN npm install && \
-    npm cache clean --force
-
-#############################################################################
-
 ENV REACT_APP_GOOGLE_MAPS_KEY=
 ENV REACT_APP_FACEBOOK_APP_ID=
 ENV REACT_APP_FIREBASE_API_KEY=
@@ -53,9 +21,13 @@ ENV DJANGO_FIREBASE_auth_provider_x509_cert_url=
 ENV DJANGO_FIREBASE_client_x509_cert_url=
 
 #############################################################################
-# Copy files
+# NodeJS: Install dependencies, copy files and build production environment
 
 WORKDIR /app
+
+COPY package.json /app
+
+RUN npm install
 
 COPY public /app/public
 COPY src /app/src
@@ -63,12 +35,35 @@ COPY *.js /app/
 
 RUN npm run-script build
 
-WORKDIR /app
+#############################################################################
+# Python: Install updates, build files, dependencies, finally cleanup
 
-COPY api /app/api
-COPY CrowdAlert /app/CrowdAlert
-COPY staticfiles /app/staticfiles
-COPY manage.py /app
+WORKDIR /django
+
+ADD requirements.txt /django
+
+RUN  apt-get update && \
+    apt-get install -y \
+        build-essential \
+        make \
+        gcc \
+        locales \
+        libgdal20 libgdal-dev && \
+    python -m pip install numpy cython --no-binary numpy,cython && \
+    python -m pip install \
+        "rasterio>=1.0a12" fiona shapely \
+        --pre --no-binary rasterio,fiona,shapely && \
+    python -m pip install -r /django/requirements.txt && \
+    python -m pip uninstall -y cython && \
+    rm -r /root/.cache/pip && \
+    apt-get remove -y --purge libgdal-dev make gcc build-essential && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY api /django/api
+COPY CrowdAlert /django/CrowdAlert
+COPY staticfiles /django/staticfiles
+COPY manage.py /django
 
 #############################################################################
 # Set port, expose it, change working directory and execute the boot script
@@ -79,6 +74,6 @@ EXPOSE $PORT
 
 WORKDIR /
 
-COPY bootWrapper.sh /
+COPY wrapper.sh /
 
 CMD chmod +x bootWrapper.sh && ./bootWrapper.sh
