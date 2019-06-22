@@ -142,18 +142,17 @@ class Viewevent extends Component {
       } else {
         image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}`;
       }
-      const place = this.props.event.reverse_geocode !== undefined ? this.props.event.reverse_geocode.name : '';
-      return (
-        <SEO
-          title={`${this.props.event.data.title} near ${place} | Incident Details`}
-          url={`${DOMAIN_NAME}/view/${this.props.event.data.eventid}`}
-          description={`Incident description: ${this.props.event.data.description} | Geo location: Latitude=${this.props.event.data.location.coords.latitude} Longitude=${this.props.event.data.location.coords.longitude}`}
-          image={image}
-        />
-      );
     }
 
-    return <React.Fragment></React.Fragment>;
+    const place = this.props.event.reverse_geocode !== undefined ? this.props.event.reverse_geocode.name : '';
+    return (
+      <SEO
+        title={`${this.props.event.data.title} near ${place} | Incident Details`}
+        url={`${DOMAIN_NAME}/view/${this.props.event.data.eventid}`}
+        description={`Incident description: ${this.props.event.data.description} | Geo location: Latitude=${this.props.event.data.location.coords.latitude} Longitude=${this.props.event.data.location.coords.longitude}`}
+        image={image}
+      />
+    );
   }
   render() {
     let lat = 0;
@@ -297,9 +296,8 @@ const mapStateToProps = state => ({
 });
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Viewevent),
-  loadData: (store, match) => {
+  loadData: (store, ip = '', match = { params: { eventid: '' } }) => {
     const { dispatch } = store;
-
     return Promise.all([
       dispatch(fetchEventDataSSR({ eventid: match.params.eventid, shouldRefresh: true }))
         .then(() => {
