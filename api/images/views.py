@@ -11,8 +11,36 @@ from rest_framework.views import APIView
 
 from .models import Image
 
-STORAGE = settings.FIREBASE.storage()
-DB = settings.FIRESTORE
+def asyncfunc(function):
+    """ Wrapper for async behaviour. Executes function in a separate new thread
+    """
+    def decorated_function(*args, **kwargs):
+        threads = Thread(target=function, args=args, kwargs=kwargs)
+        # Make sure thread doesn't quit until everything is finished
+        threads.daemon = False
+        threads.start()
+    return decorated_function
+
+@asyncfunc
+def add_thumbnail(name):
+    """ Starts the job of creating svg based thumbnail for a given file
+
+    Arguments:
+        name {string} -- [ target file name ]
+    """
+    # As our load is small now, we can do this in sequential manner
+    # After we get enough traffic we should use a redis based solution.
+    # Where an event would be pushed and a job id is to be returned
+    # and expose another endpoint where we can check the status
+    print("Generating Thumbnail", time.time())
+    subprocess.run(['../app/node_modules/.bin/sqip', name, '-o', name+'.svg'])
+    STORAGE.child('thumbnails/'+name+'.svg').put(name+'.svg')
+    # Remove the uploaded files for two good reasons:
+    # Keep our dyno clean
+    # remove malicious code before anything wrong goes.
+    os.remove(name)
+    os.remove(name+'.svg')
+    print("Finished", time.time())
 
 
 class ImagesView(APIView):

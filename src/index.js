@@ -15,6 +15,17 @@ import serverConfigureStore from './helpers/serverConfigureStore';
 import { DOMAIN_NAME_TO_PROXY } from './client/utils/apipaths';
 
 const app = express();
+
+app.use(
+  '/api/*',
+  proxy({ target: DOMAIN_NAME_TO_PROXY, changeOrigin: true }),
+);
+
+app.use(
+  '/static/*',
+  proxy({ target: DOMAIN_NAME_TO_PROXY, changeOrigin: true }),
+);
+
 app.use('*.js', (req, res, next) => {
   if (process.env.NODE_ENV === "production") {
     req.url += '.br';
@@ -23,15 +34,6 @@ app.use('*.js', (req, res, next) => {
   res.set('Content-Type', 'text/javascript');
   next();
 });
-
-app.use(
-  '/api',
-  proxy({ target: DOMAIN_NAME_TO_PROXY, changeOrigin: true }),
-);
-app.use(
-  '/static',
-  proxy({ target: DOMAIN_NAME_TO_PROXY, changeOrigin: true }),
-);
 
 app.use(express.static('public'));
 app.get('*', async (req, res) => {
