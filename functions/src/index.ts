@@ -9,23 +9,8 @@ export const updateUserData = functions.auth.user().onCreate((user) => { // esli
   const displayName = user.displayName || "Anonymous Meerkat";
   // Log: recommended
   console.log(`New User, uid: ${uid}`)
-  return Promise.all([
-    admin.firestore().doc(`/users/${uid}`).set({
-      displayName,
-      photoURL,
-    }),
-    // Legacy operation
-    admin.database().ref(`/users/${uid}`).set({
-      displayName,
-      photoURL,
-    }),
-  ])
-});
-
-export const deleteUserData = functions.auth.user().onDelete((user) => {
-  const { uid } = user;
-  console.log(`Deleting user, uid: ${uid}`);
-  return admin.firestore().doc(`users/${uid}`).update({
-    deletedByUser: true,
+  return admin.database().ref(`/users/${uid}`).set({
+    displayName,
+    photoURL,
   });
 });

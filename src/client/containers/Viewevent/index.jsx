@@ -136,21 +136,24 @@ class Viewevent extends Component {
   head() {
     let image = '';
     // console.log(this.props.event);
-    if (this.props.event.data.images.length > 0) {
+    if (this.props.event.data.images !== undefined && this.props.event.data.images.length > 0) {
       if (this.props.event.data.images[0].isNsfw) {
         image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}&mode=thumbnail`;
       } else {
         image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}`;
       }
+      const place = this.props.event.reverse_geocode !== undefined ? this.props.event.reverse_geocode.name : '';
+      return (
+        <SEO
+          title={`${this.props.event.data.title} near ${place} | Incident Details`}
+          url={`${DOMAIN_NAME}/view/${this.props.event.data.eventid}`}
+          description={`Incident description: ${this.props.event.data.description} | Geo location: Latitude=${this.props.event.data.location.coords.latitude} Longitude=${this.props.event.data.location.coords.longitude}`}
+          image={image}
+        />
+      );
     }
-    return (
-      <SEO
-        title={`${this.props.event.data.title} near ${this.props.event.reverse_geocode.name} | Incident Details`}
-        url={`${DOMAIN_NAME}/view/${this.props.event.data.eventid}`}
-        description={`Incident description: ${this.props.event.data.description} | Geo location: Latitude=${this.props.event.data.location.coords.latitude} Longitude=${this.props.event.data.location.coords.longitude}`}
-        image={image}
-      />
-    );
+
+    return <React.Fragment></React.Fragment>;
   }
   render() {
     let lat = 0;
