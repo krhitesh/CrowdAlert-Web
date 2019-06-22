@@ -13,6 +13,8 @@ import { renderApp, renderStatus } from './helpers/renderer';
 import history from './helpers/history';
 import serverConfigureStore from './helpers/serverConfigureStore';
 import { DOMAIN_NAME_TO_PROXY } from './client/utils/apipaths';
+import Feed from './client/containers/Feed';
+import Viewevent from './client/containers/Viewevent';
 
 const app = express();
 
@@ -48,11 +50,18 @@ app.get('*', async (req, res) => {
   }
 
   const promises = matchRoutes(Routes, req.path).map(({ route, match }) => {
-    // Crank up loadData function from all the 'to be' rendered here and 
-    // return all the dispatches
-    // as promises, when completed will allow us to render the application
-    // on server
-  });
+    if (route.loadData) {
+      if (route.component.displayName === `Connect(${Feed.component.WrappedComponent.name})`) {
+        return route.loadData(
+          store,
+          req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+        );
+      } else if (route.component.displayName === `Connect(${Viewevent.component.WrappedComponent.name})`) {
+        return route.loadData(
+          store,
+          match,
+        );
+      }
 
   Promise.all(promises)
     .then(() => {
