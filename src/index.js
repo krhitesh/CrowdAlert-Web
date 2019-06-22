@@ -57,19 +57,11 @@ app.get('*', async (req, res) => {
 
   const promises = matchRoutes(Routes, req.path).map(({ route, match }) => {
     if (route.loadData) {
-      if (route.component.displayName === `Connect(${Feed.component.WrappedComponent.name})`) {
-        return route.loadData(
-          store,
-          req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-        );
-      } else if (route.component.displayName === `Connect(${Viewevent.component.WrappedComponent.name})`) {
-        return route.loadData(
-          store,
-          match,
-        );
-      }
-
-      return route.loadData(store);
+      return route.loadData(
+        store,
+        req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+        match,
+      );
     }
 
     return null;
