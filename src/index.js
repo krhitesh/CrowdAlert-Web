@@ -16,6 +16,17 @@ import serverConfigureStore from './helpers/serverConfigureStore';
 import { DOMAIN_NAME_TO_PROXY } from './client/utils/apipaths';
 
 const app = express();
+
+app.use(
+  '/api/*',
+  proxy({ target: DOMAIN_NAME_TO_PROXY, changeOrigin: true }),
+);
+
+app.use(
+  '/static/*',
+  proxy({ target: DOMAIN_NAME_TO_PROXY, changeOrigin: true }),
+);
+
 app.use('*.js', (req, res, next) => {
   if (req.params['0'].includes('undefined')) {
     // BUG: File on /undefined/service-worker.js service-worker path being requested by the browser
@@ -28,15 +39,6 @@ app.use('*.js', (req, res, next) => {
   res.set('Content-Type', 'text/javascript');
   next();
 });
-
-app.use(
-  '/api',
-  proxy({ target: DOMAIN_NAME_TO_PROXY, changeOrigin: true }),
-);
-app.use(
-  '/static',
-  proxy({ target: DOMAIN_NAME_TO_PROXY, changeOrigin: true }),
-);
 
 app.use(express.static('public'));
 
