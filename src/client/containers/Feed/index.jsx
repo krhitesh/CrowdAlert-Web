@@ -123,7 +123,7 @@ Feed.propTypes = {
 
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Feed),
-  loadData: (store, ip = '') => {
+  loadData: (store, ip = '', match = {}) => {
     const { dispatch } = store;
 
     return dispatch(fetchUserLocationSSR(
