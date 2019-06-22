@@ -151,6 +151,9 @@ class MultipleEventsView(APIView):
         incidents = DB.child('incidents').get()
         data = []
 
+        if incidents.each() is None:
+            return JsonResponse(data, safe=False)
+
         # Find events which are inside the circle
 
         # This method is highly inefficient
