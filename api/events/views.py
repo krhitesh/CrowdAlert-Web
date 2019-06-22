@@ -185,11 +185,60 @@ class MultipleEventsView(APIView):
         if lat == '' or lng == '' or threshold == '':
             return HttpResponseBadRequest("Bad request")
 
-        cluster_threshold = float(request.GET.get('min', 0))
-        data = Event.get_events_around(
-            center={"latitude": lat, "longitude": lng},
-            max_distance=threshold,
-            cluster_threshold=cluster_threshold,
-            db=DB
-        )
+        incidents = DB.child('incidents').get()
+        data = []
+
+        if incidents.each() is None:
+            return JsonResponse(data, safe=False)
+
+        # Find events which are inside the circle
+
+        # This method is highly inefficient
+        # In takes O(n) time for each request
+        # Should use a GeoHash based solution instead of this
+        for incident in incidents.each():
+            event = dict(incident.val())
+            temp = {}
+            temp['key'] = incident.key()
+            temp['lat'] = event['location']['coords']['latitude']
+            temp['long'] = event['location']['coords']['longitude']
+            temp['category'] = event['category']
+            temp['title'] = event['title']
+            temp['datetime'] = event['datetime']
+            tmplat = float(event['location']['coords']['latitude'])
+            tmplng = float(event['location']['coords']['longitude'])
+            dist = distance(tmplat, tmplng, lat, lng)
+            if dist < thresold:
+                data.append(temp)
+
+        # Cluster the events
+        cluster_thresold = float(request.GET.get('min', 0))
+        # This code should also be present on client side
+        if cluster_thresold:
+            # clustered incidents data
+            clustered_data = []
+            # Consider each node as root for now
+            for root in data:
+                # If is clustered flag is not present
+                if not root.get('isClustered', False):
+                    # Loop though the points
+                    for child in data:
+                        # Base case
+                        if child['key'] == root['key']:
+                            continue
+                        # If node is not clustered
+                        if not child.get('isClustered', False):
+                            # Calculate the distance
+                            temp_distance = distance(root['lat'], root['long'],
+                                                     child['lat'], child['long'])
+                            # If two points are too close on map cluster them
+                            if temp_distance < cluster_thresold:
+                                # Update root
+                                root['isClustered'] = True
+                                root['lat'] = (root['lat'] + child['lat'])/2
+                                root['long'] = (root['long'] + child['long'])/2
+                                # Mark child
+                                child['isClustered'] = True
+                    clustered_data.append(root)
+            return JsonResponse(clustered_data, safe=False)
         return JsonResponse(data, safe=False)
