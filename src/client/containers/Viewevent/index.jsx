@@ -221,11 +221,18 @@ class Viewevent extends Component {
     }
 
     const place = this.props.event.reverse_geocode !== undefined ? this.props.event.reverse_geocode.name : '';
+    let coords = {
+      latitude: 0.0,
+      longitude: 0.0,
+    };
+    if (this.props.event.data.location !== undefined) {
+      coords = this.props.event.data.location.coords;
+    }
     return (
       <SEO
         title={`${this.props.event.data.title} near ${place} | Incident Details`}
         url={`${DOMAIN_NAME}/view/${this.props.event.data.eventid}`}
-        description={`Incident description: ${this.props.event.data.description} | Geo location: Latitude=${this.props.event.data.location.coords.latitude} Longitude=${this.props.event.data.location.coords.longitude}`}
+        description={`Incident description: ${this.props.event.data.description} | Geo location: Latitude=${coords.latitude} Longitude=${coords.longitude}`}
         image={image}
       />
     );
