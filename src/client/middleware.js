@@ -5,6 +5,7 @@ import geoLocationMiddleware from './components/Geolocator/middleware';
 import createEventsMiddleware from './containers/CreateEvent/middleware';
 import commentsMiddleware from './components/Comments/middleware';
 import notificationsMiddleware from './components/Notifications/middleware';
+import upvoteMiddleware from './components/Upvote/middleware';
 
 import {
   authMiddleware,
@@ -24,6 +25,7 @@ const middlewares = [
   oAuthMiddleware,
   commentsMiddleware,
   notificationsMiddleware,
+  upvoteMiddleware,
 ];
 
 export default middlewares;

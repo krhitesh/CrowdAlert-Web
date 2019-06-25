@@ -188,7 +188,7 @@ CommentsSection.propTypes = {
     commentButtonLoading: PropTypes.bool,
     errors: PropTypes.bool,
     message: PropTypes.string,
-    comments: PropTypes.array,
+    comments: PropTypes.object,
     userData: PropTypes.object,
   }).isRequired,
   auth: PropTypes.shape({

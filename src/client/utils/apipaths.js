@@ -1,8 +1,10 @@
 /**
  * Contains API paths, which can be imported as required
  */
-const DOMAIN_NAME = 'https://crowdalert.herokuapp.com';
-const DOMAIN_NAME_TO_PROXY = 'http://0.0.0.0:8000';
+const DOMAIN_NAME = 'http://localhost:3000';
+const DOMAIN_NAME_TO_PROXY = 'http://localhost:8000';
+const websocketURL = 'ws://localhost:3000';
+const WS_NAME_TO_PROXY = 'ws://localhost:8000';
 // const domainNameL = 'https://192.168.0.4:8000';
 const domainNameL = DOMAIN_NAME;
 
@@ -36,9 +38,19 @@ const REVERSE_GEOCODE = `${domainNameL}/api/location/reverse_geocode`;
  */
 const GET_EVENTS_BY_LOCATION = `${domainNameL}/api/events/geteventsbylocation`;
 
+/**
+ * [GET_EVENTS_BY_LOCATION opens a socket connection for the
+ * events app
+ * coordinates with a valid proximity]
+ * @type {String}
+ */
+const WS_GET_EVENTS_BY_LOCATION = `${websocketURL}/ws/events/geteventsbylocation`;
+
 const STATIC_IMAGES = `${domainNameL}/static/images`;
 
 const USER_PROFILES = `${domainNameL}/api/users/user`;
+
+const WS_COMMENTS = `${websocketURL}/ws/comments`;
 
 const COMMENTS = `${domainNameL}/api/comments/comment`;
 
@@ -54,13 +66,16 @@ export {
   GET_IMAGE_URLS,
   REVERSE_GEOCODE,
   GET_EVENTS_BY_LOCATION,
+  WS_GET_EVENTS_BY_LOCATION,
   UPLOAD_IMAGES,
   STATIC_IMAGES,
   USER_PROFILES,
   COMMENTS,
+  WS_COMMENTS,
   UPVOTE,
   SPAM_REPORT,
   FCM_TOKEN,
   DOMAIN_NAME,
   DOMAIN_NAME_TO_PROXY,
+  WS_NAME_TO_PROXY,
 };

@@ -79,7 +79,7 @@ class Upvote extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
   componentDidMount() {
-    this.props.fetchUpvotesStart(this.props.uuid);
+    this.props.fetchUpvotesStart(this.props.uuid, this.state.count, true);
   }
   static getDerivedStateFromProps(nextProps, prevState) {
     return {
@@ -99,12 +99,14 @@ class Upvote extends Component {
     if (this.state.hasUpvoted) {
       this.setState({
         hasUpvoted: false,
-        count: this.state.count - 1,
+        // Not needed
+        // count: this.state.count - 1,
       });
     } else {
       this.setState({
         hasUpvoted: true,
-        count: this.state.count + 1,
+        // Not needed
+        // count: this.state.count + 1,
       });
     }
   }

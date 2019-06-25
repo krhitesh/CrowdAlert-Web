@@ -48,6 +48,7 @@ const notificationsMiddleware = store => next => (action) => {
     }
     if (data['gcm.notification.type'] === 'comment') {
       // If there is a comment, fetch the thread again
+      // Thread id is event id
       dispatch(fetchCommentsThread(data['gcm.notification.thread_id'], false));
     }
   }

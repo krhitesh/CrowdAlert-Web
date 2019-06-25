@@ -7,6 +7,10 @@ WORKDIR /django
 
 ADD requirements.txt /django
 
+# ERROR: channels 2.1.6 has requirement asgiref~=2.3, but you'll have asgiref 3.1.2 which is incompatible.
+# ERROR: google-cloud-storage 1.10.0 has requirement google-cloud-core<0.29dev,>=0.28.0, but you'll have google-cloud-core 0.29.1 which is incompatible.
+# ERROR: pyrebase 3.0.27 has requirement requests==2.11.1, but you'll have requests 2.22.0 which is incompatible.
+
 RUN  apt-get update && \
     apt-get install -y \
         build-essential \
@@ -14,16 +18,29 @@ RUN  apt-get update && \
         gcc \
         locales \
         libgdal20 libgdal-dev && \
-    python -m pip install numpy cython --no-binary numpy,cython && \
-    python -m pip install \
-        "rasterio>=1.0a12" fiona shapely \
-        --pre --no-binary rasterio,fiona,shapely && \
     python -m pip install -r /django/requirements.txt && \
-    python -m pip uninstall -y cython && \
     rm -r /root/.cache/pip && \
     apt-get remove -y --purge libgdal-dev make gcc build-essential && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
+
+# RUN  apt-get update && \
+#     apt-get install -y \
+#         build-essential \
+#         make \
+#         gcc \
+#         locales \
+#         libgdal20 libgdal-dev && \
+#     python -m pip install numpy cython --no-binary numpy,cython && \
+#     python -m pip install \
+#         "rasterio>=1.0a12" fiona shapely \
+#         --pre --no-binary rasterio,fiona,shapely && \
+#     python -m pip install -r /django/requirements.txt && \
+#     python -m pip uninstall -y cython && \
+#     rm -r /root/.cache/pip && \
+#     apt-get remove -y --purge libgdal-dev make gcc build-essential && \
+#     apt-get autoremove -y && \
+#     rm -rf /var/lib/apt/lists/*
 
 #############################################################################
 # NodeJS: Install dependencies, copy files and build production environment
