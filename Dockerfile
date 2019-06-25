@@ -14,12 +14,7 @@ RUN  apt-get update && \
         gcc \
         locales \
         libgdal20 libgdal-dev && \
-    python -m pip install numpy cython --no-binary numpy,cython && \
-    python -m pip install \
-        "rasterio>=1.0a12" fiona shapely \
-        --pre --no-binary rasterio,fiona,shapely && \
     python -m pip install -r /django/requirements.txt && \
-    python -m pip uninstall -y cython && \
     rm -r /root/.cache/pip && \
     apt-get remove -y --purge libgdal-dev make gcc build-essential && \
     apt-get autoremove -y && \
