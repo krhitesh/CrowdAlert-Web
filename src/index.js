@@ -14,8 +14,6 @@ import { renderApp, renderStatus } from './helpers/renderer';
 import history from './helpers/history';
 import serverConfigureStore from './helpers/serverConfigureStore';
 import { DOMAIN_NAME_TO_PROXY } from './client/utils/apipaths';
-import Feed from './client/containers/Feed';
-import Viewevent from './client/containers/Viewevent';
 
 const app = express();
 
