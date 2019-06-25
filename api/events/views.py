@@ -234,34 +234,7 @@ class MultipleEventsView(APIView):
         thresold = float(request.GET.get('dist', ''))
         if lat == '' or lng == '' or thresold == '':
             return HttpResponseBadRequest("Bad request")
-
-        incidents = DB.child('incidents').get()
-        data = []
-
-        if incidents.each() is None:
-            return JsonResponse(data, safe=False)
-
-        # Find events which are inside the circle
-
-        # This method is highly inefficient
-        # In takes O(n) time for each request
-        # Should use a GeoHash based solution instead of this
-        for incident in incidents.each():
-            event = dict(incident.val())
-            temp = {}
-            temp['key'] = incident.key()
-            temp['lat'] = event['location']['coords']['latitude']
-            temp['long'] = event['location']['coords']['longitude']
-            temp['category'] = event['category']
-            temp['title'] = event['title']
-            temp['datetime'] = event['datetime']
-            tmplat = float(event['location']['coords']['latitude'])
-            tmplng = float(event['location']['coords']['longitude'])
-            dist = distance(tmplat, tmplng, lat, lng)
-            if dist < thresold:
-                data.append(temp)
-
-        # Cluster the events
+        
         cluster_thresold = float(request.GET.get('min', 0))
         data = get_multiple_events(lat, lng, thresold, cluster_thresold)
         return JsonResponse(data, safe=False)

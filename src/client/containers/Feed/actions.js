@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { GET_EVENTS_BY_LOCATION, GET_LOCATION_BY_IP } from '../../utils/apipaths';
 import {
+  WS_FEED_FETCH_EVENTS_BY_LOCATION,
   FEED_FETCH_USER_LOCATION,
   FEED_FETCH_USER_LOCATION_FINISHED,
   FEED_FETCH_USER_LOCATION_CANCEL,
@@ -36,6 +37,12 @@ export const fetchUserLocationSSR = (payload = {}, ip) => async (dispatch, getSt
 
   dispatch(fetchUserLocationFinished({ ...payload, ...data }));
 };
+export function fetchEventsByLocationOverWebSocket(payload = {}) {
+  return {
+    type: WS_FEED_FETCH_EVENTS_BY_LOCATION,
+    payload,
+  };
+}
 export function fetchUserLocationCancel(payload = {}) {
   return {
     type: FEED_FETCH_USER_LOCATION_CANCEL,
