@@ -3,6 +3,8 @@
  */
 const DOMAIN_NAME = 'https://crowdalert.herokuapp.com';
 const DOMAIN_NAME_TO_PROXY = 'http://0.0.0.0:8000';
+const websocketURL = 'wss://crowdalert.herokuapp.com';
+const WS_NAME_TO_PROXY = 'ws://0.0.0.0:8000';
 // const domainNameL = 'https://192.168.0.4:8000';
 const domainNameL = DOMAIN_NAME;
 
@@ -75,4 +77,5 @@ export {
   FCM_TOKEN,
   DOMAIN_NAME,
   DOMAIN_NAME_TO_PROXY,
+  WS_NAME_TO_PROXY,
 };
