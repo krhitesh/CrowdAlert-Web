@@ -3,6 +3,8 @@
  */
 const DOMAIN_NAME = 'https://crowdalert.herokuapp.com';
 const DOMAIN_NAME_TO_PROXY = 'http://0.0.0.0:8000';
+const websocketURL = 'wss://crowdalert.herokuapp.com';
+const WS_NAME_TO_PROXY = 'ws://0.0.0.0:8000';
 // const domainNameL = 'https://192.168.0.4:8000';
 const domainNameL = DOMAIN_NAME;
 
@@ -54,10 +56,6 @@ const STATIC_IMAGES = `${domainNameL}/static/images`;
 
 const USER_PROFILES = `${domainNameL}/api/users/user`;
 
-const USER_DELETE = `${domainNameL}/api/users/user`;
-
-const USER_UPDATE = `${domainNameL}/api/users/user?keys=`;
-
 const WS_COMMENTS = `${websocketURL}/ws/comments`;
 
 const COMMENTS = `${domainNameL}/api/comments/comment`;
@@ -88,4 +86,5 @@ export {
   FCM_TOKEN,
   DOMAIN_NAME,
   DOMAIN_NAME_TO_PROXY,
+  WS_NAME_TO_PROXY,
 };

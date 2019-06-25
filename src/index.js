@@ -12,11 +12,14 @@ import Routes from './client/Routes';
 import { renderApp, renderStatus } from './helpers/renderer';
 import history from './helpers/history';
 import serverConfigureStore from './helpers/serverConfigureStore';
-import { DOMAIN_NAME_TO_PROXY } from './client/utils/apipaths';
-import Feed from './client/containers/Feed';
-import Viewevent from './client/containers/Viewevent';
+import { DOMAIN_NAME_TO_PROXY, WS_NAME_TO_PROXY } from './client/utils/apipaths';
 
 const app = express();
+
+app.use(
+  '/ws/*',
+  proxy({ target: WS_NAME_TO_PROXY, changeOrigin: true, ws: true }),
+);
 
 app.use(
   '/api/*',
