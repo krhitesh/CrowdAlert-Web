@@ -18,11 +18,70 @@ from api.firebase_auth.permissions import FirebasePermissions
 from api.notifications.dispatch import notify_incident
 from api.spam.classifier import classify_text
 from api.spam.views import get_spam_report_data
-from api.users.models import User
-from .models import Event, IncidentReport
+from api.notifications.dispatch import notify_incident
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 DB = settings.FIRESTORE
 
+
+def get_multiple_events(lat, lng, thresold, cluster_thresold):
+    incidents = DB.child('incidents').get()
+    data = []
+
+    if incidents.each() is None:
+        return data
+
+    # Find events which are inside the circle
+
+    # This method is highly inefficient
+    # In takes O(n) time for each request
+    # Should use a GeoHash based solution instead of this
+    for incident in incidents.each():
+        event = dict(incident.val())
+        temp = {}
+        temp['key'] = incident.key()
+        temp['lat'] = event['location']['coords']['latitude']
+        temp['long'] = event['location']['coords']['longitude']
+        temp['category'] = event['category']
+        temp['title'] = event['title']
+        temp['datetime'] = event['datetime']
+        tmplat = float(event['location']['coords']['latitude'])
+        tmplng = float(event['location']['coords']['longitude'])
+        dist = distance(tmplat, tmplng, lat, lng)
+        if dist < thresold:
+            data.append(temp)
+
+    # Cluster the events
+    # This code should also be present on client side
+    if cluster_thresold:
+        # clustered incidents data
+        clustered_data = []
+        # Consider each node as root for now
+        for root in data:
+            # If is clustered flag is not present
+            if not root.get('isClustered', False):
+                # Loop though the points
+                for child in data:
+                    # Base case
+                    if child['key'] == root['key']:
+                        continue
+                    # If node is not clustered
+                    if not child.get('isClustered', False):
+                        # Calculate the distance
+                        temp_distance = distance(root['lat'], root['long'],
+                                                    child['lat'], child['long'])
+                        # If two points are too close on map cluster them
+                        if temp_distance < cluster_thresold:
+                            # Update root
+                            root['isClustered'] = True
+                            root['lat'] = (root['lat'] + child['lat'])/2
+                            root['long'] = (root['long'] + child['long'])/2
+                            # Mark child
+                            child['isClustered'] = True
+                clustered_data.append(root)
+        return clustered_data
+    return data
 
 class EventView(APIView):
     """ API view class for events
@@ -70,7 +129,7 @@ class EventView(APIView):
         and check among all channels if this newly added event
         is in the proximity of that channel. If it is, then shovel that
         event to that channel. It is for the clients to decide whether or
-        not this event satisfies their current distance criterion.
+        not this event satifies their current distance criterion.
 
         Potential required features:
             Custom validation
@@ -85,17 +144,17 @@ class EventView(APIView):
 
         latitude = decoded_json['location']['coords']['latitude']
         longitude = decoded_json['location']['coords']['longitude']
-        datetime = int(time.time() * 1000)
-
-        # Compute geohash below
-        event = Event(
-            category=decoded_json['category'],
-            datetime=datetime,
-            description=decoded_json['description'],
-            local_assistance=decoded_json['local_assistance'],
-            location={
-                "coords": GeoPoint(latitude, longitude),
-                "geohash": encode(location=[latitude, longitude], precision=12)
+        datetime = int(time.time()*1000)
+        incident_data = {
+            "category": decoded_json['category'],
+            "datetime": datetime,
+            "description": decoded_json['description'],
+            "local_assistance": decoded_json['local_assistance'],
+            "location": {
+                "coords": {
+                    "latitude": latitude,
+                    "longitude": longitude,
+                },
             },
             public={
                 "share": decoded_json['public']['share'],
@@ -121,36 +180,34 @@ class EventView(APIView):
 
         user_name = request.user.name
         user_picture = request.user.user_picture
-        if event.local_assistance:
+        if decoded_json['local_assistance']:
             notify_incident(sender_uid=uid, datetime=datetime,
-                            event_id=key, event_type=event.category,
+                            event_id=key, event_type=decoded_json['category'],
                             lat=latitude, lng=longitude,
                             user_text=event.title,
                             user_name=user_name, user_picture=user_picture)
-
-        classify_text(event.description, key)
+        classify_text(decoded_json['description'], key)
 
         channel_layer = get_channel_layer()
         # Send the event to all the websocket channels
         async_to_sync(channel_layer.group_send)(
-            "geteventsbylocation_", {
-                "type": 'event_message',
+            'geteventsbylocation_', {
+                "type": "event_message",
                 "message": {
-                    "actionType": 'WS_NEW_EVENT_RECEIVED',
-                    "data": {
-                        "lat": latitude,
-                        "long": longitude,
-                        "key": str(key),
-                        "datetime": datetime,
-                        "category": event.category,
-                        "title": event.title
+                    'actionType': 'WS_NEW_EVENT_RECEIVED',
+                    'data': {
+                        'lat': latitude,
+                        'long': longitude,
+                        'key': str(key),
+                        'datetime': datetime,
+                        'category': decoded_json['category'],
+                        'title': decoded_json['title']
                     }
                 }
             }
         )
 
-        return JsonResponse({"eventId": str(key)})
-
+        return JsonResponse({"eventId":str(key)}) 
 
 class MultipleEventsView(APIView):
     """API View for grouping incidents by location
@@ -167,7 +224,7 @@ class MultipleEventsView(APIView):
 
             dist: maximum radius of the location
 
-            cluster_threshold: maximum distance between any number events to cluster into one event
+            cluster_thresold: maximum distance between any number events to cluster into one event
 
         Arguments:
             request {[type]} -- [ Contains the django request object]
@@ -184,61 +241,7 @@ class MultipleEventsView(APIView):
         threshold = float(request.GET.get('dist', ''))
         if lat == '' or lng == '' or threshold == '':
             return HttpResponseBadRequest("Bad request")
-
-        incidents = DB.child('incidents').get()
-        data = []
-
-        if incidents.each() is None:
-            return JsonResponse(data, safe=False)
-
-        # Find events which are inside the circle
-
-        # This method is highly inefficient
-        # In takes O(n) time for each request
-        # Should use a GeoHash based solution instead of this
-        for incident in incidents.each():
-            event = dict(incident.val())
-            temp = {}
-            temp['key'] = incident.key()
-            temp['lat'] = event['location']['coords']['latitude']
-            temp['long'] = event['location']['coords']['longitude']
-            temp['category'] = event['category']
-            temp['title'] = event['title']
-            temp['datetime'] = event['datetime']
-            tmplat = float(event['location']['coords']['latitude'])
-            tmplng = float(event['location']['coords']['longitude'])
-            dist = distance(tmplat, tmplng, lat, lng)
-            if dist < thresold:
-                data.append(temp)
-
-        # Cluster the events
+        
         cluster_thresold = float(request.GET.get('min', 0))
-        # This code should also be present on client side
-        if cluster_thresold:
-            # clustered incidents data
-            clustered_data = []
-            # Consider each node as root for now
-            for root in data:
-                # If is clustered flag is not present
-                if not root.get('isClustered', False):
-                    # Loop though the points
-                    for child in data:
-                        # Base case
-                        if child['key'] == root['key']:
-                            continue
-                        # If node is not clustered
-                        if not child.get('isClustered', False):
-                            # Calculate the distance
-                            temp_distance = distance(root['lat'], root['long'],
-                                                     child['lat'], child['long'])
-                            # If two points are too close on map cluster them
-                            if temp_distance < cluster_thresold:
-                                # Update root
-                                root['isClustered'] = True
-                                root['lat'] = (root['lat'] + child['lat'])/2
-                                root['long'] = (root['long'] + child['long'])/2
-                                # Mark child
-                                child['isClustered'] = True
-                    clustered_data.append(root)
-            return JsonResponse(clustered_data, safe=False)
+        data = get_multiple_events(lat, lng, thresold, cluster_thresold)
         return JsonResponse(data, safe=False)
