@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { takeEvery } from 'redux-saga/effects';
 import { WS_FEED_FETCH_EVENTS_BY_LOCATION } from '../containers/Feed/actionTypes';
 
@@ -13,7 +12,7 @@ const sendData = (params, lat, lng, zoom, distance, MPP) => {
       min: MPP,
     });
     params.socket.send(data);
-  } else if (params.socket.readyState === WebSocket.CONNECTING && process.env.NODE_ENV !== 'production' && process.env.JEST_WORKER_ID === undefined) {
+  } else if (params.socket.readyState === WebSocket.CONNECTING) {
     console.log('WebSocket not ready yet');
   } else if (params.socket.readyState === WebSocket.CLOSED) {
     console.log('WebSocket is disconnected.');

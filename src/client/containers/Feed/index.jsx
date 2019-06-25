@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 
-import { fetchUserLocation, fetchEventsByLocation } from './actions';
+import { fetchUserLocation, fetchEventsByLocation, fetchUserLocationSSR, fetchEventsByLocationSSR, fetchEventsByLocationOverWebSocket } from './actions';
 import style from './style';
 import { MapWrapper, Sonar, EventPreviewCard, GeoLocator } from '../../components';
 import { DOMAIN_NAME } from '../../utils/apipaths';
@@ -47,6 +47,21 @@ function getEventMarkers(feed, zoom) {
  * @extends Component
  */
 class Feed extends Component {
+  componentDidMount() {
+    if (this.props.isLoggedIn) {
+      this.props.fetchEventsByLocationOverWebSocket({
+        lat: this.props.mapProps.lat,
+        lng: this.props.mapProps.lng,
+        zoom: this.props.mapProps.zoom,
+      });
+    } else {
+      this.props.fetchEventsByLocation({
+        lat: this.props.mapProps.lat,
+        lng: this.props.mapProps.lng,
+        zoom: this.props.mapProps.zoom,
+      });
+    }
+  }
   // eslint-disable-next-line class-methods-use-this
   head() {
     let types = [];
@@ -101,9 +116,11 @@ class Feed extends Component {
 const mapStateToProps = (state) => {
   const { map } = state;
   const { feed } = state;
+  const { isLoggedIn } = state.auth;
   return {
     mapProps: map,
     feedProps: feed,
+    isLoggedIn,
   };
 };
 
@@ -111,6 +128,7 @@ const mapDispatchToProps = dispatch => (
   bindActionCreators({
     fetchUserLocation,
     fetchEventsByLocation,
+    fetchEventsByLocationOverWebSocket,
   }, dispatch)
 );
 
@@ -118,7 +136,12 @@ Feed.propTypes = {
   feedProps: PropTypes.object.isRequired,
   mapProps: PropTypes.shape({
     zoom: PropTypes.number,
+    lat: PropTypes.number,
+    lng: PropTypes.number,
   }).isRequired,
+  fetchEventsByLocation: PropTypes.func.isRequired,
+  fetchEventsByLocationOverWebSocket: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
 };
 
 export default {
