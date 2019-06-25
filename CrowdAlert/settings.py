@@ -115,10 +115,10 @@ TEMPLATES = [
 
 ASGI_APPLICATION = "CrowdAlert.routing.application"
 
-CHANNEL_LAYERS = {
+CHANNEL_LAYERS={
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
+     }
 }
 
 if os.environ.get("HEROKU", False):
