@@ -9,6 +9,9 @@ node_modules/
 
 # production
 /build
+public/bundle.js
+public/bundle.js.br
+public/sw.js
 
 # misc
 .DS_Store
