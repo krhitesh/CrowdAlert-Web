@@ -1,7 +1,6 @@
 from django.conf.urls import url
-
 from . import consumers
 
 websocket_urlpatterns = [
-    url(r'^ws/comments/(?P<thread_id>[^/]+)/$', consumers.CommentsConsumer),
+  url(r'^ws/comments/(?P<thread_id>[^/]+)/$', consumers.CommentsConsumer),
 ]
