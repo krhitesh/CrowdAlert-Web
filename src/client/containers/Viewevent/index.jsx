@@ -18,11 +18,11 @@ import {
   Sonar,
   CommentsSection,
 } from '../../components';
-
+import { WS_NEW_COMMENT_RECEIVED } from '../../components/Comments/actionTypes';
 import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
-import { fetchCommentsThreadSSR } from '../../components/Comments/actions';
+import { fetchCommentsThreadSSR, fetchCommentThreadSuccessViaWebSocket } from '../../components/Comments/actions';
 import getWidth from '../../utils/width';
-import { DOMAIN_NAME, GET_IMAGE_URLS } from '../../utils/apipaths';
+import { DOMAIN_NAME, GET_IMAGE_URLS, WS_COMMENTS } from '../../utils/apipaths';
 import SEO from '../../components/SEO';
 import styleSheet from './style';
 
@@ -126,6 +126,10 @@ EventCard.defaultProps = {
  * @type {Object}
  */
 class Viewevent extends Component {
+  constructor(props) {
+    super(props);
+    this.setupSocket = this.setupSocket.bind(this);
+  }
   componentDidMount() {
     const { eventid } = this.props.match.params;
     const shouldRefresh =
@@ -133,7 +137,6 @@ class Viewevent extends Component {
     this.props.fetchEventData({ eventid, shouldRefresh });
 
     if (this.props.isLoggedIn) {
-      this.props.updateUpvotesLongPollStatus(true);
       this.setupSocket();
     }
   }
@@ -141,11 +144,10 @@ class Viewevent extends Component {
     console.log('unmount');
 
     // Close the socket connection
-    if (this.state !== null && this.state.socket && this.state.socket !== null) {
+    if (this.state.socket) {
       window.localStorage.setItem('noReconnect', true);
       this.state.socket.close(1000, 'socket closed inside componentWillUnmount');
     }
-    this.props.updateUpvotesLongPollStatus(false);
   }
   setupSocket() {
     // eslint-disable-next-line no-undef
@@ -178,35 +180,6 @@ class Viewevent extends Component {
     // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ socket });
     window.localStorage.removeItem('noReconnect');
-  }
-  // eslint-disable-next-line class-methods-use-this
-  head() {
-    let image = '';
-    // console.log(this.props.event);
-    if (this.props.event.data.images !== undefined && this.props.event.data.images.length > 0) {
-      if (this.props.event.data.images[0].isNsfw) {
-        image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}&mode=thumbnail`;
-      } else {
-        image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}`;
-      }
-    }
-
-    const place = this.props.event.reverse_geocode !== undefined ? this.props.event.reverse_geocode.name : '';
-    let coords = {
-      latitude: 0.0,
-      longitude: 0.0,
-    };
-    if (this.props.event.data.location !== undefined) {
-      coords = this.props.event.data.location.coords;
-    }
-    return (
-      <SEO
-        title={`${this.props.event.data.title} near ${place} | Incident Details`}
-        url={`${DOMAIN_NAME}/view/${this.props.event.data.eventid}`}
-        description={`Incident description: ${this.props.event.data.description} | Geo location: Latitude=${coords.latitude} Longitude=${coords.longitude}`}
-        image={image}
-      />
-    );
   }
   // eslint-disable-next-line class-methods-use-this
   head() {
@@ -334,7 +307,6 @@ class Viewevent extends Component {
 Viewevent.propTypes = {
   isLoggedIn: propTypes.bool.isRequired,
   fetchCommentThreadSuccessViaWebSocket: propTypes.func.isRequired,
-  updateUpvotesLongPollStatus: propTypes.func.isRequired,
   match: propTypes.shape({
     params: propTypes.shape({
       eventid: propTypes.string.isRequired,
@@ -375,7 +347,6 @@ const mapDispatchToProps = dispatch => (
   bindActionCreators({
     fetchEventData,
     fetchCommentThreadSuccessViaWebSocket,
-    updateUpvotesLongPollStatus,
   }, dispatch)
 );
 const mapStateToProps = state => ({
