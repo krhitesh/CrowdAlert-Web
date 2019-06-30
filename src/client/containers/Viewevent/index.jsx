@@ -20,9 +20,9 @@ import {
 } from '../../components';
 import { WS_NEW_COMMENT_RECEIVED } from '../../components/Comments/actionTypes';
 import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
-import { fetchCommentsThreadSSR } from '../../components/Comments/actions';
+import { fetchCommentsThreadSSR, fetchCommentThreadSuccessViaWebSocket } from '../../components/Comments/actions';
 import getWidth from '../../utils/width';
-import { DOMAIN_NAME, GET_IMAGE_URLS } from '../../utils/apipaths';
+import { DOMAIN_NAME, GET_IMAGE_URLS, WS_COMMENTS } from '../../utils/apipaths';
 import SEO from '../../components/SEO';
 import styleSheet from './style';
 
@@ -126,6 +126,10 @@ EventCard.defaultProps = {
  * @type {Object}
  */
 class Viewevent extends Component {
+  constructor(props) {
+    super(props);
+    this.setupSocket = this.setupSocket.bind(this);
+  }
   componentDidMount() {
     const { eventid } = this.props.match.params;
     const shouldRefresh =
@@ -133,7 +137,6 @@ class Viewevent extends Component {
     this.props.fetchEventData({ eventid, shouldRefresh });
 
     if (this.props.isLoggedIn) {
-      this.props.updateUpvotesLongPollStatus(true);
       this.setupSocket();
     }
   }
@@ -141,11 +144,10 @@ class Viewevent extends Component {
     console.log('unmount');
 
     // Close the socket connection
-    if (this.state !== null && this.state.socket && this.state.socket !== null) {
+    if (this.state.socket) {
       window.localStorage.setItem('noReconnect', true);
       this.state.socket.close(1000, 'socket closed inside componentWillUnmount');
     }
-    this.props.updateUpvotesLongPollStatus(false);
   }
   setupSocket() {
     // eslint-disable-next-line no-undef
@@ -334,7 +336,6 @@ class Viewevent extends Component {
 Viewevent.propTypes = {
   isLoggedIn: propTypes.bool.isRequired,
   fetchCommentThreadSuccessViaWebSocket: propTypes.func.isRequired,
-  updateUpvotesLongPollStatus: propTypes.func.isRequired,
   match: propTypes.shape({
     params: propTypes.shape({
       eventid: propTypes.string.isRequired,
@@ -375,7 +376,6 @@ const mapDispatchToProps = dispatch => (
   bindActionCreators({
     fetchEventData,
     fetchCommentThreadSuccessViaWebSocket,
-    updateUpvotesLongPollStatus,
   }, dispatch)
 );
 const mapStateToProps = state => ({
