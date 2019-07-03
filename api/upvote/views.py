@@ -6,11 +6,13 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 
 from api.firebase_auth.authentication import TokenAuthentication
-from .models import Upvote
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
+from django.conf import settings
+import json
+import time
 
-DB = settings.FIRESTORE
+db = settings.FIREBASE.database()
 SLEEP_SECONDS = 20
-
 
 class UpvoteView(APIView):
     """API view class for upvotes
@@ -40,10 +42,10 @@ class UpvoteView(APIView):
         """
 
         uuid = request.GET.get('uuid')
-        current_count = request.GET.get('current_count')
+        current_count = request.GET.get('current_count')        
         if not uuid:
             return HttpResponseBadRequest("BadRequest: uuid not specified")
-
+        
         if not current_count:
             current_count = -1
 
@@ -51,36 +53,43 @@ class UpvoteView(APIView):
             current_count = int(current_count)
         except:
             return HttpResponseBadRequest("BadRequest: current_count must be an integer")
+        
+        path = 'upvotes/' + uuid
 
-        upvote = Upvote(-1, [])
         for _ in range(SLEEP_SECONDS):
-            upvote = Upvote.get(uuid, DB, default=Upvote(0, []))
-            has_upvoted = self.get_has_upvoted(upvote, request)
+            count = db.child(path + '/count').get().val()
+            if count is None:
+                count = 0
+
+            has_upvoted = self.get_has_upvoted(request, path)
             if current_count == -1:
                 # send the reponse of the initial request immediately
+                # has_upvoted = self.get_has_upvoted(request, path)
                 return JsonResponse({
                     'uuid': uuid,
-                    'count': upvote.count,
+                    'count': count,
                     'has_upvoted': has_upvoted,
                 })
 
-            if upvote.count == current_count:
+            if count == current_count:
                 time.sleep(1)
                 continue
 
             # send the reponse as update is available
+            # has_upvoted = self.get_has_upvoted(request, path)
             return JsonResponse({
                 'uuid': uuid,
-                'count': upvote.count,
+                'count': count,
                 'has_upvoted': has_upvoted,
             })
 
+        has_upvoted = self.get_has_upvoted(request, path)
         return JsonResponse({
             'uuid': uuid,
             'count': current_count,
             'has_upvoted': has_upvoted,
         })
-
+               
     def post(self, request):
         """Lets a user to upvote a specific uuid
         """
@@ -115,5 +124,11 @@ class UpvoteView(APIView):
             'has_upvoted': not has_upvoted,
         }, safe=False)
 
-    def get_has_upvoted(self, upvote, request):
-        return str(request.user) in upvote.upvoters and request.user.is_authenticated
+    def get_has_upvoted(self, request, path):
+        has_upvoted = False        
+        if request.user.is_authenticated:
+            user_id = str(request.user)
+            user_upvote_path = path + '/upvoters/' + user_id + '/has_upvoted'
+            has_upvoted = db.child(user_upvote_path).get().val()
+
+        return has_upvoted
