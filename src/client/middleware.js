@@ -25,7 +25,7 @@ const middlewares = [
   oAuthMiddleware,
   commentsMiddleware,
   notificationsMiddleware,
-  upvoteMiddleware,
+  upvoteMiddleware
 ];
 
 export default middlewares;
