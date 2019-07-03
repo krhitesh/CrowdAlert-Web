@@ -9,29 +9,26 @@ class Upvote(object):
         self.upvoters = upvoters
 
     @staticmethod
-    def get(uuid, db, default=None):
-        doc = db.collection(Upvote.collection_name).document(uuid).get()
-        if doc.exists:
-            return Upvote.from_dict(doc.to_dict())
-        else:
-            return default
+    def get(incident_id, db):
+        doc = db.collection(Upvote.collection_name).document(incident_id).get()
+        return doc.to_dict()
 
-    def save(self, uuid, db):
-        db.collection(Upvote.collection_name).document(uuid).set(self.to_dict())
-        return uuid
+    def save(self, incident_id, db):
+        db.collection(Upvote.collection_name).document(incident_id).set(self.to_dict())
+        return incident_id
 
-    def update_add_upvote(self, uid, new_count, uuid, db):
+    def update_add_upvote(self, uid, new_count, incident_id, db):
         self.upvoters.append(uid)
         self.count = new_count
-        db.collection(Upvote.collection_name).document(uuid).update({
+        db.collection(Upvote.collection_name).document(incident_id).update({
             u"upvoters": ArrayUnion([uid]),
             u"count": self.count
         })
 
-    def update_remove_upvote(self, uid, new_count, uuid, db):
+    def update_remove_upvote(self, uid, new_count, incident_id, db):
         self.upvoters.remove(uid)
         self.count = new_count
-        db.collection(Upvote.collection_name).document(uuid).update({
+        db.collection(Upvote.collection_name).document(incident_id).update({
             u"upvoters": ArrayRemove([uid]),
             u"count": self.count
         })
