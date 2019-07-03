@@ -1,4 +1,5 @@
 import {
+  UPDATE_UPVOTES_LONG_POLL_STATUS,
   FETCH_UPVOTES_START,
   FETCH_UPVOTES_CANCEL,
   FETCH_UPVOTES_ERROR,
@@ -9,11 +10,21 @@ import {
   UPDATE_UPVOTE_CANCEL,
 } from './actionTypes';
 
-export function fetchUpvotesStart(uuid) {
+export function updateUpvotesLongPollStatus(status) {
+  return {
+    type: UPDATE_UPVOTES_LONG_POLL_STATUS,
+    payload: {
+      status,
+    },
+  };
+}
+export function fetchUpvotesStart(uuid, currentCount, initialRequest) {
   return {
     type: FETCH_UPVOTES_START,
     payload: {
       uuid,
+      currentCount,
+      initialRequest,
     },
   };
 }
