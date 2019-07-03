@@ -21,6 +21,7 @@ import {
 import { WS_NEW_COMMENT_RECEIVED } from '../../components/Comments/actionTypes';
 import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
 import { fetchCommentsThreadSSR, fetchCommentThreadSuccessViaWebSocket } from '../../components/Comments/actions';
+import { updateUpvotesLongPollStatus } from '../../components/Upvote/actions';
 import getWidth from '../../utils/width';
 import { DOMAIN_NAME, GET_IMAGE_URLS, WS_COMMENTS } from '../../utils/apipaths';
 import SEO from '../../components/SEO';
@@ -137,6 +138,7 @@ class Viewevent extends Component {
     this.props.fetchEventData({ eventid, shouldRefresh });
 
     if (this.props.isLoggedIn) {
+      this.props.updateUpvotesLongPollStatus(true);
       this.setupSocket();
     }
   }
@@ -148,6 +150,7 @@ class Viewevent extends Component {
       window.localStorage.setItem('noReconnect', true);
       this.state.socket.close(1000, 'socket closed inside componentWillUnmount');
     }
+    this.props.updateUpvotesLongPollStatus(false);
   }
   setupSocket() {
     // eslint-disable-next-line no-undef
@@ -301,6 +304,7 @@ class Viewevent extends Component {
 Viewevent.propTypes = {
   isLoggedIn: propTypes.bool.isRequired,
   fetchCommentThreadSuccessViaWebSocket: propTypes.func.isRequired,
+  updateUpvotesLongPollStatus: propTypes.func.isRequired,
   match: propTypes.shape({
     params: propTypes.shape({
       eventid: propTypes.string.isRequired,
@@ -341,6 +345,7 @@ const mapDispatchToProps = dispatch => (
   bindActionCreators({
     fetchEventData,
     fetchCommentThreadSuccessViaWebSocket,
+    updateUpvotesLongPollStatus,
   }, dispatch)
 );
 const mapStateToProps = state => ({
