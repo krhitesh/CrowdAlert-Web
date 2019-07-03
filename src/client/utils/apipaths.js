@@ -1,14 +1,14 @@
 /**
  * Contains API paths, which can be imported as required
  */
-const DOMAIN_NAME = 'https://crowdalert.herokuapp.com';
-const DOMAIN_NAME_TO_PROXY = 'http://0.0.0.0:8000';
-const websocketURL = 'wss://crowdalert.herokuapp.com';
-const WS_NAME_TO_PROXY = 'ws://0.0.0.0:8000';
-// const DOMAIN_NAME = 'http://localhost:3000';
-// const DOMAIN_NAME_TO_PROXY = 'http://localhost:8000';
-// const websocketURL = 'ws://localhost:3000';
-// const WS_NAME_TO_PROXY = 'ws://localhost:8000';
+// const DOMAIN_NAME = 'https://crowdalert.herokuapp.com';
+// const DOMAIN_NAME_TO_PROXY = 'http://0.0.0.0:8000';
+// const websocketURL = 'wss://crowdalert.herokuapp.com';
+// const WS_NAME_TO_PROXY = 'ws://0.0.0.0:8000';
+const DOMAIN_NAME = 'http://localhost:3000';
+const DOMAIN_NAME_TO_PROXY = 'http://localhost:8000';
+const websocketURL = 'ws://localhost:3000';
+const WS_NAME_TO_PROXY = 'ws://localhost:8000';
 // const domainNameL = 'https://192.168.0.4:8000';
 const domainNameL = DOMAIN_NAME;
 
