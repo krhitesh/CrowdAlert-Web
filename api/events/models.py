@@ -1,9 +1,9 @@
 """User reported events model
 """
-from api.utils.geohash_util import geohash_queries
 from django.conf import settings
 from google.cloud.firestore_v1beta1 import ArrayUnion, ArrayRemove
-
+from firebase_admin.firestore import GeoPoint
+from api.utils.geohash_util import geohash_queries
 from api.location.gps import distance
 
 
@@ -32,6 +32,7 @@ class Event(object):
         match_count = 0
         queries = Event.__get_queries_for_events_around(db.collection(collection_name), center, max_distance)
         # print("queries", queries)
+        event_dict = {}
         for query in queries:
             docs = query.get()
             for doc in docs:
@@ -56,10 +57,8 @@ class Event(object):
     def __get_queries_for_events_around(ref, center, max_distance):
         geohashes_to_query = geohash_queries([center['latitude'], center['longitude']], radius=max_distance * 1000)
         print("geohashes_to_query", geohashes_to_query)
-        return list(map(
-            lambda location: ref.where(u"location.geohash", u">=", location[0]).where(u"location.geohash", u"<=",
-                                                                                      location[1]),
-            geohashes_to_query))
+        return list(map(lambda location: ref.where(u"location.geohash", u">=", location[0]).where(u"location.geohash", u"<=", location[1]),
+                        geohashes_to_query))
 
     @staticmethod
     def __cluster_events(data, cluster_threshold=None):
@@ -91,6 +90,7 @@ class Event(object):
                     clustered_data.append(root)
             return clustered_data
         return data
+
 
     @staticmethod
     def get(incident_id, db):
@@ -134,20 +134,19 @@ class Event(object):
 
     def to_response_dict(self):
         event = {'category': self.category, 'datetime': self.datetime, 'description': self.description,
-                 'local_assistance': self.local_assistance,
-                 'location': {'coords': {'latitude': self.location['coords'].latitude,
-                                         'longitude': self.location['coords'].longitude},
-                              'geohash': self.location['geohash']},
+                 'local_assistance': self.local_assistance, 'location': {'coords': {'latitude': self.location['coords'].latitude,
+                                                                                    'longitude': self.location['coords'].longitude},
+                                                                         'geohash': self.location['geohash']},
                  'public': self.public, 'reportedBy': self.reported_by, 'title': self.title, 'images': self.images}
         return event
 
     def __repr__(self):
         return (
             u'Event(category={}, datetime={}, description={}, local_assistance={}, location={}, public={}, '
-            u'reportedBy={}, title={}, images={})'.format(self.category, self.datetime, self.description,
-                                                          self.local_assistance,
-                                                          self.location, self.public, self.reported_by,
-                                                          self.title, self.images))
+            u'reportedBy={}, title={}, images={})'
+                .format(self.category, self.datetime, self.description, self.local_assistance,
+                        self.location, self.public, self.reported_by,
+                        self.title, self.images))
 
 
 class IncidentReport(object):
