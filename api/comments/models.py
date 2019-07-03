@@ -1,16 +1,14 @@
-from firebase_admin import firestore
-from google.cloud.firestore_v1beta1 import ArrayUnion
-
+from django.conf import settings
 from api.spam.classifier import classify_text
+from firebase_admin import firestore
+from google.cloud.firestore_v1beta1 import ArrayUnion, ArrayRemove
 
 
 class Comment(object):
     collection_name = 'comments'
     subcollection_name = 'comments_data'
 
-    def __init__(self, participants=None):
-        if participants is None:
-            participants = []
+    def __init__(self, participants=[]):
         self.participants = participants
 
     @staticmethod
@@ -23,6 +21,7 @@ class Comment(object):
             thread_data[comment_data_doc.id] = comment_data_doc.to_dict()
 
         return thread_data
+
 
     @staticmethod
     def get(thread_id, db):
@@ -39,7 +38,7 @@ class Comment(object):
     def update_add_participant(self, new_participant_uuid, incident_id, db):
         self.participants.append(new_participant_uuid)
         db.collection(Comment.collection_name).document(incident_id).update({
-            u"participants": ArrayUnion([new_participant_uuid]),
+          u"participants": ArrayUnion([new_participant_uuid]),
         })
 
     @staticmethod
@@ -62,8 +61,7 @@ class CommentData(object):
         self.user = user
 
     def save(self, incident_id, db):
-        doc_ref = db.collection(Comment.collection_name).document(incident_id).collection(
-            self.collection_name).document()
+        doc_ref = db.collection(Comment.collection_name).document(incident_id).collection(self.collection_name).document()
         doc_ref.set(self.to_dict())
         return doc_ref.id
 
@@ -80,5 +78,8 @@ class CommentData(object):
         return comment_data
 
     def to_dict(self):
-        comment_data = {'text': self.text, 'timestamp': self.timestamp, 'user': self.user}
+        comment_data = {}
+        comment_data['text'] = self.text
+        comment_data['timestamp'] = self.timestamp
+        comment_data['user'] = self.user
         return comment_data
