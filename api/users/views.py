@@ -11,13 +11,14 @@ from api.firebase_auth.authentication import TokenAuthentication
 
 DB = settings.FIRESTORE
 
+
 class UserView(APIView):
     """ User View Class
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request):
+    def get(self):
         """ Not implemented yet
         """
         return JsonResponse({}, safe=False)
