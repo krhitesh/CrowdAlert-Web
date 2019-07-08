@@ -5,8 +5,10 @@ import os
 import subprocess
 import time
 from threading import Thread
+
+from google.cloud.firestore_v1beta1 import ArrayUnion
+
 from api.events.models import Event
-from google.cloud.firestore_v1beta1 import ArrayUnion, ArrayRemove
 
 def asyncfunc(function):
     """ Wrapper for async behaviour. Executes function in a separate new thread
@@ -18,9 +20,17 @@ def asyncfunc(function):
         threads.start()
     return decorated_function
 
-@asyncfunc
-def create_thumbnail(name, storage):
-    """ Starts the job of creating svg based thumbnail for a given file
+def asyncfunc(function):
+    """ Wrapper for async behaviour. Executes function in a separate new thread
+    """
+
+    def decorated_function(*args, **kwargs):
+        threads = Thread(target=function, args=args, kwargs=kwargs)
+        # Make sure thread doesn't quit until everything is finished
+        threads.daemon = False
+        threads.start()
+
+    return decorated_function
 
     Arguments:
         name {string} -- [ target file name ]
@@ -57,7 +67,28 @@ class Image(object):
         storage.child(Image.path + self.uuid).put(self.name)
 
     def create_thumbnail(self, storage):
-        create_thumbnail(self.name, storage)
+        self.__create_thumbnail__(self.name, storage)
+
+    @asyncfunc
+    def __create_thumbnail__(self, name, storage):
+        """ Starts the job of creating svg based thumbnail for a given file
+
+        Arguments:
+            name {string} -- [ target file name ]
+        """
+        # As our load is small now, we can do this in sequential manner
+        # After we get enough traffic we should use a redis based solution.
+        # Where an event would be pushed and a job id is to be returned
+        # and expose another endpoint where we can check the status
+        print("Generating Thumbnail", time.time())
+        subprocess.run(['node_modules/.bin/sqip', name, '-o', name + '.svg'])
+        storage.child('thumbnails/' + name + '.svg').put(name + '.svg')
+        # Remove the uploaded files for two good reasons:
+        # Keep our dyno clean
+        # remove malicious code before anything goes wrong.
+        os.remove(name)
+        os.remove(name + '.svg')
+        print("Finished", time.time())
 
     @staticmethod
     def from_dict(source_dict):
@@ -71,4 +102,3 @@ class Image(object):
             "uuid": self.uuid,
         }
         return image_dict
-        
