@@ -22,7 +22,9 @@ const connect = (store) => {
     // console.log('socket.onmessage', message);
     if (message.actionType === FEED_FETCH_EVENTS_BY_LOCATION_FINISHED) {
       dispatch(fetchEventsByLocationFinished({
-        payload: message.actionPayload,
+        payload: {
+          zoom: message.actionPayload.zoom,
+        },
         response: message.data,
       }));
     } else if (message.actionType === WS_NEW_EVENT_RECEIVED) {
