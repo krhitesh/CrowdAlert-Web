@@ -146,7 +146,7 @@ class Viewevent extends Component {
     console.log('unmount');
 
     // Close the socket connection
-    if (this.state.socket) {
+    if (this.state !== null && this.state.socket && this.state.socket !== null) {
       window.localStorage.setItem('noReconnect', true);
       this.state.socket.close(1000, 'socket closed inside componentWillUnmount');
     }
