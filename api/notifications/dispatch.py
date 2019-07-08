@@ -4,8 +4,9 @@ import requests
 import json
 import os
 import uuid
+from api.comments.models import Comment
 
-db = settings.FIREBASE.database()
+db = settings.FIRESTORE
 fcmkey = os.environ['DJANGO_FIREBASE_FCM_SENDER_TOKEN']
 
 def asyncfunc(function):
@@ -32,7 +33,11 @@ def notify(fcmkeys, body):
 
 
 def notify_all(sender_uid, body, user_ids=False):
-    user_tokens = db.child('fcmkeys').get().val()
+    token_docs = db.collection('fcmkeys').get()
+    user_tokens = {}
+    for doc in token_docs:
+        user_tokens[doc.id] = doc.to_dict()['key']
+
     if not user_ids:
         user_ids = user_tokens.keys()
     # Make sure we are not notifying the user
@@ -83,7 +88,7 @@ def notify_incident(sender_uid, datetime, event_id, event_type, lat, lng, \
 def notify_comment(sender_uid, datetime, event_id, user_text, \
     user_name, user_picture):
 
-    user_ids = db.child('comments/'+event_id+'/participants').get().val().keys()
+    user_ids = Comment.get(event_id, db).participants
 
     body = {
         "notification": {

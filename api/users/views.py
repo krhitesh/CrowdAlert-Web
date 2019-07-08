@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from api.firebase_auth.authentication import TokenAuthentication
 
-DB = settings.FIREBASE.database()
+DB = settings.FIRESTORE
 
 class UserView(APIView):
     """ User View Class
@@ -31,8 +31,6 @@ class UserView(APIView):
             return HttpResponseBadRequest("Bad request")
         uid = str(request.user)
         if user_data.get('displayName', False):
-            DB.child('users/'+uid+'/displayName').set(
-                user_data.get('displayName', ' ')
-            )
-        print(DB.child('users/'+uid+'/displayName').get().val())
+            DB.document('users/' + uid).set({u"displayName": user_data.get('displayName', ' ')})
+
         return JsonResponse({"status": "ok"}, safe=False)

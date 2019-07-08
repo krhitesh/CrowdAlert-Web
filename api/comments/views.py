@@ -6,10 +6,10 @@ import json
 import time
 from api.notifications.dispatch import notify_comment
 from api.firebase_auth.authentication import TokenAuthentication
-from api.spam.classifier import classify_text
 from api.spam.views import get_spam_report_data
 from .models import Comment, CommentData
 from api.users.models import User
+from api.upvote.models import Upvote
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
@@ -61,7 +61,7 @@ class CommentView(APIView):
             return HttpResponseBadRequest('Bad Request')
 
         comment_data = CommentData(text, timestamp=time.time()*1000, user=str(request.user))
-        comment_data.save(thread_id, DB)
+        key = comment_data.save(thread_id, DB)
         comment_data.classify_text(thread_id)
 
         comment = Comment()
@@ -85,15 +85,15 @@ class CommentView(APIView):
                 }
             }
         }
-        comments_data['message']['data']['comments'][thread_id] = {
+        comments_data['message']['data']['comments'][key] = {
             'text': text,
             'spam': {
-                'uuid': thread_id,
+                'uuid': key,
                 'count': 0,
                 'toxic': 'null',
             },
             'user': comment_data.user,
-            'timestamp': comment_data.user
+            'timestamp': comment_data.timestamp
         }
         comments_data['message']['data']['userData'][comment_data.user] = {
             'photoURL': user_picture,
@@ -107,4 +107,4 @@ class CommentView(APIView):
             comments_data
         )
         
-        return JsonResponse({"id": thread_id}, safe=False)
+        return JsonResponse({"id": key}, safe=False)

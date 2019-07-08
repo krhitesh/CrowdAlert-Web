@@ -9,8 +9,15 @@ export const updateUserData = functions.auth.user().onCreate((user) => { // esli
   const displayName = user.displayName || "Anonymous Meerkat";
   // Log: recommended
   console.log(`New User, uid: ${uid}`)
-  return admin.database().ref(`/users/${uid}`).set({
-    displayName,
-    photoURL,
-  });
+  return Promise.all([
+    admin.firestore().doc(`/users/${uid}`).set({
+      displayName,
+      photoURL,
+    }),
+    // Legacy operation
+    admin.database().ref(`/users/${uid}`).set({
+      displayName,
+      photoURL,
+    }),
+  ])
 });
