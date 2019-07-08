@@ -1,13 +1,14 @@
 """ Django API view module for locations app
 """
 
+import geocoder as gc
+import reverse_geocoder as rgc
 from django.conf import settings
 from django.http import JsonResponse, HttpResponseBadRequest
-import reverse_geocoder as rgc
-import geocoder as gc
 from rest_framework.views import APIView
 
 GMAPS = settings.GMAPS
+
 
 class PlacesView(APIView):
     """ Autocomplete place names using google maps
@@ -33,6 +34,7 @@ class PlacesView(APIView):
         data = GMAPS.places_autocomplete(input_text=query[:50])
         return JsonResponse(data, safe=False)
 
+
 class ReverseGeocodeView(APIView):
     """Returns reverse geocode for a given location
     """
@@ -55,7 +57,6 @@ class ReverseGeocodeView(APIView):
             [JsonResponse] -- [Containing the location data]     
         """
 
-
         lat = float(request.GET.get('lat', ''))
         lng = float(request.GET.get('long', ''))
         accuracy = request.GET.get('accuracy', '')
@@ -68,6 +69,7 @@ class ReverseGeocodeView(APIView):
             return JsonResponse(data, safe=False)
 
         return JsonResponse((rgc.get((lat, lng))))
+
 
 class IPLocationView(APIView):
     """Geocodes a request using IP

@@ -1,12 +1,13 @@
-from rest_framework.views import APIView
-from api.firebase_auth.permissions import FirebasePermissions
-from api.firebase_auth.authentication import TokenAuthentication
-from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.conf import settings
-import json
+from django.http import JsonResponse, HttpResponseBadRequest
+from rest_framework.views import APIView
+
+from api.firebase_auth.authentication import TokenAuthentication
+from api.firebase_auth.permissions import FirebasePermissions
 from .models import Classifier
 
 DB = settings.FIRESTORE
+
 
 def get_spam_report_data(uuid):
     classifier_dict = Classifier.get(uuid, DB)
@@ -23,11 +24,12 @@ def get_spam_report_data(uuid):
     }
     return data
 
+
 class SpamReportView(APIView):
     """Spam Reporting API view
     """
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (FirebasePermissions, )
+    permission_classes = (FirebasePermissions,)
 
     def get(self, request):
         """Returns the spam classification type for a given uuid
@@ -39,7 +41,7 @@ class SpamReportView(APIView):
         uuid = request.GET.get('uuid')
         if not uuid:
             return HttpResponseBadRequest("Bad request: uuid is not specified")
-        
+
         return JsonResponse(get_spam_report_data(uuid))
 
     def post(self, request):
@@ -48,22 +50,22 @@ class SpamReportView(APIView):
         uuid = request.GET.get('uuid')
         if not uuid:
             return HttpResponseBadRequest("Bad request: uuid is not specified")
-        
+
         classifier = Classifier.get(uuid, DB)
 
         user_id = str(request.user)
-        
+
         count = 0
         # If uuid is present, fetch the previous count
         if classifier.flag_count:
             count = classifier.flag_count
-        
+
         try:
             flagged = user_id in classifier.flag_users
         except:
             flagged = False
-        
+
         if not flagged:
             classifier.update(count + 1, user_id, uuid, DB)
             count += 1
-        return JsonResponse({ "count": count })
+        return JsonResponse({"count": count})

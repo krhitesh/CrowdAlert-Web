@@ -1,13 +1,16 @@
-from django.conf import settings
-from threading import Thread
-import requests
 import json
 import os
 import uuid
+from threading import Thread
+
+import requests
+from django.conf import settings
+
 from api.comments.models import Comment
 
 db = settings.FIRESTORE
 fcmkey = os.environ['DJANGO_FIREBASE_FCM_SENDER_TOKEN']
+
 
 def asyncfunc(function):
     def decorated_function(*args, **kwargs):
@@ -15,13 +18,15 @@ def asyncfunc(function):
         # Make sure thread doesn't quit until everything is finished
         t.daemon = False
         t.start()
+
     return decorated_function
+
 
 @asyncfunc
 def notify(fcmkeys, body):
     url = "https://fcm.googleapis.com/fcm/send"
     headers = {
-        'Authorization': 'key='+fcmkey,
+        'Authorization': 'key=' + fcmkey,
         'Content-Type': 'application/json'
     }
     for token in fcmkeys:
@@ -29,7 +34,6 @@ def notify(fcmkeys, body):
         requests.post(url, headers=headers, data=json.dumps(body))
 
     return
-
 
 
 def notify_all(sender_uid, body, user_ids=False):
@@ -45,7 +49,7 @@ def notify_all(sender_uid, body, user_ids=False):
         user_tokens.pop(sender_uid)
     except:
         pass
-    
+
     keylist = []
 
     for user in user_ids:
@@ -58,15 +62,15 @@ def notify_all(sender_uid, body, user_ids=False):
     notify(keylist, body)
     return keylist
 
+
 @asyncfunc
 def notify_incident(sender_uid, datetime, event_id, event_type, lat, lng, \
-    user_text, user_name, user_picture):
-
+                    user_text, user_name, user_picture):
     body = {
         "notification": {
             "title": event_type.title() + ' incident nearby',
             "body": user_name + ' reported a ' + event_type + ' incident nearby & wants your help',
-            "click_action":  "https://crowdalert.herokuapp.com/view/" + event_id,
+            "click_action": "https://crowdalert.herokuapp.com/view/" + event_id,
             "link": "/view/" + event_id,
             "uuid": str(uuid.uuid4()),
             "lat": lat,
@@ -84,17 +88,17 @@ def notify_incident(sender_uid, datetime, event_id, event_type, lat, lng, \
 
     return
 
+
 @asyncfunc
 def notify_comment(sender_uid, datetime, event_id, user_text, \
-    user_name, user_picture):
-
+                   user_name, user_picture):
     user_ids = Comment.get(event_id, db).participants
 
     body = {
         "notification": {
             "title": user_name + " commented on an incident",
             "body": user_text,
-            "click_action":  "https://crowdalert.herokuapp.com/view/" + event_id,
+            "click_action": "https://crowdalert.herokuapp.com/view/" + event_id,
             "link": "/view/" + event_id,
             "uuid": str(uuid.uuid4()),
             "thread_id": event_id,
@@ -109,4 +113,3 @@ def notify_comment(sender_uid, datetime, event_id, user_text, \
     notify_all(sender_uid, body, user_ids)
 
     return
-
