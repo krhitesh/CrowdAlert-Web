@@ -1,20 +1,22 @@
-from django.conf import settings
-from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 import json
 import time
-from api.notifications.dispatch import notify_comment
-from api.firebase_auth.authentication import TokenAuthentication
-from api.spam.views import get_spam_report_data
-from .models import Comment, CommentData
-from api.users.models import User
-from api.upvote.models import Upvote
+
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from django.conf import settings
+from django.http import JsonResponse, HttpResponseBadRequest
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.views import APIView
+
+from api.firebase_auth.authentication import TokenAuthentication
+from api.notifications.dispatch import notify_comment
+from api.spam.views import get_spam_report_data
+from api.users.models import User
+from .models import Comment, CommentData
 
 db = settings.FIREBASE.database()
 DB = settings.FIRESTORE
+
 
 def get_comments_from_thread(thread):
     """
@@ -22,23 +24,22 @@ def get_comments_from_thread(thread):
     along with the users' information
     """
     comment = Comment.get(thread, DB)
-    if comment.participants == []:
+    if len(comment.participants) == 0:
         return {"comments": {}, "userData": {}}
+
     user_data = {}
-    
     for user in comment.participants:
         tmp_user = User.get(user, DB)
         print(user)
         user_data[user] = tmp_user.to_dict()
 
-    response = {}
-    response['userData'] = user_data
-    response['comments'] = Comment.get_comment_data(thread, DB)
+    response = {'userData': user_data, 'comments': Comment.get_comment_data(thread, DB)}
     for comment_uuid in response['comments'].keys():
         spam_report_data = get_spam_report_data(comment_uuid)
         response['comments'][comment_uuid]['spam'] = spam_report_data
 
     return response
+
 
 class CommentView(APIView):
     authentication_classes = (TokenAuthentication,)
@@ -54,13 +55,13 @@ class CommentView(APIView):
 
     def post(self, request):
         try:
-            commentData = json.loads(json.loads(request.body.decode()).get('commentData'))
-            thread_id = commentData['thread']
-            text = commentData['text']
-        except:
+            comment_data = json.loads(json.loads(request.body.decode()).get('commentData'))
+            thread_id = comment_data['thread']
+            text = comment_data['text']
+        except (KeyError, ValueError):
             return HttpResponseBadRequest('Bad Request')
 
-        comment_data = CommentData(text, timestamp=time.time()*1000, user=str(request.user))
+        comment_data = CommentData(text, timestamp=time.time() * 1000, user=str(request.user))
         key = comment_data.save(thread_id, DB)
         comment_data.classify_text(thread_id)
 
@@ -69,10 +70,10 @@ class CommentView(APIView):
 
         user_name = request.user.name
         user_picture = request.user.user_picture
-        
-        notify_comment(sender_uid=comment_data.user, datetime=comment_data.timestamp, 
-            event_id=thread_id, user_text=text,
-            user_name=user_name, user_picture=user_picture)
+
+        notify_comment(sender_uid=comment_data.user, datetime=comment_data.timestamp,
+                       event_id=thread_id, user_text=text,
+                       user_name=user_name, user_picture=user_picture)
 
         channel_layer = get_channel_layer()
         comments_data = {
@@ -106,5 +107,5 @@ class CommentView(APIView):
             room_name,
             comments_data
         )
-        
+
         return JsonResponse({"id": key}, safe=False)

@@ -3,26 +3,26 @@
 
 import json
 import time
-from django.http import JsonResponse, HttpResponseBadRequest
-from django.conf import settings
-from rest_framework.views import APIView
-from api.location.gps import distance
-from api.firebase_auth.authentication import TokenAuthentication
-from api.firebase_auth.permissions import FirebasePermissions
-from api.spam.classifier import classify_text
-from api.spam.views import get_spam_report_data
-from api.notifications.dispatch import notify_incident
-from firebase_admin.firestore import GeoPoint
-from .models import Event, IncidentReport
-from api.comments.models import Comment
-from api.users.models import User
-from api.upvote.models import Upvote
+
 from api.utils.geohash_util import encode
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from django.conf import settings
+from django.http import JsonResponse, HttpResponseBadRequest
+from firebase_admin.firestore import GeoPoint
+from rest_framework.views import APIView
 
+from api.comments.models import Comment
+from api.firebase_auth.authentication import TokenAuthentication
+from api.firebase_auth.permissions import FirebasePermissions
+from api.notifications.dispatch import notify_incident
+from api.spam.classifier import classify_text
+from api.spam.views import get_spam_report_data
+from api.users.models import User
+from .models import Event, IncidentReport
 
 DB = settings.FIRESTORE
+
 
 class EventView(APIView):
     """ API view class for events
@@ -85,8 +85,8 @@ class EventView(APIView):
 
         latitude = decoded_json['location']['coords']['latitude']
         longitude = decoded_json['location']['coords']['longitude']
-        datetime = int(time.time()*1000)
-        
+        datetime = int(time.time() * 1000)
+
         # Compute geohash below
         event = Event(
             category=decoded_json['category'],
@@ -99,7 +99,7 @@ class EventView(APIView):
             },
             public={
                 "share": decoded_json['public']['share'],
-                "view":  decoded_json['public']['view'],
+                "view": decoded_json['public']['view'],
             },
             reported_by={
                 "original": {
@@ -149,7 +149,8 @@ class EventView(APIView):
             }
         )
 
-        return JsonResponse({"eventId":str(key)}) 
+        return JsonResponse({"eventId": str(key)})
+
 
 class MultipleEventsView(APIView):
     """API View for grouping incidents by location
@@ -166,7 +167,7 @@ class MultipleEventsView(APIView):
 
             dist: maximum radius of the location
 
-            cluster_thresold: maximum distance between any number events to cluster into one event
+            cluster_threshold: maximum distance between any number events to cluster into one event
 
         Arguments:
             request {[type]} -- [ Contains the django request object]
@@ -180,15 +181,15 @@ class MultipleEventsView(APIView):
         # Should use API View here
         lat = float(request.GET.get('lat', ''))
         lng = float(request.GET.get('long', ''))
-        thresold = float(request.GET.get('dist', ''))
-        if lat == '' or lng == '' or thresold == '':
+        threshold = float(request.GET.get('dist', ''))
+        if lat == '' or lng == '' or threshold == '':
             return HttpResponseBadRequest("Bad request")
-        
-        cluster_thresold = float(request.GET.get('min', 0))
+
+        cluster_threshold = float(request.GET.get('min', 0))
         data = Event.get_events_around(
             center={"latitude": lat, "longitude": lng},
-            max_distance=thresold,
-            cluster_threshold=cluster_thresold,
+            max_distance=threshold,
+            cluster_threshold=cluster_threshold,
             db=DB
         )
         return JsonResponse(data, safe=False)

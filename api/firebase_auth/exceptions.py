@@ -3,6 +3,7 @@
 from rest_framework import status
 from rest_framework.exceptions import APIException
 
+
 class NoAuthToken(APIException):
     """ Raised when no auth token is provided
 
@@ -12,6 +13,7 @@ class NoAuthToken(APIException):
     default_detail = 'No authentication token provided'
     default_code = 'no_auth_token'
 
+
 class InvalidAuthToken(APIException):
     """ Raised when the token is malformed
 
@@ -20,6 +22,7 @@ class InvalidAuthToken(APIException):
     status_code = status.HTTP_401_UNAUTHORIZED
     default_detail = 'Invalid authentication token provided'
     default_code = 'invalid_token'
+
 
 class FirebaseError(APIException):
     """ Raised when there is no corresponding user is in the database

@@ -1,6 +1,7 @@
 """ Django based urlconfig
 """
 from django.urls import path
+
 from api.users import views
 
 urlpatterns = [

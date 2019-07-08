@@ -5,19 +5,23 @@ import os
 import subprocess
 import time
 from threading import Thread
+
+from google.cloud.firestore_v1beta1 import ArrayUnion
+
 from api.events.models import Event
-from google.cloud.firestore_v1beta1 import ArrayUnion, ArrayRemove
 
 
-def asyncfunc(self, function):
-        """ Wrapper for async behaviour. Executes function in a separate new thread
-        """
-        def decorated_function(*args, **kwargs):
-            threads = Thread(target=function, args=args, kwargs=kwargs)
-            # Make sure thread doesn't quit until everything is finished
-            threads.daemon = False
-            threads.start()
-        return decorated_function
+def asyncfunc(function):
+    """ Wrapper for async behaviour. Executes function in a separate new thread
+    """
+
+    def decorated_function(*args, **kwargs):
+        threads = Thread(target=function, args=args, kwargs=kwargs)
+        # Make sure thread doesn't quit until everything is finished
+        threads.daemon = False
+        threads.start()
+
+    return decorated_function
 
 
 class Image(object):
@@ -58,7 +62,7 @@ class Image(object):
         # Keep our dyno clean
         # remove malicious code before anything goes wrong.
         os.remove(name)
-        os.remove(name+'.svg')
+        os.remove(name + '.svg')
         print("Finished", time.time())
 
     @staticmethod
@@ -73,4 +77,3 @@ class Image(object):
             "uuid": self.uuid,
         }
         return image_dict
-        

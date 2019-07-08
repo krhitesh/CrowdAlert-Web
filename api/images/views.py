@@ -1,15 +1,14 @@
 """ Django Views for the api app Images
 """
-import subprocess
-from threading import Thread
-import os
-from uuid import uuid4
 import base64
 import time
+from uuid import uuid4
+
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseRedirect
 from rest_framework.views import APIView
+
 from .models import Image
 
 STORAGE = settings.FIREBASE.storage()
@@ -37,7 +36,7 @@ class ImagesView(APIView):
             [JsonResponse] -- [Containing the url & thumbnail url of image]
 
         """
-        uuid = request.GET.get('uuid','')
+        uuid = request.GET.get('uuid', '')
         mode = request.GET.get('mode', 'image')
         if uuid == '':
             return HttpResponseBadRequest("Bad request: Specify the image uuid")
@@ -45,7 +44,7 @@ class ImagesView(APIView):
         if mode == 'image':
             url = STORAGE.child('images').child(uuid).get_url('')
         elif mode == 'thumbnail':
-            url = STORAGE.child('thumbnails').child(uuid.split('.')[0]+'.svg').get_url('')
+            url = STORAGE.child('thumbnails').child(uuid.split('.')[0] + '.svg').get_url('')
         return HttpResponseRedirect(url)
 
     def post(self, request):
@@ -97,7 +96,7 @@ class ImagesView(APIView):
         image.create_thumbnail(storage=STORAGE)
         # Upload files to Cloud storage
         image.put(storage=STORAGE)
-        
+
         # Update Event if id is given,
         if request.POST.get("eventId", False):
             event_id = request.POST.get("eventId", False)

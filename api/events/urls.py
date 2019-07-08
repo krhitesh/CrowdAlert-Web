@@ -2,6 +2,7 @@
 """
 
 from django.urls import path
+
 from api.events.views import EventView, MultipleEventsView
 
 urlpatterns = [
