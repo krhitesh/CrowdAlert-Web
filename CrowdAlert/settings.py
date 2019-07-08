@@ -15,6 +15,8 @@ import os
 
 import dj_database_url
 import firebase_admin
+import googlemaps
+import pyrebase
 from firebase_admin import firestore
 
 # Generate the Firebase Service Account Credential json file
@@ -114,10 +116,10 @@ TEMPLATES = [
 
 ASGI_APPLICATION = "CrowdAlert.routing.application"
 
-CHANNEL_LAYERS={
+CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
-     }
+    }
 }
 
 if os.environ.get("HEROKU", False):

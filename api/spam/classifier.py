@@ -2,11 +2,13 @@ import json
 from threading import Thread
 
 import requests
-import json
+from django.conf import settings
+
 from .models import Classifier
 
 db = settings.FIREBASE.database()
 DB = settings.FIRESTORE
+
 
 def asyncfunc(function):
     def decorated_function(*args, **kwargs):
@@ -26,9 +28,9 @@ def classify_text(text, uuid):
         response = json.loads(r.text)
         toxic_data = response['output'][0]
         DB.collection(Classifier.collection_name).document(uuid).update({
-            toxic: toxic_data
+            "toxic": toxic_data
         })
-    except:
+    except (ValueError, KeyError):
         pass
 
     return

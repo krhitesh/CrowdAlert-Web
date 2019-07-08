@@ -6,8 +6,6 @@ from django.conf import settings
 from django.http import JsonResponse, HttpResponseBadRequest
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from firebase_admin import auth
-from firebase_admin.firestore import GeoPoint
 
 from api.firebase_auth.authentication import TokenAuthentication
 from api.users.models import User
@@ -16,15 +14,15 @@ DB = settings.FIRESTORE
 
 DB = settings.FIRESTORE
 
+
 class UserView(APIView):
     """ User View Class
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request):
-        """
-        Returns user and user metadata
+    def get(self):
+        """ Not implemented yet
         """
         key = request.GET.get('key')
         if key is None:
