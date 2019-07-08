@@ -6,10 +6,6 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 
 from api.firebase_auth.authentication import TokenAuthentication
-from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
-from django.conf import settings
-import json
-import time
 from .models import Upvote
 
 DB = settings.FIRESTORE
@@ -44,10 +40,10 @@ class UpvoteView(APIView):
         """
 
         uuid = request.GET.get('uuid')
-        current_count = request.GET.get('current_count')        
+        current_count = request.GET.get('current_count')
         if not uuid:
             return HttpResponseBadRequest("BadRequest: uuid not specified")
-        
+
         if not current_count:
             current_count = -1
 
@@ -55,7 +51,7 @@ class UpvoteView(APIView):
             current_count = int(current_count)
         except:
             return HttpResponseBadRequest("BadRequest: current_count must be an integer")
-        
+
         upvote = Upvote(-1, [])
         for _ in range(SLEEP_SECONDS):
             upvote = Upvote.get(uuid, DB, default=Upvote(0, []))
@@ -84,7 +80,7 @@ class UpvoteView(APIView):
             'count': current_count,
             'has_upvoted': has_upvoted,
         })
-               
+
     def post(self, request):
         """Lets a user to upvote a specific uuid
         """
