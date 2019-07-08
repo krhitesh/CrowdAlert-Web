@@ -1,11 +1,6 @@
 import json
 import os
 import uuid
-from threading import Thread
-
-import requests
-from django.conf import settings
-
 from api.comments.models import Comment
 
 db = settings.FIRESTORE
@@ -91,8 +86,8 @@ def notify_incident(sender_uid, datetime, event_id, event_type, lat, lng, \
 
 @asyncfunc
 def notify_comment(sender_uid, datetime, event_id, user_text, \
-                   user_name, user_picture):
-    print('notify.....')
+    user_name, user_picture):
+
     user_ids = Comment.get(event_id, db).participants
 
     body = {
