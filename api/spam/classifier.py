@@ -3,8 +3,10 @@ from threading import Thread
 import os
 import requests
 import json
+from .models import Classifier
 
 db = settings.FIREBASE.database()
+DB = settings.FIRESTORE
 
 def asyncfunc(function):
     def decorated_function(*args, **kwargs):
@@ -21,7 +23,9 @@ def classify_text(text, uuid):
         r = requests.post(url, data={'text': text})
         response = json.loads(r.text)
         toxic_data = response['output'][0]
-        db.child('classifier/' + uuid).update({'toxic': toxic_data})
+        DB.collection(Classifier.collection_name).document(uuid).update({
+            toxic: toxic_data
+        })
     except:
         pass
     

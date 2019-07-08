@@ -5,7 +5,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.conf import settings
 import json
 
-db = settings.FIREBASE.database()
+db = settings.FIRESTORE
 
 class FCMTokenView(APIView):
     authentication_classes = (TokenAuthentication,)
@@ -23,7 +23,7 @@ class FCMTokenView(APIView):
         
         if not fcmtoken:
             return HttpResponseBadRequest("Bad Request: FCM token not provided")
-        db.child('fcmkeys/' + user_id + '/key').push(fcmtoken)
+        db.document('fcmkeys/' + user_id).set({ u"key": fcmtoken })
         return JsonResponse({"status": "ok"}, safe=False)
 
 
