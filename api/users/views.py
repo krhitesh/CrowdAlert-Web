@@ -11,7 +11,6 @@ from api.firebase_auth.authentication import TokenAuthentication
 
 DB = settings.FIRESTORE
 
-
 class UserView(APIView):
     """ User View Class
     """
