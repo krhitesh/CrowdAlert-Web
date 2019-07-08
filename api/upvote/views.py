@@ -10,9 +10,11 @@ from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.conf import settings
 import json
 import time
+from .models import Upvote
 
-db = settings.FIREBASE.database()
+DB = settings.FIRESTORE
 SLEEP_SECONDS = 20
+
 
 class UpvoteView(APIView):
     """API view class for upvotes
@@ -54,36 +56,29 @@ class UpvoteView(APIView):
         except:
             return HttpResponseBadRequest("BadRequest: current_count must be an integer")
         
-        path = 'upvotes/' + uuid
-
+        upvote = Upvote(-1, [])
         for _ in range(SLEEP_SECONDS):
-            count = db.child(path + '/count').get().val()
-            if count is None:
-                count = 0
-
-            has_upvoted = self.get_has_upvoted(request, path)
+            upvote = Upvote.get(uuid, DB, default=Upvote(0, []))
+            has_upvoted = self.get_has_upvoted(upvote, request)
             if current_count == -1:
                 # send the reponse of the initial request immediately
-                # has_upvoted = self.get_has_upvoted(request, path)
                 return JsonResponse({
                     'uuid': uuid,
-                    'count': count,
+                    'count': upvote.count,
                     'has_upvoted': has_upvoted,
                 })
 
-            if count == current_count:
+            if upvote.count == current_count:
                 time.sleep(1)
                 continue
 
             # send the reponse as update is available
-            # has_upvoted = self.get_has_upvoted(request, path)
             return JsonResponse({
                 'uuid': uuid,
-                'count': count,
+                'count': upvote.count,
                 'has_upvoted': has_upvoted,
             })
 
-        has_upvoted = self.get_has_upvoted(request, path)
         return JsonResponse({
             'uuid': uuid,
             'count': current_count,
@@ -124,11 +119,5 @@ class UpvoteView(APIView):
             'has_upvoted': not has_upvoted,
         }, safe=False)
 
-    def get_has_upvoted(self, request, path):
-        has_upvoted = False        
-        if request.user.is_authenticated:
-            user_id = str(request.user)
-            user_upvote_path = path + '/upvoters/' + user_id + '/has_upvoted'
-            has_upvoted = db.child(user_upvote_path).get().val()
-
-        return has_upvoted
+    def get_has_upvoted(self, upvote, request):
+        return str(request.user) in upvote.upvoters and request.user.is_authenticated

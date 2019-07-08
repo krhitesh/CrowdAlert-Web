@@ -8,39 +8,10 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseRedirect
 from rest_framework.views import APIView
-
 from .models import Image
 
-def asyncfunc(function):
-    """ Wrapper for async behaviour. Executes function in a separate new thread
-    """
-    def decorated_function(*args, **kwargs):
-        threads = Thread(target=function, args=args, kwargs=kwargs)
-        # Make sure thread doesn't quit until everything is finished
-        threads.daemon = False
-        threads.start()
-    return decorated_function
-
-@asyncfunc
-def add_thumbnail(name):
-    """ Starts the job of creating svg based thumbnail for a given file
-
-    Arguments:
-        name {string} -- [ target file name ]
-    """
-    # As our load is small now, we can do this in sequential manner
-    # After we get enough traffic we should use a redis based solution.
-    # Where an event would be pushed and a job id is to be returned
-    # and expose another endpoint where we can check the status
-    print("Generating Thumbnail", time.time())
-    subprocess.run(['../app/node_modules/.bin/sqip', name, '-o', name+'.svg'])
-    STORAGE.child('thumbnails/'+name+'.svg').put(name+'.svg')
-    # Remove the uploaded files for two good reasons:
-    # Keep our dyno clean
-    # remove malicious code before anything wrong goes.
-    os.remove(name)
-    os.remove(name+'.svg')
-    print("Finished", time.time())
+STORAGE = settings.FIREBASE.storage()
+DB = settings.FIRESTORE
 
 
 class ImagesView(APIView):
@@ -124,14 +95,14 @@ class ImagesView(APIView):
         image.create_thumbnail(storage=STORAGE)
         # Upload files to Cloud storage
         image.put(storage=STORAGE)
-
+        
         # Update Event if id is given,
         if request.POST.get("eventId", False):
             event_id = request.POST.get("eventId", False)
             is_trusted = request.POST.get('isValid', '') == 'true'
             image.is_trusted = is_trusted
             image.save(event_id, DB)
-            image.run_nsfw_classifier(event_id, DB)
+            # DB.child('incidents').child(event_id).child("images").push(image_data)
             print("Image Added")
         # Return file id for future reference
         print("Returning From Request", time.time())

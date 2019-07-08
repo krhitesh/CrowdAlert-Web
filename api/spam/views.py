@@ -3,11 +3,12 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from rest_framework.views import APIView
 
 from api.firebase_auth.authentication import TokenAuthentication
-from api.firebase_auth.permissions import FirebasePermissions
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
+from django.conf import settings
+import json
 from .models import Classifier
 
 DB = settings.FIRESTORE
-
 
 def get_spam_report_data(uuid):
     classifier_dict = Classifier.get(uuid, DB)
@@ -50,7 +51,7 @@ class SpamReportView(APIView):
         uuid = request.GET.get('uuid')
         if not uuid:
             return HttpResponseBadRequest("Bad request: uuid is not specified")
-
+        
         classifier = Classifier.get(uuid, DB)
 
         user_id = str(request.user)
@@ -59,7 +60,7 @@ class SpamReportView(APIView):
         # If uuid is present, fetch the previous count
         if classifier.flag_count:
             count = classifier.flag_count
-
+        
         try:
             flagged = user_id in classifier.flag_users
         except:
@@ -68,4 +69,4 @@ class SpamReportView(APIView):
         if not flagged:
             classifier.update(count + 1, user_id, uuid, DB)
             count += 1
-        return JsonResponse({"count": count})
+        return JsonResponse({ "count": count })
