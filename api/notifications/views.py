@@ -9,7 +9,6 @@ from api.firebase_auth.authentication import TokenAuthentication
 
 db = settings.FIRESTORE
 
-
 class FCMTokenView(APIView):
     collection_name = 'fcmkeys'
     authentication_classes = (TokenAuthentication,)
@@ -28,5 +27,5 @@ class FCMTokenView(APIView):
 
         if not fcmtoken:
             return HttpResponseBadRequest("Bad Request: FCM token not provided")
-        db.document(self.collection_name + '/' + user_id).set({u"key": fcmtoken})
+        db.document('fcmkeys/' + user_id).set({ u"key": fcmtoken })
         return JsonResponse({"status": "ok"}, safe=False)

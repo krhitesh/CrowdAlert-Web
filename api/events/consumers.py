@@ -1,7 +1,10 @@
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
-from .views import get_multiple_events
+from django.conf import settings
+from .models import Event
+
+DB = settings.FIRESTORE
 
 class EventsConsumer(WebsocketConsumer):
   def connect(self):
@@ -50,9 +53,14 @@ class EventsConsumer(WebsocketConsumer):
     lng = float(text_data_json['lng'])
     zoom = float(text_data_json['zoom'])
     dist = float(text_data_json['dist'])
-    cluster_threshold = float(text_data_json['min'])
+    cluster_threshold = float(text_data_json.get('min', 0))
 
-    data = get_multiple_events(lat, lng, dist, cluster_threshold)
+    data = Event.get_events_around(
+        center={"latitude": lat, "longitude": lng},
+        max_distance=dist,
+        cluster_threshold=cluster_threshold,
+        db=DB
+    )
     # Send message to room group
     async_to_sync(self.channel_layer.group_send)(
         self.room_group_name,
