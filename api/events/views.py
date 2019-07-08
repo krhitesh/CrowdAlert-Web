@@ -18,19 +18,11 @@ from api.firebase_auth.permissions import FirebasePermissions
 from api.notifications.dispatch import notify_incident
 from api.spam.classifier import classify_text
 from api.spam.views import get_spam_report_data
-from api.notifications.dispatch import notify_incident
-from firebase_admin.firestore import GeoPoint
-from .models import Event, IncidentReport
-from api.comments.models import Comment
 from api.users.models import User
-from api.upvote.models import Upvote
-from api.utils.geohash_util import encode
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
+from .models import Event, IncidentReport
 
 DB = settings.FIRESTORE
 
-DB = settings.FIRESTORE
 
 class EventView(APIView):
     """ API view class for events
@@ -93,8 +85,8 @@ class EventView(APIView):
 
         latitude = decoded_json['location']['coords']['latitude']
         longitude = decoded_json['location']['coords']['longitude']
-        datetime = int(time.time()*1000)
-        
+        datetime = int(time.time() * 1000)
+
         # Compute geohash below
         event = Event(
             category=decoded_json['category'],
@@ -157,7 +149,8 @@ class EventView(APIView):
             }
         )
 
-        return JsonResponse({"eventId":str(key)}) 
+        return JsonResponse({"eventId": str(key)})
+
 
 class MultipleEventsView(APIView):
     """API View for grouping incidents by location
@@ -174,7 +167,7 @@ class MultipleEventsView(APIView):
 
             dist: maximum radius of the location
 
-            cluster_thresold: maximum distance between any number events to cluster into one event
+            cluster_threshold: maximum distance between any number events to cluster into one event
 
         Arguments:
             request {[type]} -- [ Contains the django request object]
@@ -191,12 +184,12 @@ class MultipleEventsView(APIView):
         threshold = float(request.GET.get('dist', ''))
         if lat == '' or lng == '' or threshold == '':
             return HttpResponseBadRequest("Bad request")
-        
-        cluster_thresold = float(request.GET.get('min', 0))
+
+        cluster_threshold = float(request.GET.get('min', 0))
         data = Event.get_events_around(
             center={"latitude": lat, "longitude": lng},
-            max_distance=thresold,
-            cluster_threshold=cluster_thresold,
+            max_distance=threshold,
+            cluster_threshold=cluster_threshold,
             db=DB
         )
         return JsonResponse(data, safe=False)

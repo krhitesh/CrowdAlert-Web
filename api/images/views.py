@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseRedirect
 from rest_framework.views import APIView
+
 from .models import Image
 
 STORAGE = settings.FIREBASE.storage()
@@ -95,7 +96,7 @@ class ImagesView(APIView):
         image.create_thumbnail(storage=STORAGE)
         # Upload files to Cloud storage
         image.put(storage=STORAGE)
-        
+
         # Update Event if id is given,
         if request.POST.get("eventId", False):
             event_id = request.POST.get("eventId", False)
