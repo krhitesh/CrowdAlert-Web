@@ -66,7 +66,8 @@ class CommentData(object):
         return doc_ref.id
 
     def classify_text(self, thread_id):
-        classify_text(self.text, thread_id)
+        if self.text != '':
+            classify_text(self.text, thread_id)
 
     @staticmethod
     def from_dict(source_dict):
