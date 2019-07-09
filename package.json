@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "ajv": "6.4.0",
     "aphrodite": "^2.2.2",
     "axios": "0.16.2",
     "babel-cli": "6.26.0",
@@ -45,7 +46,6 @@
     "react-router-config": "1.0.0-beta.4",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
-    "react-scripts": "1.1.4",
     "react-share": "^2.1.1",
     "react-webcam": "^0.5.0",
     "recompose": "^0.27.1",
@@ -81,17 +81,22 @@
     "prod:only-build-server": "webpack -p --config webpack.server.js --colors --progress --profile",
     "start": "nodemon --exec \"node build/bundle.js\"",
     "build": "yarn prod:only-build-client && yarn prod:only-build-server",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
+    "test": "jest --watch --config=jest.config.js",
     "postinstall": "npm run build",
     "lint": "eslint src"
   },
   "devDependencies": {
+    "babel-jest": "23.4.0",
+    "enzyme": "3.3.0",
+    "enzyme-adapter-react-16": "1.1.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.8.2",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "22.4.3",
+    "jest-enzyme": "6.0.0",
     "react-styleguidist": "^7.0.14",
     "redux-logger": "^3.0.6"
   }
