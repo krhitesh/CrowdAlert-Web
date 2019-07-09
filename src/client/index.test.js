@@ -1,12 +1,9 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
-import { findByTestAttr } from '../client/tests/testUtils';
-import Client from './index';
-
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+import ReactDOM from 'react-dom';
+import client from './index';
 
 test('renders without error', () => {
-    const wrapper = shallow(<Client.Component />);
-    expect(findByTestAttr(wrapper, 'component-client').length).toBe(1);
+  const div = document.createElement('div');
+  ReactDOM.render(<client.Component />, div);
+  ReactDOM.unmountComponentAtNode(div);
 });
