@@ -35,7 +35,7 @@ const getEventColor = (type) => {
  */
 
 const Body = props => (
-  <Item.Content>
+  <Item.Content data-test="component-body">
     <Item.Header as="a">{props.title}</Item.Header>
     <Label
       color={getEventColor(props.eventType)}
@@ -45,7 +45,7 @@ const Body = props => (
       {props.eventType.toLocaleUpperCase()}
     </Label>
     {props.desktop ?
-      <Item.Meta>Description</Item.Meta>
+      <Item.Meta data-test="jsx-desktop">Description</Item.Meta>
     : null}
     <Item.Description>
       <SafeText spam={props.spam}>

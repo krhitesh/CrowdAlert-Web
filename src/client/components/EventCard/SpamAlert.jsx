@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 
 const SpamAlert = () => (
-  <div>
+  <div data-test="component-spamalert">
     <Message
       attached
       warning

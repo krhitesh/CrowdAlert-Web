@@ -67,7 +67,7 @@ class NotificationsContainer extends Component {
       ...this.props.notifications[key],
     }));
     return (
-      <div style={{ minWidth: '350px', overflowWrap: 'break-word' }}>
+      <div style={{ minWidth: '350px', overflowWrap: 'break-word' }} data-test="component-notifications-container">
         {notifications.length ?
           null
         :

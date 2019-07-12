@@ -55,10 +55,10 @@ class CommentsSection extends Component {
   }
   render() {
     if (this.props.comments.loading) {
-      return (<LoadingCard loading />);
+      return (<LoadingCard loading data-test="component-comments-section-loading" />);
     }
     return (
-      <Card style={{ width: '95%', padding: '0.3rem' }} color="red">
+      <Card style={{ width: '95%', padding: '0.3rem' }} color="red" data-test="component-comments-section">
         <Card.Content>
           <Feed>
             <Feed.Event>
@@ -66,6 +66,7 @@ class CommentsSection extends Component {
                 image={this.props.auth.user.photoURL ||
                  `${STATIC_IMAGES}/meerkat.svg`}
                 style={{ marginTop: '1rem' }}
+                data-test="jsx-user-image"
               />
               <Feed.Content>
                 <Feed.Summary>
@@ -74,7 +75,7 @@ class CommentsSection extends Component {
                 <Feed.Extra text>
                   <Form onSubmit={this.handleSubmit}>
                     <Form.Group>
-                      <Form.Field width={13}>
+                      <Form.Field width={13} data-test="jsx-comment-input">
                         <Form.TextArea
                           autoheight="true"
                           placeholder="Comment.."
@@ -85,7 +86,7 @@ class CommentsSection extends Component {
                       </Form.Field>
                       <Form.Field width={3} style={{ paddingLeft: '0rem' }}>
                         <Responsive fireOnMount getWidth={getWidth} minWidth={901}>
-                          <Form.Button width={2} color="teal">
+                          <Form.Button width={2} color="teal" data-test="jsx-btn-responsive">
                             <Icon name="comment" />
                           </Form.Button>
                         </Responsive>
@@ -98,6 +99,7 @@ class CommentsSection extends Component {
                             labelPosition="left"
                             loading={this.props.comments.commentButtonLoading}
                             disabled={this.props.comments.commentButtonLoading}
+                            data-test="jsx-btn-responsive"
                           >
                             <Icon name="comment" />
                             {/* Warning: Did not expect server HTML to contain the text node "Post" in <button>. */}
@@ -112,16 +114,16 @@ class CommentsSection extends Component {
             </Feed.Event>
           </Feed>
           {this.props.comments.errors ?
-            <Message negative>
+            <Message negative data-test="jsx-error-block">
               <Message.Header>Unable to Post Comment</Message.Header>
-              <Message.Content>{this.props.comments.message}</Message.Content>
+              <Message.Content data-test="jsx-error-msg">{this.props.comments.message}</Message.Content>
             </Message>
           : null}
         </Card.Content>
         <Card.Content>
-          <Comment.Group>
+          <Comment.Group data-test="jsx-comments-group">
             {this.props.comments.comments.map(comment => (
-              <Comment key={comment.key}>
+              <Comment key={comment.key} data-test="jsx-comment">
                 <Image
                   src={this.props.comments.userData[comment.user].photoURL ||
                       `${STATIC_IMAGES}/meerkat.svg`}
@@ -149,8 +151,8 @@ class CommentsSection extends Component {
                     </SafeText>
                   </Comment.Text>
                   <Comment.Actions>
-                    <UpvoteButton basic uuid={comment.key} />
-                    <SpamReport.Flag basic uuid={comment.key} />
+                    <UpvoteButton basic uuid={comment.key} data-test="component-upvote"/>
+                    <SpamReport.Flag basic uuid={comment.key} data-test="component-spamreport-flag" />
                   </Comment.Actions>
                 </Comment.Content>
               </Comment>
@@ -158,7 +160,7 @@ class CommentsSection extends Component {
             {this.props.comments.comments.length ?
             null
             :
-            <center>
+            <center data-test="jsx-nothing-here">
               <Image
                 src={`${STATIC_IMAGES}/meerkat.svg`}
                 size="tiny"
