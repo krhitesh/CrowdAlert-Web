@@ -2493,6 +2493,11 @@ chardet@^0.4.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.4.2.tgz#b5473b33dc97c424e5d98dc87d55d4d8a29c8bf2"
   integrity sha1-tUc7M9yXxCTl2Y3IfVXU2KKci/I=
 
+check-prop-types@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/check-prop-types/-/check-prop-types-1.1.2.tgz#c42df4fbdb509fbd4d8a102d113bb0ca01c21e67"
+  integrity sha512-hGDrZ1yhRgKuP1yzZ5sUX/PPmlKBLOF1GyF0Z008Sienko3BFZmlCXnmq+npRTIL/WlFCUzThyd+F5PQnnT1ug==
+
 cheerio@^1.0.0-rc.2:
   version "1.0.0-rc.3"
   resolved "https://registry.yarnpkg.com/cheerio/-/cheerio-1.0.0-rc.3.tgz#094636d425b2e9c0f4eb91a46c05630c9a1a8bf6"
@@ -4028,6 +4033,11 @@ eslint-plugin-import@^2.12.0:
     minimatch "^3.0.4"
     read-pkg-up "^2.0.0"
     resolve "^1.11.0"
+
+eslint-plugin-jest@^22.7.2:
+  version "22.7.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-22.7.2.tgz#7ab118a66a34e46ae5e16a128b5d24fd28b43dca"
+  integrity sha512-Aecqe3ulBVI7amgOycVI8ZPL8o0SnGHOf3zn2/Ciu8TXyXDHcjtwD3hOs3ss/Qh/VAwlW/DMcuiXg5btgF+XMA==
 
 eslint-plugin-jsx-a11y@^6.0.3:
   version "6.2.3"
