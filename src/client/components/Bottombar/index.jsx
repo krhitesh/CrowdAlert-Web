@@ -7,19 +7,19 @@ import getWidth from '../../utils/width';
 // Moved to Bottombar in a later MR
 
 const BottomBar = () => (
-  <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
+  <Responsive fireOnMount getWidth={getWidth} maxWidth={900} data-test="component-bottombar">
     <Segment style={styleSheet}>
       <Grid columns="equal" inverted>
         <Grid.Row textAlign="center">
-          <Grid.Column>
+          <Grid.Column data-test="component-grid-map-outline">
             <Icon circular color="teal" name="map outline" />
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column data-test="component-grid-map-camera">
             <Link to="/create/">
               <Icon circular inverted color="teal" name="camera" />
             </Link>
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column data-test="component-grid-bell">
             <Icon circular color="teal" name="bell" />
           </Grid.Column>
         </Grid.Row>

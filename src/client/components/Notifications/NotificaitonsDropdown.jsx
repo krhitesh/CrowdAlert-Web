@@ -11,17 +11,18 @@ const NotificaitonsDropdown = () => (
       </span>
     }
     scrolling
+    data-test="component-notifications-dropdown"
   >
     <Dropdown.Menu>
       <Segment.Group>
-        <Segment secondary basic>
+        <Segment secondary basic data-test="component-notifications-dropdown-segment-header">
           <Header>
             <Header.Content>
               Notifications
             </Header.Content>
           </Header>
         </Segment>
-        <Segment>
+        <Segment data-test="component-notifications-dropdown-segment-notifications-container">
           <NotificationsContainer />
         </Segment>
       </Segment.Group>
