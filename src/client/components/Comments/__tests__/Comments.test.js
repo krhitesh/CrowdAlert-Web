@@ -36,7 +36,7 @@ describe('render', () => {
       },
       auth: {
         user: {},
-      },
+      }
     };
     checkProps(CommentsSection, expectedProps);
   });
@@ -47,14 +47,15 @@ describe('render', () => {
         { threadId: '' },
         { comment: '' },
       );
-
+  
       test('renders loading without error', () => {
         expect(findByTestAttr(wrapper, 'component-comments-section-loading').length).toBe(1);
       });
-
+      
       test('does not render comments', () => {
         expect(findByTestAttr(wrapper, 'component-comments-section').length).toBe(0);
       });
+  
     });
 
     describe('renders zero comments section without error', () => {
@@ -75,43 +76,43 @@ describe('render', () => {
             user: {
               displayName: 'Me',
               photoURL: 'http://holdenc.altervista.org/avalanche/images/bitmap_seq1_108000000_500us.png'
-            },
-          },
-        },
+            }
+          }
+        }
       );
 
       test('does not render loading', () => {
         expect(findByTestAttr(wrapper, 'component-comments-section-loading').length).toBe(0);
       });
-
+  
       test('does render nothing here', () => {
         expect(findByTestAttr(wrapper, 'jsx-nothing-here').length).toBe(1);
       });
-
+  
       test('does not render errors block', () => {
         expect(findByTestAttr(wrapper, 'jsx-error-block').length).toBe(0);
       });
-
+    
       test('render comments section', () => {
         expect(findByTestAttr(wrapper, 'component-comments-section').length).toBe(1);
       });
-
+  
       test('renders user image without error', () => {
         expect(findByTestAttr(wrapper, 'jsx-user-image').length).toBe(1);
       });
-
+  
       test('renders post comment button without error', () => {
         expect(findByTestAttr(wrapper, 'jsx-btn-responsive').length).toBe(2);
       });
-
+  
       test('renders comment input field without error', () => {
         expect(findByTestAttr(wrapper, 'jsx-comment-input').length).toBe(1);
       });
-
+  
       test('renders comment group', () => {
         expect(findByTestAttr(wrapper, 'jsx-comments-group').length).toBe(1);
       });
-
+  
       test('renders comments without error', () => {
         expect(findByTestAttr(wrapper, 'jsx-comment').length).toBe(0);
       });
@@ -123,7 +124,7 @@ describe('render', () => {
       test('renders upvotes without error', () => {
         expect(findByTestAttr(wrapper, 'component-spamreport-flag').length).toBe(0);
       });
-    });
+    });    
   });
 
   describe('renders zero comments and error block section without error', () => {
@@ -144,9 +145,9 @@ describe('render', () => {
           user: {
             displayName: 'Me',
             photoURL: 'http://holdenc.altervista.org/avalanche/images/bitmap_seq1_108000000_500us.png'
-          },
-        },
-      },
+          }
+        }
+      }
     );
 
     test('does not render loading', () => {
@@ -177,10 +178,9 @@ describe('render', () => {
 
       userData[`user-${i}`] = {
         displayName: `John Doe ${i}`,
-        photoURL: 'https://assets2.razerzone.com/images/blade-15/logo-nvidia-geforce-rtx.png',
-      };
+        photoURL: `https://assets2.razerzone.com/images/blade-15/logo-nvidia-geforce-rtx.png`,
+      }
     }
-
     const wrapper = setup(
       { threadId: '' },
       { comment: '' },
@@ -198,9 +198,9 @@ describe('render', () => {
           user: {
             displayName: 'Me',
             photoURL: 'http://holdenc.altervista.org/avalanche/images/bitmap_seq1_108000000_500us.png'
-          },
-        },
-      },
+          }
+        }
+      }
     );
 
     test('does not render loading', () => {
@@ -214,7 +214,7 @@ describe('render', () => {
     test('does not render errors block', () => {
       expect(findByTestAttr(wrapper, 'jsx-error-block').length).toBe(0);
     });
-
+  
     test('render comments section', () => {
       expect(findByTestAttr(wrapper, 'component-comments-section').length).toBe(1);
     });
@@ -246,6 +246,7 @@ describe('render', () => {
     test('renders upvotes without error', () => {
       expect(findByTestAttr(wrapper, 'component-spamreport-flag').length).toBe(count);
     });
+
   });
 });
 
@@ -265,39 +266,45 @@ describe('redux props', () => {
         user: {
           displayName: 'Me',
           photoURL: 'http://holdenc.altervista.org/avalanche/images/bitmap_seq1_108000000_500us.png'
-        },
-      },
+        }
+      }
     };
 
     const wrapper = setup(
       { threadId: '' },
       null,
-      reduxPiece,
-    );
+      reduxPiece
+    )
     const reduxProp = {
       comments: wrapper.instance().props.comments,
       auth: wrapper.instance().props.auth,
-    };
+    }
 
     expect(reduxProp).toEqual(reduxPiece);
   });
 
   test('"fetchCommentsThread" action creator', () => {
-    const wrapper = setup({ threadId: '' });
+    const wrapper = setup(
+      { threadId: '' }
+    );
 
     const fetchCommentsThreadProp = wrapper.instance().props.fetchCommentsThread;
     expect(fetchCommentsThreadProp).toBeInstanceOf(Function);
   });
 
   test('"fetchCommentsThreadCancel" action creator', () => {
-    const wrapper = setup({ threadId: '' });
+    const wrapper = setup(
+      { threadId: '' }
+    );
 
     const fetchCommentsThreadCancelProp = wrapper.instance().props.fetchCommentsThreadCancel;
     expect(fetchCommentsThreadCancelProp).toBeInstanceOf(Function);
   });
 
   test('"postCommentToThread" action creator', () => {
-    const wrapper = setup({ threadId: '' });
+    const wrapper = setup(
+      { threadId: '' }
+    );
 
     const postCommentToThreadProp = wrapper.instance().props.postCommentToThread;
     expect(postCommentToThreadProp).toBeInstanceOf(Function);

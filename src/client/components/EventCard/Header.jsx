@@ -35,10 +35,6 @@ const EventHeader = (props) => {
           <br />
           {props.reverse_geocode ?
             <div data-test="jsx-rev-geocode">
-              {props.distance &&
-              <Label as="a" basic color="purple" data-test="d-distance">
-                {`${props.distance} away`}
-              </Label>}
               {props.reverse_geocode.name ?
                 <Label as="a" basic color="purple">
                   {props.reverse_geocode.name}

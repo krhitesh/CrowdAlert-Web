@@ -27,10 +27,7 @@ describe('renders', () => {
       spam: {},
       children: <React.Fragment />
     };
-    let wrapper;
-    beforeEach(() => {
-      wrapper = setup(props);
-    });
+    const wrapper = setup(props);
 
     test('render', () => {
       expect(findByTestAttr(wrapper, 'component-body').length).toBe(1);
