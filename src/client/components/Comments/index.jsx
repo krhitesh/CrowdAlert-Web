@@ -86,7 +86,7 @@ class CommentsSection extends Component {
                       </Form.Field>
                       <Form.Field width={3} style={{ paddingLeft: '0rem' }}>
                         <Responsive fireOnMount getWidth={getWidth} minWidth={901}>
-                          <Form.Button width={2} color="teal">
+                          <Form.Button width={2} color="teal" data-test="jsx-btn-responsive">
                             <Icon name="comment" />
                           </Form.Button>
                         </Responsive>

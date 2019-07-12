@@ -28,7 +28,7 @@ describe('testing Bottombar component', () => {
   test('renders grid map outline column without error', () => {
     const component = findByTestAttr(wrapper, 'component-grid-map-outline');
     expect(component.length).toBe(1);
-  });
+  })
 
   test('renders grid map camera column without error', () => {
     const component = findByTestAttr(wrapper, 'component-grid-map-camera');
