@@ -17,5 +17,6 @@
         "fileReader": true,
         "Blob": true,
         "navigator": true
-    }
+    },
+    "plugins": ["jest"],
 }
