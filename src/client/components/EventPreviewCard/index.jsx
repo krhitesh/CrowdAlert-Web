@@ -26,7 +26,7 @@ const EventPreviewCard = (props) => {
     return null;
   }
   return (
-    <div>
+    <div data-test="component-event-preview-card">
       <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
         <div style={style.widescreen}>
           {/* Animation isn't working as it requires component to be mounted
@@ -173,13 +173,9 @@ EventPreviewCard.defaultProps = {
 
 
 const mapStateToProps = (state) => {
-  const { map } = state;
   const { eventPreview } = state;
-  const { event } = state;
   return {
-    mapProps: map,
-    eventPreview,
-    event,
+    eventPreview
   };
 };
 const mapDispatchToProps = dispatch => (
