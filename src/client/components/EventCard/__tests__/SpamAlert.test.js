@@ -16,8 +16,8 @@ const setup = () => shallow(<SpamAlert />);
 describe('testing SpamAlert component', () => {
   const wrapper = setup();
 
-  it('renders without error', () => {
+  test('renders without error', () => {
     const component = findByTestAttr(wrapper, 'component-spamalert');
-    expect(component).toHaveLength(1);
+    expect(component.length).toBe(1);
   });
 });

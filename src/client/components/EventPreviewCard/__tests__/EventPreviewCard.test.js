@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { Link } from 'react-router-dom';
 import { findByTestAttr, checkProps, storeFactory } from '../../../tests/testUtils';
@@ -28,25 +28,25 @@ test('no render', () => {
     eventPreview: {
       event: null,
       isOpen: false,
-    },
+    }
   };
   const wrapper = setup({}, { ...reduxPiece });
 
-  expect(findByTestAttr(wrapper, 'component-event-preview-card')).toHaveLength(0);
+  expect(findByTestAttr(wrapper, 'component-event-preview-card').length).toBe(0);
 });
 
 const reduxPiece = {
   eventPreview: {
     event: {
       key: 'event key',
-      lat: Math.random() * 80,
-      long: Math.random() * 80,
+      lat: Math.random()*80,
+      long: Math.random()*80,
       category: 'event category',
       title: 'event title',
-      datetime: new Date().getTime(),
+      datetime: new Date().getTime()
     },
     isOpen: false,
-  },
+  }
 };
 
 describe('render', () => {
@@ -55,21 +55,22 @@ describe('render', () => {
     wrapper = setup({}, { ...reduxPiece }).dive();
   });
 
-  it('event category header test', () => {
-    expect(findByTestAttr(wrapper, 'component-header')).toHaveLength(2);
+  test('event category header test', () => {
+    expect(findByTestAttr(wrapper, 'component-header').length).toBe(2);
   });
 
-  it('event title header test', () => {
-    expect(findByTestAttr(wrapper, 'component-title')).toHaveLength(2);
+  test('event title header test', () => {
+    expect(findByTestAttr(wrapper, 'component-title').length).toBe(2);
   });
 
-  it('event datetime p test', () => {
-    expect(findByTestAttr(wrapper, 'jsx-datetime')).toHaveLength(2);
+  test('event datetime p test', () => {
+    expect(findByTestAttr(wrapper, 'jsx-datetime').length).toBe(2);
   });
 
-  it('links', () => {
+  test('Links', () => {
     expect(wrapper.find(Link)).toHaveLength(2);
-  });
+  })
+
 });
 
 describe('props test', () => {
@@ -78,26 +79,27 @@ describe('props test', () => {
     wrapper = setup({}, { ...reduxPiece }).dive();
   });
 
-  it('link props test', () => {
-    expect(wrapper.find(Link).at(0).props().to).toBe(`/view/${reduxPiece.eventPreview.event.key}`);
+  test('Link props test', () => { 
+    expect(wrapper.find(Link).at(0).props().to).toBe(`/view/${reduxPiece.eventPreview.event.key}`)
   });
 
-  it('does not throw warning with expected props', () => {
+  test('does not throw warning with expected props', () => {
     const expectedProps = { ...reduxPiece };
     checkProps(EventPreviewCard, expectedProps);
   });
 
-  it('event category value', () => {
+  test('event category value', () => {
     expect(findByTestAttr(wrapper, 'component-header').at(0).dive().text()).toBe(reduxPiece.eventPreview.event.category.toLocaleUpperCase());
   });
 
-  it('event title value', () => {
+  test('event title value', () => {
     expect(findByTestAttr(wrapper, 'component-title').at(0).dive().text()).toBe(reduxPiece.eventPreview.event.title);
   });
 
-  it('event datetime value', () => {
+  test('event datetime value', () => {
     expect(findByTestAttr(wrapper, 'jsx-datetime').at(0).text()).toBe(calcAge(reduxPiece.eventPreview.event.datetime));
   });
+
 });
 
 describe('redux props', () => {
@@ -106,16 +108,17 @@ describe('redux props', () => {
     wrapper = setup({}, { ...reduxPiece });
   });
 
-  it('has redux piece of state', () => {
+  test('has redux piece of state', () => {
     const reduxProp = {
       eventPreview: wrapper.props().eventPreview,
-    };
+    }
 
     expect(reduxProp).toEqual(reduxPiece);
   });
 
-  it('"closeEventPreview" action creator', () => {
+  test('"closeEventPreview" action creator', () => {
     const closeEventPreviewProp = wrapper.props().closeEventPreview;
     expect(closeEventPreviewProp).toBeInstanceOf(Function);
   });
+
 });
