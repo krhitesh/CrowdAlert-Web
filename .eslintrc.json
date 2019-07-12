@@ -23,5 +23,5 @@
         "Blob": true,
         "navigator": true
     },
-    "plugins": ["jest"]
+    "plugins": ["jest"],
 }
