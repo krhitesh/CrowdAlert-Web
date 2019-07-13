@@ -18,24 +18,25 @@ const NotificationsModal = props => (
   <Modal
     open={props.modal.open}
     basic
+    data-test="component-notifications-modal"
   >
-    <Header icon>
-      <Icon name={props.modal.icon} />
+    <Header icon data-test="component-modal-header">
+      <Icon name={props.modal.icon} data-test="component-header-icon" />
       {props.modal.header}
     </Header>
-    <Modal.Content>
-      <center>
+    <Modal.Content data-test="component-modal-content">
+      <center data-test="jsx-modal-text">
         {props.modal.text}
       </center>
     </Modal.Content>
-    <Modal.Actions>
+    <Modal.Actions data-test="component-modal-actions">
       {props.permission === false ? null :
-      <Button color="green" inverted onClick={props.showNotificationPermissionAsk}>
+      <Button color="green" inverted onClick={props.showNotificationPermissionAsk} data-test="component-allow-btn">
         <Icon name="checkmark" /> Allow
       </Button>
       }
 
-      <Button color="red" inverted basic onClick={props.showNotificationPermissionClose}>
+      <Button color="red" inverted basic onClick={props.showNotificationPermissionClose} data-test="component-close-btn">
         <Icon name="close" /> Close
       </Button>
     </Modal.Actions>

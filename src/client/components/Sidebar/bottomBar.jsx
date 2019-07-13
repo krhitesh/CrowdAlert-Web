@@ -11,38 +11,38 @@ import getWidth from '../../utils/width';
 const BottomBar = (props) => {
   if (props.bottomBarIsVisible && typeof window !== 'undefined') {
     return (
-      <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
+      <Responsive fireOnMount getWidth={getWidth} maxWidth={900} data-test="component-bottombar">
         <Segment style={styleSheet.bottomBar}>
           {props.auth.isLoggedIn ?
-            <Grid columns="equal" inverted>
+            <Grid columns="equal" inverted data-test="component-logged-in-grid">
               <Grid.Row textAlign="center">
-                <Grid.Column>
-                  <Link to="/">
+                <Grid.Column data-test="component-grid-map-outline">
+                  <Link to="/" data-test="link-root">
                     <Icon circular color="teal" name="map outline" />
                   </Link>
                 </Grid.Column>
-                <Grid.Column>
-                  <Link to="/create/">
+                <Grid.Column data-test="component-grid-map-camera">
+                  <Link to="/create/" data-test="link-create">
                     <Icon circular inverted color="teal" name="camera" />
                   </Link>
                 </Grid.Column>
-                <Grid.Column>
-                  <Link to="/notifications">
+                <Grid.Column data-test="component-notifications">
+                  <Link to="/notifications" data-test="link-notifications">
                     <Notifications.NotificationIcon />
                   </Link>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
           :
-            <Grid columns="equal" inverted>
+            <Grid columns="equal" inverted data-test="component-logged-out-grid">
               <Grid.Row textAlign="center">
                 <Grid.Column>
-                  <Link to="/login/">
+                  <Link to="/login/" data-test="link-login">
                     <LoginButton login />
                   </Link>
                 </Grid.Column>
                 <Grid.Column>
-                  <Link to="/signup/">
+                  <Link to="/signup/" data-test="link-signup">
                     <LoginButton signup />
                   </Link>
                 </Grid.Column>
