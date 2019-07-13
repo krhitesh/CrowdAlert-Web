@@ -31,26 +31,26 @@ const ShareModal = (props) => {
   const shareUrl = `${DOMAIN_NAME}/view/${props.uuid}`;
   const { title } = props;
   return (
-    <Modal trigger={props.children} basic size="small">
-      <Header icon="external share" content="Share" />
-      <Modal.Content>
+    <Modal open={props.open} trigger={props.children} basic size="small" data-test="component-share-modal">
+      <Header icon="external share" content="Share" data-test="component-header" />
+      <Modal.Content data-test="component-modal-content">
         <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
-          <FacebookShareButton url={shareUrl} quote={title}>
-            <Button color="facebook" fluid>
+          <FacebookShareButton url={shareUrl} quote={title} data-test="component-fb-share">
+            <Button color="facebook" fluid data-test="fb-share-content">
               <Icon name="facebook" />
               Facebook
             </Button>
           </FacebookShareButton>
           <br />
-          <TwitterShareButton url={shareUrl} title={title}>
-            <Button color="twitter" fluid>
+          <TwitterShareButton url={shareUrl} title={title} data-test="component-tw-share">
+            <Button color="twitter" fluid data-test="tw-share-content">
               <Icon name="twitter" />
               Twitter
             </Button>
           </TwitterShareButton>
           <br />
-          <WhatsappShareButton url={shareUrl} title={title} separator=":: ">
-            <Button color="green" fluid>
+          <WhatsappShareButton url={shareUrl} title={title} separator=":: " data-test="component-wa-share">
+            <Button color="green" fluid data-test="wa-share-content">
               <Icon name="whatsapp" />
               WhatsApp
             </Button>
@@ -59,23 +59,23 @@ const ShareModal = (props) => {
         <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
           <Grid columns={3}>
             <Grid.Column>
-              <FacebookShareButton url={shareUrl} quote={title}>
-                <Button color="facebook" fluid>
+              <FacebookShareButton url={shareUrl} quote={title} data-test="component-fb-share">
+                <Button color="facebook" fluid data-test="fb-share-content">
                   <Icon name="facebook" />
                   Facebook
                 </Button>
               </FacebookShareButton>
             </Grid.Column>
             <Grid.Column>
-              <TwitterShareButton url={shareUrl} title={title}>
-                <Button color="twitter" fluid>
+              <TwitterShareButton url={shareUrl} title={title} data-test="component-tw-share">
+                <Button color="twitter" fluid data-test="tw-share-content">
                   <Icon name="twitter" />
                   Twitter
                 </Button>
               </TwitterShareButton>
             </Grid.Column>
             <Grid.Column>
-              <Button color="google plus" fluid>
+              <Button color="google plus" fluid data-test="gp-share-content">
                 <Icon name="google plus" />
                 Google Plus
               </Button>
@@ -83,7 +83,7 @@ const ShareModal = (props) => {
           </Grid>
         </Responsive>
       </Modal.Content>
-      <Modal.Actions />
+      <Modal.Actions data-test="component-modal-actions" />
     </Modal>
   );
 };
@@ -93,5 +93,10 @@ ShareModal.propTypes = {
   /* Should be a single element which triggers the modal */
   children: PropTypes.element.isRequired,
   uuid: PropTypes.string.isRequired,
+  open: PropTypes.bool,
+};
+
+ShareModal.defaultProps = {
+  open: false,
 };
 export default ShareModal;

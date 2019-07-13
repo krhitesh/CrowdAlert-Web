@@ -20,7 +20,7 @@ import { logoutUserAuthencation } from '../../containers/Auth/actions';
  * @param {[type]} props [description]
  */
 const LeftSidebar = props => (
-  <Sidebar.Pushable as="div" style={styles.fitContainer}>
+  <Sidebar.Pushable as="div" style={styles.fitContainer} data-test="component-left-sidebar">
     <Sidebar
       as={Menu}
       animation={props.animation}
@@ -30,23 +30,23 @@ const LeftSidebar = props => (
       style={styles.sidebar}
     >
       <Menu.Item name="logo">
-        <Image src={logo} size="small" bordered centered />
+        <Image src={logo} size="small" bordered centered data-test="component-logo-image" />
       </Menu.Item>
 
-      <Link to="/" onClick={props.removeSidebarVisibility}>
-        <Menu.Item name="home">
+      <Link to="/" onClick={props.removeSidebarVisibility} data-test="link-root">
+        <Menu.Item name="home" data-test="link-root-content">
           <Icon name="home" />
           Home
         </Menu.Item>
       </Link>
-      <Link to="/create" onClick={props.removeSidebarVisibility}>
-        <Menu.Item name="camera">
+      <Link to="/create" onClick={props.removeSidebarVisibility} data-test="link-create">
+        <Menu.Item name="camera" data-test="link-create-content">
           <Icon name="camera" />
           Report
         </Menu.Item>
       </Link>
       {props.isLoggedIn ?
-        <Menu.Item name="avatar">
+        <Menu.Item name="avatar" data-test="component-menu-item">
           <Image
             avatar
             src={props.user.photoURL}
@@ -84,20 +84,21 @@ const LeftSidebar = props => (
             props.removeSidebarVisibility();
             props.signOut();
           }}
+          data-test="component-menu-item-signout"
         >
           <Icon name="sign out" />
           Sign out
         </Menu.Item>
       :
-        <div>
-          <Link to="/login" onClick={props.removeSidebarVisibility}>
-            <Menu.Item name="logout">
+        <div data-test="jsx-logged-out">
+          <Link to="/login" onClick={props.removeSidebarVisibility} data-test="link-login">
+            <Menu.Item name="logout" data-test="link-login-content">
               <Icon name="sign in" />
               Login
             </Menu.Item>
           </Link>
-          <Link to="/signup" onClick={props.removeSidebarVisibility}>
-            <Menu.Item name="logout">
+          <Link to="/signup" onClick={props.removeSidebarVisibility} data-test="link-signup">
+            <Menu.Item name="logout" data-test="link-signup-content">
               <Icon name="signup" />
               Sign up
             </Menu.Item>
@@ -108,6 +109,7 @@ const LeftSidebar = props => (
     <Sidebar.Pusher
       onClick={props.isVisible ? props.removeSidebarVisibility : null}
       dimmed={!!(props.animation === 'scale down' && props.isVisible)}
+      data-test="sidebar-pusher"
     >
       {props.children}
     </Sidebar.Pusher>
