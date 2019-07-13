@@ -43,45 +43,7 @@ test('does not throw warning with expected props', () => {
 });
 
 describe('render', () => {
-  test('renders basic button', () => {
-    const wrapper = setup(
-      { uuid: 'upvote uuid', basic: true },
-      { count: null, hasUpvoted: null },
-      reduxPiece,
-    ).dive();
 
-    expect(findByTestAttr(wrapper, 'upvote-btn-basic').length).toBe(1);
-  });
-
-  test('does not rendre non basic button', () => {
-    const wrapper = setup(
-      { uuid: 'upvote uuid', basic: true },
-      { count: null, hasUpvoted: null },
-      reduxPiece,
-    ).dive();
-
-    expect(findByTestAttr(wrapper, 'upvote-btn').length).toBe(0);
-  });
-
-  test('renders basic button', () => {
-    const wrapper = setup(
-      { uuid: 'upvote uuid', basic: false },
-      { count: null, hasUpvoted: null },
-      reduxPiece,
-    ).dive();
-
-    expect(findByTestAttr(wrapper, 'upvote-btn').length).toBe(1);
-  });
-
-  test('does not render basic button', () => {
-    const wrapper = setup(
-      { uuid: 'upvote uuid', basic: false },
-      { count: null, hasUpvoted: null },
-      reduxPiece,
-    ).dive();
-
-    expect(findByTestAttr(wrapper, 'upvote-btn-basic').length).toBe(0);
-  });
 });
 
 describe('redux props', () => {
@@ -94,7 +56,7 @@ describe('redux props', () => {
     const reduxProp = {
       upvotes: {
         upvoteData: {
-          [Object.keys(reduxPiece.upvotes.upvoteData)[0]]: wrapper.props().upvotes
+          [Object.keys(reduxPiece.upvotes.upvoteData)[0]]: wrapper.instance().props.upvotes
         }
       }
     };
@@ -108,7 +70,7 @@ describe('redux props', () => {
       { count: null, hasUpvoted: null },
       reduxPiece,
     );
-    const fetchUpvotesStartProp = wrapper.props().fetchUpvotesStart;
+    const fetchUpvotesStartProp = wrapper.instance().props.fetchUpvotesStart;
     expect(fetchUpvotesStartProp).toBeInstanceOf(Function);
   });
 
@@ -118,7 +80,7 @@ describe('redux props', () => {
       { count: null, hasUpvoted: null },
       reduxPiece,
     );
-    const fetchUpvotesCancelProp = wrapper.props().fetchUpvotesCancel;
+    const fetchUpvotesCancelProp = wrapper.instance().props.fetchUpvotesCancel;
     expect(fetchUpvotesCancelProp).toBeInstanceOf(Function);
   });
 
@@ -128,7 +90,7 @@ describe('redux props', () => {
       { count: null, hasUpvoted: null },
       reduxPiece,
     );
-    const updateUpvoteStartProp = wrapper.props().updateUpvoteStart;
+    const updateUpvoteStartProp = wrapper.instance().props.updateUpvoteStart;
     expect(updateUpvoteStartProp).toBeInstanceOf(Function);
   });
 
@@ -138,7 +100,7 @@ describe('redux props', () => {
       { count: null, hasUpvoted: null },
       reduxPiece,
     );
-    const updateUpvoteCancelProp = wrapper.props().updateUpvoteCancel;
+    const updateUpvoteCancelProp = wrapper.instance().props.updateUpvoteCancel;
     expect(updateUpvoteCancelProp).toBeInstanceOf(Function);
   });
 });

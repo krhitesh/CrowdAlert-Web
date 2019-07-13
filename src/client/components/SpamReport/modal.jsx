@@ -18,7 +18,7 @@ const SpamReportModal = props => (
     size="small"
     data-test="component-spamreportmodal"
   >
-    <Header icon>
+    <Header icon data-test="component-header">
       <Icon name={`${props.errors ? 'meh' : 'smile'}`} />
 
       {props.errors ?

@@ -68,6 +68,10 @@ describe('render', () => {
       wrapper = setup();
     });
 
+    test('staticContext notFound must be true', () => {
+      expect(wrapper.props().staticContext.notFound).toBe(true);
+    });
+
     test('link feed', () => {
       expect(findByTestAttr(wrapper, 'link-feed').props().to).toBe('/');
     });
