@@ -53,7 +53,7 @@ const Sonar = props => (
           props.openEventPreview({ ...props.payload });
         }
       }}
-    data-test="component-sonar"
+      data-test="component-sonar"
   >
     <div>
       <div className={`sonar-emitter sonar_${props.type}`} data-test="jsx-emitter">

@@ -31,12 +31,12 @@ const ShareModal = (props) => {
   const shareUrl = `${DOMAIN_NAME}/view/${props.uuid}`;
   const { title } = props;
   return (
-    <Modal trigger={props.children} basic size="small">
-      <Header icon="external share" content="Share" />
-      <Modal.Content>
+    <Modal open={props.open} trigger={props.children} basic size="small" data-test="component-share-modal">
+      <Header icon="external share" content="Share" data-test="component-header" />
+      <Modal.Content data-test="component-modal-content">
         <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
-          <FacebookShareButton url={shareUrl} quote={title}>
-            <Button color="facebook" fluid>
+          <FacebookShareButton url={shareUrl} quote={title} data-test="component-fb-share">
+            <Button color="facebook" fluid data-test="fb-share-content">
               <Icon name="facebook" />
               Facebook
             </Button>
@@ -93,5 +93,10 @@ ShareModal.propTypes = {
   /* Should be a single element which triggers the modal */
   children: PropTypes.element.isRequired,
   uuid: PropTypes.string.isRequired,
+  open: PropTypes.bool,
+};
+
+ShareModal.defaultProps = {
+  open: false,
 };
 export default ShareModal;

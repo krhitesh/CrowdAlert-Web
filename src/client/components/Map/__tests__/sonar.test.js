@@ -16,10 +16,6 @@ const defaultProps = {
   openEventPreview: () => {},
   map: {
     zoom: 4,
-    polyline: {
-      data: [],
-      bounds: null,
-    },
   },
   payload: {
     category: '',
@@ -35,10 +31,6 @@ const defaultProps = {
 const reduxPiece = {
   map: {
     zoom: 4,
-    polyline: {
-      data: [],
-      bounds: null,
-    },
   },
 };
 
@@ -116,10 +108,5 @@ describe('redux props', () => {
   test('"updateMapCenter" action creator', () => {
     const updateMapCenterProp = wrapper.instance().props.updateMapCenter;
     expect(updateMapCenterProp).toBeInstanceOf(Function);
-  });
-
-  it('"updateMapPolyline" action creator', () => {
-    const updateMapPolylineProp = wrapper.props().updateMapPolyline;
-    expect(updateMapPolylineProp).toBeInstanceOf(Function);
   });
 });
