@@ -16,9 +16,9 @@ import getWidth from '../../utils/width';
  * @param {[type]} props [description]
  */
 const MenuBar = props => (
-  <Menu size="small">
-    <Menu.Menu position="left">
-      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyMobile}>
+  <Menu size="small" data-test="component-menu">
+    <Menu.Menu position="left" data-test="left-menu">
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyMobile} data-test="resp-only-mobile">
         <Icon
           name="content"
           onClick={() => props.toggleSidebarVisibility({
@@ -26,7 +26,7 @@ const MenuBar = props => (
           })}
         />
       </Responsive>
-      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyTablet}>
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyTablet} data-test="resp-only-tabs">
         <Menu.Item>
           <Icon
             name="content"
@@ -36,10 +36,10 @@ const MenuBar = props => (
           />
         </Menu.Item>
       </Responsive>
-      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} minWidth={992}>
-        <Image src={logo} style={{ height: '4vh' }} />
-        <Link to="/">
-          <Menu.Item>
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} minWidth={992} data-test="resp-menu">
+        <Image src={logo} style={{ height: '4vh' }} data-test="component-image-logo" />
+        <Link to="/" data-test="link-root">
+          <Menu.Item data-test="component-link-root">
             <Icon name="browser" />
             Feed
           </Menu.Item>
@@ -82,8 +82,8 @@ const MenuBar = props => (
       </Responsive>
 
       <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyMobile}>
-        <Link to="/notifications" style={{ marginRight: '1em' }}>
-          <Notifications.NotificationIcon />
+        <Link to="/notifications" style={{ marginRight: '1em' }} data-test="link-notifications">
+          <Notifications.NotificationIcon data-test="component-link-notifications" />
         </Link>
         <Icon name="search" circular />
       </Responsive>
