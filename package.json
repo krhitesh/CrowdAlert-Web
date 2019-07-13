@@ -89,7 +89,7 @@
     "babel-jest": "23.4.0",
     "check-prop-types": "^1.1.2",
     "enzyme": "3.3.0",
-    "enzyme-adapter-react-16": "1.1.1",
+    "enzyme-adapter-react-16": "1.7.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.12.0",
@@ -101,5 +101,8 @@
     "jest-enzyme": "6.0.0",
     "react-styleguidist": "^7.0.14",
     "redux-logger": "^3.0.6"
+  },
+  "resolutions": {
+    "enzyme-adapter-react-16/react-test-renderer": "^16.3.0"
   }
 }
