@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
 import NotificationIcon from '../NotificationIcon';
@@ -32,30 +32,30 @@ test('does not throw warning with expected props', () => {
 });
 
 describe('render', () => {
-  it('renders component', () => {
+  test('renders component', () => {
     const wrapper = setup({}, { notifications: { unread: false } }).dive();
-    expect(findByTestAttr(wrapper, 'component-notification-icon')).toHaveLength(1);
+    expect(findByTestAttr(wrapper, 'component-notification-icon').length).toBe(1);
   });
 
-  it('does not render red icon', () => {
+  test('does not render red icon', () => {
     const wrapper = setup({}, { notifications: { unread: false } }).dive();
-    expect(findByTestAttr(wrapper, 'component-icon')).toHaveLength(0);
+    expect(findByTestAttr(wrapper, 'component-icon').length).toBe(0);
   });
 
-  it('renders red icon', () => {
+  test('renders red icon', () => {
     const wrapper = setup({}, { notifications: { unread: true } }).dive();
-    expect(findByTestAttr(wrapper, 'component-icon')).toHaveLength(1);
+    expect(findByTestAttr(wrapper, 'component-icon').length).toBe(1);
   });
 });
 
 describe('redux props', () => {
-  it('has redux piece of state', () => {
+  test('has redux piece of state', () => {
     const wrapper = setup({}, reduxPiece);
     const reduxProps = {
       notifications: {
         unread: wrapper.props().unread,
-      },
-    };
+      }
+    }
 
     expect(reduxProps).toEqual(reduxPiece);
   });

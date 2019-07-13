@@ -8,7 +8,7 @@ Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const defaultProps = {
   loading: true,
-};
+}
 
 /**
  * @function setup
@@ -19,7 +19,7 @@ const setup = (props = {}) => {
   const setupProps = { ...defaultProps, ...props };
   const wrapper = shallow(<LoadingCard {...setupProps} />);
   return wrapper;
-};
+}
 
 test('does not warn with expected props', () => {
   const expectedProps = { ...defaultProps };
@@ -28,28 +28,28 @@ test('does not warn with expected props', () => {
 });
 
 describe('render', () => {
-  it('renders component', () => {
+  test('renders component', () => {
     const wrapper = setup();
-    expect(findByTestAttr(wrapper, 'component-loading-card')).toHaveLength(1);
+    expect(findByTestAttr(wrapper, 'component-loading-card').length).toBe(1);
   });
 
-  it('dimmer active', () => {
+  test('dimmer active', () => {
     const wrapper = setup();
     expect(findByTestAttr(wrapper, 'component-dimmer').prop('active')).toBe(defaultProps.loading);
   });
 
-  it('renders loader', () => {
+  test('renders loader', () => {
     const wrapper = setup();
-    expect(findByTestAttr(wrapper, 'component-loader')).toHaveLength(1);
+    expect(findByTestAttr(wrapper, 'component-loader').length).toBe(1);
   });
 
-  it('dimmer inactive', () => {
+  test('dimmer inactive', () => {
     const wrapper = setup({ loading: false });
     expect(findByTestAttr(wrapper, 'component-dimmer').prop('active')).toBe(false);
   });
 
-  it('renders image', () => {
+  test('renders image', () => {
     const wrapper = setup();
-    expect(findByTestAttr(wrapper, 'component-image')).toHaveLength(1);
+    expect(findByTestAttr(wrapper, 'component-image').length).toBe(1);
   });
 });

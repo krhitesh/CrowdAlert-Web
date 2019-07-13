@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
 import SpamReportModal from '../modal';
@@ -16,8 +16,8 @@ const reduxPiece = {
     ...defaultProps,
     modal: {
       open: true,
-    },
-  },
+    }
+  }
 };
 
 /**
@@ -46,51 +46,51 @@ test('does not warn with expected props', () => {
 
 describe('render', () => {
   describe('open modal', () => {
-    it('renders without error', () => {
+    test('renders without error', () => {
       const wrapper = setup({}, reduxPiece).dive();
-      expect(findByTestAttr(wrapper, 'component-spamreportmodal')).toHaveLength(1);
+      expect(findByTestAttr(wrapper, 'component-spamreportmodal').length).toBe(1);
     });
 
-    it('renders header without error', () => {
+    test('renders header without error', () => {
       const wrapper = setup({}, reduxPiece).dive();
-      expect(findByTestAttr(wrapper, 'component-header')).toHaveLength(1);
+      expect(findByTestAttr(wrapper, 'component-header').length).toBe(1);
     });
 
-    it('renders content without error', () => {
+    test('renders content without error', () => {
       const wrapper = setup({}, reduxPiece).dive();
-      expect(findByTestAttr(wrapper, 'modal-content')).toHaveLength(1);
+      expect(findByTestAttr(wrapper, 'modal-content').length).toBe(1);
     });
 
     describe('renders without error', () => {
-      it('renders action without error', () => {
+      test('renders action without error', () => {
         const wrapper = setup({}, reduxPiece).dive();
-        expect(findByTestAttr(wrapper, 'modal-actions')).toHaveLength(1);
+        expect(findByTestAttr(wrapper, 'modal-actions').length).toBe(1);
       });
 
-      it('renders without error', () => {
+      test('renders without error', () => {
         const wrapper = setup({}, reduxPiece).dive();
-        expect(findByTestAttr(wrapper, 'modal-action-btn')).toHaveLength(1);
+        expect(findByTestAttr(wrapper, 'modal-action-btn').length).toBe(1);
       });
     });
   });
 });
 
 describe('redux props', () => {
-  it('has redux piece of state', () => {
+  test('has redux piece of state', () => {
     const wrapper = setup({}, reduxPiece);
     const { modal, errors, message } = wrapper.props();
     const reduxProps = {
       spam: {
         modal,
         errors,
-        message,
-      },
+        message
+      }
     };
 
     expect(reduxProps).toEqual(reduxPiece);
   });
 
-  it('"reportSpamModalClose" action creator', () => {
+  test('"reportSpamModalClose" action creator', () => {
     const wrapper = setup({}, reduxPiece);
     const reportSpamModalCloseProps = wrapper.props().reportSpamModalClose;
     expect(reportSpamModalCloseProps).toBeInstanceOf(Function);

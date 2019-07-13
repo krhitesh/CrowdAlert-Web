@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
 import Menu from '../index';
@@ -32,72 +32,72 @@ describe('render', () => {
     wrapper = setup({}, { auth: { isLoggedIn: false } }).dive();
   });
 
-  it('renders without error', () => {
-    expect(findByTestAttr(wrapper, 'component-menu')).toHaveLength(1);
+  test('renders without error', () => {
+    expect(findByTestAttr(wrapper, 'component-menu').length).toBe(1);
   });
 
-  it('renders responsive mobile view', () => {
-    expect(findByTestAttr(wrapper, 'resp-only-mobile')).toHaveLength(1);
+  test('renders responsive mobile view', () => {
+    expect(findByTestAttr(wrapper, 'resp-only-mobile').length).toBe(1);
   });
 
-  it('renders responsive tab view', () => {
-    expect(findByTestAttr(wrapper, 'resp-only-tabs')).toHaveLength(1);
+  test('renders responsive tab view', () => {
+    expect(findByTestAttr(wrapper, 'resp-only-tabs').length).toBe(1);
   });
 
-  it('renders left menu', () => {
-    expect(findByTestAttr(wrapper, 'left-menu')).toHaveLength(1);
+  test('renders left menu', () => {
+    expect(findByTestAttr(wrapper, 'left-menu').length).toBe(1);
   });
 
-  it('renders responsive menu', () => {
-    expect(findByTestAttr(wrapper, 'resp-menu')).toHaveLength(1);
+  test('renders responsive menu', () => {
+    expect(findByTestAttr(wrapper, 'resp-menu').length).toBe(1);
   });
 
-  it('renders image logo', () => {
-    expect(findByTestAttr(wrapper, 'component-image-logo')).toHaveLength(1);
+  test('renders image logo', () => {
+    expect(findByTestAttr(wrapper, 'component-image-logo').length).toBe(1);
   });
 
-  it('link root', () => {
+  test('link root', () => {
     expect(findByTestAttr(wrapper, 'link-root').props().to).toBe('/');
   });
 
-  it('lint create', () => {
+  test('lint create', () => {
     expect(findByTestAttr(wrapper, 'link-create').props().to).toBe('/create');
   });
 
-  it('link login 0', () => {
+  test('link login 0', () => {
     expect(findByTestAttr(wrapper, 'link-login').at(0).props().to).toBe('/login');
   });
 
-  it('link login 1', () => {
+  test('link login 1', () => {
     expect(findByTestAttr(wrapper, 'link-login').at(1).props().to).toBe('/login');
   });
 
-  it('link signup', () => {
+  test('link signup', () => {
     expect(findByTestAttr(wrapper, 'link-signup').props().to).toBe('/signup');
   });
 
-  it('link notifications', () => {
+  test('link notifications', () => {
     expect(findByTestAttr(wrapper, 'link-notifications').props().to).toBe('/notifications');
   });
 
-  it('renders link notification', () => {
-    expect(findByTestAttr(wrapper, 'component-link-notifications')).toHaveLength(1);
+  test('renders link notification', () => {
+    expect(findByTestAttr(wrapper, 'component-link-notifications').length).toBe(1);
   });
 
-  it('renders signup link', () => {
-    expect(findByTestAttr(wrapper, 'component-link-signup')).toHaveLength(1);
+  test('renders signup link', () => {
+    expect(findByTestAttr(wrapper, 'component-link-signup').length).toBe(1);
   });
 
-  it('renders login link', () => {
-    expect(findByTestAttr(wrapper, 'component-link-login')).toHaveLength(2);
+  test('renders login link', () => {
+    expect(findByTestAttr(wrapper, 'component-link-login').length).toBe(2);
   });
 
-  it('renders create link', () => {
-    expect(findByTestAttr(wrapper, 'component-link-create')).toHaveLength(1);
+  test('renders create link', () => {
+    expect(findByTestAttr(wrapper, 'component-link-create').length).toBe(1);
   });
 
-  it('renders root link', () => {
-    expect(findByTestAttr(wrapper, 'component-link-root')).toHaveLength(1);
+  test('renders root link', () => {
+    expect(findByTestAttr(wrapper, 'component-link-root').length).toBe(1);
   });
 });
 
@@ -107,38 +107,39 @@ describe('renders with login', () => {
     wrapper = setup({}, { auth: { isLoggedIn: true } }).dive();
   });
 
-  it('renders notifications dropdown', () => {
-    expect(findByTestAttr(wrapper, 'component-notifications-dropdown')).toHaveLength(2);
+  test('renders notifications dropdown', () => {
+    expect(findByTestAttr(wrapper, 'component-notifications-dropdown').length).toBe(2);
   });
 
-  it('renders user settins menu', () => {
-    expect(findByTestAttr(wrapper, 'component-user-settings-menu')).toHaveLength(1);
-  });
+  test('renders user settins menu', () => {
+    expect(findByTestAttr(wrapper, 'component-user-settings-menu').length).toBe(1);
+  })
 });
 
 describe('redux props', () => {
   const reduxPiece = {
     auth: {
       isLoggedIn: true,
-    },
+    }
   };
   let wrapper;
   beforeEach(() => {
     wrapper = setup({}, reduxPiece);
   });
 
-  it('has redux piece of state', () => {
+  test('has redux piece of state', () => {
     const reduxProps = {
       auth: {
-        isLoggedIn: wrapper.props().isLoggedIn,
-      },
+        isLoggedIn: wrapper.props().isLoggedIn
+      }
     };
 
     expect(reduxProps).toEqual(reduxPiece);
   });
 
-  it('"toggleSidebarVisibility" action creator', () => {
+  test('"toggleSidebarVisibility" action creator', () => {
     const toggleSidebarVisibilityProp = wrapper.props().toggleSidebarVisibility;
     expect(toggleSidebarVisibilityProp).toBeInstanceOf(Function);
   });
+
 });

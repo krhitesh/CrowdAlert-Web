@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
 import Upvote from '../index';
@@ -13,9 +13,9 @@ const reduxPiece = {
         uuid: 'upvote uuid',
         hasUpvoted: false,
         count: 0,
-      },
-    },
-  },
+      }
+    }
+  }
 };
 
 /**
@@ -43,49 +43,11 @@ test('does not throw warning with expected props', () => {
 });
 
 describe('render', () => {
-  it('renders basic button', () => {
-    const wrapper = setup(
-      { uuid: 'upvote uuid', basic: true },
-      { count: null, hasUpvoted: null },
-      reduxPiece,
-    ).dive();
 
-    expect(findByTestAttr(wrapper, 'upvote-btn-basic')).toHaveLength(1);
-  });
-
-  it('does not render non basic button', () => {
-    const wrapper = setup(
-      { uuid: 'upvote uuid', basic: true },
-      { count: null, hasUpvoted: null },
-      reduxPiece,
-    ).dive();
-
-    expect(findByTestAttr(wrapper, 'upvote-btn')).toHaveLength(0);
-  });
-
-  it('renders non basic button', () => {
-    const wrapper = setup(
-      { uuid: 'upvote uuid', basic: false },
-      { count: null, hasUpvoted: null },
-      reduxPiece,
-    ).dive();
-
-    expect(findByTestAttr(wrapper, 'upvote-btn')).toHaveLength(1);
-  });
-
-  it('does not render basic button', () => {
-    const wrapper = setup(
-      { uuid: 'upvote uuid', basic: false },
-      { count: null, hasUpvoted: null },
-      reduxPiece,
-    ).dive();
-
-    expect(findByTestAttr(wrapper, 'upvote-btn-basic')).toHaveLength(0);
-  });
 });
 
 describe('redux props', () => {
-  it('has redux piece of state', () => {
+  test('has redux piece of state', () => {
     const wrapper = setup(
       { uuid: 'upvote uuid', basic: true },
       { count: null, hasUpvoted: null },
@@ -94,51 +56,51 @@ describe('redux props', () => {
     const reduxProp = {
       upvotes: {
         upvoteData: {
-          [Object.keys(reduxPiece.upvotes.upvoteData)[0]]: wrapper.props().upvotes,
-        },
-      },
+          [Object.keys(reduxPiece.upvotes.upvoteData)[0]]: wrapper.instance().props.upvotes
+        }
+      }
     };
 
     expect(reduxProp).toEqual(reduxPiece);
   });
 
-  it('"fetchUpvotesStart" action creator', () => {
+  test('"fetchUpvotesStart" action creator', () => {
     const wrapper = setup(
       { uuid: 'upvote uuid', basic: true },
       { count: null, hasUpvoted: null },
       reduxPiece,
     );
-    const fetchUpvotesStartProp = wrapper.props().fetchUpvotesStart;
+    const fetchUpvotesStartProp = wrapper.instance().props.fetchUpvotesStart;
     expect(fetchUpvotesStartProp).toBeInstanceOf(Function);
   });
 
-  it('"fetchUpvotesCancel" action creator', () => {
+  test('"fetchUpvotesCancel" action creator', () => {
     const wrapper = setup(
       { uuid: 'upvote uuid', basic: true },
       { count: null, hasUpvoted: null },
       reduxPiece,
     );
-    const fetchUpvotesCancelProp = wrapper.props().fetchUpvotesCancel;
+    const fetchUpvotesCancelProp = wrapper.instance().props.fetchUpvotesCancel;
     expect(fetchUpvotesCancelProp).toBeInstanceOf(Function);
   });
 
-  it('"updateUpvoteStart" action creator', () => {
+  test('"updateUpvoteStart" action creator', () => {
     const wrapper = setup(
       { uuid: 'upvote uuid', basic: true },
       { count: null, hasUpvoted: null },
       reduxPiece,
     );
-    const updateUpvoteStartProp = wrapper.props().updateUpvoteStart;
+    const updateUpvoteStartProp = wrapper.instance().props.updateUpvoteStart;
     expect(updateUpvoteStartProp).toBeInstanceOf(Function);
   });
 
-  it('"updateUpvoteCancel" action creator', () => {
+  test('"updateUpvoteCancel" action creator', () => {
     const wrapper = setup(
       { uuid: 'upvote uuid', basic: true },
       { count: null, hasUpvoted: null },
       reduxPiece,
     );
-    const updateUpvoteCancelProp = wrapper.props().updateUpvoteCancel;
+    const updateUpvoteCancelProp = wrapper.instance().props.updateUpvoteCancel;
     expect(updateUpvoteCancelProp).toBeInstanceOf(Function);
   });
 });

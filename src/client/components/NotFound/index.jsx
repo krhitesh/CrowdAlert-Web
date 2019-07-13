@@ -6,17 +6,17 @@ const NotFoundPage = ({ staticContext = {} }) => {
   // eslint-disable-next-line no-param-reassign
   staticContext.notFound = true;
   return (
-    <div className="ui message" style={{ maxWidth: '550px', margin: '0 auto', marginTop: '2em' }}>
-      <div className="header">
+    <div className="ui message" style={{ maxWidth: '550px', margin: '0 auto', marginTop: '2em' }} data-test="component-not-found">
+      <div className="header" data-test="jsx-header">
         Ooops! Route not found
       </div>
       <p>Did you mean:</p>
-      <ul className="list">
-        <li><Link to="/">Feed</Link></li>
-        <li><Link to="/create/location">Report an incident in your area</Link></li>
-        <li><Link to="/login">Login</Link></li>
-        <li><Link to="/signup">Sign Up</Link></li>
-        <li><Link to="/notifications">Notifications</Link></li>
+      <ul className="list" data-test="jsx-link-list">
+        <li><Link to="/" data-test="link-feed">Feed</Link></li>
+        <li><Link to="/create/location" data-test="link-create-location">Report an incident in your area</Link></li>
+        <li><Link to="/login" data-test="link-login">Login</Link></li>
+        <li><Link to="/signup" data-test="link-signup">Sign Up</Link></li>
+        <li><Link to="/notifications" data-test="link-notifications">Notifications</Link></li>
       </ul>
     </div>
   );
@@ -24,7 +24,7 @@ const NotFoundPage = ({ staticContext = {} }) => {
 
 NotFoundPage.propTypes = {
   staticContext: propTypes.shape({
-    notFound: false,
+    notFound: propTypes.bool,
   }),
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
 import Flag from '../flagwrapper';
@@ -7,7 +7,7 @@ import Flag from '../flagwrapper';
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const defaultProps = {
-  ...Flag.defaultProps,
+  ...Flag.defaultProps
 };
 
 /**
@@ -24,7 +24,7 @@ const setup = (props = {}, initialReduxState = {}) => {
 
 test('does not warn with expected props', () => {
   const expectedProps = {
-    ...defaultProps,
+    ...defaultProps
   };
 
   checkProps(Flag, expectedProps);
@@ -32,42 +32,42 @@ test('does not warn with expected props', () => {
 
 describe('render', () => {
   describe('renders non basic', () => {
-    it('renders without error', () => {
+    test('renders without error', () => {
       const wrapper = setup().dive();
-      expect(findByTestAttr(wrapper, 'component-flag-non-basic')).toHaveLength(1);
+      expect(findByTestAttr(wrapper, 'component-flag-non-basic').length).toBe(1);
     });
 
-    it('renders icon without error', () => {
+    test('renders icon without error', () => {
       const wrapper = setup().dive();
-      expect(findByTestAttr(wrapper, 'icon-flag')).toHaveLength(1);
+      expect(findByTestAttr(wrapper, 'icon-flag').length).toBe(1);
     });
 
-    it('does not render basic', () => {
+    test('does not render basic', () => {
       const wrapper = setup().dive();
-      expect(findByTestAttr(wrapper, 'component-flag-basic')).toHaveLength(0);
+      expect(findByTestAttr(wrapper, 'component-flag-basic').length).toBe(0);
     });
   });
 
   describe('renders basic', () => {
-    it('renders without error', () => {
+    test('renders without error', () => {
       const wrapper = setup({ basic: true }).dive();
-      expect(findByTestAttr(wrapper, 'component-flag-basic')).toHaveLength(1);
+      expect(findByTestAttr(wrapper, 'component-flag-basic').length).toBe(1);
     });
 
-    it('renders basic icon without error', () => {
+    test('renders basic icon without error', () => {
       const wrapper = setup({ basic: true }).dive();
-      expect(findByTestAttr(wrapper, 'icon-flag')).toHaveLength(1);
+      expect(findByTestAttr(wrapper, 'icon-flag').length).toBe(1);
     });
 
-    it('does not render non basic', () => {
+    test('does not render non basic', () => {
       const wrapper = setup({ basic: true }).dive();
-      expect(findByTestAttr(wrapper, 'component-flag-non-basic')).toHaveLength(0);
+      expect(findByTestAttr(wrapper, 'component-flag-non-basic').length).toBe(0);
     });
   });
 });
 
 describe('redux props', () => {
-  it('"reportSpamStart" action creator', () => {
+  test('"reportSpamStart" action creator', () => {
     const wrapper = setup();
     const reportSpamStartProps = wrapper.props().reportSpamStart;
     expect(reportSpamStartProps).toBeInstanceOf(Function);
