@@ -33,10 +33,10 @@ class LoginForm extends Component {
   }
   render() {
     return (
-      <div>
+      <div data-test="component-login-form">
         <Form onSubmit={this.handleSubmit}>
           {this.props.loginForm.errors ?
-            <Message negative>
+            <Message negative data-test="login-errors">
               <Message.Header>Authentication Error</Message.Header>
               {this.props.loginForm.message}
             </Message>
@@ -50,6 +50,7 @@ class LoginForm extends Component {
               value={this.state.email}
               onChange={this.handleInputChange}
               autoComplete="off"
+              data-test="form-email"
             />
           </Form.Field>
           <Form.Field>
@@ -60,6 +61,7 @@ class LoginForm extends Component {
               name="password"
               value={this.state.password}
               onChange={this.handleInputChange}
+              data-test="form-password"
             />
           </Form.Field>
           <Form.Field>
@@ -68,6 +70,7 @@ class LoginForm extends Component {
               fluid
               loading={this.props.loginForm.loading}
               disabled={this.props.loginForm.loading}
+              data-test="form-btn-login"
             >
               Login
             </Button>

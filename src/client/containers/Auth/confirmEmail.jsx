@@ -144,7 +144,7 @@ class ConfirmEmail extends PureComponent {
     const isEmailLink = Auth.isSignInWithEmailLink(window.location.href);
     const email = window.localStorage.getItem('email');
     return (
-      <Container>
+      <Container data-test="component-confirm-email">
         {head()}
         <Grid stackable columns="equal" style={{ padding: '1rem' }}>
           <Grid.Row>
@@ -155,25 +155,28 @@ class ConfirmEmail extends PureComponent {
                   negative
                   header="Error"
                   content={this.props.confirmEmailForm.message}
+                  data-test="confirm-email-errors"
                 />
               : null}
 
               {this.props.confirmEmailForm.isVerified ?
-                <Verified />
+                <Verified data-test="verified" />
               : null }
               {this.props.confirmEmailForm.isVerifying ?
-                <Verifying />
+                <Verifying data-test="verifying" />
               : null}
               {isEmailLink && !email ?
                 <EmailPrompt
                   email={this.state.email}
                   handleInputChange={this.handleInputChange}
+                  data-test="email-prompt"
                 />
               : null}
               {!isEmailLink ?
                 <EmailSent
                   sendEmailVerification={this.props.sendEmailVerificationAuth}
                   user={this.props.user}
+                  data-test="email-sent"
                 />
               : null}
 
