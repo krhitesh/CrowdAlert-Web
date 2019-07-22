@@ -37,7 +37,7 @@ class LoginPage extends Component {
       );
     }
     return (
-      <Container>
+      <Container data-test="component-login-page">
         {this.head()}
         <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
           <Grid columns={3} stackable verticalAlign="middle" centered>
