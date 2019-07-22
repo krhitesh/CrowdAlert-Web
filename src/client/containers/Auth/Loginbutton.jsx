@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { Button, Icon } from 'semantic-ui-react';
 
 const Loginbutton = props => (
-  <div>
+  <div data-test="component-login-btn">
     {props.login ?
-      <Button fluid secondary basic icon>
+      <Button fluid secondary basic icon data-test="btn-login">
         <Icon name="sign in" />
         Login
       </Button>
     : null }
     {props.signup ?
-      <Button fluid primary icon>
+      <Button fluid primary icon data-test="btn-signup">
         <Icon name="signup" />
         Signup
       </Button>
