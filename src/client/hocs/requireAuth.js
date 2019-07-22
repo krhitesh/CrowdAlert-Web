@@ -9,10 +9,10 @@ export default (ChildComponent) => {
   class RequireAuth extends Component {
     render() {
       if (!this.props.isLoggedIn) {
-        return <Redirect to="/login/" />;
+        return <Redirect to="/login/" data-test="component-redirect" />;
       }
 
-      return <ChildComponent {...this.props} />;
+      return <ChildComponent {...this.props} data-test="component-child-component" />;
     }
   }
 
