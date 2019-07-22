@@ -151,7 +151,7 @@ class ConfirmEmail extends PureComponent {
     const isEmailLink = Auth.isSignInWithEmailLink(window.location.href);
     const email = window.localStorage.getItem('email');
     return (
-      <Container>
+      <Container data-test="component-confirm-email">
         {head()}
         <Grid stackable columns="equal" style={{ padding: '1rem' }}>
           <Grid.Row style={{ marginTop: '5%', position: 'inherit', textAlign: 'center' }} >
