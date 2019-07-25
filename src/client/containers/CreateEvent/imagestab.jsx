@@ -146,7 +146,7 @@ class ImagesTab extends Component {
 
     // console.log(this.state);
     return (
-      <div>
+      <div data-test="component-imagestab">
         {this.head()}
         <Dimmer active={false}>
           <Loader />
@@ -171,6 +171,7 @@ class ImagesTab extends Component {
               <Grid.Column textAlign="center">
                 <p>Use device camera</p>
                 <Modal
+                  open={this.props.open || false}
                   trigger={<Button
                     icon="camera"
                     fluid
@@ -184,6 +185,7 @@ class ImagesTab extends Component {
                   />}
                   closeIcon
                   basic
+                  data-test="camera-modal"
                 >
                   <Modal.Header>Click a Photo</Modal.Header>
                   <Modal.Content>
@@ -224,6 +226,7 @@ class ImagesTab extends Component {
                   ref={(node) => { this.dropzoneRef = node; }}
                   onDrop={this.handleFileSelect}
                   style={{ display: 'none' }}
+                  data-test="dropzone"
                 />
                 <p>Upload from device</p>
                 <Button
@@ -237,6 +240,7 @@ class ImagesTab extends Component {
                     }}
                   onClick={() => { this.dropzoneRef.open(); }}
                   disabled={this.props.reportForm.imageSelectDisabled}
+                  data-test="btn-upload-from-device"
                 />
               </Grid.Column>
             </Grid.Row>
@@ -248,6 +252,7 @@ class ImagesTab extends Component {
             negative
             header="Error during upload"
             content="Some of the images might not have been uploaded. Please retry"
+            data-test="upload-error"
           />
           :
           null
@@ -256,7 +261,7 @@ class ImagesTab extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column>
-                <SemanticImage.Group size="tiny">
+                <SemanticImage.Group size="tiny" data-test="image-group">
                   {
                     Object.keys(this.state.images).map((key) => {
                       const image = this.state.images[key];
@@ -292,12 +297,13 @@ class ImagesTab extends Component {
                     percent={parseInt((uploaded / total) * 100, 10) || 10}
                     color="teal"
                     indicating
+                    data-test="upload-progress"
                   />
                 : null
                 }
                 {
                   Object.keys(this.state.images).length ?
-                    <div>
+                    <div data-test="action-btns">
                       {parseInt((uploaded / total), 10) ?
                         <Button
                           as={Link}

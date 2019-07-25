@@ -32,7 +32,7 @@ const reduxPiece = {
 const setup = (props = {}, initialReduxState = {}) => {
   const store = storeFactory(initialReduxState);
   const setupProps = { ...defaultProps, ...props };
-  const wrapper = shallow(<LoginForm {...setupProps} store={store} />).dive();
+  const wrapper = shallow(<LoginForm {...setupProps} store={store} />);
   return wrapper;
 };
 
@@ -51,27 +51,27 @@ test('does not throw warning with expected props', () => {
 
 describe('render', () => {
   test('renders without errors', () => {
-    const wrapper = setup({}, reduxPiece);
+    const wrapper = setup({}, reduxPiece).dive();
     expect(findByTestAttr(wrapper, 'component-login-form').length).toBe(1);
   });
 
   test('does not render errors', () => {
-    const wrapper = setup({}, reduxPiece);
+    const wrapper = setup({}, reduxPiece).dive();
     expect(findByTestAttr(wrapper, 'login-errors').length).toBe(0);
   });
 
   test('renders email field without errors', () => {
-    const wrapper = setup({}, reduxPiece);
+    const wrapper = setup({}, reduxPiece).dive();
     expect(findByTestAttr(wrapper, 'form-email').length).toBe(1);
   });
 
   test('renders  password field without errors', () => {
-    const wrapper = setup({}, reduxPiece);
+    const wrapper = setup({}, reduxPiece).dive();
     expect(findByTestAttr(wrapper, 'form-password').length).toBe(1);
   });
 
   test('renders button without errors', () => {
-    const wrapper = setup({}, reduxPiece);
+    const wrapper = setup({}, reduxPiece).dive();
     expect(findByTestAttr(wrapper, 'form-btn-login').length).toBe(1);
   });
 });
@@ -93,7 +93,7 @@ describe('redux props', () => {
   });
 
   test('"submitEmailPasswordAuthentication" action creator', () => {
-    const submitEmailPasswordAuthenticationProps = wrapper.instance().props.submitEmailPasswordAuthentication;
+    const submitEmailPasswordAuthenticationProps = wrapper.props().submitEmailPasswordAuthentication;
     expect(submitEmailPasswordAuthenticationProps).toBeInstanceOf(Function);
   });
 });

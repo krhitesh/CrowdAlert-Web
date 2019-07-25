@@ -222,7 +222,7 @@ class Viewevent extends Component {
       ({ latitude: lat, longitude: lng } = this.props.event.data.location.coords);
     }
     return (
-      <div style={{ paddingTop: '1rem', marginBottom: '6rem' }}>
+      <div style={{ paddingTop: '1rem', marginBottom: '6rem' }} data-test="component-viewevent">
         {this.head()}
         <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
           <div style={styleSheet.mobile.mapContainer}>
@@ -231,13 +231,14 @@ class Viewevent extends Component {
               longitude={lng}
               type={this.props.event.data.category}
               loading={this.props.event.isLoading}
+              data-test="component-mapwithsonar"
             />
 
           </div>
           <Item style={styleSheet.mobile.itemContainer}>
             {
               this.props.event.isLoading
-              ? <LoadingCard loading />
+              ? <LoadingCard loading data-test="component-loadingcard" />
               :
               <EventCard
                 viewmode="mobile"
@@ -250,11 +251,13 @@ class Viewevent extends Component {
                 eventType={this.props.event.data.category}
                 uuid={this.props.match.params.eventid}
                 spam={this.props.event.data.spam}
+                data-test="component-event-card"
               />
           }
             {!this.props.event.isLoading ?
               <CommentsSection
                 threadId={this.props.match.params.eventid}
+                data-test="component-comments-section"
               />
             : null }
           </Item>
@@ -270,6 +273,7 @@ class Viewevent extends Component {
                       longitude={lng}
                       type={this.props.event.data.category}
                       loading={this.props.event.isLoading}
+                      data-test="component-mapwithsonar"
                     />
                   </div>
                 </Grid.Column>
@@ -277,7 +281,7 @@ class Viewevent extends Component {
                   <Item style={styleSheet.desktop.itemContainer}>
                     {
                       this.props.event.isLoading
-                        ? <LoadingCard loading />
+                        ? <LoadingCard loading data-test="component-loadingcard" />
                         :
                         <EventCard
                           viewmode="desktop"
@@ -290,11 +294,13 @@ class Viewevent extends Component {
                           eventType={this.props.event.data.category}
                           spam={this.props.event.data.spam}
                           uuid={this.props.match.params.eventid}
+                          data-test="component-event-card"
                         />
                     }
                     {!this.props.event.isLoading ?
                       <CommentsSection
                         threadId={this.props.match.params.eventid}
+                        data-test="component-comments-section"
                       />
                     : null }
                   </Item>

@@ -33,10 +33,10 @@ class SignUpForm extends PureComponent {
   }
   render() {
     return (
-      <div>
-        <Form onSubmit={this.handleSubmit}>
+      <div data-test="component-signupform">
+        <Form onSubmit={this.handleSubmit} data-test="signup-form">
           {this.props.signupForm.errors ?
-            <Message negative>
+            <Message negative data-test="errors">
               <Message.Header>Authentication Error</Message.Header>
               {this.props.signupForm.message}
             </Message>
@@ -49,6 +49,7 @@ class SignUpForm extends PureComponent {
               autoComplete="off"
               value={this.state.fullname}
               onChange={this.handleInputChange}
+              data-test="input-fullname"
             />
           </Form.Field>
           <Form.Field>
@@ -60,6 +61,7 @@ class SignUpForm extends PureComponent {
               autoComplete="off"
               value={this.state.email}
               onChange={this.handleInputChange}
+              data-test="input-email"
             />
           </Form.Field>
           <Form.Field>
@@ -70,6 +72,7 @@ class SignUpForm extends PureComponent {
               type="password"
               value={this.state.password}
               onChange={this.handleInputChange}
+              data-test="input-password"
             />
           </Form.Field>
           <Form.Field>
@@ -78,6 +81,7 @@ class SignUpForm extends PureComponent {
               fluid
               loading={this.props.signupForm.loading}
               disabled={this.props.signupForm.loading}
+              data-test="btn-submit"
             >
               Sign up
             </Button>
