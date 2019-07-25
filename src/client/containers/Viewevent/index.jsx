@@ -245,7 +245,7 @@ class Viewevent extends Component {
       ({ latitude: lat, longitude: lng } = this.props.event.data.location.coords);
     }
     return (
-      <div style={{ paddingTop: '1rem', marginBottom: '6rem' }}>
+      <div style={{ paddingTop: '1rem', marginBottom: '6rem' }} data-test="component-viewevent">
         {this.head()}
         <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
           <div style={styleSheet.mobile.mapContainer}>

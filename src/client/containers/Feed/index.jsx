@@ -101,13 +101,13 @@ class Feed extends Component {
           />
         ));
     return (
-      <div style={style}>
+      <div style={style} data-test="component-feed">
         {this.head()}
-        <MapWrapper shouldFetch>
+        <MapWrapper shouldFetch data-test="component-map-wrapper">
           { Markers }
         </MapWrapper>
-        <EventPreviewCard />
-        <GeoLocator />
+        <EventPreviewCard data-test="component-event-preview-card" />
+        <GeoLocator data-test="component-geolocator" />
       </div>
     );
   }

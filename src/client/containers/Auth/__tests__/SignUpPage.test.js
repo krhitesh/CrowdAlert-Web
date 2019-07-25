@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
 import LoginPage from '../SignUpPage';
@@ -10,7 +10,7 @@ Enzyme.configure({ adapter: new EnzymeAdapter() });
 const reduxPiece = {
   auth: {
     isLoggedIn: false,
-  },
+  }
 };
 
 /**
@@ -25,59 +25,59 @@ const setup = (props = {}, initialReduxState = {}) => {
 };
 
 test('does not throw warning with expected props', () => {
-  const expectedProps = {
-    setBottomBarVisibility: jest.fn(),
-    removeBottomBarVisibility: jest.fn(),
-  };
+    const expectedProps = {
+        setBottomBarVisibility: jest.fn(),
+        removeBottomBarVisibility: jest.fn()
+    };
 
-  checkProps(LoginPage.component, expectedProps);
+    checkProps(LoginPage.component, expectedProps);
 });
 
 describe('render test', () => {
-  it('renders login page component without errors', () => {
-    const wrapper = setup({}, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'component-signup-page')).toHaveLength(1);
-  });
+    test('renders login page component without errors', () => {
+        const wrapper = setup({}, reduxPiece).dive();
+        expect(findByTestAttr(wrapper, 'component-signup-page').length).toBe(1);
+    });
 
-  it('renders login form component without errors', () => {
-    const wrapper = setup({}, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'component-signup-form')).toHaveLength(1);
-  });
+    test('renders login form component without errors', () => {
+        const wrapper = setup({}, reduxPiece).dive();
+        expect(findByTestAttr(wrapper, 'component-signup-form').length).toBe(1);
+    });
 
-  it('renders oauth component without errors', () => {
-    const wrapper = setup({}, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'component-oauth')).toHaveLength(1);
-  });
+    test('renders oauth component without errors', () => {
+        const wrapper = setup({}, reduxPiece).dive();
+        expect(findByTestAttr(wrapper, 'component-oauth').length).toBe(1);
+    });
 
-  it('renders responsivev login form component without errors', () => {
-    const wrapper = setup({}, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'res-signup-form')).toHaveLength(1);
-  });
+    test('renders responsivev login form component without errors', () => {
+        const wrapper = setup({}, reduxPiece).dive();
+        expect(findByTestAttr(wrapper, 'res-signup-form').length).toBe(1);
+    });
 
-  it('renders signup link without errors', () => {
-    const wrapper = setup({}, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'link-login')).toHaveLength(1);
-  });
-
-  it('renders responsive oauth component without errors', () => {
-    const wrapper = setup({}, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'res-component-oauth')).toHaveLength(1);
-  });
+    test('renders signup link without errors', () => {
+        const wrapper = setup({}, reduxPiece).dive();
+        expect(findByTestAttr(wrapper, 'link-login').length).toBe(1);
+    });
+    
+    test('renders responsive oauth component without errors', () => {
+        const wrapper = setup({}, reduxPiece).dive();
+        expect(findByTestAttr(wrapper, 'res-component-oauth').length).toBe(1);
+    });
 });
 
 describe('redux props', () => {
-  let wrapper;
-  beforeEach(() => {
-    wrapper = setup({}, reduxPiece);
-  });
+    let wrapper;
+    beforeEach(() => {
+        wrapper = setup({}, reduxPiece);
+    });
 
-  it('"removeBottomBarVisibility" action creator', () => {
-    const removeBottomBarVisibilityProps = wrapper.props().removeBottomBarVisibility;
-    expect(removeBottomBarVisibilityProps).toBeInstanceOf(Function);
-  });
+    test('"removeBottomBarVisibility" action creator', () => {
+        const removeBottomBarVisibilityProps = wrapper.props().removeBottomBarVisibility;
+        expect(removeBottomBarVisibilityProps).toBeInstanceOf(Function);
+    });
 
-  it('"setBottomBarVisibility" action creator', () => {
-    const setBottomBarVisibilityProps = wrapper.props().setBottomBarVisibility;
-    expect(setBottomBarVisibilityProps).toBeInstanceOf(Function);
-  });
+    test('"setBottomBarVisibility" action creator', () => {
+        const setBottomBarVisibilityProps = wrapper.props().setBottomBarVisibility;
+        expect(setBottomBarVisibilityProps).toBeInstanceOf(Function);
+    });
 });

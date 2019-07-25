@@ -1,6 +1,7 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
+import { Link } from 'react-router-dom';
 import { findByTestAttr, checkProps, storeFactory } from '../../../tests/testUtils';
 import MapsTab from '../mapstab';
 
@@ -10,13 +11,13 @@ const reduxPiece = {
   map: {
     lat: 26.3434,
     lng: 80.2321,
-    zoom: 14,
+    zoom: 14
   },
   createEvents: {
     tabs: {
       isValid: {
-        location: true,
-      },
+        location: true
+      }
     },
     details: {
       help: true,
@@ -24,7 +25,7 @@ const reduxPiece = {
       title: 'title',
       eventType: '',
       anonymous: false,
-      description: 'description',
+      description: 'description'
     },
     form: {
       eventID: '',
@@ -34,11 +35,11 @@ const reduxPiece = {
     location: {
       mapCenter: {
         lat: 26.3423,
-        lng: 80.1213,
+        lng: 80.1213
       },
-      text: '',
-    },
-  },
+      text: ''
+    }
+  }
 };
 
 /**
@@ -59,7 +60,7 @@ test('does not throw warning with expected props', () => {
     reportForm: reduxPiece.createEvents.form,
     map: reduxPiece.createEvents.map,
     tabs: reduxPiece.createEvents.tabs,
-    location: reduxPiece.createEvents.location,
+    location: reduxPiece.createEvents.location
   };
 
   checkProps(MapsTab, expectedProps);
@@ -71,24 +72,24 @@ describe('renders', () => {
     wrapper = setup({}, reduxPiece).dive();
   });
 
-  it('renders without error', () => {
-    expect(findByTestAttr(wrapper, 'component-mapstab')).toHaveLength(1);
+  test('renders without error', () => {
+    expect(findByTestAttr(wrapper, 'component-mapstab').length).toBe(1);
   });
 
-  it('renders map wrapper without error', () => {
-    expect(findByTestAttr(wrapper, 'mapwrapper')).toHaveLength(1);
+  test('renders map wrapper without error', () => {
+    expect(findByTestAttr(wrapper, 'mapwrapper').length).toBe(1);
   });
 
-  it('renders sonar without error', () => {
-    expect(findByTestAttr(wrapper, 'location-sonar')).toHaveLength(1);
+  test('renders sonar without error', () => {
+    expect(findByTestAttr(wrapper, 'location-sonar').length).toBe(1);
   });
 
-  it('renders geolocator without error', () => {
-    expect(findByTestAttr(wrapper, 'geolocator')).toHaveLength(1);
+  test('renders geolocator without error', () => {
+    expect(findByTestAttr(wrapper, 'geolocator').length).toBe(1);
   });
 
-  it('renders to details button without error', () => {
-    expect(findByTestAttr(wrapper, 'details-btn')).toHaveLength(1);
+  test('renders to details button without error', () => {
+    expect(findByTestAttr(wrapper, 'details-btn').length).toBe(1);
   });
 });
 
@@ -98,13 +99,13 @@ describe('redux props', () => {
     wrapper = setup({}, reduxPiece);
   });
 
-  it('has redux piece of state', () => {
+  test('has redux piece of state', () => {
     const reduxProps = {
       createEvents: {
         details: wrapper.props().details,
         form: wrapper.props().reportForm,
         tabs: wrapper.props().tabs,
-        location: wrapper.props().location,
+        location: wrapper.props().location
       },
       map: wrapper.props().map,
     };
@@ -112,7 +113,7 @@ describe('redux props', () => {
     expect(reduxProps).toEqual(reduxPiece);
   });
 
-  it('"handleSaveLocation" action creator', () => {
+  test('"handleSaveLocation" action creator', () => {
     const handleSaveLocationProps = wrapper.props().handleSaveLocation;
     expect(handleSaveLocationProps).toBeInstanceOf(Function);
   });
