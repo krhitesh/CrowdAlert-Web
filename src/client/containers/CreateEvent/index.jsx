@@ -10,12 +10,12 @@ import requireAuth from '../../hocs/requireAuth';
 
 const CreateEvent = (props) => {
   return (
-    <Container style={{ paddingBottom: '16vh' }}>
+    <Container style={{ paddingBottom: '16vh' }} data-test="component-create-event">
       <br />
       <Switch>
-        <Route path={`${props.match.path}/location`} component={MapTab} />
-        <Route path={`${props.match.path}/details`} component={FormTab} />
-        <Route path={`${props.match.path}/images`} component={ImageTab} />
+        <Route path={`${props.match.path}/location`} component={MapTab} data-test="maptab-route" />
+        <Route path={`${props.match.path}/details`} component={FormTab} data-test="formtab-route" />
+        <Route path={`${props.match.path}/images`} component={ImageTab} data-test="imagetab-route" />
         <Route render={() => (<Redirect to={`${props.match.path}/location`} />)} />
       </Switch>
     </Container>
@@ -38,4 +38,5 @@ CreateEvent.propTypes = {
 
 export default {
   component: withRouter(connect(mapStateToProps)(requireAuth(CreateEvent))),
+  pureComponent: connect(mapStateToProps)(CreateEvent)
 };

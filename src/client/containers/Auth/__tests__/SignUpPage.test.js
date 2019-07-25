@@ -2,13 +2,14 @@ import React from 'react';
 import Enzyme, { shallow, mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
-import LoginPage from '../LoginPage';
+import LoginPage from '../SignUpPage';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
+// Can pass empty Object {} too.
 const reduxPiece = {
   auth: {
-    isLoggedIn: true,
+    isLoggedIn: false,
   }
 };
 
@@ -25,53 +26,41 @@ const setup = (props = {}, initialReduxState = {}) => {
 
 test('does not throw warning with expected props', () => {
     const expectedProps = {
-        isLoggedIn: false,
-        removeBottomBarVisibility: jest.fn(),
-        setBottomBarVisibility: jest.fn()
+        setBottomBarVisibility: jest.fn(),
+        removeBottomBarVisibility: jest.fn()
     };
 
     checkProps(LoginPage.component, expectedProps);
 });
 
-describe('renders', () => {
-    test('redirects to root', () => {
-        const wrapper = setup({}, reduxPiece).dive();
-        expect(findByTestAttr(wrapper, 'redirect-root').length).toBe(1);
-    });
-
-    const rp = {
-        auth: {
-            isLoggedIn: false
-        }
-    }
-
+describe('render test', () => {
     test('renders login page component without errors', () => {
-        const wrapper = setup({}, rp).dive();
-        expect(findByTestAttr(wrapper, 'component-login-page').length).toBe(1);
+        const wrapper = setup({}, reduxPiece).dive();
+        expect(findByTestAttr(wrapper, 'component-signup-page').length).toBe(1);
     });
 
     test('renders login form component without errors', () => {
-        const wrapper = setup({}, rp).dive();
-        expect(findByTestAttr(wrapper, 'component-login-form').length).toBe(1);
+        const wrapper = setup({}, reduxPiece).dive();
+        expect(findByTestAttr(wrapper, 'component-signup-form').length).toBe(1);
     });
 
     test('renders oauth component without errors', () => {
-        const wrapper = setup({}, rp).dive();
+        const wrapper = setup({}, reduxPiece).dive();
         expect(findByTestAttr(wrapper, 'component-oauth').length).toBe(1);
     });
 
     test('renders responsivev login form component without errors', () => {
-        const wrapper = setup({}, rp).dive();
-        expect(findByTestAttr(wrapper, 'res-login-form').length).toBe(1);
+        const wrapper = setup({}, reduxPiece).dive();
+        expect(findByTestAttr(wrapper, 'res-signup-form').length).toBe(1);
     });
 
     test('renders signup link without errors', () => {
-        const wrapper = setup({}, rp).dive();
-        expect(findByTestAttr(wrapper, 'link-signup').length).toBe(1);
+        const wrapper = setup({}, reduxPiece).dive();
+        expect(findByTestAttr(wrapper, 'link-login').length).toBe(1);
     });
     
     test('renders responsive oauth component without errors', () => {
-        const wrapper = setup({}, rp).dive();
+        const wrapper = setup({}, reduxPiece).dive();
         expect(findByTestAttr(wrapper, 'res-component-oauth').length).toBe(1);
     });
 });
@@ -80,16 +69,6 @@ describe('redux props', () => {
     let wrapper;
     beforeEach(() => {
         wrapper = setup({}, reduxPiece);
-    });
-
-    test('has redux piece of state', () => {
-        const reduxProps = {
-            auth: {
-                isLoggedIn: wrapper.props().isLoggedIn
-            }
-        };
-
-        expect(reduxProps).toEqual(reduxPiece);
     });
 
     test('"removeBottomBarVisibility" action creator', () => {

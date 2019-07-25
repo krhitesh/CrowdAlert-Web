@@ -33,7 +33,7 @@ class LoginPage extends Component {
   }
   render() {
     return (
-      <Container>
+      <Container data-test="component-signup-page">
         {this.head()}
         <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
           <Grid columns={3} stackable verticalAlign="middle" centered>
@@ -49,10 +49,10 @@ class LoginPage extends Component {
                           <Header as="h3">CrowdAlert</Header>
                         </Segment>
                         <Segment>
-                          <SignUpForm />
+                          <SignUpForm data-test="component-signup-form" />
                         </Segment>
                         <Segment secondary attached basic style={{ minHeight: '20vh' }}>
-                          <OAuth />
+                          <OAuth data-test="component-oauth" />
                         </Segment>
                       </Segment.Group>
                     </Grid.Column>
@@ -73,16 +73,16 @@ class LoginPage extends Component {
                     <Header as="h3">CrowdAlert</Header>
                   </Segment>
                   <Segment>
-                    <SignUpForm />
+                    <SignUpForm data-test="res-signup-form" />
                   </Segment>
                   <Segment secondary attached basic style={{ padding: '2vh' }}>
-                    <Link to="/login">
+                    <Link to="/login" data-test="link-login">
                       <Button secondary fluid basic>
                         Login
                       </Button>
                     </Link>
                     <Divider horizontal>Or</Divider>
-                    <OAuth />
+                    <OAuth data-test="res-component-oauth" />
                   </Segment>
                 </Segment.Group>
               </Grid.Column>
