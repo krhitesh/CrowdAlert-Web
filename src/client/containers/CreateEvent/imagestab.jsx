@@ -146,7 +146,7 @@ class ImagesTab extends Component {
 
     // console.log(this.state);
     return (
-      <div>
+      <div data-test="component-imagestab">
         {this.head()}
         <Dimmer active={false}>
           <Loader />
