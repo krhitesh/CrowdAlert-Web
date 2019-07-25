@@ -30,7 +30,7 @@ const head = () => (
 );
 
 const MapTab = props => (
-  <Segment>
+  <Segment data-test="component-mapstab">
     {head()}
     <Progress
       percent={33}

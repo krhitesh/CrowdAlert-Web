@@ -12,7 +12,7 @@ const sendData = (params, lat, lng, zoom, distance, MPP) => {
       min: MPP,
     });
     params.socket.send(data);
-  } else if (params.socket.readyState === WebSocket.CONNECTING) {
+  } else if (params.socket.readyState === WebSocket.CONNECTING && process.env.NODE_ENV !== "production" && process.env.JEST_WORKER_ID === undefined) {
     console.log('WebSocket not ready yet');
   } else if (params.socket.readyState === WebSocket.CLOSED) {
     console.log('WebSocket is disconnected.');

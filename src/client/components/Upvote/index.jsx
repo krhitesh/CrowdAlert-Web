@@ -77,7 +77,6 @@ class Upvote extends Component {
       hasUpvoted: false,
     };
     this.handleClick = this.handleClick.bind(this);
-    console.log(this.props);
   }
   componentDidMount() {
     this.props.fetchUpvotesStart(this.props.uuid, this.state.count, true);

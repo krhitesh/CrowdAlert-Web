@@ -21,13 +21,15 @@ const Tabs = (props) => {
         onClick={() => props.handleTabChange(0)}
         data-test="step-0"
       >
-        <Icon circular color="yellow" name="map outline" size="small" />
-        <Responsive fireOnMount getWidth={getWidth} minWidth={901}>
-          <Step.Content>
-            <Step.Title>Location</Step.Title>
-            <Step.Description>{props.location.text}</Step.Description>
-          </Step.Content>
-        </Responsive>
+        <span data-test="step-0-content">
+          <Icon circular color="yellow" name="map outline" size="small" />
+          <Responsive fireOnMount getWidth={getWidth} minWidth={901}>
+            <Step.Content>
+              <Step.Title>Location</Step.Title>
+              <Step.Description>{props.location.text}</Step.Description>
+            </Step.Content>
+          </Responsive>
+        </span>
 
       </Step>
       <Step

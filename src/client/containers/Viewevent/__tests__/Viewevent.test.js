@@ -9,14 +9,7 @@ Enzyme.configure({ adapter: new EnzymeAdapter() });
 const reduxPiece = {
   map: {
     lat: 26.2323,
-    lng: 80.2322,
-    polyline: {
-      isVisible: false,
-      bounds: null,
-      fitBounds: false,
-      data: [{ lat: -34.397, lng: 150.644 }, { lat: -35.397, lng: 151.644 }],
-      distance: null,
-    },
+    lng: 80.2322
   },
   event: {
     reverse_geocode: {},
@@ -134,36 +127,35 @@ describe('render test with loading', () => {
 });
 
 describe('redux props', () => {
-  let wrapper;
-  beforeEach(() => {
-    wrapper = setup({ match: { params: { eventid: 'eventid' } } }, reduxPiece);
-  });
+    let wrapper;
+    beforeEach(() => {
+        wrapper = setup({ match: { params: { eventid: 'eventid' } } }, reduxPiece);
+    });
 
-  it('has redux piece of state', () => {
-    const reduxProps = {
-      map: wrapper.props().map,
-      event: wrapper.props().event,
-      auth: {
-        isLoggedIn: wrapper.props().isLoggedIn,
-      },
-    };
+    test('has redux piece of state', () => {
+        const reduxProps = {
+            map: wrapper.props().map,
+            event: wrapper.props().event,
+            auth: {
+                isLoggedIn: wrapper.props().isLoggedIn
+            }
+        };
 
-    expect(reduxProps).toEqual(reduxPiece);
-  });
+        expect(reduxProps).toEqual(reduxPiece);
+    });
 
-  it('"fetchCommentThreadSuccessViaWebSocket" action creator', () => {
-    const fetchCommentThreadSuccessViaWebSocketProps = wrapper.props()
-      .fetchCommentThreadSuccessViaWebSocket;
-    expect(fetchCommentThreadSuccessViaWebSocketProps).toBeInstanceOf(Function);
-  });
+    test('"fetchCommentThreadSuccessViaWebSocket" action creator', () => {
+        const fetchCommentThreadSuccessViaWebSocketProps = wrapper.props().fetchCommentThreadSuccessViaWebSocket;
+        expect(fetchCommentThreadSuccessViaWebSocketProps).toBeInstanceOf(Function);
+    });
 
-  it('"getUserLocation" action creator', () => {
-    const getUserLocationProps = wrapper.props().getUserLocation;
-    expect(getUserLocationProps).toBeInstanceOf(Function);
-  });
+    test('"fetchEventData" action creator', () => {
+        const fetchEventDataProps = wrapper.props().fetchEventData;
+        expect(fetchEventDataProps).toBeInstanceOf(Function);
+    });
 
-  it('"updateUpvotesLongPollStatus" action creator', () => {
-    const updateUpvotesLongPollStatusProps = wrapper.props().updateUpvotesLongPollStatus;
-    expect(updateUpvotesLongPollStatusProps).toBeInstanceOf(Function);
-  });
+    test('"updateUpvotesLongPollStatus" action creator', () => {
+        const updateUpvotesLongPollStatusProps = wrapper.props().updateUpvotesLongPollStatus;
+        expect(updateUpvotesLongPollStatusProps).toBeInstanceOf(Function);
+    });
 });

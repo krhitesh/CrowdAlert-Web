@@ -1,16 +1,12 @@
 import React from 'react';
 import Enzyme, { shallow, mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
-import setupNavigatorMock from '../../../../../__mocks__/navigatorMock';
 import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
 import Feed from '../index';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const reduxPiece = {
-  eventPreview: {
-    isOpen: false,
-  },
   map: {
     lat: 26.2323,
     lng: 80.2322,
@@ -32,8 +28,6 @@ const setup = (props = {}, initialReduxState = {}) => {
   const wrapper = shallow(<Feed.component {...props} store={store} />);
   return wrapper;
 };
-
-beforeAll(setupNavigatorMock);
 
 test('does not throw warning with expected props', () => {
     const expectedProps = {
@@ -73,43 +67,35 @@ describe('render test', () => {
 });
 
 describe('redux props', () => {
-  let wrapper;
-  beforeEach(() => {
-    wrapper = setup({}, reduxPiece);
-  });
+    let wrapper;
+    beforeEach(() => {
+        wrapper = setup({}, reduxPiece);
+    });
 
-  it('has redux piece of state', () => {
-    const reduxProps = {
-      map: wrapper.props().mapProps,
-      feed: wrapper.props().feedProps,
-      auth: {
-        isLoggedIn: wrapper.props().isLoggedIn,
-      },
-      eventPreview: wrapper.props().eventPreview,
-    };
+    test('has redux piece of state', () => {
+        const reduxProps = {
+            map: wrapper.props().mapProps,
+            feed: wrapper.props().feedProps,
+            auth: {
+                isLoggedIn: wrapper.props().isLoggedIn
+            }
+        };
 
-    expect(reduxProps).toEqual(reduxPiece);
-  });
+        expect(reduxProps).toEqual(reduxPiece);
+    });
 
-  it('"fetchUserLocation" action creator', () => {
-    const fetchUserLocationProps = wrapper.props().fetchUserLocation;
-    expect(fetchUserLocationProps).toBeInstanceOf(Function);
-  });
+    test('"fetchUserLocation" action creator', () => {
+        const fetchUserLocationProps = wrapper.props().fetchUserLocation;
+        expect(fetchUserLocationProps).toBeInstanceOf(Function);
+    });
 
-  it('"fetchEventsByLocation" action creator', () => {
-    const fetchEventsByLocationProps = wrapper.props().fetchEventsByLocation;
-    expect(fetchEventsByLocationProps).toBeInstanceOf(Function);
-  });
+    test('"fetchEventsByLocation" action creator', () => {
+        const fetchEventsByLocationProps = wrapper.props().fetchEventsByLocation;
+        expect(fetchEventsByLocationProps).toBeInstanceOf(Function);
+    });
 
-  it('"fetchEventsByLocationOverWebSocket" action creator', () => {
-    const fetchEventsByLocationOverWebSocketProps = wrapper.props()
-      .fetchEventsByLocationOverWebSocket;
-    expect(fetchEventsByLocationOverWebSocketProps).toBeInstanceOf(Function);
-  });
-
-  it('"updateMapPolyline" action creator', () => {
-    const updateMapPolylineProps = wrapper.props()
-      .updateMapPolyline;
-    expect(updateMapPolylineProps).toBeInstanceOf(Function);
-  });
+    test('"fetchEventsByLocationOverWebSocket" action creator', () => {
+        const fetchEventsByLocationOverWebSocketProps = wrapper.props().fetchEventsByLocationOverWebSocket;
+        expect(fetchEventsByLocationOverWebSocketProps).toBeInstanceOf(Function);
+    });
 });
