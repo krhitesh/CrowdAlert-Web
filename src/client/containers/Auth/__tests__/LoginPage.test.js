@@ -93,12 +93,12 @@ describe('redux props', () => {
     });
 
     test('"removeBottomBarVisibility" action creator', () => {
-        const removeBottomBarVisibilityProps = wrapper.instance().props.removeBottomBarVisibility;
+        const removeBottomBarVisibilityProps = wrapper.props().removeBottomBarVisibility;
         expect(removeBottomBarVisibilityProps).toBeInstanceOf(Function);
     });
 
     test('"setBottomBarVisibility" action creator', () => {
-        const setBottomBarVisibilityProps = wrapper.instance().props.setBottomBarVisibility;
+        const setBottomBarVisibilityProps = wrapper.props().setBottomBarVisibility;
         expect(setBottomBarVisibilityProps).toBeInstanceOf(Function);
     });
 });

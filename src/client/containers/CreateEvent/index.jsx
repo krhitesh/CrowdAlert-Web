@@ -38,4 +38,5 @@ CreateEvent.propTypes = {
 
 export default {
   component: withRouter(connect(mapStateToProps)(requireAuth(CreateEvent))),
+  pureComponent: connect(mapStateToProps)(CreateEvent)
 };

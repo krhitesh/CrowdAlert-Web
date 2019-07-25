@@ -47,7 +47,7 @@ const FormTab = (props) => {
     return (<Redirect to="/create/images" data-test="redirect-images" />);
   }
   return (
-    <Segment>
+    <Segment data-test="component-formtab">
       {head()}
       <Progress
         percent={66}
