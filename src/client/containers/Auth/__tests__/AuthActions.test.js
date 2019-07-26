@@ -49,7 +49,7 @@ describe('testing auth actions', () => {
     const payload = {
       email: 'email',
       password: 'password'
-    };
+    }
     const action = submitEmailPasswordAuthentication(payload.email, payload.password);
     expect(action).toEqual({
       type: AUTH_LOGIN_SUBMIT_EMAIL_PASSWORD,
@@ -218,7 +218,7 @@ describe('testing auth actions', () => {
   test("signUpEmailPasswordSuccess", () => {
     const payload = {
       fullname: 'fullname'
-    };
+    }
     const action = signUpEmailPasswordSuccess(payload.fullname);
     expect(action).toEqual({
       type: AUTH_SIGNUP_EMAIL_PASSWORD_SUCCESS,
