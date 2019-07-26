@@ -37,7 +37,7 @@ const insertCss = (...styles) => {
 };
 
 const Client = () => (
-  <StyleContext.Provider value={{ insertCss }}>
+  <StyleContext.Provider value={{ insertCss }} data-test="component-client">
     <Provider store={store}>
       <ConnectedRouter history={history}>
         <div>{renderRoutes(Routes)}</div>
