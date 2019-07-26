@@ -12,82 +12,82 @@ import {
   reportSpamModalClose,
   reportSpamModalOpen,
   reportSpamStart,
-  reportSpamSuccess,
+  reportSpamSuccess
 } from '../actions';
 
 describe('testing spam report actions', () => {
-  it('reportSpamStart', () => {
+  test('reportSpamStart', () => {
     const payload = {
-      uuid: 'uuid',
+      uuid: 'uuid'
     };
     const action = reportSpamStart(payload.uuid);
     expect(action).toEqual({
       type: SPAM_REPORT_REPORT_SPAM_START,
-      payload,
+      payload
     });
   });
 
-  it('reportSpamSuccess', () => {
+  test('reportSpamSuccess', () => {
     const payload = {
       response: {
-        status: 'ok',
-      },
+        'status': 'ok'
+      }
     };
     const action = reportSpamSuccess(payload);
     expect(action).toEqual({
       type: SPAM_REPORT_REPORT_SPAM_SUCCESS,
-      payload,
+      payload
     });
   });
 
-  it('reportSpamError', () => {
+  test('reportSpamError', () => {
     const response = {
-      status: 403,
+      status: 403
     };
     const action = reportSpamError(response);
     expect(action).toEqual({
       type: SPAM_REPORT_REPORT_SPAM_ERROR,
       payload: {
         message: 'You are not allowed to flag an incident. Make sure your account is verified',
-      },
+      }
     });
   });
 
-  it('report spam error', () => {
+  test('reportSpamError', () => {
     const response = {
       status: 200,
       response: {
-        detail: {},
-      },
+        detail: {}
+      }
     };
     const action = reportSpamError(response);
     expect(action).toEqual({
       type: SPAM_REPORT_REPORT_SPAM_ERROR,
       payload: {
         message: response.response.detail,
-      },
+      }
     });
   });
 
-  it('reportSpamCancel', () => {
+  test('reportSpamCancel', () => {
     const action = reportSpamCancel();
     expect(action).toEqual({
       type: SPAM_REPORT_REPORT_SPAM_CANCEL,
     });
   });
 
-  it('reportSpamModalOpen', () => {
+  test('reportSpamModalOpen', () => {
     const payload = {
-      message: 'message',
+      message: 'message'
     };
     const action = reportSpamModalOpen(payload.message);
     expect(action).toEqual({
       type: SPAM_REPORT_MODAL_OPEN,
-      payload,
+      payload
     });
   });
 
-  it('reportSpamModalClose', () => {
+  test('reportSpamModalClose', () => {
     const action = reportSpamModalClose();
     expect(action).toEqual({
       type: SPAM_REPORT_MODAL_CLOSE,

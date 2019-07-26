@@ -40,200 +40,200 @@ import {
   sendEmailVerificationAuthSuccess,
   signInOAuth,
   signInOAuthError,
-  signInOAuthSuccess,
+  signInOAuthSuccess
 } from '../actions';
 
 
 describe('testing auth actions', () => {
-  it('submitEmailPasswordAuthentication', () => {
+  test("submitEmailPasswordAuthentication", () => {
     const payload = {
       email: 'email',
-      password: 'password',
-    };
+      password: 'password'
+    }
     const action = submitEmailPasswordAuthentication(payload.email, payload.password);
     expect(action).toEqual({
       type: AUTH_LOGIN_SUBMIT_EMAIL_PASSWORD,
-      payload,
+      payload
     });
   });
 
-  it('successEmailPasswordAuthentication', () => {
+  test("successEmailPasswordAuthentication", () => {
     const action = successEmailPasswordAuthentication();
     expect(action).toEqual({
       type: AUTH_LOGIN_SUCCESS_EMAIL_PASSWORD,
     });
   });
 
-  it('errorEmailPasswordAuthentication', () => {
+  test("errorEmailPasswordAuthentication", () => {
     const payload = {
-      error: new Error('testing "errorEmailPasswordAuthentication" action'),
+      error: new Error('testing "errorEmailPasswordAuthentication" action')
     };
     const action = errorEmailPasswordAuthentication(payload);
     expect(action).toEqual({
       type: AUTH_LOGIN_ERROR_EMAIL_PASSWORD,
-      payload,
+      payload
     });
   });
 
-  it('checkUserAuthenticationStatus', () => {
+  test("checkUserAuthenticationStatus", () => {
     const action = checkUserAuthenticationStatus();
     expect(action).toEqual({
       type: AUTH_CHECK_USER_STATUS,
     });
   });
 
-  it('logoutUserAuthencation', () => {
+  test("logoutUserAuthencation", () => {
     const action = logoutUserAuthencation();
     expect(action).toEqual({
       type: AUTH_LOGOUT_SUBMIT,
     });
   });
 
-  it('logoutUserSuccess', () => {
+  test("logoutUserSuccess", () => {
     const action = logoutUserSuccess();
     expect(action).toEqual({
       type: AUTH_LOGOUT_SUCCESS,
     });
   });
 
-  it('logoutUserError', () => {
+  test("logoutUserError", () => {
     const action = logoutUserError();
     expect(action).toEqual({
       type: AUTH_LOGOUT_ERROR,
     });
   });
 
-  it('updateUserAuthenticationData', () => {
+  test("updateUserAuthenticationData", () => {
     const payload = {
       loggedIn: true,
-      user: {},
+      user: {}
     };
     const action = updateUserAuthenticationData(payload);
     expect(action).toEqual({
       type: AUTH_UPDATE_USER_DATA,
-      payload,
+      payload
     });
   });
 
-  it('sendEmailVerificationAuth', () => {
+  test("sendEmailVerificationAuth", () => {
     const payload = {
-      email: 'email',
-    };
+      email: 'email'
+    }
     const action = sendEmailVerificationAuth(payload.email);
     expect(action).toEqual({
       type: AUTH_SEND_VERIFICATION_EMAIL,
-      payload,
+      payload
     });
   });
 
-  it('sendEmailVerificationAuthSuccess', () => {
+  test("sendEmailVerificationAuthSuccess", () => {
     const action = sendEmailVerificationAuthSuccess();
     expect(action).toEqual({
       type: AUTH_SEND_VERIFICATION_EMAIL_SUCCESS,
     });
   });
 
-  it('sendEmailVerificationAuthError', () => {
+  test("sendEmailVerificationAuthError", () => {
     const payload = {
-      message: 'error',
+      message: 'error'
     };
     const action = sendEmailVerificationAuthError(payload.message);
     expect(action).toEqual({
       type: AUTH_SEND_VERIFICATION_EMAIL_ERROR,
-      payload,
+      payload
     });
   });
 
-  it('verifyEmailAuth', () => {
+  test("verifyEmailAuth", () => {
     const payload = {
-      email: 'email',
+      email: 'email'
     };
     const action = verifyEmailAuth(payload.email);
     expect(action).toEqual({
       type: AUTH_VERIFY_EMAIL_LINK,
-      payload,
+      payload
     });
   });
 
-  it('verifyEmailAuthSuccess', () => {
+  test("verifyEmailAuthSuccess", () => {
     const action = verifyEmailAuthSuccess();
     expect(action).toEqual({
       type: AUTH_VERIFY_EMAIL_LINK_SUCCESS,
     });
   });
 
-  it('verifyEmailAuthError', () => {
+  test("verifyEmailAuthError", () => {
     const payload = {
-      message: 'error',
+      message: 'error'
     };
     const action = verifyEmailAuthError(payload.message);
     expect(action).toEqual({
       type: AUTH_VERIFY_EMAIL_LINK_ERROR,
-      payload,
+      payload
     });
   });
 
-  it('signInOAuth', () => {
+  test("signInOAuth", () => {
     const payload = {
-      provider: 'Facebook',
+      provider: 'Facebook'
     };
     const action = signInOAuth(payload.provider);
     expect(action).toEqual({
       type: AUTH_OAUTH_SIGNIN,
-      payload,
+      payload
     });
   });
 
-  it('signInOAuthError', () => {
+  test("signInOAuthError", () => {
     const payload = {
-      message: 'error',
+      message: 'error'
     };
     const action = signInOAuthError(payload.message);
     expect(action).toEqual({
       type: AUTH_OAUTH_SIGNIN_ERROR,
-      payload,
+      payload
     });
   });
 
-  it('signInOAuthSuccess', () => {
+  test("signInOAuthSuccess", () => {
     const action = signInOAuthSuccess();
     expect(action).toEqual({
       type: AUTH_OAUTH_SIGNIN_SUCCESS,
     });
   });
 
-  it('signUpEmailPassword', () => {
+  test("signUpEmailPassword", () => {
     const payload = {
       email: 'email',
       fullname: 'fullname',
-      password: 'password',
+      password: 'password'
     };
     const action = signUpEmailPassword(payload.email, payload.fullname, payload.password);
     expect(action).toEqual({
       type: AUTH_SIGNUP_EMAIL_PASSWORD,
-      payload,
+      payload
     });
   });
 
-  it('signUpEmailPasswordSuccess', () => {
+  test("signUpEmailPasswordSuccess", () => {
     const payload = {
-      fullname: 'fullname',
-    };
+      fullname: 'fullname'
+    }
     const action = signUpEmailPasswordSuccess(payload.fullname);
     expect(action).toEqual({
       type: AUTH_SIGNUP_EMAIL_PASSWORD_SUCCESS,
-      payload,
+      payload
     });
   });
 
-  it('signUpEmailPasswordError', () => {
+  test("signUpEmailPasswordError", () => {
     const payload = {
-      message: 'error',
+      message: 'error'
     };
     const action = signUpEmailPasswordError(payload.message);
     expect(action).toEqual({
       type: AUTH_SIGNUP_EMAIL_PASSWORD_ERROR,
-      payload,
+      payload
     });
   });
 });

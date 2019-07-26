@@ -14,90 +14,90 @@ import {
   geolocatorLocationSuccess,
   geolocatorModalClose,
   geolocatorModalOpen,
-  geolocatoretLocationPermission,
+  geolocatoretLocationPermission
 } from '../actions';
 
 describe('testing geolocator actions', () => {
-  it('geolocatoretLocationPermission', () => {
+  test('geolocatoretLocationPermission', () => {
     const payload = {
       modal: {
         modalText: 'We need to access your location',
-        isOpen: false,
+        isOpen: false
       },
-      static: false,
+      'static': false,
       size: 'huge',
       circular: true,
       fetchOnLoad: false,
-      floated: 'right',
+      floated: 'right'
     };
 
     const action = geolocatoretLocationPermission(payload);
     expect(action).toEqual({
       type: GEOLOCATOR_LOCATION_GET_PERMISSION,
-      payload,
+      payload
     });
   });
 
-  it('geolocatorLocationDenied', () => {
+  test('geolocatorLocationDenied', () => {
     const payload = {};
 
     const action = geolocatorLocationDenied(payload);
     expect(action).toEqual({
       type: GEOLOCATOR_LOCATION_DENIED,
-      payload,
+      payload
     });
   });
 
-  it('geolocatorModalClose', () => {
+  test('geolocatorModalClose', () => {
     const payload = {};
 
     const action = geolocatorModalClose(payload);
     expect(action).toEqual({
       type: GEOLOCATOR_MODAL_CLOSE,
-      payload,
+      payload
     });
   });
 
-  it('geolocatorModalOpen', () => {
+  test('geolocatorModalOpen', () => {
     const payload = {};
 
     const action = geolocatorModalOpen(payload);
     expect(action).toEqual({
       type: GEOLOCATOR_MODAL_OPEN,
-      payload,
+      payload
     });
   });
 
-  it('geolocatorFetchLocation', () => {
+  test('geolocatorFetchLocation', () => {
     const payload = {};
 
     const action = geolocatorFetchLocation(payload);
     expect(action).toEqual({
       type: GEOLOCATOR_LOCATION_FETCH,
-      payload,
+      payload
     });
   });
 
-  it('geolocatorLocationSuccess', () => {
+  test('geolocatorLocationSuccess', () => {
     const payload = {
       lat: 26.5083242,
-      lng: 80.2263353,
+      lng: 80.2263353
     };
 
     const action = geolocatorLocationSuccess(payload);
     expect(action).toEqual({
       type: GEOLOCATOR_LOCATION_SUCCESS,
-      payload,
+      payload
     });
   });
 
-  it('geolocatorLocationFailed', () => {
+  test('geolocatorLocationFailed', () => {
     const payload = new Error('testing "geolocatorLocationFailed" action');
 
     const action = geolocatorLocationFailed(payload);
     expect(action).toEqual({
       type: GEOLOCATOR_LOCATION_FAILED,
-      payload,
+      payload
     });
   });
 });

@@ -18,32 +18,32 @@ import {
   postCommentToThread,
   postCommentToThreadError,
   postCommentToThreadSuccess,
-  postCommnetToThreadCancel,
+  postCommnetToThreadCancel
 } from '../actions';
 
 describe('testing comments actions', () => {
-  it('fetchCommentsThread', () => {
+  test("fetchCommentsThread", () => {
     const payload = {
       threadId: '',
-      showLoader: true,
+      showLoader: true
     };
     const action = fetchCommentsThread(payload.threadId, payload.showLoader);
     expect(action).toEqual({
       type: COMMENTS_FETCH_THREAD,
       payload,
       meta: {
-        ajax: true,
-      },
+        ajax: true
+      }
     });
   });
 
-  it('fetchCommentThreadSuccessViaWebSocket', () => {
+  test("fetchCommentThreadSuccessViaWebSocket", () => {
     const payload = {
       userData: {
         kwKpnj5y0ZR4QlAkTO4IGKHqsdY2: {
           displayName: 'Hitesh Kumar',
-          photoURL: 'https://lh4.googleusercontent.com/-peeRetkut0g/AAAAAAAAAAI/AAAAAAAAEIM/Ss8Rhw2EMjY/photo.jpg',
-        },
+          photoURL: 'https://lh4.googleusercontent.com/-peeRetkut0g/AAAAAAAAAAI/AAAAAAAAEIM/Ss8Rhw2EMjY/photo.jpg'
+        }
       },
       comments: {
         '7gIxAGXrNIk4kAlMBLbB': {
@@ -53,25 +53,25 @@ describe('testing comments actions', () => {
           spam: {
             uuid: '7gIxAGXrNIk4kAlMBLbB',
             count: 0,
-            toxic: {},
-          },
-        },
-      },
+            toxic: {}
+          }
+        }
+      }
     };
     const action = fetchCommentThreadSuccessViaWebSocket(payload);
     expect(action).toEqual({
       type: WS_NEW_COMMENT_RECEIVED,
-      payload,
+      payload
     });
   });
 
-  it('fetchCommentsThreadSuccess', () => {
+  test("fetchCommentsThreadSuccess", () => {
     const payload = {
       userData: {
         kwKpnj5y0ZR4QlAkTO4IGKHqsdY2: {
           displayName: 'Hitesh Kumar',
-          photoURL: 'https://lh4.googleusercontent.com/-peeRetkut0g/AAAAAAAAAAI/AAAAAAAAEIM/Ss8Rhw2EMjY/photo.jpg',
-        },
+          photoURL: 'https://lh4.googleusercontent.com/-peeRetkut0g/AAAAAAAAAAI/AAAAAAAAEIM/Ss8Rhw2EMjY/photo.jpg'
+        }
       },
       comments: {
         G51PfyBx0scM4BwU02yB: {
@@ -81,8 +81,8 @@ describe('testing comments actions', () => {
           spam: {
             uuid: 'G51PfyBx0scM4BwU02yB',
             count: 0,
-            toxic: {},
-          },
+            toxic: {}
+          }
         },
         HIuwwlBlQqacTASx6ru1: {
           text: 'zxczcasdasdqwe asdasd',
@@ -91,8 +91,8 @@ describe('testing comments actions', () => {
           spam: {
             uuid: 'HIuwwlBlQqacTASx6ru1',
             count: 0,
-            toxic: {},
-          },
+            toxic: {}
+          }
         },
         h5OccHpYTVK8Xcmd93Pl: {
           user: 'kwKpnj5y0ZR4QlAkTO4IGKHqsdY2',
@@ -101,8 +101,8 @@ describe('testing comments actions', () => {
           spam: {
             uuid: 'h5OccHpYTVK8Xcmd93Pl',
             count: 0,
-            toxic: {},
-          },
+            toxic: {}
+          }
         },
         tbfmeBxHkh41HBH9yJwy: {
           text: 'asdasd',
@@ -111,8 +111,8 @@ describe('testing comments actions', () => {
           spam: {
             uuid: 'tbfmeBxHkh41HBH9yJwy',
             count: 0,
-            toxic: {},
-          },
+            toxic: {}
+          }
         },
         Wq0UwEqpX7IwNpzUgLRI: {
           text: 'zxczxczc',
@@ -121,8 +121,8 @@ describe('testing comments actions', () => {
           spam: {
             uuid: 'Wq0UwEqpX7IwNpzUgLRI',
             count: 0,
-            toxic: {},
-          },
+            toxic: {}
+          }
         },
         '4zZo8OF7nvkIVrS1SYab': {
           text: 'asdasdad',
@@ -131,8 +131,8 @@ describe('testing comments actions', () => {
           spam: {
             uuid: '4zZo8OF7nvkIVrS1SYab',
             count: 0,
-            toxic: {},
-          },
+            toxic: {}
+          }
         },
         VGYKU1xJ9nmAMe08NQQr: {
           timestamp: 1562604098825.726,
@@ -141,8 +141,8 @@ describe('testing comments actions', () => {
           spam: {
             uuid: 'VGYKU1xJ9nmAMe08NQQr',
             count: 0,
-            toxic: {},
-          },
+            toxic: {}
+          }
         },
         jdwCv07LI2ujk0qNNTXW: {
           text: 'testing 2',
@@ -151,8 +151,8 @@ describe('testing comments actions', () => {
           spam: {
             uuid: 'jdwCv07LI2ujk0qNNTXW',
             count: 0,
-            toxic: {},
-          },
+            toxic: {}
+          }
         },
         '7gIxAGXrNIk4kAlMBLbB': {
           text: 'test',
@@ -161,53 +161,53 @@ describe('testing comments actions', () => {
           spam: {
             uuid: '7gIxAGXrNIk4kAlMBLbB',
             count: 0,
-            toxic: {},
-          },
-        },
-      },
+            toxic: {}
+          }
+        }
+      }
     };
     const action = fetchCommentsThreadSuccess(payload);
     expect(action).toEqual({
       type: COMMENTS_FETCH_THREAD_SUCCESS,
-      payload,
+      payload
     });
   });
 
-  it('fetchCommnetsThreadError', () => {
+  test("fetchCommnetsThreadError", () => {
     const payload = new Error('testing "fetchCommnetsThreadError" action');
     const action = fetchCommnetsThreadError(payload);
     expect(action).toEqual({
       type: COMMENTS_FETCH_THREAD_ERROR,
-      payload,
+      payload
     });
   });
 
-  it('fetchCommentsThreadCancel', () => {
+  test("fetchCommentsThreadCancel", () => {
     const action = fetchCommentsThreadCancel();
     expect(action).toEqual({
       type: COMMENTS_FETCH_THREAD_CANCEL,
     });
   });
 
-  it('postCommentToThread', () => {
+  test("postCommentToThread", () => {
     const payload = {
       comment: 'comment',
-      threadId: 'threadId',
+      threadId: 'threadId'
     };
     const action = postCommentToThread(payload.comment, payload.threadId);
     expect(action).toEqual({
       type: COMMENTS_POST_TO_THREAD,
       payload,
       meta: {
-        ajax: true,
-      },
+        ajax: true
+      }
     });
   });
 
-  it('postCommentToThreadSuccess', () => {
+  test("postCommentToThreadSuccess", () => {
     const payload = {
       originalEvent: {
-        isTrusted: true,
+        isTrusted: true
       },
       xhr: {},
       request: {
@@ -216,39 +216,39 @@ describe('testing comments actions', () => {
         withCredentials: false,
         headers: {
           'Content-Type': 'application/json',
-          token: 'Q',
+          token: 'Q'
         },
         method: 'POST',
         responseType: 'json',
         timeout: 0,
         url: 'https://crowdalert.herokuapp.com/api/comments/comment',
-        body: '{"commentData":"{\\"text\\":\\"asd\\",\\"thread\\":\\"cL1z6l9TQ7FpK6ypgLwF\\"}"}',
+        body: '{"commentData":"{\\"text\\":\\"asd\\",\\"thread\\":\\"cL1z6l9TQ7FpK6ypgLwF\\"}"}'
       },
       status: 200,
       responseType: 'json',
       response: {
-        id: 'C9Pq6b2R5ZEAh6JYo0vw',
-      },
+        id: 'C9Pq6b2R5ZEAh6JYo0vw'
+      }
     };
     const action = postCommentToThreadSuccess(payload);
     expect(action).toEqual({
       type: COMMENTS_POST_TO_THREAD_SUCCESS,
-      payload,
+      payload
     });
   });
 
-  it('postCommentToThreadError', () => {
+  test("postCommentToThreadError", () => {
     const payload = {
-      detail: 'Invalid authentication token provided',
+      detail: 'Invalid authentication token provided'
     };
     const action = postCommentToThreadError(payload);
     expect(action).toEqual({
       type: COMMENTS_POST_TO_THREAD_ERROR,
-      payload,
+      payload
     });
   });
 
-  it('postCommnetToThreadCancel', () => {
+  test("postCommnetToThreadCancel", () => {
     const action = postCommnetToThreadCancel();
     expect(action).toEqual({
       type: COMMENTS_POST_TO_THREAD_CANCEL,

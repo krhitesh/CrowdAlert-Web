@@ -24,22 +24,22 @@ import {
   toggleImageUpload,
   formValidationErrorsCreateEvents,
   acceptFormCreateEvents,
-  validateFormCreateEvents,
+  validateFormCreateEvents
 } from '../actions';
 
 describe('testing create event actions', () => {
-  it('fetchEventsByLocation', () => {
+  test("fetchEventsByLocation", () => {
     const action = toggleImageUpload();
     expect(action).toEqual({
-      type: CREATE_EVENTS_FORM_TOGGLE_UPLOADING,
+      type: CREATE_EVENTS_FORM_TOGGLE_UPLOADING
     });
   });
 
-  it('submitFormErrorCreateEvents', () => {
+  test("submitFormErrorCreateEvents", () => {
     const error = {
       response: {
-        detail: 'error detail',
-      },
+        detail: 'error detail'
+      }
     };
     const action = submitFormErrorCreateEvents(error);
     expect(action).toEqual({
@@ -49,127 +49,127 @@ describe('testing create event actions', () => {
           header: 'Unable to process your request',
           body: error.response.detail,
         },
-      },
+      }
     });
   });
 
-  it('changeTabCreateEventsForm', () => {
+  test("changeTabCreateEventsForm", () => {
     const tabIndex = 1;
     const action = changeTabCreateEventsForm(tabIndex);
     expect(action).toEqual({
       type: CREATE_EVENTS_FORM_TAB_CHANGE,
       payload: {
-        tab: tabIndex,
-      },
+        tab: tabIndex
+      }
     });
   });
 
-  it('changeTabValidationCreateEventsForm', () => {
+  test("changeTabValidationCreateEventsForm", () => {
     const payload = {
       tab: 'location',
-      isValid: true,
+      isValid: true
     };
     const action = changeTabValidationCreateEventsForm(payload.tab, payload.isValid);
     expect(action).toEqual({
       type: CREATE_EVENTS_FORM_TAB_CHANGE_VALIDATION,
-      payload,
+      payload
     });
   });
 
-  it('saveLocationCreateEvents', () => {
+  test("saveLocationCreateEvents", () => {
     const action = saveLocationCreateEvents();
     expect(action).toEqual({
       type: CREATE_EVENTS_FORM_SAVE_LOCATION,
     });
   });
 
-  it('createEventsUpdateLocationText', () => {
+  test("createEventsUpdateLocationText", () => {
     const payload = {
-      text: 'Location information is unavailable',
+      text: 'Location information is unavailable'
     };
     const action = createEventsUpdateLocationText(payload.text);
     expect(action).toEqual({
       type: CREATE_EVENTS_FORM_UPDATE_LOCATION_TEXT,
-      payload,
+      payload
     });
   });
 
-  it('updateEventDetailsCreateEvents', () => {
+  test("updateEventDetailsCreateEvents", () => {
     const payload = {
       name: 'description',
-      value: 'zxczxczxc',
+      value: 'zxczxczxc'
     };
     const action = updateEventDetailsCreateEvents({
       target: {
         type: 'input',
-        ...payload,
-      },
+        ...payload
+      }
     });
     expect(action).toEqual({
       type: CREATE_EVENTS_FORMS_UPDATE_EVENT_DETAILS,
-      payload,
+      payload
     });
   });
 
-  it('formValidationErrorsCreateEvents', () => {
+  test("formValidationErrorsCreateEvents", () => {
     const payload = {
       validationErrors: true,
       message: {
         header: 'Event not given',
-        body: 'Please select an event type from the dropdown',
-      },
+        body: 'Please select an event type from the dropdown'
+      }
     };
     const action = formValidationErrorsCreateEvents(payload);
     expect(action).toEqual({
       type: CREATE_EVENTS_FORM_VALIDATION_ERRORS,
-      payload,
+      payload
     });
   });
 
-  it('validateFormCreateEvents', () => {
+  test("validateFormCreateEvents", () => {
     const payload = {};
     const action = validateFormCreateEvents(payload);
     expect(action).toEqual({
       type: CREATE_EVENTS_FORM_VALIDATE_FORM,
-      payload,
+      payload
     });
   });
 
-  it('acceptFormCreateEvents', () => {
+  test("acceptFormCreateEvents", () => {
     const payload = {};
     const action = acceptFormCreateEvents(payload);
     expect(action).toEqual({
       type: CREATE_EVENTS_FORM_VALIDATION_SUCCESS,
-      payload,
+      payload
     });
   });
 
-  it('submitFormCreateEvents', () => {
+  test("submitFormCreateEvents", () => {
     const payload = {
       eventData: {
         category: 'health',
         description: 'zxczxczxc',
         local_assistance: true,
         title: 'kml',
-        public: {
+        'public': {
           view: true,
-          share: true,
+          share: true
         },
         anonymous: true,
         location: {
           coords: {
             latitude: 26.4730579270372,
-            longitude: 80.33489379882815,
-          },
-        },
-      },
+            longitude: 80.33489379882815
+          }
+        }
+      }
     };
     const action = submitFormCreateEvents({
       location: {
         mapCenter: {
           lat: payload.eventData.location.coords.latitude,
           lng: payload.eventData.location.coords.longitude,
-        },
+        }
       },
       details: {
         eventType: payload.eventData.category,
@@ -178,24 +178,24 @@ describe('testing create event actions', () => {
         title: payload.eventData.title,
         public: true,
         anonymous: payload.eventData.anonymous,
-      },
+      }
     });
     expect(action).toEqual({
       type: CREATE_EVENTS_FORM_SUBMIT,
-      payload,
+      payload
     });
   });
 
-  it('submitFormSuccessCreateEvents', () => {
+  test("submitFormSuccessCreateEvents", () => {
     const payload = {
-      eventId: 'sl6NOrYyjvTQwUtCsOha',
+      eventId: 'sl6NOrYyjvTQwUtCsOha'
     };
     const action = submitFormSuccessCreateEvents({
-      response: payload,
+      response: payload
     });
     expect(action).toEqual({
       type: CREATE_EVENTS_FORM_SUBMIT_SUCCESS,
-      payload,
+      payload
     });
   });
 });

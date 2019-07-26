@@ -1,39 +1,39 @@
 import {
   USER_UPDATE_USER_DATA,
   USER_UPDATE_USER_DATA_ERROR,
-  USER_UPDATE_USER_DATA_SUCCESS,
-} from '../actionTypes';
+  USER_UPDATE_USER_DATA_SUCCESS
+} from "../actionTypes";
 import {
   updateUserData,
   updateUserDataError,
-  updateUserDataSuccess,
-} from '../actions';
+  updateUserDataSuccess
+} from "../actions";
 
-describe('testing user actions', () => {
-  it('updateUserData', () => {
-    const payload = { userData: { displayName: 'Fullname' } };
+describe("testing user actions", () => {
+  test("updateUserData", () => {
+    const payload = { userData: { displayName: "Fullname" } };
     const action = updateUserData(payload);
     expect(action).toEqual({
       type: USER_UPDATE_USER_DATA,
-      payload,
+      payload
     });
   });
 
-  it('updateUserDataError', () => {
+  test("updateUserDataError", () => {
     const payload = new Error('testing "updateUserDataError" action');
     const action = updateUserDataError(payload);
     expect(action).toEqual({
       type: USER_UPDATE_USER_DATA_ERROR,
-      payload,
+      payload
     });
   });
 
-  it('updateUserDataSuccess', () => {
-    const payload = { status: 'ok' };
+  test("updateUserDataSuccess", () => {
+    const payload = { status: "ok" };
     const action = updateUserDataSuccess(payload);
     expect(action).toEqual({
       type: USER_UPDATE_USER_DATA_SUCCESS,
-      payload,
+      payload
     });
   });
 });
