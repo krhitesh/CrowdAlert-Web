@@ -11,39 +11,40 @@ const initialState = {
 };
 
 describe('testing event preview card reducer', () => {
-  it('no change when no action is passed', () => {
+  test('no change when no action is passed', () => {
     const ns = eventPreviewCardReducer(initialState, {});
     expect(ns).toEqual(initialState);
   });
 
-  it('open action', () => {
+  test('open action', () => {
     const action = {
       type: EVENT_PREVIEW_OPEN,
       payload: {
         key: 'cL1z6l9TQ7FpK6ypgLwF',
         lat: 26.51478401127116,
-        long: 80.22226174171146,
+        'long': 80.22226174171146,
         category: 'nature',
         title: 'Heavy rain',
-        datetime: 1562598791192,
-      },
+        datetime: 1562598791192
+      }
     };
 
     const ns = eventPreviewCardReducer(initialState, action);
     expect(ns).toEqual({
       ...initialState,
       isOpen: true,
-      event: action.payload,
+      event: action.payload
     });
   });
 
-  it('close action', () => {
+  test('close action', () => {
     const action = {
       type: EVENT_PREVIEW_CLOSE,
-      payload: {},
+      payload: {}
     };
 
     const ns = eventPreviewCardReducer(initialState, action);
     expect(ns).toEqual(initialState);
   });
+
 });

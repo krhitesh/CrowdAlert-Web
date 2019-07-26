@@ -17,15 +17,15 @@ const initialState = {
 };
 
 describe('testing spam report reducer', () => {
-  it('no change when no action is passed', () => {
+  test('no change when no action is passed', () => {
     const ns = spamReportReducer(initialState, {});
     expect(ns).toEqual(initialState);
   });
 
-  it('modal close action', () => {
+  test('modal close action', () => {
     const action = {
       type: SPAM_REPORT_MODAL_CLOSE,
-      payload: {},
+      payload: {}
     };
 
     const ns = spamReportReducer(initialState, action);
@@ -38,12 +38,12 @@ describe('testing spam report reducer', () => {
     });
   });
 
-  it('modal open action', () => {
+  test('modal open action', () => {
     const action = {
       type: SPAM_REPORT_MODAL_OPEN,
       payload: {
-        message: 'message',
-      },
+        message: 'message'
+      }
     };
 
     const ns = spamReportReducer(initialState, action);
@@ -56,14 +56,14 @@ describe('testing spam report reducer', () => {
     });
   });
 
-  it('report success action', () => {
+  test('report success action', () => {
     const action = {
       type: SPAM_REPORT_REPORT_SPAM_SUCCESS,
       payload: {
         response: {
-          status: 'ok',
-        },
-      },
+          'status': 'ok'
+        }
+      }
     };
 
     const ns = spamReportReducer(initialState, action);
@@ -78,12 +78,12 @@ describe('testing spam report reducer', () => {
     });
   });
 
-  it('report error action', () => {
+  test('report error action', () => {
     const action = {
       type: SPAM_REPORT_REPORT_SPAM_ERROR,
       payload: {
-        status: 403,
-      },
+        status: 403
+      }
     };
 
     const ns = spamReportReducer(initialState, action);
@@ -94,7 +94,7 @@ describe('testing spam report reducer', () => {
         ...initialState.modal,
         open: true,
       },
-      message: action.payload.message,
+      message: action.payload.message
     });
   });
 });

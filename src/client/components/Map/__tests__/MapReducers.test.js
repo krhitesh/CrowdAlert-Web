@@ -13,20 +13,20 @@ const initialState = {
 };
 
 describe('testing map reducer', () => {
-  it('no change when no action is passed', () => {
+  test('no change when no action is passed', () => {
     const ns = mapReducer(initialState, {});
     expect(ns).toEqual(initialState);
   });
 
-  it('map update center action', () => {
+  test('map update center action', () => {
     const action = {
       type: MAP_UPDATE_CENTER,
       payload: {
         lat: 26.46445855489077,
         lng: 80.34210357666016,
         zoom: 13,
-        fetch: true,
-      },
+        fetch: true
+      }
     };
 
     const ns = mapReducer(initialState, action);
@@ -37,15 +37,15 @@ describe('testing map reducer', () => {
     });
   });
 
-  it('update zoom action', () => {
+  test('update zoom action', () => {
     const action = {
       type: MAP_UPDATE_ZOOM,
       payload: {
         lat: 26.46384386065638,
         lng: 80.33334884643557,
         zoom: 13,
-        fetch: true,
-      },
+        fetch: true
+      }
     };
 
     const ns = mapReducer(initialState, action);
@@ -54,4 +54,5 @@ describe('testing map reducer', () => {
       zoom: action.payload.zoom,
     });
   });
+
 });

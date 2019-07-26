@@ -34,18 +34,18 @@ const initialState = {
 };
 
 describe('testing authentication reducer', () => {
-  it('no change when no action is passed', () => {
+  test('no change when no action is passed', () => {
     const ns = authenticationReducer(initialState, {});
     expect(ns).toEqual(initialState);
   });
 
-  it('update user data action', () => {
+  test('update user data action', () => {
     const action = {
       type: AUTH_UPDATE_USER_DATA,
       payload: {
         loggedIn: true,
-        user: {},
-      },
+        user: {}
+      }
     };
 
     const ns = authenticationReducer(initialState, action);
@@ -63,13 +63,13 @@ describe('testing authentication reducer', () => {
     });
   });
 
-  it('submit email password action', () => {
+  test('submit email password action', () => {
     const action = {
       type: AUTH_LOGIN_SUBMIT_EMAIL_PASSWORD,
       payload: {
         email: 'email',
-        password: 'password',
-      },
+        password: 'password'
+      }
     };
 
     const ns = authenticationReducer(initialState, action);
@@ -79,14 +79,14 @@ describe('testing authentication reducer', () => {
         ...initialState.loginForm,
         loading: true,
         errors: false,
-      },
+      }
     });
   });
 
-  it('success email password action', () => {
+  test('success email password action', () => {
     const action = {
       type: AUTH_LOGIN_SUCCESS_EMAIL_PASSWORD,
-      payload: {},
+      payload: {}
     };
 
     const ns = authenticationReducer(initialState, action);
@@ -95,16 +95,16 @@ describe('testing authentication reducer', () => {
       loginForm: {
         ...initialState.loginForm,
         loading: false,
-      },
+      }
     });
   });
 
-  it('error email password action', () => {
+  test('error email password action', () => {
     const action = {
       type: AUTH_LOGIN_ERROR_EMAIL_PASSWORD,
       payload: {
-        error: new Error('testing "errorEmailPasswordAuthentication" action'),
-      },
+        error: new Error('testing "errorEmailPasswordAuthentication" action')
+      }
     };
 
     const ns = authenticationReducer(initialState, action);
@@ -119,10 +119,10 @@ describe('testing authentication reducer', () => {
     });
   });
 
-  it('check user status action', () => {
+  test('check user status action', () => {
     const action = {
       type: AUTH_CHECK_USER_STATUS,
-      payload: {},
+      payload: {}
     };
 
     const ns = authenticationReducer(initialState, action);
@@ -132,14 +132,14 @@ describe('testing authentication reducer', () => {
     });
   });
 
-  it('signup email password action', () => {
+  test('signup email password action', () => {
     const action = {
       type: AUTH_SIGNUP_EMAIL_PASSWORD,
       payload: {
         email: 'email',
         fullname: 'fullname',
-        password: 'password',
-      },
+        password: 'password'
+      }
     };
 
     const ns = authenticationReducer(initialState, action);
@@ -153,12 +153,12 @@ describe('testing authentication reducer', () => {
     });
   });
 
-  it('signup email password error action', () => {
+  test('signup email password error action', () => {
     const action = {
       type: AUTH_SIGNUP_EMAIL_PASSWORD_ERROR,
       payload: {
-        message: 'error',
-      },
+        message: 'error'
+      }
     };
 
     const ns = authenticationReducer(initialState, action);
@@ -173,12 +173,12 @@ describe('testing authentication reducer', () => {
     });
   });
 
-  it('signup email password success action', () => {
+  test('signup email password success action', () => {
     const action = {
       type: AUTH_SIGNUP_EMAIL_PASSWORD_SUCCESS,
       payload: {
-        fullname: 'fullname',
-      },
+        fullname: 'fullname'
+      }
     };
 
     const ns = authenticationReducer(initialState, action);
@@ -190,4 +190,5 @@ describe('testing authentication reducer', () => {
       },
     });
   });
+  
 });

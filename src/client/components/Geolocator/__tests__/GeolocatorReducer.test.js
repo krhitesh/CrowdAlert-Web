@@ -17,15 +17,15 @@ const initialState = {
 };
 
 describe('testing geolocator reducer', () => {
-  it('no change when no action is passed', () => {
+  test('no change when no action is passed', () => {
     const ns = geolocatorReducer(initialState, {});
     expect(ns).toEqual(initialState);
   });
 
-  it('modal open action', () => {
+  test('modal open action', () => {
     const action = {
       type: GEOLOCATOR_MODAL_OPEN,
-      payload: {},
+      payload: {}
     };
 
     const ns = geolocatorReducer(initialState, action);
@@ -36,10 +36,10 @@ describe('testing geolocator reducer', () => {
     });
   });
 
-  it('modal close action', () => {
+  test('modal close action', () => {
     const action = {
       type: GEOLOCATOR_MODAL_CLOSE,
-      payload: {},
+      payload: {}
     };
 
     const ns = geolocatorReducer(initialState, action);
@@ -50,10 +50,10 @@ describe('testing geolocator reducer', () => {
     });
   });
 
-  it('location denied action', () => {
+  test('location denied action', () => {
     const action = {
       type: GEOLOCATOR_LOCATION_DENIED,
-      payload: {},
+      payload: {}
     };
 
     const ns = geolocatorReducer(initialState, action);
@@ -65,10 +65,10 @@ describe('testing geolocator reducer', () => {
   });
 
 
-  it('location failed action', () => {
+  test('location failed action', () => {
     const action = {
       type: GEOLOCATOR_LOCATION_FAILED,
-      payload: new Error('testing "geolocatorLocationFailed" action'),
+      payload: new Error('testing "geolocatorLocationFailed" action')
     };
 
     const ns = geolocatorReducer(initialState, action);

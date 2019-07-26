@@ -38,12 +38,12 @@ const initialState = {
 };
 
 describe('testing notifications reducer', () => {
-  it('no change when no action is passed', () => {
+  test('no change when no action is passed', () => {
     const ns = notificationsReducer(initialState, {});
     expect(ns).toEqual(initialState);
   });
 
-  it('recieved new message action', () => {
+  test('recieved new message action', () => {
     const action = {
       type: NOTIFICATIONS_RECIEVIED_NEW_MESSAGE,
       payload: {
@@ -57,9 +57,9 @@ describe('testing notifications reducer', () => {
           'gcm.notification.type': 'type',
           'gcm.notification.datetime': new Date().getTime(),
           'gcm.notification.user_name': 'user name',
-          'gcm.notification.user_picture': 'user picture',
-        },
-      },
+          'gcm.notification.user_picture': 'user picture'
+        }
+      }
     };
 
     const ns = notificationsReducer(initialState, action);
@@ -86,10 +86,10 @@ describe('testing notifications reducer', () => {
     });
   });
 
-  it('permission init action', () => {
+  test('permission init action', () => {
     const action = {
       type: NOTIFICATIONS_SHOW_NOTIFICATIONS_PERMISSION_INIT,
-      payload: {},
+      payload: {}
     };
 
     const ns = notificationsReducer(initialState, action);
@@ -101,14 +101,14 @@ describe('testing notifications reducer', () => {
         text: modalText.text.prompt,
         header: modalText.header.prompt,
         icon: modalText.icon.prompt,
-      },
+      }
     });
   });
 
-  it('permission granted action', () => {
+  test('permission granted action', () => {
     const action = {
       type: NOTIFICATIONS_SHOW_NOTIFICATIONS_PERMISSION_GRANTED,
-      payload: {},
+      payload: {}
     };
 
     const ns = notificationsReducer(initialState, action);
@@ -118,10 +118,10 @@ describe('testing notifications reducer', () => {
     });
   });
 
-  it('permission denied action', () => {
+  test('permission denied action', () => {
     const action = {
       type: NOTIFICATIONS_SHOW_NOTIFICATIONS_PERMISSION_DENIED,
-      payload: {},
+      payload: {}
     };
 
     const ns = notificationsReducer(initialState, action);
@@ -138,10 +138,10 @@ describe('testing notifications reducer', () => {
     });
   });
 
-  it('notification close action', () => {
+  test('notification close action', () => {
     const action = {
       type: NOTIFICATIONS_SHOW_NOTIFICATIONS_CLOSE,
-      payload: {},
+      payload: {}
     };
 
     const ns = notificationsReducer(initialState, action);
@@ -150,14 +150,14 @@ describe('testing notifications reducer', () => {
       modal: {
         ...initialState.modal,
         open: false,
-      },
+      }
     });
   });
 
-  it('mark as read action', () => {
+  test('mark as read action', () => {
     const action = {
       type: NOTIFICATIONS_MARK_AS_READ,
-      payload: {},
+      payload: {}
     };
 
     const ns = notificationsReducer(initialState, action);
