@@ -61,15 +61,17 @@ describe('testing upvote actions', () => {
   });
 
   test('fetchUpvotesSuccess', () => {
-    const response = {
-      status: 'ok'
+    const payload = {
+      response: {
+        uuid: 'G51PfyBx0scM4BwU02yB',
+        count: 0,
+        has_upvoted: false
+      }
     };
-    const action = fetchUpvotesSuccess({ response });
+    const action = fetchUpvotesSuccess(payload);
     expect(action).toEqual({
       type: FETCH_UPVOTES_SUCCESS,
-      payload: {
-        response
-      }
+      payload
     });
   });
 
@@ -96,15 +98,17 @@ describe('testing upvote actions', () => {
   });
 
   test('updateUpvoteSuccess', () => {
-    const response = {
-      status: 'ok'
+    const payload = {
+      response: {
+        uuid: 'G51PfyBx0scM4BwU02yB',
+        count: 0,
+        has_upvoted: false
+      }
     };
-    const action = updateUpvoteSuccess({ response });
+    const action = updateUpvoteSuccess(payload);
     expect(action).toEqual({
       type: UPDATE_UPVOTE_SUCCESS,
-      payload: {
-        response
-      }
+      payload
     });
   });
 
