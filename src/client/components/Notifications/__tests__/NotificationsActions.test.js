@@ -25,18 +25,7 @@ import {
 
 describe('testing notifications actions', () => {
   test('receivedNewNotification', () => {
-    const data = {
-      'gcm.notification.uuid': 'uuid',
-      'gcm.notification.link': 'link',
-      'gcm.notification.lat': 26.3432,
-      'gcm.notification.long': 80.3423,
-      'gcm.notification.category': 'category',
-      'gcm.notification.user_text': 'user text',
-      'gcm.notification.type': 'type',
-      'gcm.notification.datetime': new Date().getTime(),
-      'gcm.notification.user_name': 'user name',
-      'gcm.notification.user_picture': 'user picture'
-    };
+    const data = {};
     const action = receivedNewNotification({ data });
     expect(action).toEqual({
       type: NOTIFICATIONS_RECIEVIED_NEW_MESSAGE,
