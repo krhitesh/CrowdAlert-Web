@@ -9,6 +9,8 @@ node_modules/
 
 # testing
 /coverage
+/htmlcov
+test_image.jpg
 
 # production
 /build
