@@ -1,4 +1,4 @@
-from google.cloud.firestore_v1beta1 import ArrayRemove
+from google.cloud.firestore_v1beta1 import ArrayUnion
 
 
 class Classifier(object):
@@ -19,7 +19,7 @@ class Classifier(object):
         self.flag_users.append(flag_user)
         self.flag_count = new_flag_count
         db.collection(Classifier.collection_name).document(uuid).update({
-            u"flag_users": ArrayRemove([flag_user]),
+            u"flag_users": ArrayUnion([flag_user]),
             u"flag_count": new_flag_count
         })
 
@@ -33,7 +33,7 @@ class Classifier(object):
 
     @staticmethod
     def from_dict(source_dict):
-        classifier = Classifier(source_dict['flag_users'], source_dict['flag_users'], source_dict['toxic'])
+        classifier = Classifier(source_dict['flag_count'], source_dict['flag_users'], source_dict['toxic'])
         return classifier
 
     def to_dict(self):
