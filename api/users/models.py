@@ -24,7 +24,7 @@ class User(object):
 
     def update(self, display_name, db):
         self.display_name = display_name
-        db.collection(User.collection_name).document(self.uid).update({u"displayName", display_name})
+        db.collection(User.collection_name).document(self.uid).update({u"displayName": display_name})
 
     @staticmethod
     def from_dict(uid, source_dict):
