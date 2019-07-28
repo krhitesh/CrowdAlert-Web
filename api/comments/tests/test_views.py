@@ -1,24 +1,22 @@
 import json
-import uuid
 
 from django.conf import settings
-from django.test import TestCase
-from rest_framework.test import APIRequestFactory, force_authenticate
+from django.test import TestCase, RequestFactory
 
 from api.comments.models import Comment
 from api.comments.views import CommentView
 from api.firebase_auth.users import FirebaseUser
-from api.utils.firebase_utils import get_authenticated_user_token, delete_collection
+from api.utils.firebase_utils import get_anonymous_user_token, delete_anonymous_user, delete_collection
 
 db = settings.FIRESTORE
 
 
 class CommentViewTest(TestCase):
     def setUp(self):
-        self.auth_token = get_authenticated_user_token()
-        self.factory = APIRequestFactory()
+        self.token = get_anonymous_user_token()
+        self.factory = RequestFactory()
         firebase_data = {
-            'uid': str(uuid.uuid1()),
+            'uid': '',
             'user_id': '',
             'name': '',
             'picture': '',
@@ -28,7 +26,7 @@ class CommentViewTest(TestCase):
 
     def test_get_comment_thread(self):
         request = self.factory.get('/api/comments/comment', {'thread': '1234'})
-        force_authenticate(request, user=self.user)
+        request.user = self.user
         response = CommentView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
@@ -42,11 +40,13 @@ class CommentViewTest(TestCase):
         c.save('sl6NOrYyjvTQwUtCsOha', db)
         settings.COVERAGE = True
         data = json.dumps({"commentData": '{"text":"test", "thread":"sl6NOrYyjvTQwUtCsOha"}'})
-        request = self.factory.post(path='/api/comments/comment', data=data, content_type='application/json')
-        force_authenticate(request, user=self.user, token=self.auth_token)
+        request = self.factory.post(path='/api/comments/comment', data=data, content_type='application/json',
+                                    secure=False, HTTP_TOKEN=self.token)
+        request.user = self.user
         response = CommentView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
     def tearDown(self):
         print('Cleaning up comments')
         delete_collection(db.collection(Comment.collection_name))
+        delete_anonymous_user(self.token)

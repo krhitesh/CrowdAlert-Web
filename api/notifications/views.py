@@ -28,5 +28,5 @@ class FCMTokenView(APIView):
 
         if not fcmtoken:
             return HttpResponseBadRequest("Bad Request: FCM token not provided")
-        db.document('fcmkeys/' + user_id).set({u"key": fcmtoken})
+        db.document(self.collection_name + '/' + user_id).set({u"key": fcmtoken})
         return JsonResponse({"status": "ok"}, safe=False)
