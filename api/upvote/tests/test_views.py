@@ -1,6 +1,5 @@
 import os
 import uuid
-import json
 
 from django.conf import settings
 from django.test import TestCase, RequestFactory
@@ -14,17 +13,18 @@ db = settings.FIRESTORE
 
 
 class UpvoteViewTest(TestCase):
-    """
-    Tests UpvoteView
-    """
     def setUp(self):
-        with open('api/test_data/test_data.json') as f:
-            self.test_data = json.load(f)
-            self.user = FirebaseUser(self.test_data["users"]["firebase_data"])
-
         self.factory = RequestFactory()
         self.auth_token = get_authenticated_user_token()
         self.token = get_anonymous_user_token()
+        firebase_data = {
+            'uid': '',
+            'user_id': '',
+            'name': '',
+            'picture': '',
+            'email_verified': True
+        }
+        self.user = FirebaseUser(firebase_data)
         self.test_uuid = str(uuid.uuid4())
         u = Upvote(0, [])
         u.save(self.test_uuid, db)
