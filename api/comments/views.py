@@ -57,6 +57,7 @@ class CommentView(APIView):
         print('posting')
         try:
             comment_data = json.loads(json.loads(request.body.decode()).get('commentData'))
+            print(comment_data)
             thread_id = comment_data['thread']
             text = comment_data['text']
         except (KeyError, ValueError):
@@ -64,49 +65,51 @@ class CommentView(APIView):
 
         comment_data = CommentData(text, timestamp=time.time() * 1000, user=str(request.user))
         key = comment_data.save(thread_id, DB)
-        comment_data.classify_text(thread_id)
+        if not settings.COVERAGE:
+            comment_data.classify_text(thread_id)
 
         comment = Comment()
         comment.update_add_participant(comment_data.user, thread_id, DB)
 
-        user_name = request.user.name
+        user_name = str(request.user.name)
         user_picture = request.user.user_picture
-
-        notify_comment(sender_uid=comment_data.user, datetime=comment_data.timestamp,
+        print('settings.COVERAGE', settings.COVERAGE)
+        if not settings.COVERAGE:
+            notify_comment(sender_uid=comment_data.user, datetime=comment_data.timestamp,
                        event_id=thread_id, user_text=text,
                        user_name=user_name, user_picture=user_picture)
 
-        channel_layer = get_channel_layer()
-        comments_data = {
-            "type": "comments_message",
-            "message": {
-                'actionType': 'WS_NEW_COMMENT_RECEIVED',
-                'data': {
-                    'comments': {},
-                    'userData': {}
+            channel_layer = get_channel_layer()
+            comments_data = {
+                "type": "comments_message",
+                "message": {
+                    'actionType': 'WS_NEW_COMMENT_RECEIVED',
+                    'data': {
+                        'comments': {},
+                        'userData': {}
+                    }
                 }
             }
-        }
-        comments_data['message']['data']['comments'][key] = {
-            'text': text,
-            'spam': {
-                'uuid': key,
-                'count': 0,
-                'toxic': 'null',
-            },
-            'user': comment_data.user,
-            'timestamp': comment_data.timestamp
-        }
-        comments_data['message']['data']['userData'][comment_data.user] = {
-            'photoURL': user_picture,
-            'displayName': user_name
-        }
-        room_name = 'comments_%s' % thread_id
-        print('room_name', room_name)
+            comments_data['message']['data']['comments'][key] = {
+                'text': text,
+                'spam': {
+                    'uuid': key,
+                    'count': 0,
+                    'toxic': 'null',
+                },
+                'user': comment_data.user,
+                'timestamp': comment_data.timestamp
+            }
+            comments_data['message']['data']['userData'][comment_data.user] = {
+                'photoURL': user_picture,
+                'displayName': user_name
+            }
+            room_name = 'comments_%s' % thread_id
+            print('room_name', room_name)
 
-        async_to_sync(channel_layer.group_send)(
-            room_name,
-            comments_data
-        )
+            async_to_sync(channel_layer.group_send)(
+                room_name,
+                comments_data
+            )
 
         return JsonResponse({"id": key}, safe=False)

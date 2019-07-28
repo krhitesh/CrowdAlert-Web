@@ -23,7 +23,7 @@ class UserView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    def get(self):
+    def get(self, request):
         """ Not implemented yet
         """
         key = request.GET.get('key')
