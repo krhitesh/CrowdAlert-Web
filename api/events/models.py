@@ -96,7 +96,6 @@ class Event(object):
     def get(incident_id, db):
         doc = db.collection(Event.collection_name).document(incident_id).get()
         if doc.exists:
-            print(doc.to_dict())
             return Event.from_dict(doc.to_dict())
         else:
             return None
