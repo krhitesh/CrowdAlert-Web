@@ -1,6 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import checkPropTypes from 'check-prop-types';
 import configureStore from '../configureStore';
-import history from '../../helpers/history'
+import history from '../../helpers/history';
 
 /**
  * Create a testing store with imported reducers, middleware, and initial state.
@@ -9,7 +10,7 @@ import history from '../../helpers/history'
  * @function storeFactory
  * @returns {Store} - Redux store.
  */
-export const storeFactory = (initialState) => configureStore(initialState, history);
+export const storeFactory = initialState => configureStore(initialState, history);
 
 /**
  * Return node(s) with the given data-test attribute.
@@ -24,6 +25,7 @@ export const checkProps = (component, conformingProps) => {
     component.propTypes,
     conformingProps,
     'prop',
-    component.name);
+    component.name,
+  );
   expect(propError).toBeUndefined();
-}
+};

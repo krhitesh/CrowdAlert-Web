@@ -7,15 +7,15 @@ import UserSettingsMenu from '../index';
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const defaultProps = {
-    open: false
+  open: false,
 };
 
 const reduxPiece = {
   auth: {
     user: {
-        displayName: 'user display name',
-        email: 'user@gmail.com',
-        photoURL: ''
+      displayName: 'user display name',
+      email: 'user@gmail.com',
+      photoURL: '',
     },
     isLoggedIn: true,
   },
@@ -34,75 +34,75 @@ const setup = (props = {}, initialReduxState = {}) => {
 };
 
 test('does not throw warning with expected props', () => {
-    const expectedProps = {
-        signOut: jest.fn(),
-        ...reduxPiece
-    };
+  const expectedProps = {
+    signOut: jest.fn(),
+    ...reduxPiece,
+  };
 
-    checkProps(UserSettingsMenu, expectedProps);
+  checkProps(UserSettingsMenu, expectedProps);
 });
 
 describe('renders', () => {
-    let wrapper;
-    beforeEach(() => {
-        wrapper = setup({}, reduxPiece).dive();
+  let wrapper;
+  beforeEach(() => {
+    wrapper = setup({}, reduxPiece).dive();
+  });
+
+  it('renders without error', () => {
+    expect(findByTestAttr(wrapper, 'component-user-settings-menu')).toHaveLength(1);
+  });
+
+  it('renders user image', () => {
+    expect(findByTestAttr(wrapper, 'component-image')).toHaveLength(1);
+  });
+
+  it('renders header content', () => {
+    expect(findByTestAttr(wrapper, 'component-header-content')).toHaveLength(1);
+  });
+
+  describe('renders drop down items', () => {
+    it('renders settings item', () => {
+      expect(findByTestAttr(wrapper, 'item-settings')).toHaveLength(1);
     });
 
-    test('renders without error', () => {
-        expect(findByTestAttr(wrapper, 'component-user-settings-menu').length).toBe(1);
+    it('renders user item', () => {
+      expect(findByTestAttr(wrapper, 'item-user')).toHaveLength(1);
     });
 
-    test('renders user image', () => {
-        expect(findByTestAttr(wrapper, 'component-image').length).toBe(1);
+    it('renders privacy item', () => {
+      expect(findByTestAttr(wrapper, 'item-privacy')).toHaveLength(1);
     });
 
-    test('renders header content', () => {
-        expect(findByTestAttr(wrapper, 'component-header-content').length).toBe(1);
+    it('renders tasks item', () => {
+      expect(findByTestAttr(wrapper, 'item-tasks')).toHaveLength(1);
     });
 
-    describe('renders drop down items', () => {
-        test('renders settings item', () => {
-            expect(findByTestAttr(wrapper, 'item-settings').length).toBe(1);
-        });
-
-        test('renders user item', () => {
-            expect(findByTestAttr(wrapper, 'item-user').length).toBe(1);
-        });
-
-        test('renders privacy item', () => {
-            expect(findByTestAttr(wrapper, 'item-privacy').length).toBe(1);
-        });
-
-        test('renders tasks item', () => {
-            expect(findByTestAttr(wrapper, 'item-tasks').length).toBe(1);
-        });
-
-        test('renders sign out item', () => {
-            expect(findByTestAttr(wrapper, 'item-sign-out').length).toBe(1);
-        });
+    it('renders sign out item', () => {
+      expect(findByTestAttr(wrapper, 'item-sign-out')).toHaveLength(1);
     });
+  });
 });
 
 describe('redux props', () => {
-    let wrapper;
-    beforeEach(() => {
-        wrapper = setup({}, reduxPiece);
-    });
+  let wrapper;
+  beforeEach(() => {
+    wrapper = setup({}, reduxPiece);
+  });
 
-    test('has redux piece of state', () => {
-        const reduxProps = {
-            auth: {
-                user: wrapper.props().user,
-                isLoggedIn: wrapper.props().isLoggedIn
-            }
-        };
+  it('has redux piece of state', () => {
+    const reduxProps = {
+      auth: {
+        user: wrapper.props().user,
+        isLoggedIn: wrapper.props().isLoggedIn,
+      },
+    };
 
-        expect(reduxProps).toEqual(reduxPiece);
-    });
+    expect(reduxProps).toEqual(reduxPiece);
+  });
 
-    test('"signOut" action creator', () => {
-        const signOutProps = wrapper.props().signOut;
-        expect(signOutProps).toBeInstanceOf(Function);
-    });
+  it('"signOut" action creator', () => {
+    const signOutProps = wrapper.props().signOut;
+    expect(signOutProps).toBeInstanceOf(Function);
+  });
 });
 

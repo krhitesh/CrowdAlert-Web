@@ -1,15 +1,15 @@
 import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
-import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
+import { storeFactory, checkProps } from '../../../tests/testUtils';
 import OAuth from '../OAuth';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const reduxPiece = {
   auth: {
-      loginForm: {},
-  }
+    loginForm: {},
+  },
 };
 
 /**
@@ -24,31 +24,31 @@ const setup = (props = {}, initialReduxState = {}) => {
 };
 
 test('does not throw warning with expected props', () => {
-    const expectedProps = {
-        loginForm: {}
-    };
+  const expectedProps = {
+    loginForm: {},
+  };
 
-    checkProps(OAuth, expectedProps);
+  checkProps(OAuth, expectedProps);
 });
 
 describe('redux props', () => {
-    let wrapper;
-    beforeEach(() => {
-        wrapper = setup({}, reduxPiece);
-    });
+  let wrapper;
+  beforeEach(() => {
+    wrapper = setup({}, reduxPiece);
+  });
 
-    test('has redux piece of state', () => {
-        const reduxProps = {
-            auth: {
-                loginForm: wrapper.props().loginForm
-            }
-        };
+  it('has redux piece of state', () => {
+    const reduxProps = {
+      auth: {
+        loginForm: wrapper.props().loginForm,
+      },
+    };
 
-        expect(reduxProps).toEqual(reduxPiece);
-    });
+    expect(reduxProps).toEqual(reduxPiece);
+  });
 
-    test('"signInOAuthProps" action creator', () => {
-        const signInOAuthProps = wrapper.props().signInOAuth;
-        expect(signInOAuthProps).toBeInstanceOf(Function);
-    });
+  it('"signInOAuthProps" action creator', () => {
+    const signInOAuthProps = wrapper.props().signInOAuth;
+    expect(signInOAuthProps).toBeInstanceOf(Function);
+  });
 });

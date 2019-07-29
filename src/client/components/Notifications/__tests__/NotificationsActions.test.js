@@ -20,11 +20,11 @@ import {
   showNotificationPermissionClose,
   showNotificationPermissionDenied,
   showNotificationPermissionGranted,
-  showNotificationPermissionInit
+  showNotificationPermissionInit,
 } from '../actions';
 
 describe('testing notifications actions', () => {
-  test('receivedNewNotification', () => {
+  it('receivedNewNotification', () => {
     const data = {
       'gcm.notification.uuid': 'uuid',
       'gcm.notification.link': 'link',
@@ -35,82 +35,82 @@ describe('testing notifications actions', () => {
       'gcm.notification.type': 'type',
       'gcm.notification.datetime': new Date().getTime(),
       'gcm.notification.user_name': 'user name',
-      'gcm.notification.user_picture': 'user picture'
+      'gcm.notification.user_picture': 'user picture',
     };
     const action = receivedNewNotification({ data });
     expect(action).toEqual({
       type: NOTIFICATIONS_RECIEVIED_NEW_MESSAGE,
       payload: {
-        data
-      }
+        data,
+      },
     });
   });
 
-  test('showNotificationPermissionInit', () => {
+  it('showNotificationPermissionInit', () => {
     const action = showNotificationPermissionInit();
     expect(action).toEqual({
       type: NOTIFICATIONS_SHOW_NOTIFICATIONS_PERMISSION_INIT,
     });
   });
 
-  test('showNotificationPermissionAsk', () => {
+  it('showNotificationPermissionAsk', () => {
     const action = showNotificationPermissionAsk();
     expect(action).toEqual({
       type: NOTIFICATIONS_SHOW_NOTIFICATIONS_PERMISSION_ASK,
     });
   });
 
-  test('showNotificationPermissionGranted', () => {
+  it('showNotificationPermissionGranted', () => {
     const action = showNotificationPermissionGranted();
     expect(action).toEqual({
       type: NOTIFICATIONS_SHOW_NOTIFICATIONS_PERMISSION_GRANTED,
     });
   });
 
-  test('showNotificationPermissionDenied', () => {
+  it('showNotificationPermissionDenied', () => {
     const action = showNotificationPermissionDenied();
     expect(action).toEqual({
       type: NOTIFICATIONS_SHOW_NOTIFICATIONS_PERMISSION_DENIED,
     });
   });
 
-  test('showNotificationPermissionClose', () => {
+  it('showNotificationPermissionClose', () => {
     const action = showNotificationPermissionClose();
     expect(action).toEqual({
       type: NOTIFICATIONS_SHOW_NOTIFICATIONS_CLOSE,
     });
   });
 
-  test('sendFCMTokenToServer', () => {
+  it('sendFCMTokenToServer', () => {
     const fcmtoken = 'token';
     const action = sendFCMTokenToServer(fcmtoken);
     expect(action).toEqual({
       type: NOTIFICATIONS_SEND_TOKEN_TO_SERVER,
       payload: {
-        fcmtoken
-      }
+        fcmtoken,
+      },
     });
   });
 
-  test('sendFCMTokenToServerSuccess', () => {
+  it('sendFCMTokenToServerSuccess', () => {
     const action = sendFCMTokenToServerSuccess();
     expect(action).toEqual({
       type: NOTIFICATIONS_SEND_TOKEN_TO_SERVER_SUCCESS,
     });
   });
 
-  test('sendFCMTokenToServerError', () => {
+  it('sendFCMTokenToServerError', () => {
     const error = new Error('testing "sendFCMTokenToServerError" action');
     const action = sendFCMTokenToServerError(error);
     expect(action).toEqual({
       type: NOTIFICATIONS_SEND_TOKEN_TO_SERVER_ERROR,
       payload: {
-        error
-      }
+        error,
+      },
     });
   });
 
-  test('markNotificationAsRead', () => {
+  it('markNotificationAsRead', () => {
     const action = markNotificationAsRead();
     expect(action).toEqual({
       type: NOTIFICATIONS_MARK_AS_READ,

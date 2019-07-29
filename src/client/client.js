@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/jsx-filename-extension */
 // Startup point for the client side application
 /**
@@ -10,9 +11,9 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import runtime from 'serviceworker-webpack-plugin/lib/runtime';
 import history from '../helpers/history';
 import registerServiceWorker from './registerServiceWorker';
-import runtime from 'serviceworker-webpack-plugin/lib/runtime';
 
 import client from './index';
 import { messaging } from './utils/firebase';
@@ -25,20 +26,6 @@ messaging.onMessage((payload) => {
   // console.log('Message', payload);
   client.store.dispatch(receivedNewNotification(payload));
 });
-
-const removeDimmer = () => {
-  const delay = 500;
-  const dimmer = document.querySelector('#docs-loading-dimmer');
-  dimmer.style.opacity = '0';
-  setTimeout(() => {
-    const dimmer = document.querySelector('#docs-loading-dimmer');
-
-    document.body.removeChild(dimmer);
-    document.body.setAttribute('class', '');
-    // Uncomment the following line
-    // window.alert('Production Build: 11-Aug');
-  }, delay);
-};
 
 /**
  * [ROOT_NODE is the document reference where the app should be mounted]
@@ -60,6 +47,7 @@ ReactDOM.hydrate(
  */
 registerServiceWorker();
 if ('serviceWorker' in navigator) {
+  // eslint-disable-next-line no-unused-vars
   const registration = runtime.register();
 }
 

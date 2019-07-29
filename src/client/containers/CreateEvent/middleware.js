@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import formValidator from './validator';
 import {
   changeTabCreateEventsForm,
@@ -17,7 +18,7 @@ const createEventsMiddleware = store => next => (action) => {
   const { dispatch } = store;
   if (action.type === CREATE_EVENTS_FORM_UPDATE_LOCATION_TEXT) {
     const state = store.getState();
-    
+
     // Kill the action if form is freezed
     if (state.createEvents.form.isFreezed) {
       return null;

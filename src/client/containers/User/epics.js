@@ -1,7 +1,7 @@
 import { ajax } from 'rxjs/observable/dom/ajax';
 import { of } from 'rxjs/observable/of';
 import { ofType, combineEpics } from 'redux-observable';
-import { mergeMap, map, takeUntil, debounceTime, catchError } from 'rxjs/operators';
+import { mergeMap, map, catchError } from 'rxjs/operators';
 
 import { USER_UPDATE_USER_DATA } from './actionTypes';
 import {

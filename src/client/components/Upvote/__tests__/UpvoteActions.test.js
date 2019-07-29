@@ -22,104 +22,104 @@ import {
 } from '../actions';
 
 describe('testing upvote actions', () => {
-  test('fetchUpvotesCancel', () => {
+  it('fetchUpvotesCancel', () => {
     const action = fetchUpvotesCancel();
     expect(action).toEqual({
       type: FETCH_UPVOTES_CANCEL,
     });
   });
 
-  test('updateUpvoteCancel', () => {
+  it('updateUpvoteCancel', () => {
     const action = updateUpvoteCancel();
     expect(action).toEqual({
       type: UPDATE_UPVOTE_CANCEL,
     });
   });
 
-  test('updateUpvotesLongPollStatus', () => {
+  it('updateUpvotesLongPollStatus', () => {
     const status = true;
     const action = updateUpvotesLongPollStatus(status);
     expect(action).toEqual({
       type: UPDATE_UPVOTES_LONG_POLL_STATUS,
       payload: {
-        status
-      }
+        status,
+      },
     });
   });
 
-  test('fetchUpvotesStart', () => {
+  it('fetchUpvotesStart', () => {
     const payload = {
       uuid: 'uuid',
       currentCount: 0,
-      initialRequest: true
+      initialRequest: true,
     };
     const action = fetchUpvotesStart(payload.uuid, payload.currentCount, payload.initialRequest);
     expect(action).toEqual({
       type: FETCH_UPVOTES_START,
-      payload
+      payload,
     });
   });
 
-  test('fetchUpvotesSuccess', () => {
+  it('fetchUpvotesSuccess', () => {
     const payload = {
       response: {
         uuid: 'G51PfyBx0scM4BwU02yB',
         count: 0,
-        has_upvoted: false
-      }
+        has_upvoted: false,
+      },
     };
     const action = fetchUpvotesSuccess(payload);
     expect(action).toEqual({
       type: FETCH_UPVOTES_SUCCESS,
-      payload
+      payload,
     });
   });
 
-  test('fetchUpvotesError', () => {
+  it('fetchUpvotesError', () => {
     const payload = {
-      message: 'error'
+      message: 'error',
     };
     const action = fetchUpvotesError(payload);
     expect(action).toEqual({
       type: FETCH_UPVOTES_ERROR,
-      payload
+      payload,
     });
   });
 
-  test('updateUpvoteStart', () => {
+  it('updateUpvoteStart', () => {
     const payload = {
-      uuid: 'uuid'
+      uuid: 'uuid',
     };
     const action = updateUpvoteStart(payload.uuid);
     expect(action).toEqual({
       type: UPDATE_UPVOTE_START,
-      payload
+      payload,
     });
   });
 
-  test('updateUpvoteSuccess', () => {
+  it('updateUpvoteSuccess', () => {
     const payload = {
       response: {
         uuid: 'G51PfyBx0scM4BwU02yB',
         count: 0,
-        has_upvoted: false
-      }
+        has_upvoted: false,
+      },
     };
     const action = updateUpvoteSuccess(payload);
     expect(action).toEqual({
       type: UPDATE_UPVOTE_SUCCESS,
-      payload
+      payload,
     });
   });
 
-  test('upvoteUpvoteError', () => {
+  it('upvoteUpvoteError', () => {
     const payload = {
-      message: 'error'
+      message: 'error',
     };
     const action = upvoteUpvoteError(payload);
     expect(action).toEqual({
       type: UPDATE_UPVOTE_ERROR,
-      payload
+      payload,
     });
   });
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
 import LoginForm from '../Loginform';
@@ -20,8 +20,8 @@ const reduxPiece = {
       errors: false,
       message: null,
       loading: true,
-    }
-  }
+    },
+  },
 };
 
 /**
@@ -43,36 +43,36 @@ test('does not throw warning with expected props', () => {
       errors: false,
       message: null,
       loading: true,
-    }
+    },
   };
 
   checkProps(LoginForm, expectedProps);
 });
 
 describe('render', () => {
-  test('renders without errors', () => {
+  it('renders without errors', () => {
     const wrapper = setup({}, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'component-login-form').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'component-login-form')).toHaveLength(1);
   });
 
-  test('does not render errors', () => {
+  it('does not render errors', () => {
     const wrapper = setup({}, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'login-errors').length).toBe(0);
+    expect(findByTestAttr(wrapper, 'login-errors')).toHaveLength(0);
   });
 
-  test('renders email field without errors', () => {
+  it('renders email field without errors', () => {
     const wrapper = setup({}, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'form-email').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'form-email')).toHaveLength(1);
   });
 
-  test('renders  password field without errors', () => {
+  it('renders  password field without errors', () => {
     const wrapper = setup({}, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'form-password').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'form-password')).toHaveLength(1);
   });
 
-  test('renders button without errors', () => {
+  it('renders button without errors', () => {
     const wrapper = setup({}, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'form-btn-login').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'form-btn-login')).toHaveLength(1);
   });
 });
 
@@ -82,18 +82,19 @@ describe('redux props', () => {
     wrapper = setup({}, reduxPiece);
   });
 
-  test('has redux piece of state', () => {
+  it('has redux piece of state', () => {
     const reduxProps = {
       auth: {
-        loginForm: wrapper.props().loginForm
-      }
+        loginForm: wrapper.props().loginForm,
+      },
     };
 
     expect(reduxProps).toEqual(reduxPiece);
   });
 
-  test('"submitEmailPasswordAuthentication" action creator', () => {
-    const submitEmailPasswordAuthenticationProps = wrapper.props().submitEmailPasswordAuthentication;
+  it('"submitEmailPasswordAuthentication" action creator', () => {
+    const submitEmailPasswordAuthenticationProps = wrapper.props()
+      .submitEmailPasswordAuthentication;
     expect(submitEmailPasswordAuthenticationProps).toBeInstanceOf(Function);
   });
 });

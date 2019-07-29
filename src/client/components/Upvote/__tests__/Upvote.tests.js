@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
 import Upvote from '../index';
@@ -13,9 +13,9 @@ const reduxPiece = {
         uuid: 'upvote uuid',
         hasUpvoted: false,
         count: 0,
-      }
-    }
-  }
+      },
+    },
+  },
 };
 
 /**
@@ -43,49 +43,49 @@ test('does not throw warning with expected props', () => {
 });
 
 describe('render', () => {
-  test('renders basic button', () => {
+  it('renders basic button', () => {
     const wrapper = setup(
       { uuid: 'upvote uuid', basic: true },
       { count: null, hasUpvoted: null },
       reduxPiece,
     ).dive();
 
-    expect(findByTestAttr(wrapper, 'upvote-btn-basic').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'upvote-btn-basic')).toHaveLength(1);
   });
 
-  test('does not rendre non basic button', () => {
+  it('does not render non basic button', () => {
     const wrapper = setup(
       { uuid: 'upvote uuid', basic: true },
       { count: null, hasUpvoted: null },
       reduxPiece,
     ).dive();
 
-    expect(findByTestAttr(wrapper, 'upvote-btn').length).toBe(0);
+    expect(findByTestAttr(wrapper, 'upvote-btn')).toHaveLength(0);
   });
 
-  test('renders basic button', () => {
+  it('renders non basic button', () => {
     const wrapper = setup(
       { uuid: 'upvote uuid', basic: false },
       { count: null, hasUpvoted: null },
       reduxPiece,
     ).dive();
 
-    expect(findByTestAttr(wrapper, 'upvote-btn').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'upvote-btn')).toHaveLength(1);
   });
 
-  test('does not render basic button', () => {
+  it('does not render basic button', () => {
     const wrapper = setup(
       { uuid: 'upvote uuid', basic: false },
       { count: null, hasUpvoted: null },
       reduxPiece,
     ).dive();
 
-    expect(findByTestAttr(wrapper, 'upvote-btn-basic').length).toBe(0);
+    expect(findByTestAttr(wrapper, 'upvote-btn-basic')).toHaveLength(0);
   });
 });
 
 describe('redux props', () => {
-  test('has redux piece of state', () => {
+  it('has redux piece of state', () => {
     const wrapper = setup(
       { uuid: 'upvote uuid', basic: true },
       { count: null, hasUpvoted: null },
@@ -94,15 +94,15 @@ describe('redux props', () => {
     const reduxProp = {
       upvotes: {
         upvoteData: {
-          [Object.keys(reduxPiece.upvotes.upvoteData)[0]]: wrapper.props().upvotes
-        }
-      }
+          [Object.keys(reduxPiece.upvotes.upvoteData)[0]]: wrapper.props().upvotes,
+        },
+      },
     };
 
     expect(reduxProp).toEqual(reduxPiece);
   });
 
-  test('"fetchUpvotesStart" action creator', () => {
+  it('"fetchUpvotesStart" action creator', () => {
     const wrapper = setup(
       { uuid: 'upvote uuid', basic: true },
       { count: null, hasUpvoted: null },
@@ -112,7 +112,7 @@ describe('redux props', () => {
     expect(fetchUpvotesStartProp).toBeInstanceOf(Function);
   });
 
-  test('"fetchUpvotesCancel" action creator', () => {
+  it('"fetchUpvotesCancel" action creator', () => {
     const wrapper = setup(
       { uuid: 'upvote uuid', basic: true },
       { count: null, hasUpvoted: null },
@@ -122,7 +122,7 @@ describe('redux props', () => {
     expect(fetchUpvotesCancelProp).toBeInstanceOf(Function);
   });
 
-  test('"updateUpvoteStart" action creator', () => {
+  it('"updateUpvoteStart" action creator', () => {
     const wrapper = setup(
       { uuid: 'upvote uuid', basic: true },
       { count: null, hasUpvoted: null },
@@ -132,7 +132,7 @@ describe('redux props', () => {
     expect(updateUpvoteStartProp).toBeInstanceOf(Function);
   });
 
-  test('"updateUpvoteCancel" action creator', () => {
+  it('"updateUpvoteCancel" action creator', () => {
     const wrapper = setup(
       { uuid: 'upvote uuid', basic: true },
       { count: null, hasUpvoted: null },

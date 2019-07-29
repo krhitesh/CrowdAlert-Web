@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import axios from 'axios';
 import {
   EVENT_FETCH_EVENT_DATA_SSR,

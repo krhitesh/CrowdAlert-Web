@@ -24,7 +24,7 @@ const sortComments = (a, b) => {
     return 1;
   }
   return 0;
-}
+};
 
 function commentsReducer(state = initialState, action) {
   if (action.type === WS_NEW_COMMENT_RECEIVED) {
@@ -52,7 +52,7 @@ function commentsReducer(state = initialState, action) {
     };
   }
   if (action.type === COMMENTS_FETCH_THREAD) {
-    const loading = action.payload.showLoader && state.threadId !== action.payload.threadId
+    const loading = action.payload.showLoader && state.threadId !== action.payload.threadId;
     return {
       ...state,
       threadId: action.payload.threadId,

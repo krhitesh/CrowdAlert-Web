@@ -1,5 +1,5 @@
 {
-    "extends": "airbnb",
+    "extends": ["plugin:jest/all", "airbnb"],
     "rules": {
         "no-console": "off",
         "no-underscore-dangle": "off",
@@ -7,7 +7,12 @@
         "jsx-a11y/anchor-is-valid": ["error", {
             "components": ["Link"],
             "specialLink": ["to"]
-        }]
+        }],
+        "jest/no-hooks": "off",
+        "jest/prefer-expect-assertions": "off",
+        "jest/expect-expect": "off",
+        "jest/no-mocks-import": "off",
+        "jest/prefer-strict-equal": "off"
     },
     "globals": {
         "window": true,
@@ -18,5 +23,5 @@
         "Blob": true,
         "navigator": true
     },
-    "plugins": ["jest"],
+    "plugins": ["jest"]
 }

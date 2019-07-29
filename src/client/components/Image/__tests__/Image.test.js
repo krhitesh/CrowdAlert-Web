@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
+import Enzyme, { mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { findByTestAttr, checkProps } from '../../../tests/testUtils';
 import { GET_IMAGE_URLS } from '../../../utils/apipaths';
@@ -47,7 +47,7 @@ describe('test state', () => {
   const base64StateProps = {
     uuid: null,
     loading: true,
-    base64: 'base64'
+    base64: 'base64',
   };
 
   const nullProps = {
@@ -55,23 +55,23 @@ describe('test state', () => {
     loading: true,
     base64: null,
   };
-  
-  test('uuid prop', () => {
+
+  it('uuid prop', () => {
     const wrapper = setup({ isTrusted: true, ...stateProps }, stateProps);
     expect(wrapper.state('uuid')).toBe(stateProps.uuid);
   });
 
-  test('loading prop', () => {
+  it('loading prop', () => {
     const wrapper = setup({ isTrusted: true, ...stateProps }, stateProps);
     expect(wrapper.state('loading')).toBe(stateProps.loading);
   });
 
-  test('base64 prop', () => {
+  it('base64 prop', () => {
     const wrapper = setup({ isTrusted: true, ...stateProps }, stateProps);
     expect(wrapper.state('base64')).toBe(stateProps.base64);
   });
 
-  test('image urls', () => {
+  it('image urls', () => {
     const wrapper = setup({ isTrusted: true, ...stateProps }, stateProps);
     expect(wrapper.state('imageUrls')).toEqual({
       url: `${GET_IMAGE_URLS}?uuid=${stateProps.uuid}`,
@@ -79,7 +79,7 @@ describe('test state', () => {
     });
   });
 
-  test('image as base64 state prop', () => {
+  it('image as base64 state prop', () => {
     const wrapper = setup({ isTrusted: true, ...base64StateProps }, base64StateProps);
     expect(wrapper.state('imageUrls')).toEqual({
       url: base64StateProps.base64,
@@ -87,71 +87,68 @@ describe('test state', () => {
     });
   });
 
-  test('null state prop', () => {
+  it('null state prop', () => {
     const wrapper = setup({ isTrusted: true, ...nullProps }, nullProps);
     expect(wrapper.state('imageUrls')).toBeUndefined();
   });
-
 });
 
 describe('render', () => {
-  test('renders image not available', () => {
+  it('renders image not available', () => {
     const wrapper = setup({ isTrusted: true, ...stateProps }, stateProps);
-    expect(findByTestAttr(wrapper, 'component-image-modal').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'component-image-modal')).toHaveLength(1);
   });
 
   describe('renders image', () => {
     describe('modal trigger', () => {
-      test('renders', () => {
+      it('renders', () => {
         const wrapper = setup({ isTrusted: false, ...stateProps }, stateProps);
-        expect(findByTestAttr(wrapper, 'component-modal-trigger-image').length).toBe(2);
+        expect(findByTestAttr(wrapper, 'component-modal-trigger-image')).toHaveLength(2);
       });
 
-      test('untrusted image props', () => {
+      it('untrusted image props', () => {
         const wrapper = setup({ isTrusted: false, ...stateProps }, stateProps);
         expect(findByTestAttr(wrapper, 'component-modal-trigger-image').at(0).prop('src')).toBe(wrapper.state('imageUrls').thumbnail);
       });
 
-      test('untrusted image props', () => {
+      it('untrusted image props for thumbnail', () => {
         const wrapper = setup({ isTrusted: true, ...stateProps }, stateProps);
         expect(findByTestAttr(wrapper, 'component-modal-trigger-image').at(0).prop('src')).toBe(wrapper.state('imageUrls').url);
       });
-      
     });
 
     describe('modal not shown', () => {
-      test('renders component', () => {
+      it('renders component', () => {
         const wrapper = setup({ isTrusted: true, ...stateProps }, stateProps);
-        expect(findByTestAttr(wrapper, 'component-image').length).toBe(0);
+        expect(findByTestAttr(wrapper, 'component-image')).toHaveLength(0);
       });
-  
-      test('renders header div', () => {
+
+      it('renders header div', () => {
         const wrapper = setup({ isTrusted: true, ...stateProps }, stateProps);
-        expect(findByTestAttr(wrapper, 'component-modal-header').length).toBe(0);
+        expect(findByTestAttr(wrapper, 'component-modal-header')).toHaveLength(0);
       });
     });
 
     describe('modal is open', () => {
-      test('renders component', () => {
+      it('renders component', () => {
         const wrapper = setup({ open: true, isTrusted: true, ...stateProps }, stateProps);
-        expect(findByTestAttr(wrapper, 'component-image').length).toBe(2);
+        expect(findByTestAttr(wrapper, 'component-image')).toHaveLength(2);
       });
-  
-      test('renders header div', () => {
+
+      it('renders header div', () => {
         const wrapper = setup({ open: true, isTrusted: true, ...stateProps }, stateProps);
-        expect(findByTestAttr(wrapper, 'component-modal-header').length).toBe(2);
+        expect(findByTestAttr(wrapper, 'component-modal-header')).toHaveLength(2);
       });
-  
-      test('label when image is untrusted 0', () => {
+
+      it('label when image is untrusted 0', () => {
         const wrapper = setup({ open: true, isTrusted: false, ...stateProps }, stateProps);
         expect(findByTestAttr(wrapper, 'component-image').at(0).prop('label')).not.toBeNull();
       });
 
-      test('label when image is untrusted 1', () => {
+      it('label when image is untrusted 1', () => {
         const wrapper = setup({ open: true, isTrusted: false, ...stateProps }, stateProps);
         expect(findByTestAttr(wrapper, 'component-image').at(1).prop('label')).not.toBeNull();
       });
-
     });
   });
 });

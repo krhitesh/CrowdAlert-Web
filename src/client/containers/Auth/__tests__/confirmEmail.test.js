@@ -1,30 +1,31 @@
-import React from "react";
-import Enzyme, { shallow, mount } from "enzyme";
-import EnzymeAdapter from "enzyme-adapter-react-16";
+/* eslint-disable no-tabs */
+import React from 'react';
+import Enzyme, { shallow } from 'enzyme';
+import EnzymeAdapter from 'enzyme-adapter-react-16';
 import {
   findByTestAttr,
   storeFactory,
-  checkProps
-} from "../../../tests/testUtils";
-import ConfirmEmail from "../confirmEmail";
+  checkProps,
+} from '../../../tests/testUtils';
+import ConfirmEmail from '../confirmEmail';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const reduxPiece = {
   auth: {
     user: {
-      displayName: "user display name",
-      photoURL: ""
+      displayName: 'user display name',
+      photoURL: '',
     },
     confirmEmailForm: {
       email: true,
       isVerified: true,
       isVerifying: false,
       message: null,
-      errors: false
-		},
-		isLoggedIn: true,
-  }
+      errors: false,
+    },
+    isLoggedIn: true,
+  },
 };
 
 /**
@@ -34,54 +35,52 @@ const reduxPiece = {
  */
 const setup = (props = {}, initialReduxState = {}) => {
   const store = storeFactory(initialReduxState);
-  const wrapper = shallow(
-    <ConfirmEmail.component {...props} store={store} />
-  ).dive();
+  const wrapper = shallow(<ConfirmEmail.component {...props} store={store} />).dive();
   return wrapper;
 };
 
 test('does not throw warning with expected props', () => {
-	const expectedProps = {
-		...reduxPiece,
-		verifyEmailAuth: jest.fn(),
-		sendEmailVerificationAuth: jest.fn()
-	};
+  const expectedProps = {
+    ...reduxPiece,
+    verifyEmailAuth: jest.fn(),
+    sendEmailVerificationAuth: jest.fn(),
+  };
 
-	checkProps(ConfirmEmail.component, expectedProps);
+  checkProps(ConfirmEmail.component, expectedProps);
 });
 
 describe('render', () => {
-	test('renders without error', () => {
-		const	wrapper = setup({}, reduxPiece).dive().dive();
-		expect(findByTestAttr(wrapper, 'component-confirm-email').length).toBe(1);
-  });
-  
-  test('renders no errors', () => {
-		const	wrapper = setup({}, reduxPiece).dive().dive();
-		expect(findByTestAttr(wrapper, 'confirm-email-errors').length).toBe(0);
-  });
-  
-  test('renders verified', () => {
-		const	wrapper = setup({}, reduxPiece).dive().dive();
-		expect(findByTestAttr(wrapper, 'verified').length).toBe(1);
-	});
-
-  test('renders email sent', () => {
-		const	wrapper = setup({}, reduxPiece).dive().dive();
-		expect(findByTestAttr(wrapper, 'email-sent').length).toBe(1);
-  });
-  
-  test('renders email prompt', () => {
-		const	wrapper = setup({}, reduxPiece).dive().dive();
-		expect(findByTestAttr(wrapper, 'email-prompt').length).toBe(0);
+  it('renders without error', () => {
+    const	wrapper = setup({}, reduxPiece).dive().dive();
+    expect(findByTestAttr(wrapper, 'component-confirm-email')).toHaveLength(1);
   });
 
-  test('renders no verifying', () => {
-		const	wrapper = setup({}, reduxPiece).dive().dive();
-		expect(findByTestAttr(wrapper, 'verifying').length).toBe(0);
+  it('renders no errors', () => {
+    const	wrapper = setup({}, reduxPiece).dive().dive();
+    expect(findByTestAttr(wrapper, 'confirm-email-errors')).toHaveLength(0);
   });
-  
-  test('renders error component', () => {
+
+  it('renders verified', () => {
+    const	wrapper = setup({}, reduxPiece).dive().dive();
+    expect(findByTestAttr(wrapper, 'verified')).toHaveLength(1);
+  });
+
+  it('renders email sent', () => {
+    const	wrapper = setup({}, reduxPiece).dive().dive();
+    expect(findByTestAttr(wrapper, 'email-sent')).toHaveLength(1);
+  });
+
+  it('renders email prompt', () => {
+    const	wrapper = setup({}, reduxPiece).dive().dive();
+    expect(findByTestAttr(wrapper, 'email-prompt')).toHaveLength(0);
+  });
+
+  it('renders no verifying', () => {
+    const	wrapper = setup({}, reduxPiece).dive().dive();
+    expect(findByTestAttr(wrapper, 'verifying')).toHaveLength(0);
+  });
+
+  it('renders error component', () => {
     const rp = {
       auth: {
         ...reduxPiece.auth,
@@ -89,16 +88,16 @@ describe('render', () => {
           email: true,
           isVerified: true,
           isVerifying: false,
-          message: "error message",
-          errors: true
-        }
-      }
-    }
-		const	wrapper = setup({}, rp).dive().dive();
-		expect(findByTestAttr(wrapper, 'confirm-email-errors').length).toBe(1);
+          message: 'error message',
+          errors: true,
+        },
+      },
+    };
+    const	wrapper = setup({}, rp).dive().dive();
+    expect(findByTestAttr(wrapper, 'confirm-email-errors')).toHaveLength(1);
   });
-  
-  test('renders verifying', () => {
+
+  it('renders verifying', () => {
     const rp = {
       auth: {
         ...reduxPiece.auth,
@@ -107,15 +106,15 @@ describe('render', () => {
           isVerified: false,
           isVerifying: true,
           message: null,
-          errors: false
-        }
-      }
+          errors: false,
+        },
+      },
     };
-		const	wrapper = setup({}, rp).dive().dive();
-		expect(findByTestAttr(wrapper, 'verifying').length).toBe(1);
+    const	wrapper = setup({}, rp).dive().dive();
+    expect(findByTestAttr(wrapper, 'verifying')).toHaveLength(1);
   });
 
-  test('renders no verified', () => {
+  it('renders no verified', () => {
     const rp = {
       auth: {
         ...reduxPiece.auth,
@@ -124,41 +123,40 @@ describe('render', () => {
           isVerified: false,
           isVerifying: true,
           message: null,
-          errors: false
-        }
-      }
+          errors: false,
+        },
+      },
     };
-		const	wrapper = setup({}, rp).dive().dive();
-		expect(findByTestAttr(wrapper, 'verified').length).toBe(0);
+    const	wrapper = setup({}, rp).dive().dive();
+    expect(findByTestAttr(wrapper, 'verified')).toHaveLength(0);
   });
-
 });
 
-describe("redux props", () => {
+describe('redux props', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = setup({}, reduxPiece);
   });
 
-  test("redux piece of state", () => {
+  it('redux piece of state', () => {
     const reduxProps = {
       auth: {
         confirmEmailForm: wrapper.props().confirmEmailForm,
-				user: wrapper.props().user,
-				isLoggedIn: wrapper.props().isLoggedIn,
-      }
+        user: wrapper.props().user,
+        isLoggedIn: wrapper.props().isLoggedIn,
+      },
     };
 
     expect(reduxProps).toEqual(reduxPiece);
   });
 
-  test('"verifyEmailAuth" action creator', () => {
+  it('"verifyEmailAuth" action creator', () => {
     const verifyEmailAuthProps = wrapper.instance().props.verifyEmailAuth;
     expect(verifyEmailAuthProps).toBeInstanceOf(Function);
-	});
-	
-	test('"sendEmailVerificationAuth" action creator', () => {
+  });
+
+  it('"sendEmailVerificationAuth" action creator', () => {
     const sendEmailVerificationAuthProps = wrapper.instance().props.sendEmailVerificationAuth;
     expect(sendEmailVerificationAuthProps).toBeInstanceOf(Function);
-	});
+  });
 });

@@ -3,7 +3,7 @@ const styleSheet = {
     position: 'fixed',
     bottom: '10vh',
     right: '20px',
-    zIndex: 1000
+    zIndex: 1000,
   },
 };
 
