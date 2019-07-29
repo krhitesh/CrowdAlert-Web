@@ -42,7 +42,7 @@ test_backend:
   stage: test_backend
   script:
   - . env/bin/activate
-  - coverage run manage.py test -v 2
+  - coverage run manage.py test api.users -v 2
   artifacts:
     paths:
     - env/
