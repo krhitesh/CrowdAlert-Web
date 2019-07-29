@@ -25,6 +25,7 @@ def get_authenticated_user_token():
 
 def get_anonymous_user_token():
     r = requests.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + os.environ['REACT_APP_FIREBASE_API_KEY'], data={'returnSecureToken': True})
+    print(r.json())
     return r.json()['idToken']
 
 def delete_anonymous_user(idToken):
