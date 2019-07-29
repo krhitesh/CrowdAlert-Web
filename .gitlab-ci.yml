@@ -70,8 +70,8 @@ build_frontend:
   image: node:10.15.0
   stage: build_frontend
   dependencies:
-  - install_dependencies
-  - frontend_unit_test
+  - installnpmdeps
+  - testfrontend
   script:
   - yarn build
   artifacts:
