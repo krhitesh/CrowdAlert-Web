@@ -21,7 +21,9 @@ def exchange_refresh_token():
     return r.json()['id_token']
 
 def get_authenticated_user_token():
-    return exchange_refresh_token()
+    if not settings.FIREBASE_USER_AUTH_TOKEN:
+        settings.FIREBASE_USER_AUTH_TOKEN = exchange_refresh_token()
+    return settings.FIREBASE_USER_AUTH_TOKEN
 
 def get_anonymous_user_token():
     r = requests.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + os.environ['REACT_APP_FIREBASE_API_KEY'], data={'returnSecureToken': True})

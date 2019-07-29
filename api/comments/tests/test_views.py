@@ -6,14 +6,14 @@ from django.test import TestCase, RequestFactory
 from api.comments.models import Comment
 from api.comments.views import CommentView
 from api.firebase_auth.users import FirebaseUser
-from api.utils.firebase_utils import get_anonymous_user_token, delete_anonymous_user, delete_collection
+from api.utils.firebase_utils import get_authenticated_user_token, delete_collection
 
 db = settings.FIRESTORE
 
 
 class CommentViewTest(TestCase):
     def setUp(self):
-        self.token = get_anonymous_user_token()
+        self.auth_token = get_authenticated_user_token()
         self.factory = RequestFactory()
         firebase_data = {
             'uid': '',
@@ -41,7 +41,7 @@ class CommentViewTest(TestCase):
         settings.COVERAGE = True
         data = json.dumps({"commentData": '{"text":"test", "thread":"sl6NOrYyjvTQwUtCsOha"}'})
         request = self.factory.post(path='/api/comments/comment', data=data, content_type='application/json',
-                                    secure=False, HTTP_TOKEN=self.token)
+                                    secure=False, HTTP_TOKEN=self.auth_token)
         request.user = self.user
         response = CommentView.as_view()(request)
         self.assertEqual(response.status_code, 200)
@@ -49,4 +49,3 @@ class CommentViewTest(TestCase):
     def tearDown(self):
         print('Cleaning up comments')
         delete_collection(db.collection(Comment.collection_name))
-        delete_anonymous_user(self.token)

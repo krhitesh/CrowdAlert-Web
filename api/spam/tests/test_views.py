@@ -7,7 +7,7 @@ from django.test import TestCase, RequestFactory
 from api.firebase_auth.users import FirebaseUser
 from api.spam.models import Classifier
 from api.spam.views import SpamReportView
-from api.utils.firebase_utils import get_anonymous_user_token, delete_collection, delete_anonymous_user, get_authenticated_user_token
+from api.utils.firebase_utils import delete_collection, get_authenticated_user_token
 
 db = settings.FIRESTORE
 
@@ -16,7 +16,6 @@ class SpamReportViewTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.auth_token = get_authenticated_user_token()
-        self.token = get_anonymous_user_token()
         firebase_data = {
             'uid': '',
             'user_id': '',
@@ -31,7 +30,7 @@ class SpamReportViewTest(TestCase):
 
     def test_get(self):
         request = self.factory.get('/api/spam/report', data={'uuid': self.test_uuid}, secure=False,
-                                   HTTP_TOKEN=self.token)
+                                   HTTP_TOKEN=self.auth_token)
         response = SpamReportView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
@@ -46,4 +45,3 @@ class SpamReportViewTest(TestCase):
     def tearDown(self):
         print('Cleaning up classifer')
         delete_collection(db.collection(Classifier.collection_name))
-        delete_anonymous_user(self.token)
