@@ -1,19 +1,19 @@
 stages:
-  - setuppyenv
-  - installpydeps
-  - testbackend
-  - installnpmdeps
-  - testfrontend
-  - build_frontend
+  - setup_py_env
+  - install_py_deps
+  - test_backend
+  - install_npm_deps
+  - test_frontend
+  - build_image
 
 cache:
   paths:
   - node_modules/
   - env/
 
-setuppyenv:
+setup_py_env:
   image: python:3.5
-  stage: setuppyenv
+  stage: setup_py_env
   script:
   - apt-get update -q -y
   - apt-get install -y python-pip
@@ -23,11 +23,11 @@ setuppyenv:
     paths:
     - env/
 
-installpydeps:
+install_py_deps:
   image: python:3.5
   dependencies:
-  - setuppyenv
-  stage: installpydeps
+  - setup_py_env
+  stage: install_py_deps
   script:
   - . env/bin/activate
   - pip install -r requirements.txt
@@ -35,47 +35,44 @@ installpydeps:
     paths:
     - env/
 
-testbackend:
+test_backend:
   image: python:3.5
   dependencies:
-  - installpydeps
-  stage: testbackend
+  - install_py_deps
+  stage: test_backend
   script:
   - . env/bin/activate
-  - coverage run manage.py test api.events -v 2
+  - coverage run manage.py test -v 2
   artifacts:
     paths:
     - env/
 
-installnpmdeps:
+install_npm_deps:
   image: node:10.15.0
-  stage: installnpmdeps
+  stage: install_npm_deps
   script:
   - yarn
   artifacts:
     paths:
     - node_modules/
 
-testfrontend:
+test_frontend:
   image: node:10.15.0
-  stage: testfrontend
+  stage: test_frontend
   dependencies:
-  - installnpmdeps
+  - install_npm_deps
   script:
   - yarn lint
   - yarn test
   when: on_success
 
-build_frontend:
-  image: node:10.15.0
-  stage: build_frontend
+build_image:
+  image: docker
+  stage: build_image
   dependencies:
-  - installnpmdeps
-  - testfrontend
+  - install_npm_deps
+  - test_frontend
+  - test_backend
   script:
-  - yarn build
-  artifacts:
-    paths:
-    - build/
-    - public/
+  - docker build -t crowdalert .
   when: on_success
