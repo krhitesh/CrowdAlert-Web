@@ -1,8 +1,8 @@
 import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
-import { findByTestAttr, checkProps } from '../../../tests/testUtils';
 import { Item, Label } from 'semantic-ui-react';
+import { findByTestAttr, checkProps } from '../../../tests/testUtils';
 import Body from '../Body';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
@@ -20,34 +20,33 @@ const defaultProps = {
 const setup = (props = {}) => shallow(<Body {...defaultProps} {...props} />);
 
 describe('renders', () => {
-
   describe('renders without error', () => {
     const props = {
       title: 'No title',
       spam: {},
-      children: <React.Fragment />
+      children: <React.Fragment />,
     };
     let wrapper;
     beforeEach(() => {
       wrapper = setup(props);
     });
 
-    test('render', () => {
-      expect(findByTestAttr(wrapper, 'component-body').length).toBe(1);
+    it('render', () => {
+      expect(findByTestAttr(wrapper, 'component-body')).toHaveLength(1);
     });
 
-    test('renders header', () => {
+    it('renders header', () => {
       expect(wrapper.find(Item.Header).render().text()).toEqual(props.title);
     });
 
-    test('renders label', () => {
-      expect(wrapper.find(Label).render().text()).toEqual(defaultProps.eventType.toUpperCase());
+    it('renders label', () => {
+      expect(wrapper.find(Label).render().text())
+        .toEqual(defaultProps.eventType.toUpperCase());
     });
 
-    test('does not render desktop meta', () => {
-      expect(findByTestAttr(wrapper, 'jsx-desktop').length).toBe(0);
+    it('does not render desktop meta', () => {
+      expect(findByTestAttr(wrapper, 'jsx-desktop')).toHaveLength(0);
     });
-
   });
 
   describe('renders on desktop without error', () => {
@@ -55,22 +54,21 @@ describe('renders', () => {
       title: '',
       desktop: true,
       spam: {},
-      children: <React.Fragment />
+      children: <React.Fragment />,
     };
     const wrapper = setup(props);
 
-    test('renders desktop meta', () => {
-      expect(findByTestAttr(wrapper, 'jsx-desktop').length).toBe(1);
+    it('renders desktop meta', () => {
+      expect(findByTestAttr(wrapper, 'jsx-desktop')).toHaveLength(1);
     });
-
   });
 
-  test('does not throw warning with expected props', () => {
+  it('does not throw warning with expected props', () => {
     const expectedProps = {
       title: '',
       desktop: true,
       spam: {},
-      children: <React.Fragment />
+      children: <React.Fragment />,
     };
 
     checkProps(Body, expectedProps);

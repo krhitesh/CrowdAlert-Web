@@ -1,9 +1,9 @@
 import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
+import { Link } from 'react-router-dom';
 import { findByTestAttr } from '../../../tests/testUtils';
 import Bottombar from '../';
-import { Link } from 'react-router-dom';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
@@ -20,34 +20,34 @@ describe('testing Bottombar component', () => {
     wrapper = setup();
   });
 
-  test('renders without error', () => {
+  it('renders without error', () => {
+    expect.hasAssertions();
     const component = findByTestAttr(wrapper, 'component-bottombar');
-    expect(component.length).toBe(1);
+    expect(component).toHaveLength(1);
   });
 
-  test('renders grid map outline column without error', () => {
+  it('renders grid map outline column without error', () => {
     const component = findByTestAttr(wrapper, 'component-grid-map-outline');
-    expect(component.length).toBe(1);
+    expect(component).toHaveLength(1);
   });
 
-  test('renders grid map camera column without error', () => {
+  it('renders grid map camera column without error', () => {
     const component = findByTestAttr(wrapper, 'component-grid-map-camera');
-    expect(component.length).toBe(1);
-  })
+    expect(component).toHaveLength(1);
+  });
 
-  test('renders grid bell column without error', () => {
+  it('renders grid bell column without error', () => {
     const component = findByTestAttr(wrapper, 'component-grid-bell');
-    expect(component.length).toBe(1);
+    expect(component).toHaveLength(1);
   });
 
   describe('link renders without error', () => {
-    test('link create renders without error', () => {
+    it('link create renders without error', () => {
       expect(wrapper.find(Link)).toHaveLength(1);
     });
 
-    test('link create has correct to attribute', () => {
+    it('link create has correct to attribute', () => {
       expect(wrapper.find(Link).props().to).toBe('/create/');
     });
   });
-  
 });

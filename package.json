@@ -83,7 +83,8 @@
     "build": "yarn prod:only-build-client && yarn prod:only-build-server",
     "test-watch": "jest --watch --config=jest.config.js",
     "test": "jest --config=jest.config.js",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "lint-fix": "eslint --fix -c ./.eslintrc.json src"
   },
   "devDependencies": {
     "babel-jest": "23.4.0",

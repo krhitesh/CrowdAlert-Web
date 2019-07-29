@@ -25,23 +25,23 @@ const sortComments = (a, b) => {
     return 1;
   }
   return 0;
-}
+};
 
 describe('testing comments reducer', () => {
-  test('no change when no action is passed', () => {
+  it('no change when no action is passed', () => {
     const ns = commentsReducer(initialState, {});
     expect(ns).toEqual(initialState);
   });
 
-  test('new comment via web socket action', () => {
+  it('new comment via web socket action', () => {
     const action = {
       type: WS_NEW_COMMENT_RECEIVED,
       payload: {
         userData: {
           kwKpnj5y0ZR4QlAkTO4IGKHqsdY2: {
             displayName: 'Hitesh Kumar',
-            photoURL: 'https://lh4.googleusercontent.com/-peeRetkut0g/AAAAAAAAAAI/AAAAAAAAEIM/Ss8Rhw2EMjY/photo.jpg'
-          }
+            photoURL: 'https://lh4.googleusercontent.com/-peeRetkut0g/AAAAAAAAAAI/AAAAAAAAEIM/Ss8Rhw2EMjY/photo.jpg',
+          },
         },
         comments: {
           '7gIxAGXrNIk4kAlMBLbB': {
@@ -51,11 +51,11 @@ describe('testing comments reducer', () => {
             spam: {
               uuid: '7gIxAGXrNIk4kAlMBLbB',
               count: 0,
-              toxic: {}
-            }
-          }
-        }
-      }
+              toxic: {},
+            },
+          },
+        },
+      },
     };
 
     const ns = commentsReducer(initialState, action);
@@ -69,7 +69,8 @@ describe('testing comments reducer', () => {
     const comments = [comment[0], ...initialState.comments];
     const { userData } = initialState;
     const userDataKey = Object.keys(action.payload.userData)[0];
-    const insert = Object.keys(initialState.userData).filter(key => key === userDataKey).length === 0;
+    const insert = Object.keys(initialState.userData)
+      .filter(key => key === userDataKey).length === 0;
 
     if (insert) {
       userData[userDataKey] = action.payload.userData[userDataKey];
@@ -84,13 +85,13 @@ describe('testing comments reducer', () => {
     });
   });
 
-  test('fetch thread action', () => {
+  it('fetch thread action', () => {
     const action = {
       type: COMMENTS_FETCH_THREAD,
       payload: {
         threadId: '',
-        showLoader: true
-      }
+        showLoader: true,
+      },
     };
 
     const ns = commentsReducer(initialState, action);
@@ -99,19 +100,19 @@ describe('testing comments reducer', () => {
     expect(ns).toEqual({
       ...initialState,
       threadId: action.payload.threadId,
-      loading
+      loading,
     });
   });
 
-  test('fetch thread success action', () => {
+  it('fetch thread success action', () => {
     const action = {
       type: COMMENTS_FETCH_THREAD_SUCCESS,
       payload: {
         userData: {
           kwKpnj5y0ZR4QlAkTO4IGKHqsdY2: {
             displayName: 'Hitesh Kumar',
-            photoURL: 'https://lh4.googleusercontent.com/-peeRetkut0g/AAAAAAAAAAI/AAAAAAAAEIM/Ss8Rhw2EMjY/photo.jpg'
-          }
+            photoURL: 'https://lh4.googleusercontent.com/-peeRetkut0g/AAAAAAAAAAI/AAAAAAAAEIM/Ss8Rhw2EMjY/photo.jpg',
+          },
         },
         comments: {
           G51PfyBx0scM4BwU02yB: {
@@ -121,8 +122,8 @@ describe('testing comments reducer', () => {
             spam: {
               uuid: 'G51PfyBx0scM4BwU02yB',
               count: 0,
-              toxic: {}
-            }
+              toxic: {},
+            },
           },
           HIuwwlBlQqacTASx6ru1: {
             text: 'zxczcasdasdqwe asdasd',
@@ -131,8 +132,8 @@ describe('testing comments reducer', () => {
             spam: {
               uuid: 'HIuwwlBlQqacTASx6ru1',
               count: 0,
-              toxic: {}
-            }
+              toxic: {},
+            },
           },
           h5OccHpYTVK8Xcmd93Pl: {
             user: 'kwKpnj5y0ZR4QlAkTO4IGKHqsdY2',
@@ -141,8 +142,8 @@ describe('testing comments reducer', () => {
             spam: {
               uuid: 'h5OccHpYTVK8Xcmd93Pl',
               count: 0,
-              toxic: {}
-            }
+              toxic: {},
+            },
           },
           tbfmeBxHkh41HBH9yJwy: {
             text: 'asdasd',
@@ -151,8 +152,8 @@ describe('testing comments reducer', () => {
             spam: {
               uuid: 'tbfmeBxHkh41HBH9yJwy',
               count: 0,
-              toxic: {}
-            }
+              toxic: {},
+            },
           },
           Wq0UwEqpX7IwNpzUgLRI: {
             text: 'zxczxczc',
@@ -161,8 +162,8 @@ describe('testing comments reducer', () => {
             spam: {
               uuid: 'Wq0UwEqpX7IwNpzUgLRI',
               count: 0,
-              toxic: {}
-            }
+              toxic: {},
+            },
           },
           '4zZo8OF7nvkIVrS1SYab': {
             text: 'asdasdad',
@@ -171,8 +172,8 @@ describe('testing comments reducer', () => {
             spam: {
               uuid: '4zZo8OF7nvkIVrS1SYab',
               count: 0,
-              toxic: {}
-            }
+              toxic: {},
+            },
           },
           VGYKU1xJ9nmAMe08NQQr: {
             timestamp: 1562604098825.726,
@@ -181,8 +182,8 @@ describe('testing comments reducer', () => {
             spam: {
               uuid: 'VGYKU1xJ9nmAMe08NQQr',
               count: 0,
-              toxic: {}
-            }
+              toxic: {},
+            },
           },
           jdwCv07LI2ujk0qNNTXW: {
             text: 'testing 2',
@@ -191,8 +192,8 @@ describe('testing comments reducer', () => {
             spam: {
               uuid: 'jdwCv07LI2ujk0qNNTXW',
               count: 0,
-              toxic: {}
-            }
+              toxic: {},
+            },
           },
           '7gIxAGXrNIk4kAlMBLbB': {
             text: 'test',
@@ -201,11 +202,11 @@ describe('testing comments reducer', () => {
             spam: {
               uuid: '7gIxAGXrNIk4kAlMBLbB',
               count: 0,
-              toxic: {}
-            }
-          }
-        }
-      }
+              toxic: {},
+            },
+          },
+        },
+      },
     };
 
     const ns = commentsReducer(initialState, action);
@@ -225,13 +226,13 @@ describe('testing comments reducer', () => {
     });
   });
 
-  test('post to thread action', () => {
+  it('post to thread action', () => {
     const action = {
       type: COMMENTS_POST_TO_THREAD,
       payload: {
         comment: 'comment',
-        threadId: 'threadId'
-      }
+        threadId: 'threadId',
+      },
     };
 
     const ns = commentsReducer(initialState, action);
@@ -241,12 +242,12 @@ describe('testing comments reducer', () => {
     });
   });
 
-  test('post to thread error action', () => {
+  it('post to thread error action', () => {
     const action = {
       type: COMMENTS_POST_TO_THREAD_ERROR,
       payload: {
-        detail: 'Invalid authentication token provided'
-      }
+        detail: 'Invalid authentication token provided',
+      },
     };
 
     const ns = commentsReducer(initialState, action);

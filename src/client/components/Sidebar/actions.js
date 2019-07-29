@@ -18,8 +18,8 @@ export function toggleSidebarVisibility(payload = {}) {
   };
 }
 /**
- * 
- * @param {*} payload 
+ *
+ * @param {*} payload
  */
 export function setSidebarVisibility(payload = {}) {
   return {

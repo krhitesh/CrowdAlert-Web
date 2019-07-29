@@ -16,17 +16,17 @@ const initialState = {
 };
 
 describe('testing sidebar reducer', () => {
-  test('no change when no action is passed', () => {
+  it('no change when no action is passed', () => {
     const ns = sidebarReducer(initialState, {});
     expect(ns).toEqual(initialState);
   });
 
-  test('toggle visibility action', () => {
+  it('toggle visibility action', () => {
     const action = {
       type: SIDEBAR_TOGGLE_VISIBILITY,
       payload: {
-        animation: 'scale down'
-      }
+        animation: 'scale down',
+      },
     };
 
     const ns = sidebarReducer(initialState, action);
@@ -39,10 +39,10 @@ describe('testing sidebar reducer', () => {
     });
   });
 
-  test('set visibility action', () => {
+  it('set visibility action', () => {
     const action = {
       type: SIDEBAR_SET_VISIBILITY,
-      payload: {}
+      payload: {},
     };
 
     const ns = sidebarReducer(initialState, action);
@@ -55,12 +55,12 @@ describe('testing sidebar reducer', () => {
     });
   });
 
-  test('remove visibility action', () => {
+  it('remove visibility action', () => {
     const action = {
       type: SIDEBAR_REMOVE_VISIBILITY,
       payload: {
-        animation: 'scale down'
-      }
+        animation: 'scale down',
+      },
     };
 
     const ns = sidebarReducer(initialState, action);
@@ -72,10 +72,10 @@ describe('testing sidebar reducer', () => {
     });
   });
 
-  test('bottom bar toggle visibility action', () => {
+  it('bottom bar toggle visibility action', () => {
     const action = {
       type: BOTTOMBAR_TOGGLE_VISIBILITY,
-      payload: {}
+      payload: {},
     };
 
     const ns = sidebarReducer(initialState, action);
@@ -85,10 +85,10 @@ describe('testing sidebar reducer', () => {
     });
   });
 
-  test('bottom bar set visibility action', () => {
+  it('bottom bar set visibility action', () => {
     const action = {
       type: BOTTTOMBAR_SET_VISIBILITY,
-      payload: {}
+      payload: {},
     };
 
     const ns = sidebarReducer(initialState, action);
@@ -99,10 +99,10 @@ describe('testing sidebar reducer', () => {
     });
   });
 
-  test('bottom bar remove visibility action', () => {
+  it('bottom bar remove visibility action', () => {
     const action = {
       type: BOTTTOMBAR_REMOVE_VISIBILITY,
-      payload: {}
+      payload: {},
     };
 
     const ns = sidebarReducer(initialState, action);

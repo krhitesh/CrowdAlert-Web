@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* global window */
 import {
   AUTH_LOGIN_SUBMIT_EMAIL_PASSWORD,

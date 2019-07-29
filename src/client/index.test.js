@@ -7,6 +7,6 @@ import Client from './index';
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 test('renders without error', () => {
-    const wrapper = shallow(<Client.Component />);
-    expect(findByTestAttr(wrapper, 'component-client').length).toBe(1);
+  const wrapper = shallow(<Client.Component />);
+  expect(findByTestAttr(wrapper, 'component-client')).toHaveLength(1);
 });

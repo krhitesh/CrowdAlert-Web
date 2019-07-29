@@ -50,7 +50,7 @@ const initialState = {
     validationErrors: false,
     uploading: false,
     imageSelectDisabled: false,
-  }
+  },
 };
 
 test('no change when no action is passed', () => {
@@ -59,12 +59,12 @@ test('no change when no action is passed', () => {
 });
 
 describe('testing switch tab reducer', () => {
-  test('form tab change action', () => {
+  it('form tab change action', () => {
     const action = {
       type: CREATE_EVENTS_FORM_TAB_CHANGE,
       payload: {
-        tab: 1
-      }
+        tab: 1,
+      },
     };
 
     const ns = createEventsReducer(initialState, action);
@@ -72,18 +72,18 @@ describe('testing switch tab reducer', () => {
       ...initialState,
       tabs: {
         ...initialState.tabs,
-        activeTab: action.payload.tab
-      }
+        activeTab: action.payload.tab,
+      },
     });
   });
 
-  test('form tab change validation action', () => {
+  it('form tab change validation action', () => {
     const action = {
       type: CREATE_EVENTS_FORM_TAB_CHANGE_VALIDATION,
       payload: {
         tab: 'location',
-        isValid: true
-      }
+        isValid: true,
+      },
     };
 
     const ns = createEventsReducer(initialState, action);
@@ -93,21 +93,21 @@ describe('testing switch tab reducer', () => {
         ...initialState.tabs,
         isValid: {
           ...initialState.tabs.isValid,
-          [action.payload.tab]: action.payload.isValid
-        }
-      }
+          [action.payload.tab]: action.payload.isValid,
+        },
+      },
     });
   });
 });
 
 describe('testing location tab reducer', () => {
-  test('map on click action', () => {
+  it('map on click action', () => {
     const action = {
       type: MAP_ONCLICK,
       payload: {
         lat: 26.46445855489077,
         lng: 80.34210357666016,
-      }
+      },
     };
 
     const ns = createEventsReducer(initialState, action);
@@ -120,17 +120,17 @@ describe('testing location tab reducer', () => {
           lat: action.payload.lat,
           lng: action.payload.lng,
         },
-        disabled: false
-      }
+        disabled: false,
+      },
     });
   });
 
-  test('update location text action', () => {
+  it('update location text action', () => {
     const action = {
       type: CREATE_EVENTS_FORM_UPDATE_LOCATION_TEXT,
       payload: {
-        text: 'new location text'
-      }
+        text: 'new location text',
+      },
     };
 
     const ns = createEventsReducer(initialState, action);
@@ -138,15 +138,15 @@ describe('testing location tab reducer', () => {
       ...initialState,
       location: {
         ...initialState.location,
-        text: action.payload.text
-      }
+        text: action.payload.text,
+      },
     });
   });
 
-  test('save location action', () => {
+  it('save location action', () => {
     const action = {
       type: CREATE_EVENTS_FORM_SAVE_LOCATION,
-      payload: {}
+      payload: {},
     };
 
     const ns = createEventsReducer(initialState, action);
@@ -154,20 +154,20 @@ describe('testing location tab reducer', () => {
       ...initialState,
       location: {
         ...initialState.location,
-        disabled: true
-      }
+        disabled: true,
+      },
     });
   });
 });
 
 describe('testing details reducer', () => {
-  test('update event details action', () => {
+  it('update event details action', () => {
     const action = {
       type: CREATE_EVENTS_FORMS_UPDATE_EVENT_DETAILS,
       payload: {
         name: 'description',
-        value: 'zxczxczxc'
-      }
+        value: 'zxczxczxc',
+      },
     };
 
     const ns = createEventsReducer(initialState, action);
@@ -176,22 +176,22 @@ describe('testing details reducer', () => {
       details: {
         ...initialState.details,
         [action.payload.name]: action.payload.value,
-      }
+      },
     });
   });
 });
 
 describe('testing report form reducer', () => {
-  test('validation errors action', () => {
+  it('validation errors action', () => {
     const action = {
       type: CREATE_EVENTS_FORM_VALIDATION_ERRORS,
       payload: {
         validationErrors: true,
         message: {
           header: 'Event not given',
-          body: 'Please select an event type from the dropdown'
-        }
-      }
+          body: 'Please select an event type from the dropdown',
+        },
+      },
     };
 
     const ns = createEventsReducer(initialState, action);
@@ -206,14 +206,14 @@ describe('testing report form reducer', () => {
         },
         loading: false,
         isFreezed: false,
-      }
+      },
     });
   });
 
-  test('validation success action', () => {
+  it('validation success action', () => {
     const action = {
       type: CREATE_EVENTS_FORM_VALIDATION_SUCCESS,
-      payload: {}
+      payload: {},
     };
 
     const ns = createEventsReducer(initialState, action);
@@ -224,14 +224,14 @@ describe('testing report form reducer', () => {
         isFreezed: true,
         loading: false,
         validationErrors: false,
-      }
+      },
     });
   });
 
-  test('form submit action', () => {
+  it('form submit action', () => {
     const action = {
       type: CREATE_EVENTS_FORM_SUBMIT,
-      payload: {}
+      payload: {},
     };
 
     const ns = createEventsReducer(initialState, action);
@@ -242,17 +242,17 @@ describe('testing report form reducer', () => {
         isFreezed: true,
         loading: true,
         validationErrors: false,
-      }
+      },
     });
   });
 
 
-  test('form submit action', () => {
+  it('form submit success action', () => {
     const action = {
       type: CREATE_EVENTS_FORM_SUBMIT_SUCCESS,
       payload: {
-        eventId: 'eventId'
-      }
+        eventId: 'eventId',
+      },
     };
 
     const ns = createEventsReducer(initialState, action);
@@ -264,11 +264,11 @@ describe('testing report form reducer', () => {
         loading: false,
         validationErrors: false,
         eventID: action.payload.eventId,
-      }
+      },
     });
   });
 
-  test('form submit error action', () => {
+  it('form submit error action', () => {
     const action = {
       type: CREATE_EVENTS_FORM_SUBMIT_ERROR,
       payload: {
@@ -276,7 +276,7 @@ describe('testing report form reducer', () => {
           header: 'Unable to process your request',
           body: 'error body',
         },
-      }
+      },
     };
 
     const ns = createEventsReducer(initialState, action);
@@ -291,15 +291,15 @@ describe('testing report form reducer', () => {
         },
         loading: false,
         isFreezed: false,
-      }
+      },
     });
   });
 
 
-  test('toggle uploading action', () => {
+  it('toggle uploading action', () => {
     const action = {
       type: CREATE_EVENTS_FORM_TOGGLE_UPLOADING,
-      payload: {}
+      payload: {},
     };
 
     const ns = createEventsReducer(initialState, action);
@@ -307,8 +307,8 @@ describe('testing report form reducer', () => {
       ...initialState,
       form: {
         ...initialState.form,
-        uploading: !initialState.form.uploading
-      }
+        uploading: !initialState.form.uploading,
+      },
     });
   });
 });

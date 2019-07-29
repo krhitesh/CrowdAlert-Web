@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
 import GeoLocator from '../index';
@@ -18,7 +18,7 @@ const reduxPiece = {
   geoLocator: {
     modalText: 'Text',
     isOpen: false,
-    closeModal: () => {}
+    closeModal: () => {},
   },
 };
 
@@ -39,45 +39,45 @@ test('does not throw warning with expected props', () => {
     getLocation: jest.fn(),
     closeModal: jest.fn(),
     ...defaultProps,
-    modal: {      
+    modal: {
       ...defaultProps.modal,
       modalText: 'Text',
-    }
+    },
   };
 
   checkProps(GeoLocator, expectedProps);
 });
 
 describe('render', () => {
-  test('renders without error', () => {
+  it('renders without error', () => {
     const wrapper = setup({}, reduxPiece);
-    expect(findByTestAttr(wrapper, 'component-geolocator').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'component-geolocator')).toHaveLength(1);
   });
 
-  test('renders button', () => {
+  it('renders button', () => {
     const wrapper = setup({}, reduxPiece);
-    expect(findByTestAttr(wrapper, 'jsx-geolocator-btn').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'jsx-geolocator-btn')).toHaveLength(1);
   });
 
-  
+
   describe('renders confirmation modal', () => {
-    test('renders confirmation modal', () => {
+    it('renders confirmation modal', () => {
       const wrapper = setup({}, reduxPiece);
-      expect(findByTestAttr(wrapper, 'component-confirmation-modal').length).toBe(1);
+      expect(findByTestAttr(wrapper, 'component-confirmation-modal')).toHaveLength(1);
     });
-    
-    test('renders modal content p', () => {
+
+    it('renders modal content p', () => {
       const wrapper = setup({}, reduxPiece);
       const component = findByTestAttr(wrapper, 'component-confirmation-modal').dive();
 
       expect(findByTestAttr(component, 'jsx-prop-text').text()).toBe(reduxPiece.geoLocator.modalText);
     });
 
-    test('renders modal button', () => {
+    it('renders modal button', () => {
       const wrapper = setup({}, reduxPiece);
       const component = findByTestAttr(wrapper, 'component-confirmation-modal').dive();
 
-      expect(findByTestAttr(component, 'jsx-ok-btn').length).toBe(1);
+      expect(findByTestAttr(component, 'jsx-ok-btn')).toHaveLength(1);
     });
   });
 });
@@ -87,20 +87,20 @@ describe('redux props', () => {
   beforeEach(() => {
     wrapper = setup({}, reduxPiece);
   });
-  test('has redux piece of state', () => {
+  it('has redux piece of state', () => {
     const reduxProps = {
       geoLocator: wrapper.instance().props.modal,
-    }
+    };
 
     expect(reduxProps).toEqual(reduxPiece);
   });
 
-  test('"getLocation" action creator', () => {
+  it('"getLocation" action creator', () => {
     const getLocationProp = wrapper.instance().props.getLocation;
     expect(getLocationProp).toBeInstanceOf(Function);
   });
 
-  test('"closeModal" action creator', () => {
+  it('"closeModal" action creator', () => {
     const closeModalProps = wrapper.instance().props.closeModal;
     expect(closeModalProps).toBeInstanceOf(Function);
   });

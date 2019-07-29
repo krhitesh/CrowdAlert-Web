@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
 import LeftSidebar from '../index';
@@ -9,15 +9,15 @@ Enzyme.configure({ adapter: new EnzymeAdapter() });
 const reduxPiece = {
   sidebar: {
     isVisible: true,
-    animation: 'push'
+    animation: 'push',
   },
   auth: {
     isLoggedIn: true,
     user: {
       displayName: 'user display name',
       photoURL: 'https://assets2.razerzone.com/images/blade-15/shop/blade15-d1-1.jpg',
-    }
-  }
+    },
+  },
 };
 
 /**
@@ -41,151 +41,151 @@ test('does not throw warning with expected props', () => {
     signOut: jest.fn(),
     user: {
       displayName: 'user display name',
-      photoURL: 'url'
-    }
+      photoURL: 'url',
+    },
   };
 
   checkProps(LeftSidebar, expectedProps);
 });
 
 describe('render', () => {
-  test('renders without error', () => {
+  it('renders without error', () => {
     const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'component-left-sidebar').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'component-left-sidebar')).toHaveLength(1);
   });
 
-  test('renders logo', () => {
+  it('renders logo', () => {
     const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'component-logo-image').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'component-logo-image')).toHaveLength(1);
   });
 
-  test('renders link', () => {
+  it('renders link', () => {
     const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'link-root').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'link-root')).toHaveLength(1);
   });
 
-  test('render link create', () => {
+  it('render link create', () => {
     const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'link-create').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'link-create')).toHaveLength(1);
   });
 
-  test('link root prop', () => {
+  it('link root prop', () => {
     const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
     expect(findByTestAttr(wrapper, 'link-root').props().to).toBe('/');
-  })
+  });
 
-  test('link create prop', () => {
+  it('link create prop', () => {
     const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
     expect(findByTestAttr(wrapper, 'link-create').props().to).toBe('/create');
   });
 
-  test('render sidebar pusher', () => {
+  it('render sidebar pusher', () => {
     const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'sidebar-pusher').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'sidebar-pusher')).toHaveLength(1);
   });
 
-  test('component menu item', () => {
+  it('component menu item', () => {
     const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'component-menu-item').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'component-menu-item')).toHaveLength(1);
   });
 
-  test('component menu item signout', () => {
+  it('component menu item signout', () => {
     const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'component-menu-item-signout').length).toBe(1);
+    expect(findByTestAttr(wrapper, 'component-menu-item-signout')).toHaveLength(1);
   });
 
-  test('logged out menu', () => {
+  it('logged out menu', () => {
     const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-    expect(findByTestAttr(wrapper, 'jsx-logged-out').length).toBe(0);
+    expect(findByTestAttr(wrapper, 'jsx-logged-out')).toHaveLength(0);
   });
 
   describe('renders with user logged out', () => {
+    // eslint-disable-next-line no-shadow
     const reduxPiece = {
       sidebar: {
         isVisible: true,
-        animation: 'push'
+        animation: 'push',
       },
       auth: {
         isLoggedIn: false,
         user: {
           displayName: 'user display name',
           photoURL: 'https://assets2.razerzone.com/images/blade-15/shop/blade15-d1-1.jpg',
-        }
-      }
-    }
-    test('component menu item', () => {
+        },
+      },
+    };
+    it('component menu item', () => {
       const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-      expect(findByTestAttr(wrapper, 'component-menu-item').length).toBe(0);
-    });
-  
-    test('component menu item signout', () => {
-      const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-      expect(findByTestAttr(wrapper, 'component-menu-item-signout').length).toBe(0);
+      expect(findByTestAttr(wrapper, 'component-menu-item')).toHaveLength(0);
     });
 
-    test('logged out menu', () => {
+    it('component menu item signout', () => {
       const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-      expect(findByTestAttr(wrapper, 'jsx-logged-out').length).toBe(1);
+      expect(findByTestAttr(wrapper, 'component-menu-item-signout')).toHaveLength(0);
     });
 
-    test('renders link login', () => {
+    it('logged out menu', () => {
       const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-      expect(findByTestAttr(wrapper, 'link-login').length).toBe(1);
-    });
-  
-    test('render link signup', () => {
-      const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-      expect(findByTestAttr(wrapper, 'link-signup').length).toBe(1);
+      expect(findByTestAttr(wrapper, 'jsx-logged-out')).toHaveLength(1);
     });
 
-    test('link login prop', () => {
+    it('renders link login', () => {
+      const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
+      expect(findByTestAttr(wrapper, 'link-login')).toHaveLength(1);
+    });
+
+    it('render link signup', () => {
+      const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
+      expect(findByTestAttr(wrapper, 'link-signup')).toHaveLength(1);
+    });
+
+    it('link login prop', () => {
       const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
       expect(findByTestAttr(wrapper, 'link-login').props().to).toBe('/login');
-    })
-  
-    test('link signup prop', () => {
+    });
+
+    it('link signup prop', () => {
       const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
       expect(findByTestAttr(wrapper, 'link-signup').props().to).toBe('/signup');
     });
 
-    test('renders link login content', () => {
+    it('renders link login content', () => {
       const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-      expect(findByTestAttr(wrapper, 'link-login-content').length).toBe(1);
-    });
-  
-    test('render link signup content', () => {
-      const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
-      expect(findByTestAttr(wrapper, 'link-signup-content').length).toBe(1);
+      expect(findByTestAttr(wrapper, 'link-login-content')).toHaveLength(1);
     });
 
+    it('render link signup content', () => {
+      const wrapper = setup({ children: <React.Fragment /> }, reduxPiece).dive();
+      expect(findByTestAttr(wrapper, 'link-signup-content')).toHaveLength(1);
+    });
   });
 });
 
 describe('redux props', () => {
-  test('redux piece of state', () => {
+  it('redux piece of state', () => {
     const wrapper = setup({ children: <React.Fragment /> }, reduxPiece);
     const { isVisible, animation } = wrapper.props();
     const reduxProps = {
       auth: {
         user: wrapper.props().user,
-        isLoggedIn: wrapper.props().isLoggedIn
+        isLoggedIn: wrapper.props().isLoggedIn,
       },
       sidebar: {
         isVisible,
-        animation
-      }
-    }
+        animation,
+      },
+    };
 
     expect(reduxProps).toEqual(reduxPiece);
   });
 
-  test('"signOut" action creator', () => {
+  it('"signOut" action creator', () => {
     const wrapper = setup({ children: <React.Fragment /> }, reduxPiece);
     const signOutProps = wrapper.props().signOut;
     expect(signOutProps).toBeInstanceOf(Function);
   });
 
-  test(' action creator', () => {
+  it(' action creator', () => {
     const wrapper = setup({ children: <React.Fragment /> }, reduxPiece);
     const removeSidebarVisibilityProps = wrapper.props().removeSidebarVisibility;
     expect(removeSidebarVisibilityProps).toBeInstanceOf(Function);

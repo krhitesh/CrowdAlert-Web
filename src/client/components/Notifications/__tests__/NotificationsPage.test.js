@@ -19,14 +19,13 @@ describe('testing NotificationsPage component', () => {
     wrapper = setup();
   });
 
-  test('renders without error', () => {
+  it('renders without error', () => {
     const component = findByTestAttr(wrapper, 'component-notifications-page');
-    expect(component.length).toBe(1);
+    expect(component).toHaveLength(1);
   });
 
-  test('renders segment notifications container error', () => {
+  it('renders segment notifications container error', () => {
     const component = findByTestAttr(wrapper, 'component-notifications-page-segment-notifications-container');
-    expect(component.length).toBe(1);
+    expect(component).toHaveLength(1);
   });
-
 });

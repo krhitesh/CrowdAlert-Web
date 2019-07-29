@@ -12,7 +12,7 @@ function distanceCoordinates(lat1, lon1, lat2, lon2) {
   const dlat2 = degreesToRadians(lat2);
 
   const a = (Math.sin(dLat / 2) * Math.sin(dLat / 2)) +
-          (Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(dlat1) * Math.cos(dlat2)); 
+          (Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(dlat1) * Math.cos(dlat2));
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return earthRadiusKm * c;
 }

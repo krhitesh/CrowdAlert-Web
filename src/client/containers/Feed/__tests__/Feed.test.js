@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
 import Feed from '../index';
@@ -10,12 +10,91 @@ const reduxPiece = {
   map: {
     lat: 26.2323,
     lng: 80.2322,
-    zoom: 14
+    zoom: 14,
   },
-  feed:{'0':{key:'TEST'},'11':{'0YAou5LPbyVMjRtHBV6X':{key:'0YAou5LPbyVMjRtHBV6X',lat:26.517079178420964,'long':80.23280679139403,category:'health',title:'Death',datetime:1562598644434,isClustered:true}},'12':{'0YAou5LPbyVMjRtHBV6X':{key:'0YAou5LPbyVMjRtHBV6X',lat:26.515999258988806,'long':80.23443597447508,category:'health',title:'Death',datetime:1562598644434,isClustered:true},cL1z6l9TQ7FpK6ypgLwF:{key:'cL1z6l9TQ7FpK6ypgLwF',lat:26.51478401127116,'long':80.22226174171146,category:'nature',title:'Heavy rain',datetime:1562598791192}},'13':{'0YAou5LPbyVMjRtHBV6X':{key:'0YAou5LPbyVMjRtHBV6X',lat:26.506144655813888,'long':80.23529520635987,category:'health',title:'Death',datetime:1562598644434},cL1z6l9TQ7FpK6ypgLwF:{key:'cL1z6l9TQ7FpK6ypgLwF',lat:26.51478401127116,'long':80.22226174171146,category:'nature',title:'Heavy rain',datetime:1562598791192},ylFaLmmIsW6AUd1EHS1r:{key:'ylFaLmmIsW6AUd1EHS1r',lat:26.51894959240159,'long':80.23443514947508,category:'electric',title:'Firestore test 1',datetime:1562598383931,isClustered:true}},'14':{'0YAou5LPbyVMjRtHBV6X':{key:'0YAou5LPbyVMjRtHBV6X',lat:26.506144655813888,'long':80.23529520635987,category:'health',title:'Death',datetime:1562598644434},cL1z6l9TQ7FpK6ypgLwF:{key:'cL1z6l9TQ7FpK6ypgLwF',lat:26.51478401127116,'long':80.22226174171146,category:'nature',title:'Heavy rain',datetime:1562598791192},ylFaLmmIsW6AUd1EHS1r:{key:'ylFaLmmIsW6AUd1EHS1r',lat:26.51894959240159,'long':80.23443514947508,category:'electric',title:'Firestore test 1',datetime:1562598383931,isClustered:true}},'15':{'0YAou5LPbyVMjRtHBV6X':{key:'0YAou5LPbyVMjRtHBV6X',lat:26.506144655813888,'long':80.23529520635987,category:'health',title:'Death',datetime:1562598644434},cL1z6l9TQ7FpK6ypgLwF:{key:'cL1z6l9TQ7FpK6ypgLwF',lat:26.51478401127116,'long':80.22226174171146,category:'nature',title:'Heavy rain',datetime:1562598791192},ylFaLmmIsW6AUd1EHS1r:{key:'ylFaLmmIsW6AUd1EHS1r',lat:26.517945989465012,'long':80.23529190635986,category:'electric',title:'Firestore test 1',datetime:1562598383931},BAncvwpWEbywrYp281K6:{key:'BAncvwpWEbywrYp281K6',lat:26.519953195338164,'long':80.23357839259029,category:'road',title:'Crash',datetime:1562600516657}},'16':{'0YAou5LPbyVMjRtHBV6X':{key:'0YAou5LPbyVMjRtHBV6X',lat:26.506144655813888,'long':80.23529520635987,category:'health',title:'Death',datetime:1562598644434},cL1z6l9TQ7FpK6ypgLwF:{key:'cL1z6l9TQ7FpK6ypgLwF',lat:26.51478401127116,'long':80.22226174171146,category:'nature',title:'Heavy rain',datetime:1562598791192},ylFaLmmIsW6AUd1EHS1r:{key:'ylFaLmmIsW6AUd1EHS1r',lat:26.517945989465012,'long':80.23529190635986,category:'electric',title:'Firestore test 1',datetime:1562598383931},BAncvwpWEbywrYp281K6:{key:'BAncvwpWEbywrYp281K6',lat:26.519953195338164,'long':80.23357839259029,category:'road',title:'Crash',datetime:1562600516657}},'17':{'0YAou5LPbyVMjRtHBV6X':{key:'0YAou5LPbyVMjRtHBV6X',lat:26.506144655813888,'long':80.23529520635987,category:'health',title:'Death',datetime:1562598644434},cL1z6l9TQ7FpK6ypgLwF:{key:'cL1z6l9TQ7FpK6ypgLwF',lat:26.51478401127116,'long':80.22226174171146,category:'nature',title:'Heavy rain',datetime:1562598791192},ylFaLmmIsW6AUd1EHS1r:{key:'ylFaLmmIsW6AUd1EHS1r',lat:26.517945989465012,'long':80.23529190635986,category:'electric',title:'Firestore test 1',datetime:1562598383931},BAncvwpWEbywrYp281K6:{key:'BAncvwpWEbywrYp281K6',lat:26.519953195338164,'long':80.23357839259029,category:'road',title:'Crash',datetime:1562600516657 }}},
+  feed: {
+    0: { key: 'TEST' },
+    11: {
+      '0YAou5LPbyVMjRtHBV6X': {
+        key: '0YAou5LPbyVMjRtHBV6X', lat: 26.517079178420964, long: 80.23280679139403, category: 'health', title: 'Death', datetime: 1562598644434, isClustered: true,
+      },
+    },
+    12: {
+      '0YAou5LPbyVMjRtHBV6X': {
+        key: '0YAou5LPbyVMjRtHBV6X', lat: 26.515999258988806, long: 80.23443597447508, category: 'health', title: 'Death', datetime: 1562598644434, isClustered: true,
+      },
+      cL1z6l9TQ7FpK6ypgLwF: {
+        key: 'cL1z6l9TQ7FpK6ypgLwF', lat: 26.51478401127116, long: 80.22226174171146, category: 'nature', title: 'Heavy rain', datetime: 1562598791192,
+      },
+    },
+    13: {
+      '0YAou5LPbyVMjRtHBV6X': {
+        key: '0YAou5LPbyVMjRtHBV6X', lat: 26.506144655813888, long: 80.23529520635987, category: 'health', title: 'Death', datetime: 1562598644434,
+      },
+      cL1z6l9TQ7FpK6ypgLwF: {
+        key: 'cL1z6l9TQ7FpK6ypgLwF', lat: 26.51478401127116, long: 80.22226174171146, category: 'nature', title: 'Heavy rain', datetime: 1562598791192,
+      },
+      ylFaLmmIsW6AUd1EHS1r: {
+        key: 'ylFaLmmIsW6AUd1EHS1r', lat: 26.51894959240159, long: 80.23443514947508, category: 'electric', title: 'Firestore test 1', datetime: 1562598383931, isClustered: true,
+      },
+    },
+    14: {
+      '0YAou5LPbyVMjRtHBV6X': {
+        key: '0YAou5LPbyVMjRtHBV6X', lat: 26.506144655813888, long: 80.23529520635987, category: 'health', title: 'Death', datetime: 1562598644434,
+      },
+      cL1z6l9TQ7FpK6ypgLwF: {
+        key: 'cL1z6l9TQ7FpK6ypgLwF', lat: 26.51478401127116, long: 80.22226174171146, category: 'nature', title: 'Heavy rain', datetime: 1562598791192,
+      },
+      ylFaLmmIsW6AUd1EHS1r: {
+        key: 'ylFaLmmIsW6AUd1EHS1r', lat: 26.51894959240159, long: 80.23443514947508, category: 'electric', title: 'Firestore test 1', datetime: 1562598383931, isClustered: true,
+      },
+    },
+    15: {
+      '0YAou5LPbyVMjRtHBV6X': {
+        key: '0YAou5LPbyVMjRtHBV6X', lat: 26.506144655813888, long: 80.23529520635987, category: 'health', title: 'Death', datetime: 1562598644434,
+      },
+      cL1z6l9TQ7FpK6ypgLwF: {
+        key: 'cL1z6l9TQ7FpK6ypgLwF', lat: 26.51478401127116, long: 80.22226174171146, category: 'nature', title: 'Heavy rain', datetime: 1562598791192,
+      },
+      ylFaLmmIsW6AUd1EHS1r: {
+        key: 'ylFaLmmIsW6AUd1EHS1r', lat: 26.517945989465012, long: 80.23529190635986, category: 'electric', title: 'Firestore test 1', datetime: 1562598383931,
+      },
+      BAncvwpWEbywrYp281K6: {
+        key: 'BAncvwpWEbywrYp281K6', lat: 26.519953195338164, long: 80.23357839259029, category: 'road', title: 'Crash', datetime: 1562600516657,
+      },
+    },
+    16: {
+      '0YAou5LPbyVMjRtHBV6X': {
+        key: '0YAou5LPbyVMjRtHBV6X', lat: 26.506144655813888, long: 80.23529520635987, category: 'health', title: 'Death', datetime: 1562598644434,
+      },
+      cL1z6l9TQ7FpK6ypgLwF: {
+        key: 'cL1z6l9TQ7FpK6ypgLwF', lat: 26.51478401127116, long: 80.22226174171146, category: 'nature', title: 'Heavy rain', datetime: 1562598791192,
+      },
+      ylFaLmmIsW6AUd1EHS1r: {
+        key: 'ylFaLmmIsW6AUd1EHS1r', lat: 26.517945989465012, long: 80.23529190635986, category: 'electric', title: 'Firestore test 1', datetime: 1562598383931,
+      },
+      BAncvwpWEbywrYp281K6: {
+        key: 'BAncvwpWEbywrYp281K6', lat: 26.519953195338164, long: 80.23357839259029, category: 'road', title: 'Crash', datetime: 1562600516657,
+      },
+    },
+    17: {
+      '0YAou5LPbyVMjRtHBV6X': {
+        key: '0YAou5LPbyVMjRtHBV6X', lat: 26.506144655813888, long: 80.23529520635987, category: 'health', title: 'Death', datetime: 1562598644434,
+      },
+      cL1z6l9TQ7FpK6ypgLwF: {
+        key: 'cL1z6l9TQ7FpK6ypgLwF', lat: 26.51478401127116, long: 80.22226174171146, category: 'nature', title: 'Heavy rain', datetime: 1562598791192,
+      },
+      ylFaLmmIsW6AUd1EHS1r: {
+        key: 'ylFaLmmIsW6AUd1EHS1r', lat: 26.517945989465012, long: 80.23529190635986, category: 'electric', title: 'Firestore test 1', datetime: 1562598383931,
+      },
+      BAncvwpWEbywrYp281K6: {
+        key: 'BAncvwpWEbywrYp281K6', lat: 26.519953195338164, long: 80.23357839259029, category: 'road', title: 'Crash', datetime: 1562600516657,
+      },
+    },
+  },
   auth: {
-      isLoggedIn: true,
-  }
+    isLoggedIn: true,
+  },
 };
 
 /**
@@ -30,72 +109,73 @@ const setup = (props = {}, initialReduxState = {}) => {
 };
 
 test('does not throw warning with expected props', () => {
-    const expectedProps = {
-        feedProps: reduxPiece.feed,
-        mapProps: reduxPiece.map,
-        isLoggedIn: true,
-        fetchEventsByLocation: jest.fn(),
-        fetchEventsByLocationOverWebSocket: jest.fn(),
-        fetchUserLocation: jest.fn()
-    };
+  const expectedProps = {
+    feedProps: reduxPiece.feed,
+    mapProps: reduxPiece.map,
+    isLoggedIn: true,
+    fetchEventsByLocation: jest.fn(),
+    fetchEventsByLocationOverWebSocket: jest.fn(),
+    fetchUserLocation: jest.fn(),
+  };
 
-    checkProps(Feed.component, expectedProps);
+  checkProps(Feed.component, expectedProps);
 });
 
 
 describe('render test', () => {
-    let wrapper;
-    beforeEach(() => {
-        wrapper = setup({ match: { params: { eventid: 'eventid' } } }, reduxPiece).dive();
-    });
+  let wrapper;
+  beforeEach(() => {
+    wrapper = setup({ match: { params: { eventid: 'eventid' } } }, reduxPiece).dive();
+  });
 
-    test('renders without errors', () => {
-        expect(findByTestAttr(wrapper, 'component-feed').length).toBe(1);
-    });
+  it('renders without errors', () => {
+    expect(findByTestAttr(wrapper, 'component-feed')).toHaveLength(1);
+  });
 
-    test('renders map wrapper without errors', () => {
-        expect(findByTestAttr(wrapper, 'component-map-wrapper').length).toBe(1);
-    });
+  it('renders map wrapper without errors', () => {
+    expect(findByTestAttr(wrapper, 'component-map-wrapper')).toHaveLength(1);
+  });
 
-    test('renders event preview card without errors', () => {
-        expect(findByTestAttr(wrapper, 'component-event-preview-card').length).toBe(1);
-    });
+  it('renders event preview card without errors', () => {
+    expect(findByTestAttr(wrapper, 'component-event-preview-card')).toHaveLength(1);
+  });
 
-    test('renders geolocator without errors', () => {
-        expect(findByTestAttr(wrapper, 'component-geolocator').length).toBe(1);
-    });
+  it('renders geolocator without errors', () => {
+    expect(findByTestAttr(wrapper, 'component-geolocator')).toHaveLength(1);
+  });
 });
 
 describe('redux props', () => {
-    let wrapper;
-    beforeEach(() => {
-        wrapper = setup({}, reduxPiece);
-    });
+  let wrapper;
+  beforeEach(() => {
+    wrapper = setup({}, reduxPiece);
+  });
 
-    test('has redux piece of state', () => {
-        const reduxProps = {
-            map: wrapper.props().mapProps,
-            feed: wrapper.props().feedProps,
-            auth: {
-                isLoggedIn: wrapper.props().isLoggedIn
-            }
-        };
+  it('has redux piece of state', () => {
+    const reduxProps = {
+      map: wrapper.props().mapProps,
+      feed: wrapper.props().feedProps,
+      auth: {
+        isLoggedIn: wrapper.props().isLoggedIn,
+      },
+    };
 
-        expect(reduxProps).toEqual(reduxPiece);
-    });
+    expect(reduxProps).toEqual(reduxPiece);
+  });
 
-    test('"fetchUserLocation" action creator', () => {
-        const fetchUserLocationProps = wrapper.props().fetchUserLocation;
-        expect(fetchUserLocationProps).toBeInstanceOf(Function);
-    });
+  it('"fetchUserLocation" action creator', () => {
+    const fetchUserLocationProps = wrapper.props().fetchUserLocation;
+    expect(fetchUserLocationProps).toBeInstanceOf(Function);
+  });
 
-    test('"fetchEventsByLocation" action creator', () => {
-        const fetchEventsByLocationProps = wrapper.props().fetchEventsByLocation;
-        expect(fetchEventsByLocationProps).toBeInstanceOf(Function);
-    });
+  it('"fetchEventsByLocation" action creator', () => {
+    const fetchEventsByLocationProps = wrapper.props().fetchEventsByLocation;
+    expect(fetchEventsByLocationProps).toBeInstanceOf(Function);
+  });
 
-    test('"fetchEventsByLocationOverWebSocket" action creator', () => {
-        const fetchEventsByLocationOverWebSocketProps = wrapper.props().fetchEventsByLocationOverWebSocket;
-        expect(fetchEventsByLocationOverWebSocketProps).toBeInstanceOf(Function);
-    });
+  it('"fetchEventsByLocationOverWebSocket" action creator', () => {
+    const fetchEventsByLocationOverWebSocketProps = wrapper.props()
+      .fetchEventsByLocationOverWebSocket;
+    expect(fetchEventsByLocationOverWebSocketProps).toBeInstanceOf(Function);
+  });
 });

@@ -6,41 +6,41 @@ import {
 import {
   updateMapCenter,
   updateMapZoom,
-  updateOnClick
+  updateOnClick,
 } from '../actions';
 
 describe('testing map actions', () => {
-  test('updateMapCenter', () => {
+  it('updateMapCenter', () => {
     const payload = {
       lat: 26.46445855489077,
       lng: 80.34210357666016,
       zoom: 13,
-      fetch: true
+      fetch: true,
     };
 
     const action = updateMapCenter(payload);
     expect(action).toEqual({
       type: MAP_UPDATE_CENTER,
-      payload
+      payload,
     });
   });
 
-  test('updateMapZoom', () => {
+  it('updateMapZoom', () => {
     const payload = {
       lat: 26.46384386065638,
       lng: 80.33334884643557,
       zoom: 13,
-      fetch: true
+      fetch: true,
     };
 
     const action = updateMapZoom(payload);
     expect(action).toEqual({
       type: MAP_UPDATE_ZOOM,
-      payload
+      payload,
     });
   });
 
-  test('updateOnClick', () => {
+  it('updateOnClick', () => {
     const payload = {
       lat: 26.46445855489077,
       lng: 80.34210357666016,
@@ -49,7 +49,7 @@ describe('testing map actions', () => {
     const action = updateOnClick(payload.lat, payload.lng);
     expect(action).toEqual({
       type: MAP_ONCLICK,
-      payload
+      payload,
     });
   });
 });

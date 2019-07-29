@@ -12,58 +12,58 @@ import {
   setBottomBarVisibility,
   setSidebarVisibility,
   removeSidebarVisibility,
-  removeBottomBarVisibility
+  removeBottomBarVisibility,
 } from '../actions';
 
 describe('testing sidebar actions', () => {
-  test('removeBottomBarVisibility', () => {
+  it('removeBottomBarVisibility', () => {
     const action = removeBottomBarVisibility();
     expect(action).toEqual({
       type: BOTTTOMBAR_REMOVE_VISIBILITY,
     });
   });
 
-  test('setBottomBarVisibility', () => {
+  it('setBottomBarVisibility', () => {
     const action = setBottomBarVisibility();
     expect(action).toEqual({
       type: BOTTTOMBAR_SET_VISIBILITY,
     });
   });
 
-  test('toggleVisibilityBottomBar', () => {
+  it('toggleVisibilityBottomBar', () => {
     const action = toggleVisibilityBottomBar();
     expect(action).toEqual({
       type: BOTTOMBAR_TOGGLE_VISIBILITY,
     });
   });
 
-  test('toggleSidebarVisibility', () => {
+  it('toggleSidebarVisibility', () => {
     const payload = {
-      animation: 'scale down'
+      animation: 'scale down',
     };
     const action = toggleSidebarVisibility(payload);
     expect(action).toEqual({
       type: SIDEBAR_TOGGLE_VISIBILITY,
-      payload
+      payload,
     });
   });
 
-  test('removeSidebarVisibility', () => {
+  it('removeSidebarVisibility', () => {
     const payload = {
-      animation: 'scale down'
+      animation: 'scale down',
     };
     const action = removeSidebarVisibility(payload);
     expect(action).toEqual({
       type: SIDEBAR_REMOVE_VISIBILITY,
-      payload
+      payload,
     });
   });
 
-  test('setSidebarVisibility', () => {
+  it('setSidebarVisibility', () => {
     const action = setSidebarVisibility();
     expect(action).toEqual({
       type: SIDEBAR_SET_VISIBILITY,
-      payload: {}
+      payload: {},
     });
   });
 });

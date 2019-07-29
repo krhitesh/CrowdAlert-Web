@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable function-paren-newline */
 /* eslint-disable react/jsx-filename-extension */

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/jsx-filename-extension */
 // Startup point for the client side application
 /**
