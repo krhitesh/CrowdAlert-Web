@@ -17,6 +17,7 @@ cffi==1.12.2
 channels==2.1.6
 channelsmultiplexer==0.0.2
 chardet==3.0.4
+coverage==3.6
 click==6.7
 constantly==15.1.0
 daphne==2.3.0
