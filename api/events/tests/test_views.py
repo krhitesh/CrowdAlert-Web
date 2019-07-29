@@ -7,7 +7,7 @@ import os
 import time
 
 from api.utils.geohash_util import encode
-from api.utils.firebase_utils import get_anonymous_user_token, delete_anonymous_user, delete_collection, get_authenticated_user_token
+from api.utils.firebase_utils import delete_collection, get_authenticated_user_token
 from api.events.models import Event, IncidentReport
 from api.events.views import EventView, MultipleEventsView
 
@@ -46,7 +46,6 @@ class EventViewTest(TestCase):
     return e
 
   def setUp(self):
-    self.token = get_anonymous_user_token()
     self.auth_token = get_authenticated_user_token()
     self.factory = RequestFactory()
     firebase_data = {
@@ -78,12 +77,10 @@ class EventViewTest(TestCase):
     print('Cleaning up events')
     delete_collection(db.collection(Event.collection_name))
     delete_collection(db.collection(IncidentReport.collection_name))
-    delete_anonymous_user(self.token)
 
 
 class MultipleEventsViewTest(TestCase):
   def setUp(self):
-    self.token = get_anonymous_user_token()
     self.factory = RequestFactory()
     firebase_data = {
       'uid': '',
@@ -102,4 +99,3 @@ class MultipleEventsViewTest(TestCase):
   def tearDown(self):
     print('Cleaning up events')
     delete_collection(db.collection(Event.collection_name))
-    delete_anonymous_user(self.token)

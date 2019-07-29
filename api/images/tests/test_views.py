@@ -3,14 +3,14 @@ from django.test import TestCase, RequestFactory
 
 from api.firebase_auth.users import FirebaseUser
 from api.images.views import ImagesView
-from api.utils.firebase_utils import get_anonymous_user_token, delete_anonymous_user
+from api.utils.firebase_utils import get_authenticated_user_token
 
 db = settings.FIRESTORE
 
 
 class ImagesViewTest(TestCase):
     def setUp(self):
-        self.token = get_anonymous_user_token()
+        self.auth_token = get_authenticated_user_token()
         self.factory = RequestFactory()
         firebase_data = {
             'uid': '',
@@ -36,4 +36,3 @@ class ImagesViewTest(TestCase):
 
     def tearDown(self):
         print('Cleaning up images')
-        delete_anonymous_user(self.token)
