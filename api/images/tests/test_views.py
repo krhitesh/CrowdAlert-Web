@@ -1,5 +1,8 @@
+import uuid
+
 from django.conf import settings
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
+from rest_framework.test import APIRequestFactory, force_authenticate
 
 from api.firebase_auth.users import FirebaseUser
 from api.images.views import ImagesView
@@ -11,9 +14,9 @@ db = settings.FIRESTORE
 class ImagesViewTest(TestCase):
     def setUp(self):
         self.auth_token = get_authenticated_user_token()
-        self.factory = RequestFactory()
+        self.factory = APIRequestFactory()
         firebase_data = {
-            'uid': '',
+            'uid': str(uuid.uuid1()),
             'user_id': '',
             'name': '',
             'picture': '',
@@ -23,16 +26,13 @@ class ImagesViewTest(TestCase):
 
     def test_get(self):
         request = self.factory.get('/api/images/image', {'uuid': '84c7ed21-2a02-414b-a700-89d4b8084ee9.jpg'})
-        request.user = self.user
+        force_authenticate(request, user=self.user)
         response = ImagesView.as_view()(request)
         self.assertEqual(response.status_code, 302)
 
     def test_get_thumbnail(self):
         request = self.factory.get('/api/images/image',
                                    {'uuid': '84c7ed21-2a02-414b-a700-89d4b8084ee9.jpg', 'mode': 'thumbnail'})
-        request.user = self.user
+        force_authenticate(request, user=self.user)
         response = ImagesView.as_view()(request)
         self.assertEqual(response.status_code, 302)
-
-    def tearDown(self):
-        print('Cleaning up images')

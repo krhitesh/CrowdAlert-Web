@@ -1,11 +1,12 @@
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
+from rest_framework.test import APIRequestFactory
 
 from api.location.views import PlacesView, ReverseGeocodeView, IPLocationView
 
 
 class PlacesViewTest(TestCase):
     def setUp(self):
-        self.factory = RequestFactory()
+        self.factory = APIRequestFactory()
 
     def test_get(self):
         request = self.factory.get('/api/location/places_autocomplete', {'q': ''})
@@ -15,7 +16,7 @@ class PlacesViewTest(TestCase):
 
 class ReverseGeocodeViewTest(TestCase):
     def setUp(self):
-        self.factory = RequestFactory()
+        self.factory = APIRequestFactory()
 
     def test_get_high_accuracy(self):
         request = self.factory.get('/api/location/reverse_geocode',
@@ -32,10 +33,10 @@ class ReverseGeocodeViewTest(TestCase):
 
 class IPLocationViewTest(TestCase):
     def setUp(self):
-        self.factory = RequestFactory()
+        self.factory = APIRequestFactory()
 
     def test_get(self):
-        request = self.factory.get('/api/location/get_location', data=None, secure=False,
-                                   HTTP_X_FORWARDED_FOR='14.139.38.127')
+        request = self.factory.get('/api/location/get_location',
+                                   data=None, HTTP_X_FORWARDED_FOR='14.139.38.127')
         response = IPLocationView.as_view()(request)
         self.assertEqual(response.status_code, 200)
