@@ -21,7 +21,7 @@ def exchange_refresh_token():
     return r.json()['id_token']
 
 def get_authenticated_user_token():
-    if not settings.FIREBASE_USER_AUTH_TOKEN:
+    if not hasattr(settings, 'FIREBASE_USER_AUTH_TOKEN'):
         settings.FIREBASE_USER_AUTH_TOKEN = exchange_refresh_token()
     return settings.FIREBASE_USER_AUTH_TOKEN
 
