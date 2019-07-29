@@ -1,0 +1,81 @@
+stages:
+  - setuppyenv
+  - installpydeps
+  - testbackend
+  - installnpmdeps
+  - testfrontend
+  - build
+
+cache:
+  paths:
+  - node_modules/
+  - env/
+
+setuppyenv:
+  image: python:3.5
+  stage: setuppyenv
+  script:
+  - apt-get update -q -y
+  - apt-get install -y python-pip
+  - pip install virtualenv
+  - virtualenv env --python=python3.5
+  artifacts:
+    paths:
+    - env/
+
+installpydeps:
+  image: python:3.5
+  dependencies:
+  - setuppyenv
+  stage: installpydeps
+  script:
+  - . env/bin/activate
+  - pip install -r requirements.txt
+  artifacts:
+    paths:
+    - env/
+
+testbackend:
+  image: python:3.5
+  dependencies:
+  - installpydeps
+  stage: testbackend
+  script:
+  - . env/bin/activate
+  - coverage run manage.py test api.events -v 2
+  artifacts:
+    paths:
+    - env/
+
+install_node_dependencies:
+  image: node:10.15.0
+  stage: installnpmdeps
+  script:
+  - yarn
+  artifacts:
+    paths:
+    - node_modules/
+
+frontend_unit_test:
+  image: node:10.15.0
+  stage: testfrontend
+  dependencies:
+  - install_dependencies
+  script:
+  - yarn lint
+  - yarn test
+  when: on_success
+
+build_frontend:
+  image: node:10.15.0
+  stage: build
+  dependencies:
+  - install_dependencies
+  - frontend_unit_test
+  script:
+  - yarn build
+  artifacts:
+    paths:
+    - build/
+    - public/
+  when: on_success
