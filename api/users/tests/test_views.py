@@ -1,5 +1,4 @@
 import json
-import os
 import uuid
 
 from django.conf import settings
@@ -33,17 +32,13 @@ class UserViewTest(TestCase):
     def test_get(self):
         request = self.factory.get('/api/users/user', data=None)
         force_authenticate(request, user=self.user, token=self.auth_token)
-        # request = self.factory.get('/api/users/user', data=None, secure=False, HTTP_TOKEN=self.auth_token)
         response = UserView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
     def test_post(self):
         data = json.dumps({"userData": '{ "displayName": "display name" }'})
-        # request = self.factory.post('/api/users/user', data=data, content_type='application/json')
-        # force_authenticate(request, self.user, self.auth_token)
-        request = self.factory.post('/api/users/user', data=data, content_type='application/json', secure=False,
-                                     HTTP_TOKEN=self.auth_token)
-        request.user = self.user
+        request = self.factory.post('/api/users/user', data=data, content_type='application/json')
+        force_authenticate(request, self.user, self.auth_token)
         response = UserView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 

@@ -1,8 +1,8 @@
-import os
 import uuid
 
 from django.conf import settings
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
+from rest_framework.test import APIRequestFactory, force_authenticate
 
 from api.firebase_auth.users import FirebaseUser
 from api.spam.models import Classifier
@@ -14,10 +14,10 @@ db = settings.FIRESTORE
 
 class SpamReportViewTest(TestCase):
     def setUp(self):
-        self.factory = RequestFactory()
+        self.factory = APIRequestFactory()
         self.auth_token = get_authenticated_user_token()
         firebase_data = {
-            'uid': '',
+            'uid': str(uuid.uuid1()),
             'user_id': '',
             'name': '',
             'picture': '',
@@ -29,16 +29,15 @@ class SpamReportViewTest(TestCase):
         c.save(self.test_uuid, db)
 
     def test_get(self):
-        request = self.factory.get('/api/spam/report', data={'uuid': self.test_uuid}, secure=False,
-                                   HTTP_TOKEN=self.auth_token)
+        request = self.factory.get('/api/spam/report', data={'uuid': self.test_uuid})
+        force_authenticate(request, user=self.user, token=self.auth_token)
         response = SpamReportView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
     def test_post(self):
         request = self.factory.post('/api/spam/report?uuid=' + self.test_uuid, data=None,
-                                    content_type='application/json', secure=False,
-                                    HTTP_TOKEN=self.auth_token)
-        request.user = self.user
+                                    content_type='application/json')
+        force_authenticate(request, user=self.user, token=self.auth_token)
         response = SpamReportView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 

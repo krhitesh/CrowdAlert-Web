@@ -1,7 +1,9 @@
 import json
+import uuid
 
 from django.conf import settings
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
+from rest_framework.test import APIRequestFactory, force_authenticate
 
 from api.comments.models import Comment
 from api.comments.views import CommentView
@@ -14,9 +16,9 @@ db = settings.FIRESTORE
 class CommentViewTest(TestCase):
     def setUp(self):
         self.auth_token = get_authenticated_user_token()
-        self.factory = RequestFactory()
+        self.factory = APIRequestFactory()
         firebase_data = {
-            'uid': '',
+            'uid': str(uuid.uuid1()),
             'user_id': '',
             'name': '',
             'picture': '',
@@ -26,7 +28,7 @@ class CommentViewTest(TestCase):
 
     def test_get_comment_thread(self):
         request = self.factory.get('/api/comments/comment', {'thread': '1234'})
-        request.user = self.user
+        force_authenticate(request, user=self.user)
         response = CommentView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
@@ -40,9 +42,8 @@ class CommentViewTest(TestCase):
         c.save('sl6NOrYyjvTQwUtCsOha', db)
         settings.COVERAGE = True
         data = json.dumps({"commentData": '{"text":"test", "thread":"sl6NOrYyjvTQwUtCsOha"}'})
-        request = self.factory.post(path='/api/comments/comment', data=data, content_type='application/json',
-                                    secure=False, HTTP_TOKEN=self.auth_token)
-        request.user = self.user
+        request = self.factory.post(path='/api/comments/comment', data=data, content_type='application/json')
+        force_authenticate(request, user=self.user, token=self.auth_token)
         response = CommentView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
