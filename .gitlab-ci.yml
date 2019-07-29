@@ -4,7 +4,7 @@ stages:
   - testbackend
   - installnpmdeps
   - testfrontend
-  - build
+  - build_frontend
 
 cache:
   paths:
@@ -47,7 +47,7 @@ testbackend:
     paths:
     - env/
 
-install_node_dependencies:
+installnpmdeps:
   image: node:10.15.0
   stage: installnpmdeps
   script:
@@ -56,7 +56,7 @@ install_node_dependencies:
     paths:
     - node_modules/
 
-frontend_unit_test:
+testfrontend:
   image: node:10.15.0
   stage: testfrontend
   dependencies:
@@ -68,7 +68,7 @@ frontend_unit_test:
 
 build_frontend:
   image: node:10.15.0
-  stage: build
+  stage: build_frontend
   dependencies:
   - install_dependencies
   - frontend_unit_test
