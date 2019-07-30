@@ -53,7 +53,7 @@ const Sonar = props => (
           props.openEventPreview({ ...props.payload });
         }
       }}
-      data-test="component-sonar"
+    data-test="component-sonar"
   >
     <div>
       <div className={`sonar-emitter sonar_${props.type}`} data-test="jsx-emitter">
@@ -78,15 +78,6 @@ Sonar.propTypes = {
       data: PropTypes.array,
       bounds: PropTypes.object,
     }).isRequired,
-  }),
-  payload: PropTypes.shape({
-    category: PropTypes.string,
-    datetime: PropTypes.number,
-    isClustered: PropTypes.bool,
-    key: PropTypes.string,
-    lat: PropTypes.number,
-    long: PropTypes.number,
-    title: PropTypes.string,
   }),
   payload: PropTypes.shape({
     category: PropTypes.string,

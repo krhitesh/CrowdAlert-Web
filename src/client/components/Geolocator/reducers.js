@@ -4,7 +4,6 @@ import {
   GEOLOCATOR_LOCATION_DENIED,
   GEOLOCATOR_LOCATION_FAILED,
   GEOLOCATOR_LOCATION_SUCCESS,
-  GEOLOCATOR_UPDATE_HOME_LOCATION,
 } from './actionTypes';
 
 /* UI texts */
@@ -16,7 +15,6 @@ const initialState = {
   modalText: PERMISSION_REQUIRED_TEXT,
   isOpen: false,
   locationHistory: [],
-  homeLocation: {},
 };
 
 let newLocationHistory;
