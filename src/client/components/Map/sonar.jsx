@@ -4,10 +4,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { updateMapCenter, updateMapZoom } from './actions';
-import { MarkerWithLabel } from 'react-google-maps/lib/components/addons/MarkerWithLabel';
-import { openEventPreview } from '../EventPreviewCard/actions';
 import withStyles from 'isomorphic-style-loader/withStyles';
+import { MarkerWithLabel } from 'react-google-maps/lib/components/addons/MarkerWithLabel';
+import { updateMapCenter, updateMapZoom, updateMapPolyline } from './actions';
+import { openEventPreview } from '../EventPreviewCard/actions';
 import s from './pulseRed.css';
 
 // 1x1 transparent png image as we don't want to show the default marker image
@@ -43,10 +43,17 @@ const Sonar = props => (
             zoom: Math.min(props.map.zoom + 3, 16),
           });
         } else if (props.id) {
+          props.updateMapPolyline({
+            data: props.map.polyline.data,
+            isVisible: false,
+            bounds: props.map.polyline.bounds,
+            fitBounds: false,
+          });
+          // eslint-disable-next-line react/prop-types
           props.openEventPreview({ ...props.payload });
         }
       }}
-      data-test="component-sonar"
+    data-test="component-sonar"
   >
     <div>
       <div className={`sonar-emitter sonar_${props.type}`} data-test="jsx-emitter">
@@ -56,6 +63,7 @@ const Sonar = props => (
   </MarkerWithLabel>
 );
 Sonar.propTypes = {
+  updateMapPolyline: PropTypes.func,
   lat: PropTypes.number.isRequired,
   lng: PropTypes.number.isRequired,
   id: PropTypes.string,
@@ -66,6 +74,10 @@ Sonar.propTypes = {
   openEventPreview: PropTypes.func,
   map: PropTypes.shape({
     zoom: PropTypes.number,
+    polyline: PropTypes.shape({
+      data: PropTypes.array,
+      bounds: PropTypes.object,
+    }).isRequired,
   }),
   payload: PropTypes.shape({
     category: PropTypes.string,
@@ -84,6 +96,7 @@ Sonar.defaultProps = {
   updateMapCenter: () => {},
   updateMapZoom: () => {},
   openEventPreview: () => {},
+  updateMapPolyline: () => {},
   map: {
     zoom: 4,
   },
@@ -102,6 +115,7 @@ const mapDispatchToProps = dispatch => (
     updateMapCenter,
     updateMapZoom,
     openEventPreview,
+    updateMapPolyline,
   }, dispatch)
 );
 const mapStateToProps = state => ({

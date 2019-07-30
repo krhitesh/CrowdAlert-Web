@@ -13,6 +13,7 @@ import {
   geolocatorModalClose,
   geolocatorModalOpen,
 } from './actions';
+import { fetchDirections } from '../../containers/Viewevent/actions';
 import {
   updateMapCenter,
   updateMapZoom,
@@ -28,7 +29,7 @@ const geoLocationMiddleware = store => next => (action) => {
         .query({ name: 'geolocation' })
         .then((result) => {
           if (result.state === 'granted') {
-            dispatch(geolocatorFetchLocation());
+            dispatch(geolocatorFetchLocation({ ...action.payload }));
             dispatch(geolocatorModalClose());
           } else if (result.state === 'prompt') {
             dispatch(geolocatorModalOpen());
@@ -53,13 +54,14 @@ const geoLocationMiddleware = store => next => (action) => {
             const lat = response.coords.latitude;
             const lng = response.coords.longitude;
             dispatch(geolocatorLocationSuccess({
+              ...action.payload,
               lat,
               lng,
             }));
           },
           (err) => {
             console.error(err);
-            dispatch(geolocatorLocationFailed());
+            dispatch(geolocatorLocationFailed({ ...action.payload }));
           }, {
             enableHighAccuracy: true,
             maximumAge: 30000,
@@ -68,25 +70,31 @@ const geoLocationMiddleware = store => next => (action) => {
         );
     } catch (err) {
       console.error('Unexpected: Location Fetch Failed', err);
-      dispatch(geolocatorLocationFailed());
+      dispatch(geolocatorLocationFailed({ ...action.payload }));
     }
   }
   if (action.type === GEOLOCATOR_LOCATION_SUCCESS) {
     const { lat } = action.payload;
     const { lng } = action.payload;
-    dispatch(updateMapCenter({
-      lat,
-      lng,
-      zoom: 14,
-    }));
-    dispatch(updateMapZoom({
-      lat,
-      lng,
-      zoom: 14,
-    }));
+
+    if (action.payload.fromViewevent) {
+      const { latitude, longitude } = store.getState().event.data.location.coords;
+      dispatch(fetchDirections(lat, lng, latitude, longitude));
+    } else {
+      dispatch(updateMapCenter({
+        lat,
+        lng,
+        zoom: 14,
+      }));
+      dispatch(updateMapZoom({
+        lat,
+        lng,
+        zoom: 14,
+      }));
+    }
   }
   if (action.type === GEOLOCATOR_LOCATION_FAILED) {
-    dispatch(fetchUserLocation({ forced: true }));
+    dispatch(fetchUserLocation({ ...action.payload, forced: true }));
   }
 
   next(action);

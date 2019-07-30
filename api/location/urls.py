@@ -12,4 +12,6 @@ urlpatterns = [
          name='reverse geocode'),
     path('get_location', views.IPLocationView.as_view(),
          name='get location using ip'),
+    path('get_directions', views.DirectionsView.as_view(),
+         name='get directions between two latLng points')
 ]
