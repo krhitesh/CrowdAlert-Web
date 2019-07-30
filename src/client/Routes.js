@@ -5,6 +5,7 @@ import { NotificationsPage } from './components/Notifications';
 import App from './containers/App/index';
 import Viewevent from './containers/Viewevent/index';
 import Feed from './containers/Feed/index';
+import UserMenu from './containers/User/index';
 import LoginPage from './containers/Auth/LoginPage';
 import SignUpPage from './containers/Auth/SignUpPage';
 import ConfirmEmail from './containers/Auth/confirmEmail';
@@ -47,6 +48,10 @@ export default [
         ...NotificationsPage,
         path: '/notifications',
         exact: true,
+      },
+      {
+        ...UserMenu,
+        path: '/user',
       },
       {
         ...NotFound,
