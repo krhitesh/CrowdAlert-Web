@@ -32,5 +32,4 @@ describe('render', () => {
   it('renders without error', () => {
     expect(findByTestAttr(wrapper, 'component-directions-modal')).toHaveLength(1);
   });
-
 });
