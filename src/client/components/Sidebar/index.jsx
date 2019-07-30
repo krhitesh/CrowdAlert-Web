@@ -51,7 +51,9 @@ const LeftSidebar = props => (
             avatar
             src={props.user.photoURL}
             floated="right"
-            style={{ position: 'fixed', right: '0px', marginRight: '0.7rem', marginTop: '-0.5rem' }}
+            style={{
+ position: 'fixed', right: '0px', marginRight: '0.7rem', marginTop: '-0.5rem',
+}}
           />
           {props.user.displayName}
           <Menu.Menu icon="labeled">
