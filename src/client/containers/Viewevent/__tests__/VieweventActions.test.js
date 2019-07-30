@@ -3,15 +3,19 @@ import {
   EVENT_FETCH_EVENT_DATA_CANCEL,
   EVENT_FETCH_EVENT_DATA_FINISHED,
   EVENT_FETCH_REVERSE_GEOCODE,
-  EVENT_FETCH_REVERSE_GEOCODE_FINISHED
-} from "../actionTypes";
+  EVENT_FETCH_REVERSE_GEOCODE_FINISHED,
+  EVENT_FETCH_DIRECTIONS,
+  EVENT_FETCH_DIRECTIONS_FINISHED,
+} from '../actionTypes';
 import {
   fetchEventData,
   fetchEventDataCanceled,
   fetchEventDataFinished,
   fetchReverseGeocode,
-  fetchReverseGeocodeSuccess
-} from "../actions";
+  fetchReverseGeocodeSuccess,
+  fetchDirections,
+  fetchDirectionsSuccess,
+} from '../actions';
 
 describe("testing viewevent actions", () => {
   test("fetchEventData", () => {
@@ -104,6 +108,29 @@ describe("testing viewevent actions", () => {
     expect(action).toEqual({
       type: EVENT_FETCH_REVERSE_GEOCODE_FINISHED,
       payload
+    });
+  });
+
+  it('fetchDirectionsSuccess', () => {
+    const payload = { };
+    const action = fetchDirectionsSuccess(payload);
+    expect(action).toEqual({
+      type: EVENT_FETCH_DIRECTIONS_FINISHED,
+      payload,
+    });
+  });
+
+  it('fetchDirections', () => {
+    const payload = {
+      startLat: 26.1111,
+      startLon: 80.1111,
+      endLat: 26.0000,
+      endLon: 80.0000,
+    };
+    const action = fetchDirections(26.1111, 80.1111, 26.0000, 80.0000);
+    expect(action).toEqual({
+      type: EVENT_FETCH_DIRECTIONS,
+      payload,
     });
   });
 });

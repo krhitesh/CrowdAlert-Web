@@ -7,6 +7,9 @@ import Feed from '../index';
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const reduxPiece = {
+  eventPreview: {
+    isOpen: false,
+  },
   map: {
     lat: 26.2323,
     lng: 80.2322,
@@ -67,35 +70,43 @@ describe('render test', () => {
 });
 
 describe('redux props', () => {
-    let wrapper;
-    beforeEach(() => {
-        wrapper = setup({}, reduxPiece);
-    });
+  let wrapper;
+  beforeEach(() => {
+    wrapper = setup({}, reduxPiece);
+  });
 
-    test('has redux piece of state', () => {
-        const reduxProps = {
-            map: wrapper.props().mapProps,
-            feed: wrapper.props().feedProps,
-            auth: {
-                isLoggedIn: wrapper.props().isLoggedIn
-            }
-        };
+  it('has redux piece of state', () => {
+    const reduxProps = {
+      map: wrapper.props().mapProps,
+      feed: wrapper.props().feedProps,
+      auth: {
+        isLoggedIn: wrapper.props().isLoggedIn,
+      },
+      eventPreview: wrapper.props().eventPreview,
+    };
 
-        expect(reduxProps).toEqual(reduxPiece);
-    });
+    expect(reduxProps).toEqual(reduxPiece);
+  });
 
-    test('"fetchUserLocation" action creator', () => {
-        const fetchUserLocationProps = wrapper.props().fetchUserLocation;
-        expect(fetchUserLocationProps).toBeInstanceOf(Function);
-    });
+  it('"fetchUserLocation" action creator', () => {
+    const fetchUserLocationProps = wrapper.props().fetchUserLocation;
+    expect(fetchUserLocationProps).toBeInstanceOf(Function);
+  });
 
-    test('"fetchEventsByLocation" action creator', () => {
-        const fetchEventsByLocationProps = wrapper.props().fetchEventsByLocation;
-        expect(fetchEventsByLocationProps).toBeInstanceOf(Function);
-    });
+  it('"fetchEventsByLocation" action creator', () => {
+    const fetchEventsByLocationProps = wrapper.props().fetchEventsByLocation;
+    expect(fetchEventsByLocationProps).toBeInstanceOf(Function);
+  });
 
-    test('"fetchEventsByLocationOverWebSocket" action creator', () => {
-        const fetchEventsByLocationOverWebSocketProps = wrapper.props().fetchEventsByLocationOverWebSocket;
-        expect(fetchEventsByLocationOverWebSocketProps).toBeInstanceOf(Function);
-    });
+  it('"fetchEventsByLocationOverWebSocket" action creator', () => {
+    const fetchEventsByLocationOverWebSocketProps = wrapper.props()
+      .fetchEventsByLocationOverWebSocket;
+    expect(fetchEventsByLocationOverWebSocketProps).toBeInstanceOf(Function);
+  });
+
+  it('"updateMapPolyline" action creator', () => {
+    const updateMapPolylineProps = wrapper.props()
+      .updateMapPolyline;
+    expect(updateMapPolylineProps).toBeInstanceOf(Function);
+  });
 });
