@@ -103,7 +103,7 @@ class ImagesView(APIView):
             is_trusted = request.POST.get('isValid', '') == 'true'
             image.is_trusted = is_trusted
             image.save(event_id, DB)
-            # DB.child('incidents').child(event_id).child("images").push(image_data)
+            image.run_nsfw_classifier(event_id, DB)
             print("Image Added")
         # Return file id for future reference
         print("Returning From Request", time.time())

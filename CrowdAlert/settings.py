@@ -16,7 +16,7 @@ import os
 import dj_database_url
 import firebase_admin
 import googlemaps
-import pyrebase
+from api.utils import pyrebase
 from firebase_admin import firestore
 
 # Generate the Firebase Service Account Credential json file
