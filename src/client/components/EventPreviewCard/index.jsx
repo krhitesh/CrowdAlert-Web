@@ -8,10 +8,14 @@ import {
   Segment,
   Header,
   Icon,
+  Button,
+  Loader,
+  Dimmer,
 } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import style from './style';
 import { closeEventPreview } from './actions';
+import { updateMapPolyline } from '../Map/actions';
 import calcAge from '../../utils/time';
 import getEventColor from '../../utils/eventcolors';
 import getWidth from '../../utils/width';
@@ -57,6 +61,26 @@ const EventPreviewCard = (props) => {
               >
                 View Incident
               </Link>
+              <Button
+                primary
+                style={{ marginLeft: 12 }}
+                onClick={() => props.updateMapPolyline({
+                  data: props.mapProps.polyline.data,
+                  isVisible: props.mapProps.polyline.isVisible,
+                  bounds: props.mapProps.polyline.bounds,
+                  fitBounds: true,
+                })}
+                data-test="btn-see-route"
+              >See Route
+              </Button>
+              <Dimmer
+                inverted
+                active={props.eventPreview.isOpen && !props.mapProps.polyline.isVisible}
+                data-test="preview-dimmer"
+              >
+                <Loader inverted />
+              </Dimmer>
+
             </Segment>
           </Transition>
         </div>
@@ -91,6 +115,26 @@ const EventPreviewCard = (props) => {
               >
                 View Incident
               </Link>
+              <Button
+                primary
+                style={{ marginLeft: 12 }}
+                onClick={() => props.updateMapPolyline({
+                data: props.mapProps.polyline.data,
+                isVisible: props.mapProps.polyline.isVisible,
+                bounds: props.mapProps.polyline.bounds,
+                fitBounds: true,
+                })}
+                data-test="btn-see-route"
+              >See Route
+              </Button>
+              <Dimmer
+                inverted
+                active={props.eventPreview.isOpen && !props.mapProps.polyline.isVisible}
+                data-test="preview-dimmer"
+              >
+                <Loader inverted />
+              </Dimmer>
+
             </Segment>
           </Transition>
         </div>
@@ -100,6 +144,7 @@ const EventPreviewCard = (props) => {
 };
 
 EventPreviewCard.propTypes = {
+  updateMapPolyline: proptypes.func.isRequired,
   closeEventPreview: proptypes.func.isRequired,
   eventPreview: proptypes.shape({
     event: proptypes.shape({
@@ -112,6 +157,14 @@ EventPreviewCard.propTypes = {
     }),
     isOpen: proptypes.bool,
   }),
+  mapProps: proptypes.shape({
+    polyline: proptypes.shape({
+      fitBounds: proptypes.bool,
+      bounds: proptypes.object,
+      data: proptypes.array,
+      isVisible: proptypes.bool,
+    }),
+  }).isRequired,
 };
 
 EventPreviewCard.defaultProps = {
@@ -120,14 +173,19 @@ EventPreviewCard.defaultProps = {
 
 
 const mapStateToProps = (state) => {
+  const { map } = state;
   const { eventPreview } = state;
+  const { event } = state;
   return {
-    eventPreview
+    mapProps: map,
+    eventPreview,
+    event,
   };
 };
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     closeEventPreview,
+    updateMapPolyline,
   }, dispatch)
 );
 

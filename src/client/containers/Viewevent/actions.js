@@ -8,9 +8,29 @@ import {
   EVENT_FETCH_REVERSE_GEOCODE_SSR,
   EVENT_FETCH_REVERSE_GEOCODE,
   EVENT_FETCH_REVERSE_GEOCODE_FINISHED,
+  EVENT_FETCH_DIRECTIONS,
+  EVENT_FETCH_DIRECTIONS_FINISHED,
 } from './actionTypes';
 import { GET_EVENT_BY_ID, REVERSE_GEOCODE } from '../../utils/apipaths';
 
+export function fetchDirections(startLat, startLon, endLat, endLon) {
+  return {
+    type: EVENT_FETCH_DIRECTIONS,
+    payload: {
+      startLat,
+      startLon,
+      endLat,
+      endLon,
+    },
+  };
+}
+export function fetchDirectionsSuccess(payload = {}) {
+  console.log(payload);
+  return {
+    type: EVENT_FETCH_DIRECTIONS_FINISHED,
+    payload,
+  };
+}
 export function fetchEventData(payload = {}) {
   return {
     type: EVENT_FETCH_EVENT_DATA,

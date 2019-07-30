@@ -1,5 +1,5 @@
-import { EVENT_PREVIEW_OPEN } from './actionTypes';
-import { updateMapCenter } from '../../components/Map/actions';
+import { EVENT_PREVIEW_OPEN, EVENT_PREVIEW_CLOSE } from './actionTypes';
+import { updateMapCenter, updateMapPolyline } from '../../components/Map/actions';
 import { fetchEventData } from '../../containers/Viewevent/actions';
 
 const eventPreviewMiddleware = ({ dispatch }) => next => (action) => {
@@ -21,6 +21,16 @@ const eventPreviewMiddleware = ({ dispatch }) => next => (action) => {
       eventid: action.payload.key,
     }));
   }
+  if (action.type === EVENT_PREVIEW_CLOSE) {
+    // Remove the polyline from the map when the event preview of the incident closes.
+    dispatch(updateMapPolyline({
+      polyline: null,
+      bounds: null,
+      fitBounds: false,
+      isVisible: false,
+    }));
+  }
+
   // Call the next middleware
   next(action);
 };

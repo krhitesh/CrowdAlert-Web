@@ -1,3 +1,6 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable prefer-destructuring */
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import {
@@ -20,6 +23,7 @@ import {
 } from '../../components';
 import { WS_NEW_COMMENT_RECEIVED } from '../../components/Comments/actionTypes';
 import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
+import { geolocatoretLocationPermission } from '../../components/Geolocator/actions';
 import { fetchCommentsThreadSSR, fetchCommentThreadSuccessViaWebSocket } from '../../components/Comments/actions';
 import { updateUpvotesLongPollStatus } from '../../components/Upvote/actions';
 import getWidth from '../../utils/width';
@@ -67,6 +71,7 @@ const EventCard = props => (
       reportedBy={props.reportedBy}
       dateTime={props.datetime}
       reverse_geocode={props.reverse_geocode}
+      distance={props.polyline.distance}
     />
     {(props.spam.count > 2) ?
       <Event.SpamAlert />
@@ -89,10 +94,22 @@ const EventCard = props => (
         }
       </SemanticImage.Group>
     </Event.Body>
-    <Event.Footer title={props.title} uuid={props.uuid} />
+    <Event.Footer
+      title={props.title}
+      uuid={props.uuid}
+      htmlInstructions={props.polyline.htmlInstructions}
+    />
   </Card>
 );
 EventCard.propTypes = {
+  polyline: propTypes.shape({
+    fitBounds: propTypes.bool,
+    bounds: propTypes.object,
+    data: propTypes.array,
+    isVisible: propTypes.bool,
+    htmlInstructions: propTypes.arrayOf(propTypes.string),
+    distance: propTypes.string,
+  }).isRequired,
   reportedBy: propTypes.object.isRequired,
   spam: propTypes.object.isRequired,
   viewmode: propTypes.string.isRequired,
@@ -132,10 +149,9 @@ class Viewevent extends Component {
     this.setupSocket = this.setupSocket.bind(this);
   }
   componentDidMount() {
-    const { eventid } = this.props.match.params;
-    const shouldRefresh =
-      this.props.match.params.eventid !== this.props.event.data.eventid;
-    this.props.fetchEventData({ eventid, shouldRefresh });
+    if (!this.props.map.polyline.isVisible && process.env.JEST_WORKER_ID === undefined) {
+      this.props.getUserLocation({ fromViewevent: true });
+    }
 
     if (this.props.isLoggedIn) {
       this.props.updateUpvotesLongPollStatus(true);
@@ -244,6 +260,7 @@ class Viewevent extends Component {
                 viewmode="mobile"
                 reportedBy={this.props.event.data.reportedBy}
                 datetime={this.props.event.data.datetime}
+                polyline={this.props.map.polyline}
                 title={this.props.event.data.title}
                 description={this.props.event.data.description}
                 images={this.props.event.data.images}
@@ -287,6 +304,7 @@ class Viewevent extends Component {
                           viewmode="desktop"
                           reportedBy={this.props.event.data.reportedBy}
                           datetime={this.props.event.data.datetime}
+                          polyline={this.props.map.polyline}
                           title={this.props.event.data.title}
                           description={this.props.event.data.description}
                           images={this.props.event.data.images}
@@ -322,7 +340,6 @@ Viewevent.propTypes = {
       eventid: propTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  fetchEventData: propTypes.func.isRequired,
   event: propTypes.shape({
     reverse_geocode: propTypes.object,
     isLoading: propTypes.bool,
@@ -350,7 +367,9 @@ Viewevent.propTypes = {
   map: propTypes.shape({
     lat: propTypes.number,
     lng: propTypes.number,
+    polyline: propTypes.object.isRequired,
   }).isRequired,
+  getUserLocation: propTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => (
@@ -358,6 +377,7 @@ const mapDispatchToProps = dispatch => (
     fetchEventData,
     fetchCommentThreadSuccessViaWebSocket,
     updateUpvotesLongPollStatus,
+    getUserLocation: geolocatoretLocationPermission,
   }, dispatch)
 );
 const mapStateToProps = state => ({
