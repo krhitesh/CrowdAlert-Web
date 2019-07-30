@@ -29,6 +29,16 @@ test('no render', () => {
       event: null,
       isOpen: false,
     },
+    event: {},
+    map: {
+      polyline: {
+        isVisible: false,
+        bounds: null,
+        fitBounds: false,
+        data: [{ lat: -34.397, lng: 150.644 }, { lat: -35.397, lng: 151.644 }],
+        distance: null,
+      },
+    },
   };
   const wrapper = setup({}, { ...reduxPiece });
 
@@ -46,6 +56,16 @@ const reduxPiece = {
       datetime: new Date().getTime(),
     },
     isOpen: false,
+  },
+  event: {},
+  map: {
+    polyline: {
+      isVisible: false,
+      bounds: null,
+      fitBounds: false,
+      data: [{ lat: -34.397, lng: 150.644 }, { lat: -35.397, lng: 151.644 }],
+      distance: null,
+    },
   },
 };
 
@@ -65,6 +85,14 @@ describe('render', () => {
 
   it('event datetime p test', () => {
     expect(findByTestAttr(wrapper, 'jsx-datetime')).toHaveLength(2);
+  });
+
+  it('renders see route button', () => {
+    expect(findByTestAttr(wrapper, 'btn-see-route')).toHaveLength(2);
+  });
+
+  it('renders preview dimmer', () => {
+    expect(findByTestAttr(wrapper, 'preview-dimmer')).toHaveLength(2);
   });
 
   it('links', () => {
@@ -109,6 +137,8 @@ describe('redux props', () => {
   it('has redux piece of state', () => {
     const reduxProp = {
       eventPreview: wrapper.props().eventPreview,
+      event: wrapper.props().event,
+      map: wrapper.props().mapProps,
     };
 
     expect(reduxProp).toEqual(reduxPiece);
@@ -117,5 +147,10 @@ describe('redux props', () => {
   it('"closeEventPreview" action creator', () => {
     const closeEventPreviewProp = wrapper.props().closeEventPreview;
     expect(closeEventPreviewProp).toBeInstanceOf(Function);
+  });
+
+  it('"updateMapPolyline" action creator', () => {
+    const updateMapPolylineProp = wrapper.props().updateMapPolyline;
+    expect(updateMapPolylineProp).toBeInstanceOf(Function);
   });
 });

@@ -1,7 +1,17 @@
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 
-from api.location.views import PlacesView, ReverseGeocodeView, IPLocationView
+from api.location.views import DirectionsView, PlacesView, ReverseGeocodeView, IPLocationView
+
+
+class DirectionsViewTest(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+
+    def test_get(self):
+        request = self.factory.get('/api/location/get_directions', {'startLat': 26.3423, 'startLong': 80.3433, 'endLat': 24.2342, 'endLong': 80.1111})
+        response = DirectionsView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
 
 
 class PlacesViewTest(TestCase):

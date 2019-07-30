@@ -7,6 +7,9 @@ import Feed from '../index';
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const reduxPiece = {
+  eventPreview: {
+    isOpen: false,
+  },
   map: {
     lat: 26.2323,
     lng: 80.2322,
@@ -158,6 +161,7 @@ describe('redux props', () => {
       auth: {
         isLoggedIn: wrapper.props().isLoggedIn,
       },
+      eventPreview: wrapper.props().eventPreview,
     };
 
     expect(reduxProps).toEqual(reduxPiece);
@@ -177,5 +181,11 @@ describe('redux props', () => {
     const fetchEventsByLocationOverWebSocketProps = wrapper.props()
       .fetchEventsByLocationOverWebSocket;
     expect(fetchEventsByLocationOverWebSocketProps).toBeInstanceOf(Function);
+  });
+
+  it('"updateMapPolyline" action creator', () => {
+    const updateMapPolylineProps = wrapper.props()
+      .updateMapPolyline;
+    expect(updateMapPolylineProps).toBeInstanceOf(Function);
   });
 });

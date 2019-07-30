@@ -8,6 +8,7 @@ Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const defaultProps = {
   reverse_geocode: { name: '', admin2: '', admin1: '' },
+  distance: null,
 };
 
 /**
@@ -33,6 +34,7 @@ describe('renders', () => {
     dateTime: new Date().getTime(),
     reportedBy: randomReportedBy(),
     ...defaultProps,
+    distance: '1.6 km',
   };
   let wrapper;
   beforeEach(() => {
@@ -57,6 +59,10 @@ describe('renders', () => {
 
   it('renders reverse geocode jsx', () => {
     expect(findByTestAttr(wrapper, 'jsx-rev-geocode')).toHaveLength(1);
+  });
+
+  it('renders distance jsx', () => {
+    expect(findByTestAttr(wrapper, 'd-distance')).toHaveLength(1);
   });
 });
 

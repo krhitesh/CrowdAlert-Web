@@ -6,11 +6,18 @@ import Footer from '../Footer';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
+const defaultProps = {
+  htmlInstructions: ['No directions available'],
+};
+
 /**
  * @function setup
  * @returns {ShallowWrapper}
  */
-const setup = (props = {}) => shallow(<Footer {...props} />);
+const setup = (props = {}) => {
+  const setupProps = { ...defaultProps, ...props };
+  return shallow(<Footer {...setupProps} />);
+};
 
 describe('render', () => {
   let wrapper;
@@ -21,6 +28,14 @@ describe('render', () => {
 
   it('renders without error', () => {
     expect(findByTestAttr(wrapper, 'component-footer')).toHaveLength(1);
+  });
+
+  it('renders directions modal without error', () => {
+    expect(findByTestAttr(wrapper, 'component-directions-modal')).toHaveLength(1);
+  });
+
+  it('renders directions modal trigger without error', () => {
+    expect(findByTestAttr(wrapper, 'modal-trigger')).toHaveLength(1);
   });
 
   it('renders upvote button without error', () => {

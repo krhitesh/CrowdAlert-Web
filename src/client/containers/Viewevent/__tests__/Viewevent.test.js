@@ -10,6 +10,13 @@ const reduxPiece = {
   map: {
     lat: 26.2323,
     lng: 80.2322,
+    polyline: {
+      isVisible: false,
+      bounds: null,
+      fitBounds: false,
+      data: [{ lat: -34.397, lng: 150.644 }, { lat: -35.397, lng: 151.644 }],
+      distance: null,
+    },
   },
   event: {
     reverse_geocode: {},
@@ -150,9 +157,9 @@ describe('redux props', () => {
     expect(fetchCommentThreadSuccessViaWebSocketProps).toBeInstanceOf(Function);
   });
 
-  it('"fetchEventData" action creator', () => {
-    const fetchEventDataProps = wrapper.props().fetchEventData;
-    expect(fetchEventDataProps).toBeInstanceOf(Function);
+  it('"getUserLocation" action creator', () => {
+    const getUserLocationProps = wrapper.props().getUserLocation;
+    expect(getUserLocationProps).toBeInstanceOf(Function);
   });
 
   it('"updateUpvotesLongPollStatus" action creator', () => {

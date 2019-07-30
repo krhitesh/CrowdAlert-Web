@@ -2,11 +2,13 @@ import {
   MAP_UPDATE_CENTER,
   MAP_UPDATE_ZOOM,
   MAP_ONCLICK,
+  MAP_UPDATE_POLYLINE,
 } from '../actionTypes';
 import {
   updateMapCenter,
   updateMapZoom,
   updateOnClick,
+  updateMapPolyline
 } from '../actions';
 
 describe('testing map actions', () => {
@@ -49,6 +51,22 @@ describe('testing map actions', () => {
     const action = updateOnClick(payload.lat, payload.lng);
     expect(action).toEqual({
       type: MAP_ONCLICK,
+      payload,
+    });
+  });
+
+  it('updateMapPolyline', () => {
+    const payload = {
+      isVisible: false,
+      bounds: null,
+      fitBounds: false,
+      data: [{ lat: -34.397, lng: 150.644 }, { lat: -35.397, lng: 151.644 }],
+      distance: null,
+    };
+
+    const action = updateMapPolyline(payload);
+    expect(action).toEqual({
+      type: MAP_UPDATE_POLYLINE,
       payload,
     });
   });

@@ -3,6 +3,7 @@ import {
   GEOLOCATOR_MODAL_OPEN,
   GEOLOCATOR_LOCATION_DENIED,
   GEOLOCATOR_LOCATION_FAILED,
+  GEOLOCATOR_LOCATION_SUCCESS,
 } from '../actionTypes';
 import geolocatorReducer from '../reducers';
 
@@ -14,6 +15,7 @@ const LOCATION_FAILED_TEXT = 'You need enable location services. Current locatio
 const initialState = {
   modalText: PERMISSION_REQUIRED_TEXT,
   isOpen: false,
+  locationHistory: [],
 };
 
 describe('testing geolocator reducer', () => {
@@ -76,6 +78,33 @@ describe('testing geolocator reducer', () => {
       ...initialState,
       modalText: LOCATION_FAILED_TEXT,
       isOpen: true,
+    });
+  });
+
+  it('location success action', () => {
+    const action = {
+      type: GEOLOCATOR_LOCATION_SUCCESS,
+      payload: {
+        lat: 26.2313,
+        lng: 80.2323,
+      },
+    };
+
+    const ns = geolocatorReducer(initialState, action);
+    let newLocationHistory;
+    if (initialState.locationHistory.length === 0) {
+      newLocationHistory = [action.payload];
+    } else if (action.payload.lat === initialState.locationHistory[0].lat &&
+      action.payload.lng === initialState.locationHistory[0].lng) {
+      newLocationHistory = initialState.locationHistory;
+    } else {
+      newLocationHistory = initialState.locationHistory;
+      newLocationHistory.unshift(action.payload);
+    }
+
+    expect(ns).toEqual({
+      ...initialState,
+      locationHistory: newLocationHistory,
     });
   });
 });
