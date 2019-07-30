@@ -173,9 +173,13 @@ EventPreviewCard.defaultProps = {
 
 
 const mapStateToProps = (state) => {
+  const { map } = state;
   const { eventPreview } = state;
+  const { event } = state;
   return {
-    eventPreview
+    mapProps: map,
+    eventPreview,
+    event,
   };
 };
 const mapDispatchToProps = dispatch => (

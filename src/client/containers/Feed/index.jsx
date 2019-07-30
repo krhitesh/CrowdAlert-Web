@@ -1,8 +1,11 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 
+import { updateMapPolyline } from '../../components/Map/actions';
 import { fetchUserLocation, fetchEventsByLocation, fetchUserLocationSSR, fetchEventsByLocationSSR, fetchEventsByLocationOverWebSocket } from './actions';
 import style from './style';
 import { MapWrapper, Sonar, EventPreviewCard, GeoLocator } from '../../components';
@@ -47,6 +50,16 @@ function getEventMarkers(feed, zoom) {
  * @extends Component
  */
 class Feed extends Component {
+  componentWillMount() {
+    if (!this.props.eventPreview.isOpen) {
+      this.props.updateMapPolyline({
+        polyline: null,
+        bounds: null,
+        fitBounds: false,
+        isVisible: false,
+      });
+    }
+  }
   componentDidMount() {
     if (this.props.isLoggedIn) {
       this.props.fetchEventsByLocationOverWebSocket({
@@ -115,12 +128,13 @@ class Feed extends Component {
 
 const mapStateToProps = (state) => {
   const { map } = state;
-  const { feed } = state;
+  const { feed, eventPreview } = state;
   const { isLoggedIn } = state.auth;
   return {
     mapProps: map,
     feedProps: feed,
     isLoggedIn,
+    eventPreview,
   };
 };
 
@@ -129,6 +143,7 @@ const mapDispatchToProps = dispatch => (
     fetchUserLocation,
     fetchEventsByLocation,
     fetchEventsByLocationOverWebSocket,
+    updateMapPolyline,
   }, dispatch)
 );
 
@@ -142,6 +157,10 @@ Feed.propTypes = {
   fetchEventsByLocation: PropTypes.func.isRequired,
   fetchEventsByLocationOverWebSocket: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
+  updateMapPolyline: PropTypes.func.isRequired,
+  eventPreview: PropTypes.shape({
+    isOpen: PropTypes.bool,
+  }).isRequired,
 };
 
 export default {
