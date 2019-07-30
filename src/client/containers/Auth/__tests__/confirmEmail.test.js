@@ -80,6 +80,11 @@ describe('render', () => {
     expect(findByTestAttr(wrapper, 'verifying')).toHaveLength(0);
   });
 
+  it('renders link to feed in confirmEmail', () => {
+    const	wrapper = setup({}, reduxPiece).dive().dive();
+    expect(findByTestAttr(wrapper, 'link-to-feed')).toHaveLength(1);
+  });
+
   it('renders error component', () => {
     const rp = {
       auth: {

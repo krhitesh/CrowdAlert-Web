@@ -11,6 +11,7 @@ import {
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { sendEmailVerificationAuth, verifyEmailAuth } from './actions';
 import { Auth } from '../../utils/firebase';
@@ -66,13 +67,19 @@ const EmailSent = props => (
     />
     <Segment attached>
       <p>An email was sent to your registered email ID {props.user.email}.</p>
-      <p>Click on the link to verify your account.</p>
+      <p>
+        Click on the link in email to verify your account.
+        Once confirmed, you will be able to post incidents nearby
+        with your new CrowdAlert account.
+      </p>
+      <p style={{ marginBottom: 0 }}>Best wishes,</p>
+      <p>Team CrowdAlert</p>
     </Segment>
     <Segment attached textAlign="right">
-      <p>Did not receive the mail? </p>
+      <p>Did not receive the mail ?</p>
       <Button
-        basic
-        color="black"
+        primary
+        style={{ backgroundColor: '#573a08' }}
         onClick={props.sendEmailVerification}
       >
         Resend verification email
@@ -147,9 +154,15 @@ class ConfirmEmail extends PureComponent {
       <Container data-test="component-confirm-email">
         {head()}
         <Grid stackable columns="equal" style={{ padding: '1rem' }}>
-          <Grid.Row>
-            <Grid.Column />
-            <Grid.Column>
+          <Grid.Row style={{ marginTop: '5%', position: 'inherit', textAlign: 'center' }} >
+            <h1 style={{ margin: '0 auto' }} >Welcome, user!</h1>
+          </Grid.Row>
+          <Grid.Row style={{ position: 'inherit', padding: '0 0 0 0' }}>
+            <h3 style={{ margin: '0 auto' }} >Glad to have you on board.</h3>
+          </Grid.Row>
+          <Grid.Row style={{ marginTop: '1%', position: 'inherit' }}>
+            <Grid.Column style={{ maxWidth: 600, margin: '0 auto' }}>
+
               {this.props.confirmEmailForm.errors ?
                 <Message
                   negative
@@ -180,6 +193,13 @@ class ConfirmEmail extends PureComponent {
                 />
               : null}
 
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row style={{ marginTop: '1%', position: 'inherit' }}>
+            <Grid.Column style={{ textAlign: 'center' }}>
+              <Link to="/" data-test="link-to-feed">
+                <Button primary>Go to Feed</Button>
+              </Link>
             </Grid.Column>
           </Grid.Row>
         </Grid>
