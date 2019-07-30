@@ -4,7 +4,6 @@ stages:
   - test_backend
   - install_npm_deps
   - test_frontend
-  - build_image
 
 cache:
   paths:
