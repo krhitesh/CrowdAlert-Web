@@ -8,7 +8,7 @@ import {
   updateMapCenter,
   updateMapZoom,
   updateOnClick,
-  updateMapPolyline
+  updateMapPolyline,
 } from '../actions';
 
 describe('testing map actions', () => {
