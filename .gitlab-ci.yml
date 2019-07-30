@@ -65,14 +65,3 @@ test_frontend:
   - yarn lint
   - yarn test
   when: on_success
-
-build_image:
-  image: docker:stable
-  stage: build_image
-  dependencies:
-  - install_npm_deps
-  - test_frontend
-  - test_backend
-  script:
-  - docker build -t crowdalert .
-  when: on_success
