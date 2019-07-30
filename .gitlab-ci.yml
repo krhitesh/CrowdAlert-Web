@@ -1,3 +1,7 @@
+before_script:
+  - docker info
+
+
 stages:
   - setup_py_env
   - install_py_deps
