@@ -4,9 +4,11 @@ But we can replace the firestore mechanism with a custom model
 import os
 import subprocess
 import time
+import requests
+import json
 from threading import Thread
 
-from google.cloud.firestore_v1beta1 import ArrayUnion
+from google.cloud.firestore_v1beta1 import ArrayUnion, ArrayRemove
 
 from api.events.models import Event
 
@@ -19,6 +21,9 @@ def asyncfunc(function):
         threads.daemon = False
         threads.start()
     return decorated_function
+
+url = 'https://test-nsfw-7.herokuapp.com'
+
 
 def asyncfunc(function):
     """ Wrapper for async behaviour. Executes function in a separate new thread
@@ -64,11 +69,24 @@ class Image(object):
         return self.uuid
 
     def put(self, storage):
-        storage.child(Image.path + self.uuid).put(self.name)
+        storage.child(Image.path + self.uuid).put(self.name, content_type="image/jpg")
 
     def create_thumbnail(self, storage):
         self.__create_thumbnail__(self.name, storage)
 
+    @asyncfunc
+    def run_nsfw_classifier(self, incident_id, db):
+        try:
+            res = requests.post(url, data={'url': 'https://crowdalert.herokuapp.com/api/images/image?uuid=' + self.uuid})
+            score = float(res.text)*100
+            print(score)
+            if score > 20.0:
+                db.collection(Event.collection_name).document(incident_id).update({u'images': ArrayRemove([self.to_dict()])})
+                self.is_nsfw = True
+                db.collection(Event.collection_name).document(incident_id).update({u'images': ArrayUnion([self.to_dict()])})
+        except:
+            pass
+    
     @asyncfunc
     def __create_thumbnail__(self, name, storage):
         """ Starts the job of creating svg based thumbnail for a given file
@@ -82,7 +100,7 @@ class Image(object):
         # and expose another endpoint where we can check the status
         print("Generating Thumbnail", time.time())
         subprocess.run(['node_modules/.bin/sqip', name, '-o', name + '.svg'])
-        storage.child('thumbnails/' + name + '.svg').put(name + '.svg')
+        storage.child('thumbnails/' + name + '.svg').put(name + '.svg', content_type="image/svg+xml")
         # Remove the uploaded files for two good reasons:
         # Keep our dyno clean
         # remove malicious code before anything goes wrong.
