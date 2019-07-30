@@ -80,8 +80,18 @@ describe('render', () => {
 		const	wrapper = setup({}, reduxPiece).dive().dive();
 		expect(findByTestAttr(wrapper, 'verifying').length).toBe(0);
   });
-  
-  test('renders error component', () => {
+
+  it('renders no verifying', () => {
+    const	wrapper = setup({}, reduxPiece).dive().dive();
+    expect(findByTestAttr(wrapper, 'verifying')).toHaveLength(0);
+  });
+
+  it('renders link to feed in confirmEmail', () => {
+    const	wrapper = setup({}, reduxPiece).dive().dive();
+    expect(findByTestAttr(wrapper, 'link-to-feed')).toHaveLength(1);
+  });
+
+  it('renders error component', () => {
     const rp = {
       auth: {
         ...reduxPiece.auth,
