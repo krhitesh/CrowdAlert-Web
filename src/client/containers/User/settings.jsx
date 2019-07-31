@@ -8,6 +8,7 @@ import {
   List,
   Checkbox,
 } from 'semantic-ui-react';
+import googleLogo from '../../googlel.png';
 
 export default class UserSettings extends React.Component {
   constructor(props) {
@@ -55,7 +56,7 @@ export default class UserSettings extends React.Component {
             </List.Item>
             <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '2em' }}>
               <List.Content floated="right">
-                <Image avatar src="https://react.semantic-ui.com/images/avatar/small/lena.png" />
+                <Image avatar src={googleLogo} />
               </List.Content>
               <List.Content>
                 <p style={{ marginBottom: 0 }}><b>Connected Accounts</b></p>
