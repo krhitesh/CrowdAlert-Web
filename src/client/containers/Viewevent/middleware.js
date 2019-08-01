@@ -1,13 +1,31 @@
 /* eslint-disable no-undef */
-import { EVENT_FETCH_EVENT_DATA_FINISHED, EVENT_FETCH_DIRECTIONS_FINISHED } from './actionTypes';
+import db from '../../utils/cacheAPI';
+import { EVENT_FETCH_EVENT_DATA, EVENT_FETCH_EVENT_DATA_FINISHED, EVENT_FETCH_DIRECTIONS_FINISHED } from './actionTypes';
 import { updateMapCenter, updateMapZoom, updateMapPolyline } from '../../components/Map/actions';
-import { fetchReverseGeocode, fetchDirections } from './actions';
+import { fetchReverseGeocode, fetchDirections, fetchEventDataFinished } from './actions';
 
 
 const fetchEventDataMiddleware = store => next => (action) => {
   const { dispatch } = store;
   const state = store.getState();
-  if (action.type === EVENT_FETCH_EVENT_DATA_FINISHED) {
+  if (action.type === EVENT_FETCH_EVENT_DATA && process.env.BROWSER) {
+    const { eventid } = action.payload;
+    db.get(eventid)
+      .then((doc) => {
+        console.log('Using cache', eventid);
+        const newPayload = {
+          cached: true,
+          ...doc,
+        };
+        delete newPayload._id;
+        delete newPayload._rev;
+
+        // This is going to set isLoading to false and use cached incident
+        dispatch(fetchEventDataFinished(newPayload));
+      })
+      .catch(err => console.log('Error while using cache', err));
+    next(action);
+  } else if (action.type === EVENT_FETCH_EVENT_DATA_FINISHED) {
     const { payload } = action;
     let formattedImages = [];
     const { images } = payload;
@@ -56,6 +74,29 @@ const fetchEventDataMiddleware = store => next => (action) => {
         const recentCoords = locationHistory[0];
         dispatch(fetchDirections(recentCoords.lat, recentCoords.lng, lat, lng));
       }
+
+      db.get(payload.eventid)
+        .then(doc => db.put({
+          _id: payload.eventid,
+          _rev: doc._rev,
+          ...payload,
+        }))
+        .catch(() => {
+          db.put({
+            _id: payload.eventid,
+            ...payload,
+          })
+            .then((response) => {
+              if (!response.ok) {
+                console.error('Failed to save the doc');
+              } else {
+                console.log('Doc created', payload.eventid);
+              }
+            })
+            .catch((createError) => {
+              console.error('Error occured while saving the doc', createError);
+            });
+        });
     }
 
     next(newAction);
