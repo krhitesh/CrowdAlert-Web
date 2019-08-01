@@ -25,7 +25,7 @@ export function fetchDirections(startLat, startLon, endLat, endLon) {
   };
 }
 export function fetchDirectionsSuccess(payload = {}) {
-  console.log(payload);
+  // console.log(payload);
   return {
     type: EVENT_FETCH_DIRECTIONS_FINISHED,
     payload,

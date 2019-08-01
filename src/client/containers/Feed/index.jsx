@@ -32,12 +32,12 @@ function getEventMarkers(feed, zoom) {
   for (let i = 1; i < 18;) {
     if ((zoom + i > 4 && zoom + i < 18)
       && feedData[zoom + i] && feedData[zoom + i].length) {
-      console.log(feedData[zoom + i], i, zoom + i);
+      // console.log(feedData[zoom + i], i, zoom + i);
       return feedData[zoom + i] || [];
     }
     if ((zoom - i > 4 && zoom - i < 18)
       && feedData[zoom - i] && feedData[zoom - i].length) {
-      console.log(feedData[zoom - i], i, zoom - i);
+      // console.log(feedData[zoom - i], i, zoom - i);
       return feedData[zoom - i];
     }
     i += 1;
