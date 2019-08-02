@@ -5,10 +5,11 @@
 class User(object):
     collection_name = 'users'
 
-    def __init__(self, uid, display_name, photo_url):
+    def __init__(self, uid, display_name, photo_url, home_location={}):
         self.uid = uid
         self.display_name = display_name
         self.photo_url = photo_url
+        self.home_location = home_location
 
     @staticmethod
     def get(uid, db):
@@ -29,12 +30,15 @@ class User(object):
     @staticmethod
     def from_dict(uid, source_dict):
         user = User(uid, source_dict['displayName'], source_dict['photoURL'])
+        if 'home_location' in source_dict.keys():
+            user.home_location = source_dict['home_location']
         return user
 
     def to_dict(self):
         user_dict = {
             'displayName': self.display_name,
-            'photoURL': self.photo_url
+            'photoURL': self.photo_url,
+            'home_location': self.home_location
         }
 
         return user_dict
