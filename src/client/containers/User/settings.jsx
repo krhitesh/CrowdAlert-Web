@@ -38,6 +38,15 @@ export default class UserSettings extends React.Component {
             </List.Item>
             <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '2em' }}>
               <List.Content floated="right">
+                <Button primary>&nbsp;&nbsp;&nbsp;&nbsp;Add&nbsp;&nbsp;&nbsp;</Button>
+              </List.Content>
+              <List.Content>
+                <p style={{ marginBottom: 0 }}><b>Add your home location</b></p>
+                <p>Your home location will be automatically opened on map.</p>
+              </List.Content>
+            </List.Item>
+            <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '2em' }}>
+              <List.Content floated="right">
                 <Button primary>Change</Button>
               </List.Content>
               <List.Content>
