@@ -6,6 +6,8 @@ import createEventsMiddleware from './containers/CreateEvent/middleware';
 import commentsMiddleware from './components/Comments/middleware';
 import notificationsMiddleware from './components/Notifications/middleware';
 import upvoteMiddleware from './components/Upvote/middleware';
+import userMiddleware from './containers/User/middleware';
+import homeLocationMiddleware from './components/HomeLocationModal/middleware';
 
 import {
   authMiddleware,
@@ -26,6 +28,8 @@ const middlewares = [
   commentsMiddleware,
   notificationsMiddleware,
   upvoteMiddleware,
+  userMiddleware,
+  homeLocationMiddleware,
 ];
 
 export default middlewares;

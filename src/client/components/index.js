@@ -15,6 +15,7 @@ import Directions from './DirectionsModal';
 import * as SpamReport from './SpamReport';
 import * as Notifications from './Notifications';
 import SafeText from './SafeText';
+import HomeLocationModal from './HomeLocationModal';
 
 export {
   Image,
@@ -35,4 +36,5 @@ export {
   SpamReport,
   SafeText,
   Notifications,
+  HomeLocationModal,
 };

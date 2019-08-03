@@ -57,7 +57,7 @@ app.get('*', async (req, res) => {
   const token = getCookie(cookie, 'token');
 
   const store = serverConfigureStore(req, {}, history);
-  const authenticateUserPromise = authenticateUser(store, token);
+  await authenticateUser(store, token);
 
   const promises = matchRoutes(Routes, req.path).map(({ route, match }) => {
     if (route.loadData) {
@@ -77,8 +77,6 @@ app.get('*', async (req, res) => {
         });
       }
     });
-
-  promises.push(authenticateUserPromise);
 
   let content = '';
   try {
