@@ -43,9 +43,9 @@ class UserView(APIView):
             user = User.get(uid, DB)
             if user.home_location != {}:
                 home_location = {
-                    u"lat": user.home_location.coords.latitude,
-                    u"lng": user.home_location.coords.longitude,
-                    u"reverse_geocode": user.home_location.reverse_geocode
+                    u"lat": user.home_location["coords"].latitude,
+                    u"lng": user.home_location["coords"].longitude,
+                    u"text": user.home_location["text"]
                 }
             return JsonResponse(home_location, safe=False)
 
@@ -81,7 +81,7 @@ class UserView(APIView):
                 raise Exception("No fields to patch")
         except:
             return HttpResponseBadRequest("Bad request")
-
+            
         uid = str(request.user)
         for field in fields:
             try:
@@ -95,10 +95,10 @@ class UserView(APIView):
                     password = update_fields["password"]
                     auth.update_user(uid=uid, password=password)
                 elif field == 'home_location':
-                    home_location = update_fields["home_location"]
+                    home_location = json.loads(update_fields["home_location"])
                     home_location["coords"] = GeoPoint(home_location["lat"], home_location["lng"])
-                    del home_location.lat
-                    del home_location.lng
+                    del home_location["lat"]
+                    del home_location["lng"]
                     DB.document('users/' + uid).update({u"home_location": home_location})
             except:
                 return HttpResponseBadRequest("Bad request")

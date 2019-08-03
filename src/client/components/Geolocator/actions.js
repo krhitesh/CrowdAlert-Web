@@ -6,8 +6,19 @@ import {
   GEOLOCATOR_LOCATION_FAILED,
   GEOLOCATOR_MODAL_OPEN,
   GEOLOCATOR_MODAL_CLOSE,
+  GEOLOCATOR_UPDATE_HOME_LOCATION,
 } from './actionTypes';
 
+/**
+ * updates home location of user
+ * @param {*} payload none
+ */
+export function geolocatorUpdateHomeLocation(payload = {}) {
+  return {
+    type: GEOLOCATOR_UPDATE_HOME_LOCATION,
+    payload,
+  };
+}
 /**
  * start fetching geolocation of user
  * @param {*} payload none

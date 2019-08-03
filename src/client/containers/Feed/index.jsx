@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 
 import { updateMapPolyline } from '../../components/Map/actions';
-import { fetchUserLocation, fetchEventsByLocation, fetchUserLocationSSR, fetchEventsByLocationSSR, fetchEventsByLocationOverWebSocket } from './actions';
+import { fetchUserLocation, fetchEventsByLocation, fetchUserLocationSSR, fetchEventsByLocationSSR, fetchEventsByLocationOverWebSocket, fetchUserLocationFinished } from './actions';
 import style from './style';
 import { MapWrapper, Sonar, EventPreviewCard, GeoLocator } from '../../components';
 import { DOMAIN_NAME } from '../../utils/apipaths';
@@ -167,20 +167,38 @@ export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Feed),
   loadData: (store, ip = '') => {
     const { dispatch } = store;
+    const { homeLocation } = store.getState().geoLocator;
+    const oldCoords = {
+      oldLat: -26.77,
+      oldLng: 135.17,
+    };
 
-    return dispatch(fetchUserLocationSSR(
-      {
-        oldLat: -26.77,
-        oldLng: 135.17,
-      },
-      ip,
-    )).then(() => {
-      const { lat, lng, zoom } = store.getState().map;
-      return dispatch(fetchEventsByLocationSSR({
-        lat,
-        lng,
-        zoom,
-      }));
-    });
+    if (JSON.stringify(homeLocation) === '{}') {
+      console.log('Using IP');
+      return dispatch(fetchUserLocationSSR(
+        oldCoords,
+        ip,
+      )).then(() => {
+        const { lat, lng, zoom } = store.getState().map;
+        return dispatch(fetchEventsByLocationSSR({
+          lat,
+          lng,
+          zoom,
+        }));
+      });
+    }
+
+    dispatch(fetchUserLocationFinished({
+      oldCoords,
+      lat: homeLocation.lat,
+      lng: homeLocation.lng,
+      forced: true,
+    }));
+    const { lat, lng, zoom } = store.getState().map;
+    return dispatch(fetchEventsByLocationSSR({
+      lat,
+      lng,
+      zoom,
+    }));
   },
 };
