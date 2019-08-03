@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Auth } from '../utils/firebaseAdmin';
 import { updateUserAuthenticationData } from '../client/containers/Auth/actions';
 import { userGetInfoSSR } from '../client/containers/User/actions';

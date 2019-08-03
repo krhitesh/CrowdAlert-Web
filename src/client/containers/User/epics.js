@@ -93,6 +93,11 @@ const userProfileUpdaterEpic = action$ =>
     }),
   );
 
-const epics = combineEpics(userProfileUpdaterEpic, userDeleteUserEpic, userUpdateCredentialsEpic, getUserInfoEpic);
+const epics = combineEpics(
+  userProfileUpdaterEpic,
+  userDeleteUserEpic,
+  userUpdateCredentialsEpic,
+  getUserInfoEpic,
+);
 
 export default epics;
