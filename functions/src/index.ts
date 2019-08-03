@@ -21,3 +21,11 @@ export const updateUserData = functions.auth.user().onCreate((user) => { // esli
     }),
   ])
 });
+
+export const deleteUserData = functions.auth.user().onDelete((user) => {
+  const { uid } = user;
+  console.log(`Deleting user, uid: ${uid}`);
+  return admin.firestore().doc(`users/${uid}`).update({
+    deletedByUser: true,
+  });
+});

@@ -5,8 +5,8 @@ import { geolocatorUpdateHomeLocation } from '../../components/Geolocator/action
 const userMiddleware = ({ dispatch }) => next => (action) => {
   if (action.type === USER_DELETE_USER_SUCCESS) {
     dispatch(logoutUserAuthencation());
-    // A cloud function trigger is set Auth.onDelete to add a field "deleted" to user record
-    // in firestore
+    // Deploy a cloud function trigger Auth.onDelete to delete user record
+    // from firestore
   } if (action.type === USER_UPDATE_USER_CREDENTIALS_SUCCESS) {
     dispatch(logoutUserAuthencation());
   } else if (action.type === USER_GET_INFO_SUCCESS) {

@@ -68,6 +68,44 @@ class UserView(APIView):
 
         return JsonResponse({"status": "ok"}, safe=False)
 
+    def patch(self, request):
+        """
+        Updates user's email, password given a uid
+        """
+        keys = request.GET.get('keys')
+        if keys is None:
+            return HttpResponseBadRequest("Bad request")
+        fields = keys.split(',')
+        try:
+            update_fields = json.loads(request.body.decode())
+            if len(update_fields) == 0:
+                raise Exception("No fields to patch")
+        except:
+            return HttpResponseBadRequest("Bad request")
+            
+        uid = str(request.user)
+        for field in fields:
+            try:
+                if field == 'email':
+                    email = update_fields["email"]
+                    if request.user.email != email:
+                        auth.update_user(uid=uid, email=email)
+                    else:
+                        return HttpResponseBadRequest("Email already exists")
+                elif field == 'password':
+                    password = update_fields["password"]
+                    auth.update_user(uid=uid, password=password)
+                elif field == 'home_location':
+                    home_location = json.loads(update_fields["home_location"])
+                    home_location["coords"] = GeoPoint(home_location["lat"], home_location["lng"])
+                    del home_location["lat"]
+                    del home_location["lng"]
+                    DB.document('users/' + uid).update({u"home_location": home_location})
+            except:
+                return HttpResponseBadRequest("Bad request")
+
+        return JsonResponse({"status": "ok"}, safe=False)
+
     def delete(self, request):
         """
         Deletes a user given its uid
