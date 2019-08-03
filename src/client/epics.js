@@ -10,7 +10,6 @@ import upvotesEpics from './components/Upvote/epics';
 import spamReportEpics from './components/SpamReport/epics';
 import notificationsEpics from './components/Notifications/epics';
 import homeLocationEpic from './components/HomeLocationModal/epics';
-import editEventsEpic from './containers/EditEvent/epics';
 
 const rootEpic = combineEpics(
   feedEpic,
@@ -22,7 +21,6 @@ const rootEpic = combineEpics(
   spamReportEpics,
   notificationsEpics,
   homeLocationEpic,
-  editEventsEpic,
 );
 
 export default rootEpic;
