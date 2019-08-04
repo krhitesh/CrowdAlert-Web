@@ -20,6 +20,7 @@ import {
   Message,
   Form,
 } from 'semantic-ui-react';
+import { updateMapPolyline } from '../../components/Map/actions';
 import { HomeLocationModal } from '../../components/index';
 import googleLogo from '../../googlel.png';
 import fbl from '../../facebookl.png';
@@ -38,8 +39,8 @@ class UserSettings extends React.Component {
       showEmailUpdateModal: false,
       showPasswordUpdateModal: false,
       showChangePassword: Object.keys(this.props.providerData).indexOf('password') !== -1,
-      email: null,
-      password: null,
+      email: '',
+      password: '',
     };
     this.handleItemClick = this.handleItemClick.bind(this);
     this.toggleHLModal = this.toggleHLModal.bind(this);
@@ -50,6 +51,13 @@ class UserSettings extends React.Component {
   }
 
   componentDidMount() {
+    this.props.updateMapPolyline({
+      polyline: null,
+      bounds: null,
+      fitBounds: false,
+      isVisible: false,
+      force: false,
+    });
     if (this.props.homeLocation === {}) {
       this.props.userGetInfo({ key: 'home_location' });
     }
@@ -211,7 +219,7 @@ class UserSettings extends React.Component {
     const { activeItem } = this.state;
     let locationBtnText = 'Add';
     let locationText = 'Your home location will be automatically opened on map.';
-    if (this.props.homeLocation !== {}) {
+    if (JSON.stringify(this.props.homeLocation) !== '{}') {
       locationBtnText = 'Update';
       locationText = this.props.homeLocation.text;
     }
@@ -383,6 +391,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
+    updateMapPolyline,
     deleteUser,
     updateUserCredentials,
     userGetInfo,
@@ -392,6 +401,7 @@ const mapDispatchToProps = dispatch => (
 );
 
 UserSettings.propTypes = {
+  updateMapPolyline: propTypes.func.isRequired,
   userGetInfo: propTypes.func.isRequired,
   requestNotificationsPermission: propTypes.func.isRequired,
   deleteUser: propTypes.func.isRequired,
