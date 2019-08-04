@@ -12,28 +12,28 @@ Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const reduxPiece = {
   createEvents: {
-		tabs: {},
-		location: {
-			text: ''
-		},
-		details: {
-			help: true,
-			public: false,
-			title: 'title',
-			eventType: {},
-			anonymous: false,
-			description: 'description'
-		},
-		form: {
-			loading: false,
-			isFreezed: false,
-			validationErrors: false,
-			message: {
-				header: '',
-				body: ''
-			}
-		}
-  }
+    tabs: {},
+    location: {
+      text: '',
+    },
+    details: {
+      help: true,
+      public: false,
+      title: 'title',
+      eventType: 'fire',
+      anonymous: false,
+      description: 'description',
+    },
+    form: {
+      loading: false,
+      isFreezed: false,
+      validationErrors: false,
+      message: {
+        header: '',
+        body: '',
+      },
+    },
+  },
 };
 
 /**

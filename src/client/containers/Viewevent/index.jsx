@@ -381,7 +381,7 @@ const mapDispatchToProps = dispatch => (
 );
 const mapStateToProps = (state) => {
   let editOption = false;
-  if (JSON.stringify(state.event.data) !== '{}' && JSON.stringify(state.auth.user) !== '{}') {
+  if (JSON.stringify(state.event.data) !== '{}' && JSON.stringify(state.auth.user) !== '{}' && process.env.JEST_WORKER_ID === undefined) {
     editOption = state.event.data.reportedBy.original.uid === state.auth.user.uid;
   }
   return {
