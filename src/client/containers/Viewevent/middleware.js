@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-undef */
 import db from '../../utils/cacheAPI';
 import { EVENT_FETCH_EVENT_DATA, EVENT_FETCH_EVENT_DATA_FINISHED, EVENT_FETCH_DIRECTIONS_FINISHED } from './actionTypes';
@@ -9,21 +10,24 @@ const fetchEventDataMiddleware = store => next => (action) => {
   const { dispatch } = store;
   const state = store.getState();
   if (action.type === EVENT_FETCH_EVENT_DATA && process.env.BROWSER) {
-    const { eventid } = action.payload;
-    db.get(eventid)
-      .then((doc) => {
-        console.log('Using cache', eventid);
-        const newPayload = {
-          cached: true,
-          ...doc,
-        };
-        delete newPayload._id;
-        delete newPayload._rev;
+    const { eventid, fromNetwork } = action.payload;
+    // console.log('from net', fromNetwork);
+    if (fromNetwork !== true) {
+      db.get(eventid)
+        .then((doc) => {
+          console.log('Using cache', eventid);
+          const newPayload = {
+            cached: true,
+            ...doc,
+          };
+          delete newPayload._id;
+          delete newPayload._rev;
 
-        // This is going to set isLoading to false and use cached incident
-        dispatch(fetchEventDataFinished(newPayload));
-      })
-      .catch(err => console.log('Error while using cache', err));
+          // This is going to set isLoading to false and use cached incident
+          dispatch(fetchEventDataFinished(newPayload));
+        })
+        .catch(err => console.log('Cache:', err.message));
+    }
     next(action);
   } else if (action.type === EVENT_FETCH_EVENT_DATA_FINISHED) {
     const { payload } = action;
@@ -73,30 +77,35 @@ const fetchEventDataMiddleware = store => next => (action) => {
       if (locationHistory.length !== 0) {
         const recentCoords = locationHistory[0];
         dispatch(fetchDirections(recentCoords.lat, recentCoords.lng, lat, lng));
+      } else {
+        console.log('Location history is empty. Using home location');
+        dispatch(fetchDirections(state.geoLocator.homeLocation.lat, state.geoLocator.homeLocation.lng, lat, lng));
       }
 
-      db.get(payload.eventid)
-        .then(doc => db.put({
-          _id: payload.eventid,
-          _rev: doc._rev,
-          ...payload,
-        }))
-        .catch(() => {
-          db.put({
+      if (payload.cancelSync !== true) {
+        db.get(payload.eventid)
+          .then(doc => db.put({
             _id: payload.eventid,
+            _rev: doc._rev,
             ...payload,
-          })
-            .then((response) => {
-              if (!response.ok) {
-                console.error('Failed to save the doc');
-              } else {
-                console.log('Doc created', payload.eventid);
-              }
+          }))
+          .catch(() => {
+            db.put({
+              _id: payload.eventid,
+              ...payload,
             })
-            .catch((createError) => {
-              console.error('Error occured while saving the doc', createError);
-            });
-        });
+              .then((response) => {
+                if (!response.ok) {
+                  console.error('Failed to save the doc');
+                } else {
+                  console.log('Doc created', payload.eventid);
+                }
+              })
+              .catch((createError) => {
+                console.error('Cache:', createError.message);
+              });
+          });
+      } 
     }
 
     next(newAction);

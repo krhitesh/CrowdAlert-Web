@@ -97,6 +97,7 @@ const EventCard = props => (
     <Event.Footer
       title={props.title}
       uuid={props.uuid}
+      editOption={props.editOption}
       htmlInstructions={props.polyline.htmlInstructions}
     />
   </Card>
@@ -132,6 +133,7 @@ EventCard.propTypes = {
     uuid: propTypes.string.isRequired,
   })).isRequired,
   uuid: propTypes.string.isRequired,
+  editOption: propTypes.bool.isRequired,
 };
 EventCard.defaultProps = {
   reverse_geocode: { name: '', admin2: '', admin1: '' },
@@ -173,7 +175,7 @@ class Viewevent extends Component {
     const socket = new WebSocket(`${WS_COMMENTS}/${this.props.match.params.eventid}/`);
 
     socket.onclose = () => {
-      console.log('state', this.state);
+      // console.log('state', this.state);
       if (window.localStorage.getItem('noReconnect') === 'false') {
         console.log('Socket is closed. Reconnect will be attempted in 5 seconds.');
         setTimeout(this.setupSocket, 5000);
@@ -268,6 +270,7 @@ class Viewevent extends Component {
                 eventType={this.props.event.data.category}
                 uuid={this.props.match.params.eventid}
                 spam={this.props.event.data.spam}
+                editOption={this.props.editOption}
                 data-test="component-event-card"
               />
           }
@@ -313,6 +316,7 @@ class Viewevent extends Component {
                           spam={this.props.event.data.spam}
                           uuid={this.props.match.params.eventid}
                           data-test="component-event-card"
+                          editOption={this.props.editOption}
                         />
                     }
                     {!this.props.event.isLoading ?
@@ -370,6 +374,7 @@ Viewevent.propTypes = {
     polyline: propTypes.object.isRequired,
   }).isRequired,
   getUserLocation: propTypes.func.isRequired,
+  editOption: propTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = dispatch => (
@@ -380,11 +385,18 @@ const mapDispatchToProps = dispatch => (
     getUserLocation: geolocatoretLocationPermission,
   }, dispatch)
 );
-const mapStateToProps = state => ({
-  map: state.map,
-  event: state.event,
-  isLoggedIn: state.auth.isLoggedIn,
-});
+const mapStateToProps = (state) => {
+  let editOption = false;
+  if (JSON.stringify(state.event.data) !== '{}' && JSON.stringify(state.auth.user) !== '{}') {
+    editOption = state.event.data.reportedBy.original.uid === state.auth.user.uid;
+  }
+  return {
+    map: state.map,
+    event: state.event,
+    isLoggedIn: state.auth.isLoggedIn,
+    editOption,
+  };
+};
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Viewevent),
   loadData: (store, ip = '', match = { params: { eventid: '' } }) => {
