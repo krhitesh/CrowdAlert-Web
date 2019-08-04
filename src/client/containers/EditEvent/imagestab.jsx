@@ -135,7 +135,7 @@ class ImagesTab extends Component {
     return (
       <SEO
         title="Add Incident Images | Edit Incident"
-        url={`${DOMAIN_NAME}/edit/images`}
+        url={`${DOMAIN_NAME}/edit/${this.props.eventid}/images`}
         description="Edit incident."
       />
     );
@@ -360,7 +360,7 @@ ImagesTab.propTypes = {
     uploading: PropTypes.bool,
   }).isRequired,
   toggleImageUpload: PropTypes.func.isRequired,
-
+  eventid: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps, mapDisptachToProps)(ImagesTab);

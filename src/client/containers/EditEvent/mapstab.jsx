@@ -21,18 +21,15 @@ import getEventColor from '../../utils/eventcolors';
 import { DOMAIN_NAME } from '../../utils/apipaths';
 import SEO from '../../components/SEO';
 
-const head = () => (
-  <SEO
-    title="Update Location | Report Incident"
-    url={`${DOMAIN_NAME}/edit/location`}
-    description="Report an incident near you."
-  />
-);
 
 const MapTab = (props) => {
   return (
     <Segment data-test="component-mapstab">
-      {head()}
+      <SEO
+        title="Update Location | Report Incident"
+        url={`${DOMAIN_NAME}/edit/${props.eventid}/location`}
+        description="Report an incident near you."
+      />
       <Progress
         percent={33}
         attached="top"
