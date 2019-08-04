@@ -105,7 +105,7 @@ const fetchEventDataMiddleware = store => next => (action) => {
                 console.error('Cache:', createError.message);
               });
           });
-      } 
+      }
     }
 
     next(newAction);
