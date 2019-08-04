@@ -60,6 +60,10 @@ const STATIC_IMAGES = `${domainNameL}/static/images`;
 
 const USER_PROFILES = `${domainNameL}/api/users/user`;
 
+const USER_DELETE = `${domainNameL}/api/users/user`;
+
+const USER_UPDATE = `${domainNameL}/api/users/user?keys=`;
+
 const WS_COMMENTS = `${websocketURL}/ws/comments`;
 
 const COMMENTS = `${domainNameL}/api/comments/comment`;
@@ -81,6 +85,8 @@ export {
   UPLOAD_IMAGES,
   STATIC_IMAGES,
   USER_PROFILES,
+  USER_DELETE,
+  USER_UPDATE,
   COMMENTS,
   WS_COMMENTS,
   UPVOTE,
