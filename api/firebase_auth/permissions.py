@@ -18,7 +18,7 @@ class FirebasePermissions(permissions.BasePermission):
         """
         if request.method in permissions.SAFE_METHODS:
             return True
-        elif request.method == 'POST':
+        elif request.method == 'POST' or request.method == 'PATCH':
             # Make sure email is verified
             if request.user and request.user.is_authenticated and request.user.is_email_verified:
                 return True
