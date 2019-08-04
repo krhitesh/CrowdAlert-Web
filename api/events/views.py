@@ -59,6 +59,7 @@ class EventView(APIView):
                 event.reported_by[key] = {
                     "displayName": udata.display_name,
                     "photoURL": udata.photo_url,
+                    "uid": user_id
                 }
         data = event.to_response_dict()
         data['spam'] = get_spam_report_data(query)
@@ -151,6 +152,44 @@ class EventView(APIView):
             )
 
         return JsonResponse({"eventId": str(key)})
+
+    def patch(self, request):
+        event_data = json.loads(request.body.decode()).get('eventData', '')
+        if event_data == '':
+            return HttpResponseBadRequest("Bad request")
+        decoded_json = json.loads(event_data)
+
+        eventid = decoded_json['eventid']
+        if 'location' in decoded_json.keys():
+            decoded_json['location']['geohash'] = encode(location=[decoded_json['location']['coords']['latitude'], decoded_json['location']['coords']['longitude']])
+            geopoint = GeoPoint(decoded_json['location']['coords']['latitude'], decoded_json['location']['coords']['longitude'])
+            decoded_json['location']['coords'] = geopoint
+
+        Event.patch(eventid, decoded_json, DB)
+        event = Event.get(eventid, DB)
+        if 'description' in decoded_json.keys() and not settings.COVERAGE:
+            classify_text(decoded_json['description'], eventid)
+
+        if not settings.COVERAGE:
+            channel_layer = get_channel_layer()
+            # Send the event to all the websocket channels
+            async_to_sync(channel_layer.group_send)(
+                "geteventsbylocation_", {
+                    "type": 'event_message',
+                    "message": {
+                        "actionType": 'WS_NEW_EVENT_RECEIVED',
+                        "data": {
+                            "lat": event.location['coords'].latitude,
+                            "long": event.location['coords'].longitude,
+                            "key": str(eventid),
+                            "datetime": event.datetime,
+                            "category": event.category,
+                            "title": event.title
+                        }
+                    }
+                }
+            )
+        return JsonResponse({"eventId": str(eventid)})
 
 
 class MultipleEventsView(APIView):

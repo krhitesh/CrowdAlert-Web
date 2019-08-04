@@ -30,6 +30,11 @@ def get_comments_from_thread(thread):
     user_data = {}
     for user in comment.participants:
         tmp_user = User.get(user, DB)
+        tmp_user.home_location['coords'] = {
+            u"lat": tmp_user.home_location["coords"].latitude,
+            u"lng": tmp_user.home_location["coords"].longitude,
+            u"text": tmp_user.home_location["text"]
+        }
         print(user)
         user_data[user] = tmp_user.to_dict()
 
@@ -51,6 +56,7 @@ class CommentView(APIView):
             return HttpResponseBadRequest('No thread specified')
 
         response = get_comments_from_thread(thread)
+        print(response)
         return JsonResponse(response, safe=False)
 
     def post(self, request):

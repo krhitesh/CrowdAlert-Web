@@ -26,6 +26,10 @@ class Event(object):
         self.images = images
 
     @staticmethod
+    def patch(incident_id, data, DB):
+        DB.collection(Event.collection_name).document(incident_id).update(data)
+
+    @staticmethod
     def get_events_around(center, max_distance, cluster_threshold, db, collection_name='incidents'):
         events_around = []
         result_count = 0
