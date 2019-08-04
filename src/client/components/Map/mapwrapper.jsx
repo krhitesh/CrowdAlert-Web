@@ -46,11 +46,21 @@ const MapComponent = compose(
   >
     { props.children }
     <Polyline visible={props.polyline.isVisible} path={props.polyline.data} />
-    { props.polyline.isVisible && props.geoLocatorProps.locationHistory &&
+    { props.polyline.isVisible && props.geoLocatorProps.locationHistory.length !== 0 &&
       <Marker
         position={{
         lat: props.geoLocatorProps.locationHistory[0].lat,
         lng: props.geoLocatorProps.locationHistory[0].lng,
+        }}
+        labelStyle={{ padding: '24px' }}
+        icon={{ url: currentLocationMarkerImage }}
+        onDblClick={props.zoomOnCurrentLocationMarkerClicked}
+      /> }
+    { props.polyline.isVisible && props.geoLocatorProps.locationHistory.length === 0 &&
+      <Marker
+        position={{
+        lat: props.geoLocatorProps.homeLocation.lat,
+        lng: props.geoLocatorProps.homeLocation.lng,
         }}
         labelStyle={{ padding: '24px' }}
         icon={{ url: currentLocationMarkerImage }}
