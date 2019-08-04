@@ -243,7 +243,7 @@ FormTab.propTypes = {
     help: PropTypes.bool,
     public: PropTypes.bool,
     title: PropTypes.string,
-    eventType: PropTypes.object,
+    eventType: PropTypes.string,
     anonymous: PropTypes.bool,
     description: PropTypes.string,
   }).isRequired,
