@@ -21,7 +21,7 @@ const reduxPiece = {
       help: true,
       public: false,
       title: 'title',
-      eventType: {},
+      eventType: 'fire',
       anonymous: false,
       description: 'description',
     },
