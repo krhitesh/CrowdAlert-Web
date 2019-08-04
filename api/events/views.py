@@ -154,6 +154,17 @@ class EventView(APIView):
         return JsonResponse({"eventId": str(key)})
 
     def patch(self, request):
+        """Patches an incident data 
+
+        PATCH request parameters:
+            [REQUIRED]
+            eventData: stringified JSON data. Must have at eventid key.
+        Arguments:
+            request {[type]} -- [ Contains the django request object]
+        Returns:
+            [HttpResponseBadRequest] -- [If  eventData is not given]
+            [JsonResponse] -- [Containing the event id]
+        """
         event_data = json.loads(request.body.decode()).get('eventData', '')
         if event_data == '':
             return HttpResponseBadRequest("Bad request")
@@ -172,7 +183,7 @@ class EventView(APIView):
 
         if not settings.COVERAGE:
             channel_layer = get_channel_layer()
-            # Send the event to all the websocket channels
+            # Send the event in response to patch to all the websocket channels
             async_to_sync(channel_layer.group_send)(
                 "geteventsbylocation_", {
                     "type": 'event_message',

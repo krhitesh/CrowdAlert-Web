@@ -1,4 +1,5 @@
 /* eslint-disable import/no-mutable-exports */
+/* Using PouchDB APIs to access IndexedDB for storing incidents for quick load times. */
 import PouchDB from 'pouchdb-browser';
 import PouchDBFind from 'pouchdb-find';
 
