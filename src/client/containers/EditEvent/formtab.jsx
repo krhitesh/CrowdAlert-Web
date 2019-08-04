@@ -34,13 +34,6 @@ const eventOptions = [
   { key: 'nt', text: 'Nature', value: 'nature' },
 ];
 
-const head = () => (
-  <SEO
-    title="Edit Incident Details | Edit Incident"
-    url={`${DOMAIN_NAME}/edit/details`}
-    description="Edit incident"
-  />
-);
 
 const FormTab = (props) => {
   if (props.reportForm.isFreezed && !props.reportForm.loading) {
@@ -48,7 +41,11 @@ const FormTab = (props) => {
   }
   return (
     <Segment data-test="component-formtab">
-      {head()}
+      <SEO
+        title="Update Details | Report Incident"
+        url={`${DOMAIN_NAME}/edit/${props.eventid}/location`}
+        description="Report an incident near you."
+      />
       <Progress
         percent={66}
         attached="top"
