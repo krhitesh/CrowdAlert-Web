@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
+import withStyles from 'isomorphic-style-loader/withStyles';
 import { ShareModal, UpvoteButton, SpamReport, Directions } from '../';
+import s from './footer.css';
 
 /**
  * [EventFooter Footer Bar component for Events Card ]
@@ -22,6 +25,11 @@ const EventFooter = props => (
             Share
       </Button>
     </ShareModal>
+    {props.editOption &&
+      <Button as={Link} to={`/edit/${props.uuid}/location`}>
+        <Icon color="black" name="edit" />
+        Edit
+      </Button>}
     <SpamReport.Flag uuid={props.uuid} data-test="component-spamreport-flag" />
   </Button.Group>
 );
@@ -30,10 +38,12 @@ EventFooter.propTypes = {
   title: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
   htmlInstructions: PropTypes.arrayOf(PropTypes.string),
+  editOption: PropTypes.bool,
 };
 
 EventFooter.defaultProps = {
   htmlInstructions: ['No directions available'],
+  editOption: false,
 };
 
-export default EventFooter;
+export default withStyles(s)(EventFooter);
