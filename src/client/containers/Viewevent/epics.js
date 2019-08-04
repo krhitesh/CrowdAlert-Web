@@ -26,7 +26,6 @@ const fetchEventDataEpic = action$ =>
     mergeMap((action) => {
       const { payload } = action;
       const apiUrl = `${GET_EVENT_BY_ID}?id=${payload.eventid}`;
-      // console.log(apiUrl);
       return ajax
         .getJSON(apiUrl)
         .pipe(

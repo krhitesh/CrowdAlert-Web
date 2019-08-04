@@ -69,7 +69,7 @@ class UserView(APIView):
 
     def patch(self, request):
         """
-        Updates user's email, password given a uid
+        Updates user's email, password or home location given a uid
         """
         keys = request.GET.get('keys')
         if keys is None:

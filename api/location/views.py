@@ -12,7 +12,12 @@ GMAPS = settings.GMAPS
 
 
 class DirectionsView(APIView):
+    """ Returns directions in the form of list of (latitude, longitude)
+        and html instructions from one coordinate to another
 
+    Arguments:
+        APIView -- [REST framework API view]
+    """
     def get(self, request):
         try:
             start_lat = float(request.GET.get('startLat', ''))

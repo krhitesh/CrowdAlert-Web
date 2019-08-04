@@ -114,7 +114,6 @@ EventCard.propTypes = {
   reportedBy: propTypes.object.isRequired,
   spam: propTypes.object.isRequired,
   viewmode: propTypes.string.isRequired,
-  // reportedBy: propTypes..isRequired,
   datetime: propTypes.number.isRequired,
   title: propTypes.string.isRequired,
   description: propTypes.string,
@@ -163,8 +162,7 @@ class Viewevent extends Component {
   componentWillUnmount() {
     console.log('unmount');
 
-    // Close the socket connection
-    if (this.state.socket) {
+    if (this.state !== null && this.state.socket && this.state.socket !== null) {
       window.localStorage.setItem('noReconnect', true);
       this.state.socket.close(1000, 'socket closed inside componentWillUnmount');
     }
@@ -175,7 +173,6 @@ class Viewevent extends Component {
     const socket = new WebSocket(`${WS_COMMENTS}/${this.props.match.params.eventid}/`);
 
     socket.onclose = () => {
-      // console.log('state', this.state);
       if (window.localStorage.getItem('noReconnect') === 'false') {
         console.log('Socket is closed. Reconnect will be attempted in 5 seconds.');
         setTimeout(this.setupSocket, 5000);
@@ -191,10 +188,6 @@ class Viewevent extends Component {
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       if (message.actionType === WS_NEW_COMMENT_RECEIVED) {
-        // console.log('socket.onmessage', message.data);
-
-        // dispatch action to add this message to the state
-        // Need to write that action
         this.props.fetchCommentThreadSuccessViaWebSocket(message.data);
       }
     };
@@ -205,7 +198,6 @@ class Viewevent extends Component {
   // eslint-disable-next-line class-methods-use-this
   head() {
     let image = '';
-    // console.log(this.props.event);
     if (this.props.event.data.images !== undefined && this.props.event.data.images.length > 0) {
       if (this.props.event.data.images[0].isNsfw) {
         image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}&mode=thumbnail`;

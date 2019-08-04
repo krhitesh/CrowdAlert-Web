@@ -108,7 +108,6 @@ class Feed extends Component {
     return <SEO title="Feed | CrowdAlert" url={DOMAIN_NAME} description={ogDesc} />;
   }
   render() {
-    // console.log(this.props);
     const Markers =
       getEventMarkers(this.props.feedProps, this.props.mapProps.zoom)
         .map(event => (
