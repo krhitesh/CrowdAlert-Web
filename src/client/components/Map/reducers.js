@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   MAP_UPDATE_CENTER,
   MAP_UPDATE_ZOOM,
@@ -39,6 +40,20 @@ function mapUpdateReducer(state = initialState, action) {
       }
       break;
     case MAP_UPDATE_POLYLINE:
+      // console.log(action.payload.force, state.polyline.force);
+      // JEST
+      if ((state.polyline !== undefined && state.polyline.force) || (action.payload !== undefined && action.payload.force)) {
+        return {
+          ...state,
+          polyline: {
+            polyline: null,
+            bounds: null,
+            fitBounds: false,
+            isVisible: false,
+            force: action.payload.force || true,
+          },
+        };
+      }
       if (action.payload.polyline === null) {
         return {
           ...state,
