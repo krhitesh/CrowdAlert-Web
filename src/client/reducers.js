@@ -14,6 +14,7 @@ import spamReducer from './components/SpamReport/reducers';
 import notificationReducer from './components/Notifications/reducers';
 import userReducer from './containers/User/reducers';
 import homeLocationReducer from './components/HomeLocationModal/reducers';
+import editEventsReducer from './containers/EditEvent/reducers';
 
 const rootReducer = combineReducers({
   router: routerReducer,
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   notifications: notificationReducer,
   user: userReducer,
   homeLocation: homeLocationReducer,
+  editEvents: editEventsReducer,
 });
 
 export default rootReducer;
