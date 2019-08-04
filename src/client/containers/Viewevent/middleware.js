@@ -10,7 +10,6 @@ const fetchEventDataMiddleware = store => next => (action) => {
   const state = store.getState();
   if (action.type === EVENT_FETCH_EVENT_DATA && process.env.BROWSER) {
     const { eventid, fromNetwork } = action.payload;
-    // console.log('from net', fromNetwork);
     if (fromNetwork !== true) {
       db.get(eventid)
         .then((doc) => {
@@ -22,7 +21,7 @@ const fetchEventDataMiddleware = store => next => (action) => {
           delete newPayload._id;
           delete newPayload._rev;
 
-          // This is going to set isLoading to false and use cached incident
+          // This is going to set isLoading to false and use cached incident data
           dispatch(fetchEventDataFinished(newPayload));
         })
         .catch(err => console.log('Cache:', err.message));

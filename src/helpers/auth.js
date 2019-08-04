@@ -49,6 +49,7 @@ export default ({ dispatch, getState }, token) => {
         }));
         console.log('authByIdToken.then/RendererServer: Logged IN');
 
+        // Get user's home location if any
         await dispatch(userGetInfoSSR({ key: 'home_location' }, token));
       } else {
         handleNoUser({ dispatch });
