@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-prop-types */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
@@ -5,7 +6,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 
+import { closeEventPreview } from '../../components/EventPreviewCard/actions';
 import { updateMapPolyline } from '../../components/Map/actions';
+import { geolocatorFetchLocation } from '../../components/Geolocator/actions';
 import { fetchUserLocation, fetchEventsByLocation, fetchUserLocationSSR, fetchEventsByLocationSSR, fetchEventsByLocationOverWebSocket, fetchUserLocationFinished } from './actions';
 import style from './style';
 import { MapWrapper, Sonar, EventPreviewCard, GeoLocator } from '../../components';
@@ -61,6 +64,9 @@ class Feed extends Component {
     }
   }
   componentDidMount() {
+    if (JSON.stringify(this.props.homeLocation) === '{}') {
+      this.props.geolocatorFetchLocation();
+    }
     if (this.props.isLoggedIn) {
       this.props.fetchEventsByLocationOverWebSocket({
         lat: this.props.mapProps.lat,
@@ -74,6 +80,9 @@ class Feed extends Component {
         zoom: this.props.mapProps.zoom,
       });
     }
+  }
+  componentWillUnmount() {
+    this.props.closeEventPreview();
   }
   // eslint-disable-next-line class-methods-use-this
   head() {
@@ -130,11 +139,14 @@ const mapStateToProps = (state) => {
   const { map } = state;
   const { feed, eventPreview } = state;
   const { isLoggedIn } = state.auth;
+  const { locationHistory, homeLocation } = state.geoLocator;
   return {
     mapProps: map,
     feedProps: feed,
     isLoggedIn,
     eventPreview,
+    locationHistory,
+    homeLocation,
   };
 };
 
@@ -144,6 +156,8 @@ const mapDispatchToProps = dispatch => (
     fetchEventsByLocation,
     fetchEventsByLocationOverWebSocket,
     updateMapPolyline,
+    geolocatorFetchLocation,
+    closeEventPreview,
   }, dispatch)
 );
 
@@ -161,6 +175,10 @@ Feed.propTypes = {
   eventPreview: PropTypes.shape({
     isOpen: PropTypes.bool,
   }).isRequired,
+  locationHistory: PropTypes.array.isRequired,
+  geolocatorFetchLocation: PropTypes.func.isRequired,
+  homeLocation: PropTypes.object.isRequired,
+  closeEventPreview: PropTypes.func.isRequired,
 };
 
 export default {
