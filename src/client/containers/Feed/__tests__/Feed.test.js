@@ -1,6 +1,7 @@
 import React from 'react';
 import Enzyme, { shallow, mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
+import setupNavigatorMock from '../../../../../__mocks__/navigatorMock';
 import { findByTestAttr, storeFactory, checkProps } from '../../../tests/testUtils';
 import Feed from '../index';
 
@@ -31,6 +32,8 @@ const setup = (props = {}, initialReduxState = {}) => {
   const wrapper = shallow(<Feed.component {...props} store={store} />);
   return wrapper;
 };
+
+beforeAll(setupNavigatorMock);
 
 test('does not throw warning with expected props', () => {
     const expectedProps = {
