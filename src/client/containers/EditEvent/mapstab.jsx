@@ -9,14 +9,14 @@ import {
   Header,
   Icon,
   Progress,
+  Message,
 } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
 import {
   MapWrapper,
   Sonar,
   GeoLocator,
 } from '../../components';
-import { saveLocationEditEvents } from './actions';
+import { validateLocationEditEvents } from './actions';
 import getEventColor from '../../utils/eventcolors';
 import { DOMAIN_NAME } from '../../utils/apipaths';
 import SEO from '../../components/SEO';
@@ -38,6 +38,15 @@ const MapTab = (props) => {
       <Grid>
         <Grid.Row>
           <Grid.Column>
+            {props.location.validationErrors ?
+              <Message
+                negative
+                icon="ban"
+                header="Location Restricted"
+                content="Reported incident must be within 3 KM of circular area."
+                data-test="form-validation-error"
+              />
+            : null }
             <Header as="h3">
               <Icon name="marker" />
               <Header.Content>
@@ -97,14 +106,12 @@ const MapTab = (props) => {
               data-test="geolocator"
             />
             <Button
-              as={Link}
               floated="right"
               color="teal"
               disabled={!props.location.mapCenter.lat}
-              onClick={() => props.handleSaveLocation()}
+              onClick={() => props.validateSaveLocation()}
               icon
               labelPosition="right"
-              to={`/edit/${props.eventid}/details`}
               data-test="details-btn"
             >
               <Icon name="right arrow" />
@@ -115,10 +122,10 @@ const MapTab = (props) => {
       </Grid>
     </Segment>
   );
-}
+};
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    handleSaveLocation: saveLocationEditEvents,
+    validateSaveLocation: validateLocationEditEvents,
   }, dispatch)
 );
 const mapStateToProps = state => ({
@@ -142,6 +149,7 @@ MapTab.propTypes = {
       lng: PropTypes.number,
     }).isRequired,
     text: PropTypes.string,
+    validationErrors: PropTypes.bool,
   }).isRequired,
   map: PropTypes.shape({
     lat: PropTypes.number,
@@ -152,7 +160,7 @@ MapTab.propTypes = {
       location: PropTypes.bool,
     }).isRequired,
   }).isRequired,
-  handleSaveLocation: PropTypes.func.isRequired,
+  validateSaveLocation: PropTypes.func.isRequired,
   eventid: PropTypes.string.isRequired,
 };
 

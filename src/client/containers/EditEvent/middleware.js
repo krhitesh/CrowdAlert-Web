@@ -9,17 +9,20 @@ import {
   submitFormEditEvents,
   updateEventDetailsEditEvents,
   keepOldEvent,
+  saveLocationEditEvents,
+  locationValidationError,
 } from './actions';
 import { updateOnClick } from '../../components/Map/actions';
-import { fetchEventDataFinished } from '../Viewevent/actions';
 import {
   EDIT_EVENTS_FORM_SAVE_LOCATION,
   EDIT_EVENTS_FORM_UPDATE_LOCATION_TEXT,
   EDIT_EVENTS_FORM_VALIDATE_FORM,
   EDIT_EVENTS_FORM_SUBMIT_SUCCESS,
-  EDIT_EVENTS_FORM_SUBMIT,
+  EDIT_EVENTS_FORM_VALIDATE_LOCATION,
 } from './actionTypes';
 import { EVENT_FETCH_EVENT_DATA_FINISHED } from '../Viewevent/actionTypes';
+import distanceCoordinates from '../../utils/gps';
+import history from '../../../helpers/history';
 
 const editEventsMiddleware = store => next => (action) => {
   const { dispatch } = store;
@@ -42,7 +45,28 @@ const editEventsMiddleware = store => next => (action) => {
       return null;
     }
   }
+  if (action.type === EDIT_EVENTS_FORM_VALIDATE_LOCATION) {
+    const state = store.getState();
+    let userLocation = {
+      lat: state.geoLocator.homeLocation.lat,
+      lng: state.geoLocator.homeLocation.lng,
+    };
+    if (state.geoLocator.locationHistory.length !== 0) {
+      // eslint-disable-next-line prefer-destructuring
+      userLocation = state.geoLocator.locationHistory[0];
+    }
+
+    const eventLocation = state.editEvents.location.mapCenter;
+    if (distanceCoordinates(userLocation.lat, userLocation.lng, eventLocation.lat, eventLocation.lng) < 3.0) {
+      // Reported incident must be within 3 KM of circular area.
+      dispatch(saveLocationEditEvents());
+    } else {
+      dispatch(locationValidationError());
+    }
+  }
   if (action.type === EDIT_EVENTS_FORM_SAVE_LOCATION) {
+    const { eventid } = store.getState().editEvents.form.old;
+    history.push(`/edit/${eventid}/details`);
     // Jump to event data tab
     dispatch(changeTabEditEventsForm(1));
     // Mark it as validated
@@ -60,11 +84,6 @@ const editEventsMiddleware = store => next => (action) => {
       // dispatch error handler
       dispatch(formValidationErrorsEditEvents(status));
     }
-  }
-  if (action.type === EDIT_EVENTS_FORM_SUBMIT) {
-    dispatch(fetchEventDataFinished({
-      ...action.payload.all,
-    }));
   }
   if (action.type === EDIT_EVENTS_FORM_SUBMIT_SUCCESS) {
     dispatch(changeTabValidationEditEventsForm('details', true));

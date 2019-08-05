@@ -13,8 +13,15 @@ import {
   EDIT_EVENTS_FORM_SUBMIT_ERROR,
   EDIT_EVENTS_FORM_TOGGLE_UPLOADING,
   EDIT_EVENTS_OLD_EVENT,
+  EDIT_EVENTS_FORM_VALIDATE_LOCATION,
+  EDIT_EVENTS_FORM_VALIDATE_LOCATION_ERROR,
 } from './actionTypes';
 
+export function locationValidationError() {
+  return {
+    type: EDIT_EVENTS_FORM_VALIDATE_LOCATION_ERROR,
+  };
+}
 /**
  * Changes tab based on the tab ID
  * @param {*} tabIndex Target Tab index
@@ -51,6 +58,11 @@ export function editEventsUpdateLocationText(text) {
     payload: {
       text,
     },
+  };
+}
+export function validateLocationEditEvents() {
+  return {
+    type: EDIT_EVENTS_FORM_VALIDATE_LOCATION,
   };
 }
 /**
