@@ -12,6 +12,7 @@ import {
   EDIT_EVENTS_FORM_SUBMIT_ERROR,
   EDIT_EVENTS_FORM_TOGGLE_UPLOADING,
   EDIT_EVENTS_OLD_EVENT,
+  EDIT_EVENTS_FORM_VALIDATE_LOCATION_ERROR,
 } from './actionTypes';
 import { MAP_ONCLICK } from '../../components/Map/actionTypes';
 import { EVENT_FETCH_EVENT_DATA_FINISHED } from '../Viewevent/actionTypes';
@@ -50,8 +51,15 @@ const locationInitialState = {
   },
   text: '',
   disabled: true,
+  validationErrors: false,
 };
 function locaitonTabReducer(state = locationInitialState, action) {
+  if (action.type === EDIT_EVENTS_FORM_VALIDATE_LOCATION_ERROR) {
+    return {
+      ...state,
+      validationErrors: true,
+    };
+  }
   if (action.type === EVENT_FETCH_EVENT_DATA_FINISHED) {
     const { payload } = action;
     return {
@@ -71,6 +79,7 @@ function locaitonTabReducer(state = locationInitialState, action) {
         lng: action.payload.lng,
       },
       disabled: false,
+      validationErrors: false,
     };
   }
   if (action.type === EDIT_EVENTS_FORM_UPDATE_LOCATION_TEXT) {
@@ -83,6 +92,7 @@ function locaitonTabReducer(state = locationInitialState, action) {
     return {
       ...state,
       disabled: true,
+      validationErrors: false,
     };
   }
   return state;

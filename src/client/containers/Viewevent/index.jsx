@@ -150,6 +150,11 @@ class Viewevent extends Component {
     this.setupSocket = this.setupSocket.bind(this);
   }
   componentDidMount() {
+    const { eventid } = this.props.match.params;
+    const shouldRefresh =
+     this.props.match.params.eventid !== this.props.event.data.eventid;
+    this.props.fetchEventData({ eventid, shouldRefresh });
+
     if (!this.props.map.polyline.isVisible && process.env.JEST_WORKER_ID === undefined) {
       this.props.getUserLocation({ fromViewevent: true });
     }
@@ -390,6 +395,7 @@ Viewevent.propTypes = {
   }).isRequired,
   getUserLocation: propTypes.func.isRequired,
   editOption: propTypes.bool.isRequired,
+  fetchEventData: propTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => (
