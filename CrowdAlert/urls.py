@@ -16,8 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path, include
 from django.views.generic import TemplateView
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='CrowdAlert APIs')
 
 urlpatterns = [
+    re_path(r'api-docs/', schema_view),
     path('admin/', admin.site.urls),
     # API paths
     path('api/events/', include('api.events.urls')),

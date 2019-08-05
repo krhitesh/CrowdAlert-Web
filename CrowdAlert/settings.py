@@ -79,7 +79,8 @@ INSTALLED_APPS = [
     'api.upvote',
     'api.spam',
     'api.notifications',
-    'coverage'
+    'coverage',
+    'rest_framework_swagger'
 ]
 
 MIDDLEWARE = [
