@@ -30,7 +30,7 @@ class UserViewTest(TestCase):
         u.save(db)
 
     def test_get(self):
-        request = self.factory.get('/api/users/user', data=None)
+        request = self.factory.get('/api/users/user?key=home_location', data=None)
         force_authenticate(request, user=self.user, token=self.auth_token)
         response = UserView.as_view()(request)
         self.assertEqual(response.status_code, 200)
