@@ -54,35 +54,37 @@ const EventPreviewCard = (props) => {
                 </Header>
               </div>
               <br />
-              <Header as="h4" data-test="component-title">{props.eventPreview.event.title}</Header>
-              <p data-test="jsx-datetime">{calcAge(props.eventPreview.event.datetime)}</p>
-              <Link
-                to={`/view/${props.eventPreview.event.key}`}
-                onClick={() => props.closeEventPreview()}
-              >
-                View Incident
-              </Link>
-              <Button
-                disabled={props.event.errors}
-                primary
-                style={{ marginLeft: 12 }}
-                onClick={() => props.updateMapPolyline({
-                  data: props.mapProps.polyline.data,
-                  isVisible: props.mapProps.polyline.isVisible,
-                  bounds: props.mapProps.polyline.bounds,
-                  fitBounds: true,
-                })}
-                data-test="btn-see-route"
-              >See Route
-              </Button>
-              <Dimmer
-                inverted
-                active={props.eventPreview.isOpen && !props.mapProps.polyline.isVisible && !props.event.errors}
-                data-test="preview-dimmer"
-              >
-                <Loader inverted />
-              </Dimmer>
-
+              <React.Fragment>
+                <Header as="h4" data-test="component-title">{props.eventPreview.event.title}</Header>
+                <p data-test="jsx-datetime">{calcAge(props.eventPreview.event.datetime)}</p>
+                <Link
+                  to={`/view/${props.eventPreview.event.key}`}
+                  onClick={() => props.closeEventPreview()}
+                >
+                  View Incident
+                </Link>
+                <Button
+                  disabled={props.event.errors}
+                  loading={!props.mapProps.polyline.isVisible && !props.event.errors}
+                  primary
+                  style={{ marginLeft: 12 }}
+                  onClick={() => props.updateMapPolyline({
+                    data: props.mapProps.polyline.data,
+                    isVisible: props.mapProps.polyline.isVisible,
+                    bounds: props.mapProps.polyline.bounds,
+                    fitBounds: true,
+                  })}
+                  data-test="btn-see-route"
+                >See Route
+                </Button>
+                <Dimmer
+                  inverted
+                  active={!props.eventPreview.isOpen}
+                  data-test="preview-dimmer"
+                >
+                  <Loader inverted />
+                </Dimmer>
+              </React.Fragment>
             </Segment>
           </Transition>
         </div>
@@ -109,35 +111,37 @@ const EventPreviewCard = (props) => {
                 </Header>
               </div>
               <br />
-              <Header as="h4" data-test="component-title">{props.eventPreview.event.title}</Header>
-              <p data-test="jsx-datetime">{calcAge(props.eventPreview.event.datetime)}</p>
-              <Link
-                to={`/view/${props.eventPreview.event.key}`}
-                onClick={() => props.closeEventPreview()}
-              >
-                View Incident
-              </Link>
-              <Button
-                disabled={props.event.errors}
-                primary
-                style={{ marginLeft: 12 }}
-                onClick={() => props.updateMapPolyline({
-                data: props.mapProps.polyline.data,
-                isVisible: props.mapProps.polyline.isVisible,
-                bounds: props.mapProps.polyline.bounds,
-                fitBounds: true,
-                })}
-                data-test="btn-see-route"
-              >See Route
-              </Button>
-              <Dimmer
-                inverted
-                active={props.eventPreview.isOpen && !props.mapProps.polyline.isVisible && !props.event.errors}
-                data-test="preview-dimmer"
-              >
-                <Loader inverted />
-              </Dimmer>
-
+              <React.Fragment>
+                <Header as="h4" data-test="component-title">{props.eventPreview.event.title}</Header>
+                <p data-test="jsx-datetime">{calcAge(props.eventPreview.event.datetime)}</p>
+                <Link
+                  to={`/view/${props.eventPreview.event.key}`}
+                  onClick={() => props.closeEventPreview()}
+                >
+                  View Incident
+                </Link>
+                <Button
+                  disabled={props.event.errors}
+                  loading={!props.mapProps.polyline.isVisible && !props.event.errors}
+                  primary
+                  style={{ marginLeft: 12 }}
+                  onClick={() => props.updateMapPolyline({
+                  data: props.mapProps.polyline.data,
+                  isVisible: props.mapProps.polyline.isVisible,
+                  bounds: props.mapProps.polyline.bounds,
+                  fitBounds: true,
+                  })}
+                  data-test="btn-see-route"
+                >See Route
+                </Button>
+                <Dimmer
+                  inverted
+                  active={!props.eventPreview.isOpen}
+                  data-test="preview-dimmer"
+                >
+                  <Loader inverted />
+                </Dimmer>
+              </React.Fragment>
             </Segment>
           </Transition>
         </div>
