@@ -77,9 +77,11 @@ const geoLocationMiddleware = store => next => (action) => {
     const { lat } = action.payload;
     const { lng } = action.payload;
 
-    if (action.payload.fromViewevent) {
-      const { latitude, longitude } = store.getState().event.data.location.coords;
-      dispatch(fetchDirections(lat, lng, latitude, longitude));
+    if (action.payload.fromViewevent && !!store.getState().event.data.location) {
+      if (lat !== undefined && lng !== undefined) {
+        const { latitude, longitude } = store.getState().event.data.location.coords;
+        dispatch(fetchDirections(lat, lng, latitude, longitude));
+      }
     } else {
       dispatch(updateMapCenter({
         lat,

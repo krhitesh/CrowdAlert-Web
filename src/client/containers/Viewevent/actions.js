@@ -6,6 +6,7 @@ import {
   EVENT_FETCH_REVERSE_GEOCODE_FINISHED,
   EVENT_FETCH_DIRECTIONS,
   EVENT_FETCH_DIRECTIONS_FINISHED,
+  EVENT_FETCH_DIRECTIONS_ERROR,
 } from './actionTypes';
 
 export function fetchDirections(startLat, startLon, endLat, endLon) {
@@ -17,6 +18,12 @@ export function fetchDirections(startLat, startLon, endLat, endLon) {
       endLat,
       endLon,
     },
+  };
+}
+export function fetchDirectionsError(payload = {}) {
+  return {
+    type: EVENT_FETCH_DIRECTIONS_ERROR,
+    payload,
   };
 }
 export function fetchDirectionsSuccess(payload = {}) {

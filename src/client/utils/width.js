@@ -4,7 +4,7 @@ const getWidth = () => {
     return window.innerWidth;
   }
   const { isMobile } = process.env;
-  if (isMobile) {
+  if (isMobile === 'true') {
     return GET_WIDTH_IS_MOBILE;
   }
   return Infinity;

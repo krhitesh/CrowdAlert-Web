@@ -1,10 +1,12 @@
 import { ajax } from 'rxjs/observable/dom/ajax';
+import { of } from 'rxjs/observable/of';
 import { ofType, combineEpics } from 'redux-observable';
-import { mergeMap, map, takeUntil } from 'rxjs/operators';
+import { mergeMap, map, takeUntil, catchError } from 'rxjs/operators';
 import {
   fetchEventDataFinished,
   fetchReverseGeocodeSuccess,
   fetchDirectionsSuccess,
+  fetchDirectionsError,
 } from './actions';
 
 import {
@@ -57,7 +59,10 @@ const fetchDirections = action$ =>
       const apiUrl = `${GET_DIRECTIONS}?startLat=${startLat}&startLong=${startLon}&endLat=${endLat}&endLong=${endLon}`;
       return ajax
         .getJSON(apiUrl)
-        .pipe(map(response => fetchDirectionsSuccess(response)));
+        .pipe(
+          map(response => fetchDirectionsSuccess(response)),
+          catchError(error => of(fetchDirectionsError(error.message))),
+        );
     }),
   );
 

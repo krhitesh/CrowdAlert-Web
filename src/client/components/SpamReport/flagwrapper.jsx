@@ -25,7 +25,7 @@ const Flag = (props) => {
   }
   return (
     <Button onClick={() => props.reportSpamStart(props.uuid)} data-test="component-flag-non-basic">
-      <Icon color="black" name="flag" data-test="icon-flag" /> Flag
+      <Icon color="black" name="flag" data-test="icon-flag" /> {props.showLabel && 'Flag'}
     </Button>
   );
 };
@@ -39,10 +39,12 @@ const mapDispatchToProps = dispatch => (
 Flag.propTypes = {
   basic: PropTypes.bool,
   reportSpamStart: PropTypes.func.isRequired,
+  showLabel: PropTypes.bool,
 };
 
 Flag.defaultProps = {
   basic: false,
+  showLabel: true,
 };
 
 export default connect(null, mapDispatchToProps)(Flag);

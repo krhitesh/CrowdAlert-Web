@@ -27,8 +27,12 @@ class DirectionsView(APIView):
         except ValueError:
             return HttpResponseBadRequest("Bad request")
 
-        directions_result = GMAPS.directions({ "lat": start_lat, "lng": start_lng},
+        directions_result = []
+        try:
+            directions_result = GMAPS.directions({ "lat": start_lat, "lng": start_lng},
                                      { "lat": end_lat, "lng": end_lng})
+        except:
+            return JsonResponse({"status": "error"}, safe=False)
 
         res = {}
         polyline_points = []

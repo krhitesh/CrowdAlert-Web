@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-undef */
-import { EVENT_FETCH_EVENT_DATA_FINISHED, EVENT_FETCH_DIRECTIONS_FINISHED } from './actionTypes';
+import db from '../../utils/cacheAPI';
+import { EVENT_FETCH_EVENT_DATA, EVENT_FETCH_EVENT_DATA_FINISHED, EVENT_FETCH_DIRECTIONS_FINISHED, EVENT_FETCH_DIRECTIONS_ERROR } from './actionTypes';
 import { updateMapCenter, updateMapZoom, updateMapPolyline } from '../../components/Map/actions';
 import { fetchReverseGeocode, fetchDirections } from './actions';
 
@@ -23,8 +24,7 @@ const fetchEventDataMiddleware = store => next => (action) => {
 
           // This is going to set isLoading to false and use cached incident data
           dispatch(fetchEventDataFinished(newPayload));
-        })
-        .catch(err => console.log('Cache:', err.message));
+        }).catch(() => {});
     }
     next(action);
   } else if (action.type === EVENT_FETCH_EVENT_DATA_FINISHED) {
@@ -74,10 +74,15 @@ const fetchEventDataMiddleware = store => next => (action) => {
       const { locationHistory } = state.geoLocator;
       if (locationHistory.length !== 0) {
         const recentCoords = locationHistory[0];
-        dispatch(fetchDirections(recentCoords.lat, recentCoords.lng, lat, lng));
+        if (recentCoords.lat !== undefined && recentCoords.lng !== undefined) {
+          dispatch(fetchDirections(recentCoords.lat, recentCoords.lng, lat, lng));
+        }
       } else {
         console.log('Location history is empty. Using home location');
-        dispatch(fetchDirections(state.geoLocator.homeLocation.lat, state.geoLocator.homeLocation.lng, lat, lng));
+        if (state.geoLocator.homeLocation.lat !== undefined &&
+          state.geoLocator.homeLocation.lng !== undefined) {
+          dispatch(fetchDirections(state.geoLocator.homeLocation.lat, state.geoLocator.homeLocation.lng, lat, lng));
+        }
       }
 
       if (payload.cancelSync !== true) {
@@ -95,13 +100,8 @@ const fetchEventDataMiddleware = store => next => (action) => {
               .then((response) => {
                 if (!response.ok) {
                   console.error('Failed to save the doc');
-                } else {
-                  console.log('Doc created', payload.eventid);
                 }
-              })
-              .catch((createError) => {
-                console.error('Cache:', createError.message);
-              });
+              }).catch(() => {});
           });
       } 
     }
@@ -109,20 +109,42 @@ const fetchEventDataMiddleware = store => next => (action) => {
     next(newAction);
   } else if (action.type === EVENT_FETCH_DIRECTIONS_FINISHED) {
     const { payload } = action;
-    // eslint-disable-next-line camelcase
-    const { polyline_points, html_instructions, distance } = payload;
-    const bounds = new google.maps.LatLngBounds();
-    for (let i = 0; i < polyline_points.length; i += 1) {
-      bounds.extend(polyline_points[i]);
-    }
+    if (payload.status === 'error') {
+      dispatch(updateMapPolyline({
+        isVisible: false,
+        bounds: null,
+        fitBounds: false,
+        data: [{ lat: -34.397, lng: 150.644 }, { lat: -35.397, lng: 151.644 }],
+        distance: null,
+        force: false,
+      }));
+      next(action);
+    } else {
+      // eslint-disable-next-line camelcase
+      const { polyline_points, html_instructions, distance } = payload;
+      const bounds = new google.maps.LatLngBounds();
+      for (let i = 0; i < polyline_points.length; i += 1) {
+        bounds.extend(polyline_points[i]);
+      }
 
+      dispatch(updateMapPolyline({
+        data: polyline_points,
+        bounds,
+        fitBounds: false,
+        isVisible: true,
+        htmlInstructions: html_instructions,
+        distance,
+      }));
+      next(action);
+    }
+  } else if (action.type === EVENT_FETCH_DIRECTIONS_ERROR) {
     dispatch(updateMapPolyline({
-      data: polyline_points,
-      bounds,
+      isVisible: false,
+      bounds: null,
       fitBounds: false,
-      isVisible: true,
-      htmlInstructions: html_instructions,
-      distance,
+      data: [{ lat: -34.397, lng: 150.644 }, { lat: -35.397, lng: 151.644 }],
+      distance: null,
+      force: false,
     }));
     next(action);
   } else {
