@@ -12,6 +12,9 @@ import commentsReducer from './components/Comments/reducers';
 import upvotesReducer from './components/Upvote/reducers';
 import spamReducer from './components/SpamReport/reducers';
 import notificationReducer from './components/Notifications/reducers';
+import userReducer from './containers/User/reducers';
+import homeLocationReducer from './components/HomeLocationModal/reducers';
+import editEventsReducer from './containers/EditEvent/reducers';
 
 const rootReducer = combineReducers({
   router: routerReducer,
@@ -27,6 +30,9 @@ const rootReducer = combineReducers({
   upvotes: upvotesReducer,
   spam: spamReducer,
   notifications: notificationReducer,
+  user: userReducer,
+  homeLocation: homeLocationReducer,
+  editEvents: editEventsReducer,
 });
 
 export default rootReducer;

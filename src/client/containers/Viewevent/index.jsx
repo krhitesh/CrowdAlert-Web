@@ -97,6 +97,7 @@ const EventCard = props => (
     <Event.Footer
       title={props.title}
       uuid={props.uuid}
+      editOption={props.editOption}
       htmlInstructions={props.polyline.htmlInstructions}
     />
   </Card>
@@ -113,7 +114,6 @@ EventCard.propTypes = {
   reportedBy: propTypes.object.isRequired,
   spam: propTypes.object.isRequired,
   viewmode: propTypes.string.isRequired,
-  // reportedBy: propTypes..isRequired,
   datetime: propTypes.number.isRequired,
   title: propTypes.string.isRequired,
   description: propTypes.string,
@@ -132,6 +132,7 @@ EventCard.propTypes = {
     uuid: propTypes.string.isRequired,
   })).isRequired,
   uuid: propTypes.string.isRequired,
+  editOption: propTypes.bool.isRequired,
 };
 EventCard.defaultProps = {
   reverse_geocode: { name: '', admin2: '', admin1: '' },
@@ -149,6 +150,11 @@ class Viewevent extends Component {
     this.setupSocket = this.setupSocket.bind(this);
   }
   componentDidMount() {
+    const { eventid } = this.props.match.params;
+    const shouldRefresh =
+     this.props.match.params.eventid !== this.props.event.data.eventid;
+    this.props.fetchEventData({ eventid, shouldRefresh });
+
     if (!this.props.map.polyline.isVisible && process.env.JEST_WORKER_ID === undefined) {
       this.props.getUserLocation({ fromViewevent: true });
     }
@@ -161,7 +167,6 @@ class Viewevent extends Component {
   componentWillUnmount() {
     console.log('unmount');
 
-    // Close the socket connection
     if (this.state !== null && this.state.socket && this.state.socket !== null) {
       window.localStorage.setItem('noReconnect', true);
       this.state.socket.close(1000, 'socket closed inside componentWillUnmount');
@@ -173,7 +178,6 @@ class Viewevent extends Component {
     const socket = new WebSocket(`${WS_COMMENTS}/${this.props.match.params.eventid}/`);
 
     socket.onclose = () => {
-      console.log('state', this.state);
       if (window.localStorage.getItem('noReconnect') === 'false') {
         console.log('Socket is closed. Reconnect will be attempted in 5 seconds.');
         setTimeout(this.setupSocket, 5000);
@@ -189,10 +193,6 @@ class Viewevent extends Component {
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       if (message.actionType === WS_NEW_COMMENT_RECEIVED) {
-        // console.log('socket.onmessage', message.data);
-
-        // dispatch action to add this message to the state
-        // Need to write that action
         this.props.fetchCommentThreadSuccessViaWebSocket(message.data);
       }
     };
@@ -203,7 +203,6 @@ class Viewevent extends Component {
   // eslint-disable-next-line class-methods-use-this
   head() {
     let image = '';
-    // console.log(this.props.event);
     if (this.props.event.data.images !== undefined && this.props.event.data.images.length > 0) {
       if (this.props.event.data.images[0].isNsfw) {
         image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}&mode=thumbnail`;
@@ -268,6 +267,7 @@ class Viewevent extends Component {
                 eventType={this.props.event.data.category}
                 uuid={this.props.match.params.eventid}
                 spam={this.props.event.data.spam}
+                editOption={this.props.editOption}
                 data-test="component-event-card"
               />
           }
@@ -313,6 +313,7 @@ class Viewevent extends Component {
                           spam={this.props.event.data.spam}
                           uuid={this.props.match.params.eventid}
                           data-test="component-event-card"
+                          editOption={this.props.editOption}
                         />
                     }
                     {!this.props.event.isLoading ?
@@ -370,6 +371,8 @@ Viewevent.propTypes = {
     polyline: propTypes.object.isRequired,
   }).isRequired,
   getUserLocation: propTypes.func.isRequired,
+  editOption: propTypes.bool.isRequired,
+  fetchEventData: propTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => (
@@ -380,11 +383,18 @@ const mapDispatchToProps = dispatch => (
     getUserLocation: geolocatoretLocationPermission,
   }, dispatch)
 );
-const mapStateToProps = state => ({
-  map: state.map,
-  event: state.event,
-  isLoggedIn: state.auth.isLoggedIn,
-});
+const mapStateToProps = (state) => {
+  let editOption = false;
+  if (JSON.stringify(state.event.data) !== '{}' && JSON.stringify(state.auth.user) !== '{}' && process.env.JEST_WORKER_ID === undefined) {
+    editOption = state.event.data.reportedBy.original.uid === state.auth.user.uid;
+  }
+  return {
+    map: state.map,
+    event: state.event,
+    isLoggedIn: state.auth.isLoggedIn,
+    editOption,
+  };
+};
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Viewevent),
   loadData: (store, ip = '', match = { params: { eventid: '' } }) => {

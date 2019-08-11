@@ -35,7 +35,7 @@ export function reportSpamError(response) {
   return {
     type: SPAM_REPORT_REPORT_SPAM_ERROR,
     payload: {
-      message: response.response.detail,
+      message: response.message,
     },
   };
 }

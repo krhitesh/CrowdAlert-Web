@@ -36,6 +36,12 @@ const UPLOAD_IMAGES = `${domainNameL}/api/images/image`;
  */
 const REVERSE_GEOCODE = `${domainNameL}/api/location/reverse_geocode`;
 /**
+ * [GET_DIRECTIONS returns the Google maps direction API \
+ * response for a given bi-pair of coordinates]
+ * @type {String}
+ */
+const GET_DIRECTIONS = `${domainNameL}/api/location/get_directions`;
+/**
  * [GET_EVENTS_BY_LOCATION returns a list of events for a given pair of
  * coordinates with a valid proximity]
  * @type {String}
@@ -54,6 +60,10 @@ const STATIC_IMAGES = `${domainNameL}/static/images`;
 
 const USER_PROFILES = `${domainNameL}/api/users/user`;
 
+const USER_DELETE = `${domainNameL}/api/users/user`;
+
+const USER_UPDATE = `${domainNameL}/api/users/user?keys=`;
+
 const WS_COMMENTS = `${websocketURL}/ws/comments`;
 
 const COMMENTS = `${domainNameL}/api/comments/comment`;
@@ -69,11 +79,14 @@ export {
   GET_EVENT_BY_ID,
   GET_IMAGE_URLS,
   REVERSE_GEOCODE,
+  GET_DIRECTIONS,
   GET_EVENTS_BY_LOCATION,
   WS_GET_EVENTS_BY_LOCATION,
   UPLOAD_IMAGES,
   STATIC_IMAGES,
   USER_PROFILES,
+  USER_DELETE,
+  USER_UPDATE,
   COMMENTS,
   WS_COMMENTS,
   UPVOTE,

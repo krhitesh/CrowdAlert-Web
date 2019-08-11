@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 import { Auth } from '../utils/firebaseAdmin';
 import { updateUserAuthenticationData } from '../client/containers/Auth/actions';
+import { userGetInfoSSR } from '../client/containers/User/actions';
 
 /*
 Use firebase Admin SDK on server to verify the retrieved ID token. If that ID token is
@@ -18,13 +20,13 @@ const handleNoUser = ({ dispatch }) => {
   console.log('handleNoUser/RendererServer: NOT Logged IN');
 };
 
-export default ({ dispatch }, token) => {
+export default ({ dispatch, getState }, token) => {
   if (!token || token === '' || typeof token !== 'string') {
     return handleNoUser({ dispatch });
   }
 
   return authByIdToken(token)
-    .then((user) => {
+    .then(async (user) => {
       if (user) {
         const {
           displayName,
@@ -47,6 +49,9 @@ export default ({ dispatch }, token) => {
           },
         }));
         console.log('authByIdToken.then/RendererServer: Logged IN');
+
+        // Get user's home location if any
+        await dispatch(userGetInfoSSR({ key: 'home_location' }, token));
       } else {
         handleNoUser({ dispatch });
       }

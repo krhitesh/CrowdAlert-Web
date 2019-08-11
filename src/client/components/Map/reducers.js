@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   MAP_UPDATE_CENTER,
   MAP_UPDATE_ZOOM,
@@ -16,6 +17,7 @@ const initialState = {
     fitBounds: false,
     data: [{ lat: -34.397, lng: 150.644 }, { lat: -35.397, lng: 151.644 }],
     distance: null,
+    force: false,
   },
 };
 
@@ -39,6 +41,19 @@ function mapUpdateReducer(state = initialState, action) {
       }
       break;
     case MAP_UPDATE_POLYLINE:
+      // JEST
+      if ((state.polyline !== undefined && state.polyline.force) || (action.payload !== undefined && action.payload.force)) {
+        return {
+          ...state,
+          polyline: {
+            polyline: null,
+            bounds: null,
+            fitBounds: false,
+            isVisible: false,
+            force: action.payload.force || true,
+          },
+        };
+      }
       if (action.payload.polyline === null) {
         return {
           ...state,
@@ -54,6 +69,7 @@ function mapUpdateReducer(state = initialState, action) {
           fitBounds: action.payload.fitBounds,
           distance: action.payload.distance,
           htmlInstructions: action.payload.htmlInstructions,
+          force: action.payload.force || initialState.polyline.force,
         },
       };
     default:

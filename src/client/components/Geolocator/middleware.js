@@ -77,7 +77,7 @@ const geoLocationMiddleware = store => next => (action) => {
     const { lat } = action.payload;
     const { lng } = action.payload;
 
-    if (action.payload.fromViewevent) {
+    if (action.payload.fromViewevent && !!store.getState().event.data.location) {
       const { latitude, longitude } = store.getState().event.data.location.coords;
       dispatch(fetchDirections(lat, lng, latitude, longitude));
     } else {
