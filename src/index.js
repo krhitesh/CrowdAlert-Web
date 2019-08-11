@@ -6,6 +6,7 @@ import 'babel-polyfill';
 import express from 'express';
 import { gzip } from 'zlib';
 import { matchRoutes } from 'react-router-config';
+import MobileDetect from 'mobile-detect';
 import { getCookie } from './utils/cookie';
 import { performAuthentication, handleNoUser } from './helpers/auth';
 import Routes from './client/Routes';
@@ -42,6 +43,9 @@ app.use('*.js', (req, res, next) => {
 
 app.use(express.static('public'));
 app.get('*', async (req, res) => {
+  const md = new MobileDetect(req.headers['user-agent']);
+  process.env.isMobile = md.mobile() !== null;
+
   const cookie = req.get('cookie') || '';
   const token = getCookie(cookie, 'token');
 
