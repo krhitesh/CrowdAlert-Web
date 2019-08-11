@@ -156,7 +156,8 @@ class Viewevent extends Component {
     this.props.fetchEventData({ eventid, shouldRefresh });
 
     if (!this.props.map.polyline.isVisible && process.env.JEST_WORKER_ID === undefined) {
-      this.props.getUserLocation({ fromViewevent: true });
+      // No need
+      // this.props.getUserLocation({ fromViewevent: true });
     }
 
     if (this.props.isLoggedIn) {

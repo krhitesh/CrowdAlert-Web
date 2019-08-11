@@ -36,6 +36,7 @@ function fetchEventDataReducer(state = initialState, action) {
     return {
       ...state,
       directions: action.payload,
+      isLoading: false,
     };
   }
 
