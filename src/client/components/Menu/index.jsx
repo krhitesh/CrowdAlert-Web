@@ -18,7 +18,7 @@ import getWidth from '../../utils/width';
 const MenuBar = props => (
   <Menu size="small" data-test="component-menu">
     <Menu.Menu position="left" data-test="left-menu">
-      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyMobile} data-test="resp-only-mobile">
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} maxWidth={992} data-test="resp-only-mobile">
         <Icon
           name="content"
           onClick={() => props.toggleSidebarVisibility({
@@ -26,7 +26,9 @@ const MenuBar = props => (
           })}
         />
       </Responsive>
-      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyTablet} data-test="resp-only-tabs">
+      {/* Issue with Responsive.onlyMobile and Response.onlyTablet as window width, height values
+        are not available during SSR */}
+      {/* <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} data-test="resp-only-tabs">
         <Menu.Item>
           <Icon
             name="content"
@@ -35,7 +37,7 @@ const MenuBar = props => (
             })}
           />
         </Menu.Item>
-      </Responsive>
+      </Responsive> */}
       <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} minWidth={992} data-test="resp-menu">
         <Image src={logo} style={{ height: '4vh' }} data-test="component-image-logo" />
         <Link to="/" data-test="link-root">
@@ -71,7 +73,9 @@ const MenuBar = props => (
           </Link>
         }
       </Responsive>
-      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyTablet}>
+      {/* Issue with Responsive.onlyMobile and Response.onlyTablet as window width, height values
+        are not available during SSR */}
+      {/* <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyTablet}>
         {props.isLoggedIn ?
           <Notifications.NotificationsDropdown data-test="component-notifications-dropdown" />
           :
@@ -79,9 +83,9 @@ const MenuBar = props => (
             <LoginButton login data-test="component-link-login" />
           </Link>
         }
-      </Responsive>
+      </Responsive> */}
 
-      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} {...Responsive.onlyMobile}>
+      <Responsive fireOnMount getWidth={getWidth} as={Menu.Item} maxWidth={992}>
         <Link to="/notifications" style={{ marginRight: '1em' }} data-test="link-notifications">
           <Notifications.NotificationIcon data-test="component-link-notifications" />
         </Link>
