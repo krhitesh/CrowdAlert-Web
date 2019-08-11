@@ -15,17 +15,10 @@ def delete_collection(coll_ref, batch_size=5):
     if deleted >= batch_size:
         return delete_collection(coll_ref, batch_size)
 
-def get_refresh_token():
-    return db.collection('keys').document('API_Keys').get().to_dict()['rrt']
-
-def exchange_refresh_token():
-    print('refreshing for Id token')
-    r = requests.post('https://securetoken.googleapis.com/v1/token?key=' + os.environ['REACT_APP_FIREBASE_API_KEY'],
-                      data={'refresh_token': get_refresh_token(), 'grant_type': 'refresh_token'})
-    return r.json()['id_token']
-
 def get_authenticated_user_token():
-    return exchange_refresh_token()
+    # Firebase user authentication is bypassed for testing purposes.
+    return ''
+
 
 def get_anonymous_user_token():
     r = requests.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + os.environ['REACT_APP_FIREBASE_API_KEY'], data={'returnSecureToken': True})
