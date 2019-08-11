@@ -8,6 +8,7 @@ import express from 'express';
 import proxy from 'http-proxy-middleware';
 import { gzip } from 'zlib';
 import { matchRoutes } from 'react-router-config';
+import MobileDetect from 'mobile-detect';
 import { getCookie } from './utils/cookie';
 import authenticateUser from './helpers/auth';
 import Routes from './client/Routes';
@@ -53,6 +54,9 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 app.get('*', async (req, res) => {
+  const md = new MobileDetect(req.headers['user-agent']);
+  process.env.isMobile = md.mobile() !== null;
+
   const cookie = req.get('cookie') || '';
   const token = getCookie(cookie, 'token');
 
