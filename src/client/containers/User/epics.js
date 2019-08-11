@@ -54,7 +54,13 @@ const userUpdateCredentialsEpic = action$ =>
           token: window.sessionStorage.getItem('token'),
         }).pipe(
           map(response => updateUserCredentialsSuccess(response)),
-          catchError(error => of(updateUserCredentialsFailed(error.message))),
+          catchError((error) => {
+            if (error.status === 400) {
+              return of(updateUserCredentialsFailed('Please enter a valid email.'));
+            }
+
+            return of(updateUserCredentialsFailed(error.message));
+          }),
         );
     }),
   );
