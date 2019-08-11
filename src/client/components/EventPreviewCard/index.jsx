@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import proptypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -62,6 +63,7 @@ const EventPreviewCard = (props) => {
                 View Incident
               </Link>
               <Button
+                disabled={props.event.errors}
                 primary
                 style={{ marginLeft: 12 }}
                 onClick={() => props.updateMapPolyline({
@@ -75,7 +77,7 @@ const EventPreviewCard = (props) => {
               </Button>
               <Dimmer
                 inverted
-                active={props.eventPreview.isOpen && !props.mapProps.polyline.isVisible}
+                active={props.eventPreview.isOpen && !props.mapProps.polyline.isVisible && !props.event.errors}
                 data-test="preview-dimmer"
               >
                 <Loader inverted />
@@ -116,6 +118,7 @@ const EventPreviewCard = (props) => {
                 View Incident
               </Link>
               <Button
+                disabled={props.event.errors}
                 primary
                 style={{ marginLeft: 12 }}
                 onClick={() => props.updateMapPolyline({
@@ -129,7 +132,7 @@ const EventPreviewCard = (props) => {
               </Button>
               <Dimmer
                 inverted
-                active={props.eventPreview.isOpen && !props.mapProps.polyline.isVisible}
+                active={props.eventPreview.isOpen && !props.mapProps.polyline.isVisible && !props.event.errors}
                 data-test="preview-dimmer"
               >
                 <Loader inverted />
@@ -164,6 +167,9 @@ EventPreviewCard.propTypes = {
       data: proptypes.array,
       isVisible: proptypes.bool,
     }),
+  }).isRequired,
+  event: proptypes.shape({
+    errors: proptypes.bool.isRequired,
   }).isRequired,
 };
 

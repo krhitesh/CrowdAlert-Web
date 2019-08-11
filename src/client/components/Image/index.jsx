@@ -44,7 +44,6 @@ export default class ImageModal extends Component {
       && this.state.imageUrls !== undefined && this.state.imageUrls.url !== '') {
       return (
         <Modal
-          open={!!this.props.open}
           trigger={
             this.props.children ? this.props.children :
             <Image
