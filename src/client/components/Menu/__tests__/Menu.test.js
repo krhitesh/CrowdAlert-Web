@@ -40,10 +40,6 @@ describe('render', () => {
     expect(findByTestAttr(wrapper, 'resp-only-mobile')).toHaveLength(1);
   });
 
-  it('renders responsive tab view', () => {
-    expect(findByTestAttr(wrapper, 'resp-only-tabs')).toHaveLength(1);
-  });
-
   it('renders left menu', () => {
     expect(findByTestAttr(wrapper, 'left-menu')).toHaveLength(1);
   });
@@ -68,10 +64,6 @@ describe('render', () => {
     expect(findByTestAttr(wrapper, 'link-login').at(0).props().to).toBe('/login');
   });
 
-  it('link login 1', () => {
-    expect(findByTestAttr(wrapper, 'link-login').at(1).props().to).toBe('/login');
-  });
-
   it('link signup', () => {
     expect(findByTestAttr(wrapper, 'link-signup').props().to).toBe('/signup');
   });
@@ -88,10 +80,6 @@ describe('render', () => {
     expect(findByTestAttr(wrapper, 'component-link-signup')).toHaveLength(1);
   });
 
-  it('renders login link', () => {
-    expect(findByTestAttr(wrapper, 'component-link-login')).toHaveLength(2);
-  });
-
   it('renders create link', () => {
     expect(findByTestAttr(wrapper, 'component-link-create')).toHaveLength(1);
   });
@@ -105,10 +93,6 @@ describe('renders with login', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = setup({}, { auth: { isLoggedIn: true } }).dive();
-  });
-
-  it('renders notifications dropdown', () => {
-    expect(findByTestAttr(wrapper, 'component-notifications-dropdown')).toHaveLength(2);
   });
 
   it('renders user settins menu', () => {

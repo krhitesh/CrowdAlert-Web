@@ -56,15 +56,13 @@ describe('testing spam report actions', () => {
   it('report spam error', () => {
     const response = {
       status: 200,
-      response: {
-        detail: {},
-      },
+      message: '',
     };
     const action = reportSpamError(response);
     expect(action).toEqual({
       type: SPAM_REPORT_REPORT_SPAM_ERROR,
       payload: {
-        message: response.response.detail,
+        message: response.message,
       },
     });
   });

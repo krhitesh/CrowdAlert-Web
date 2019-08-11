@@ -4,7 +4,6 @@ import { Container } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Route, withRouter, Redirect, Switch } from 'react-router-dom';
-import { fetchEventData } from '../Viewevent/actions';
 import { updateMapPolyline } from '../../components/Map/actions';
 import MapTab from './mapstab';
 import FormTab from './formtab';
@@ -53,7 +52,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    fetchEventData,
     updateMapPolyline,
   }, dispatch)
 );
@@ -65,11 +63,10 @@ CreateEvent.propTypes = {
     params: PropTypes.object,
     url: PropTypes.string,
   }).isRequired,
-  fetchEventData: PropTypes.func.isRequired,
   updateMapPolyline: PropTypes.func.isRequired,
 };
 
 export default {
   component: withRouter(connect(mapStateToProps, mapDispatchToProps)(requireAuth(CreateEvent))),
-  pureComponent: connect(mapStateToProps)(CreateEvent),
+  pureComponent: connect(mapStateToProps, mapDispatchToProps)(CreateEvent),
 };
