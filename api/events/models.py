@@ -47,15 +47,14 @@ class Event(object):
                             'title': event_dict['title'], 'datetime': event_dict['datetime']}
                     events_around.append(temp)
 
-        print("result_count", result_count)
-        print("match_count", match_count)
-        print("diff (result_count - match_count)", result_count - match_count)
+        # print("result_count", result_count)
+        # print("match_count", match_count)
+        # print("diff (result_count - match_count)", result_count - match_count)
         return Event.__cluster_events(events_around, cluster_threshold)
 
     @staticmethod
     def __get_queries_for_events_around(ref, center, max_distance):
         geohashes_to_query = geohash_queries([center['latitude'], center['longitude']], radius=max_distance * 1000)
-        print("geohashes_to_query", geohashes_to_query)
         return list(map(
             lambda location: ref.where(u"location.geohash", u">=", location[0]).where(u"location.geohash", u"<=",
                                                                                       location[1]),
@@ -107,7 +106,7 @@ class Event(object):
 
     @staticmethod
     def from_dict(source_dict):
-        print(source_dict)
+        # print(source_dict)
         event = Event(
             category=source_dict['category'],
             datetime=source_dict['datetime'],
