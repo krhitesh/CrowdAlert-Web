@@ -19,11 +19,18 @@ import {
   Loader,
   Message,
   Form,
+  Responsive,
 } from 'semantic-ui-react';
+import withStyles from 'isomorphic-style-loader/withStyles';
+import getWidth from '../../utils/width';
+import { updateMapPolyline } from '../../components/Map/actions';
 import { HomeLocationModal } from '../../components/index';
 import googleLogo from '../../googlel.png';
 import fbl from '../../facebookl.png';
 import passl from '../../passl.png';
+import s from './settings.css';
+import SEO from '../../components/SEO';
+import { DOMAIN_NAME } from '../../utils/apipaths';
 
 import { deleteUser, updateUserCredentials, userGetInfo } from './actions';
 import { showNotificationPermissionAsk, showNotificationPermissionGranted } from '../../components/Notifications/actions';
@@ -218,84 +225,181 @@ class UserSettings extends React.Component {
 
     if (activeItem === 'account') {
       return (
-        <div style={{ maxWidth: '900px', right: 0, marginLeft: '18em' }}>
-          <List divided verticalAlign="middle">
-            <List.Item style={{ maxHeight: '4em' }}>
-              <List.Content floated="right">
-                <Button onClick={this.toggleEmailUpdateModal} primary>Change</Button>
-              </List.Content>
-              <List.Content>
-                <p style={{ marginBottom: 0 }}><b>Registered Email</b></p>
-                <p>{this.props.email}</p>
-              </List.Content>
-            </List.Item>
-            <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '2em' }}>
-              <List.Content floated="right">
-                <Button onClick={this.toggleHLModal} primary>
-                  &nbsp;&nbsp;&nbsp;&nbsp;{locationBtnText}&nbsp;&nbsp;&nbsp;
-                </Button>
-              </List.Content>
-              <List.Content>
-                <p style={{ marginBottom: 0 }}><b>Home Location</b></p>
-                <p style={{ maxWidth: '300px' }}>{locationText}</p>
-              </List.Content>
-            </List.Item>
-            {this.state.showChangePassword &&
-            <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '2em' }}>
-              <List.Content floated="right">
-                <Button onClick={this.togglePasswordUpdateModal} primary>Change</Button>
-              </List.Content>
-              <List.Content>
-                <p style={{ marginBottom: 0 }}><b>Change Password</b></p>
-                <p>Password must be at least 6 characters long.</p>
-              </List.Content>
-            </List.Item>}
-            <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '2em' }}>
-              <List.Content floated="right">
-                <Button onClick={this.toggleDeleteModal} basic color="red">DELETE</Button>
-              </List.Content>
-              <List.Content>
-                <p style={{ marginBottom: 0 }}><b>Delete Account</b></p>
-                <p>This process is not reversible.</p>
-              </List.Content>
-            </List.Item>
-            <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '2em' }}>
-              <List.Content floated="right">
-                {Object.keys(this.props.providerData).map((providerId) => {
-                  if (providerId === 'google.com') {
-                    return <Image key={providerId} avatar src={googleLogo} />;
-                  } else if (providerId === 'password') {
-                    return <Image key={providerId} avatar src={passl} />;
-                  } else if (providerId === 'facebook.com') {
-                    return <Image key={providerId} avatar src={fbl} />;
-                  }
-                  return null;
-                })}
-              </List.Content>
-              <List.Content>
-                <p style={{ marginBottom: 0 }}><b>Connected Accounts</b></p>
-              </List.Content>
-            </List.Item>
-          </List>
-        </div>
+        <React.Fragment>
+          <SEO
+            title="Account Settings | CrowdAlert"
+            url={`${DOMAIN_NAME}/user/settings`}
+            description="User account settings."
+          />
+          <Responsive fireOnMount getWidth={getWidth} maxWidth={720}>
+            <div style={{ maxWidth: '900px', right: 0 }}>
+              <List divided verticalAlign="middle">
+                <List.Item style={{ maxHeight: '4em' }}>
+                  <List.Content floated="right">
+                    <Button onClick={this.toggleEmailUpdateModal} primary>Change</Button>
+                  </List.Content>
+                  <List.Content>
+                    <p style={{ marginBottom: 0 }}><b>Registered Email</b></p>
+                    <p>{this.props.email}</p>
+                  </List.Content>
+                </List.Item>
+                <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '3.5em' }}>
+                  <List.Content floated="right">
+                    <Button onClick={this.toggleHLModal} primary>
+                      &nbsp;&nbsp;&nbsp;&nbsp;{locationBtnText}&nbsp;&nbsp;&nbsp;
+                    </Button>
+                  </List.Content>
+                  <List.Content>
+                    <p style={{ marginBottom: 0 }}><b>Home Location</b></p>
+                    <p style={{ maxWidth: '200px' }}>{locationText}</p>
+                  </List.Content>
+                </List.Item>
+                {this.state.showChangePassword &&
+                <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '3.5em' }}>
+                  <List.Content floated="right">
+                    <Button onClick={this.togglePasswordUpdateModal} primary>Change</Button>
+                  </List.Content>
+                  <List.Content>
+                    <p style={{ marginBottom: 0 }}><b>Change Password</b></p>
+                    <p>Password must be at least 6 characters long.</p>
+                  </List.Content>
+                </List.Item>}
+                <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '3.5em' }}>
+                  <List.Content floated="right">
+                    <Button onClick={this.toggleDeleteModal} basic color="red">DELETE</Button>
+                  </List.Content>
+                  <List.Content>
+                    <p style={{ marginBottom: 0 }}><b>Delete Account</b></p>
+                    <p>This process is not reversible.</p>
+                  </List.Content>
+                </List.Item>
+                <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '3.5em' }}>
+                  <List.Content floated="right">
+                    {Object.keys(this.props.providerData).map((providerId) => {
+                      if (providerId === 'google.com') {
+                        return <Image key={providerId} avatar src={googleLogo} />;
+                      } else if (providerId === 'password') {
+                        return <Image key={providerId} avatar src={passl} />;
+                      } else if (providerId === 'facebook.com') {
+                        return <Image key={providerId} avatar src={fbl} />;
+                      }
+                      return null;
+                    })}
+                  </List.Content>
+                  <List.Content>
+                    <p style={{ marginBottom: 0 }}><b>Connected Accounts</b></p>
+                  </List.Content>
+                </List.Item>
+              </List>
+            </div>
+          </Responsive>
+          <Responsive fireOnMount getWidth={getWidth} minWidth={720}>
+            <div style={{ maxWidth: '900px', right: 0, marginLeft: '18em' }}>
+              <List divided verticalAlign="middle">
+                <List.Item style={{ maxHeight: '4em' }}>
+                  <List.Content floated="right">
+                    <Button onClick={this.toggleEmailUpdateModal} primary>Change</Button>
+                  </List.Content>
+                  <List.Content>
+                    <p style={{ marginBottom: 0 }}><b>Registered Email</b></p>
+                    <p>{this.props.email}</p>
+                  </List.Content>
+                </List.Item>
+                <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '2em' }}>
+                  <List.Content floated="right">
+                    <Button onClick={this.toggleHLModal} primary>
+                      &nbsp;&nbsp;&nbsp;&nbsp;{locationBtnText}&nbsp;&nbsp;&nbsp;
+                    </Button>
+                  </List.Content>
+                  <List.Content>
+                    <p style={{ marginBottom: 0 }}><b>Home Location</b></p>
+                    <p style={{ maxWidth: '300px' }}>{locationText}</p>
+                  </List.Content>
+                </List.Item>
+                {this.state.showChangePassword &&
+                <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '2em' }}>
+                  <List.Content floated="right">
+                    <Button onClick={this.togglePasswordUpdateModal} primary>Change</Button>
+                  </List.Content>
+                  <List.Content>
+                    <p style={{ marginBottom: 0 }}><b>Change Password</b></p>
+                    <p>Password must be at least 6 characters long.</p>
+                  </List.Content>
+                </List.Item>}
+                <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '2em' }}>
+                  <List.Content floated="right">
+                    <Button onClick={this.toggleDeleteModal} basic color="red">DELETE</Button>
+                  </List.Content>
+                  <List.Content>
+                    <p style={{ marginBottom: 0 }}><b>Delete Account</b></p>
+                    <p>This process is not reversible.</p>
+                  </List.Content>
+                </List.Item>
+                <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff', marginTop: '2em' }}>
+                  <List.Content floated="right">
+                    {Object.keys(this.props.providerData).map((providerId) => {
+                      if (providerId === 'google.com') {
+                        return <Image key={providerId} avatar src={googleLogo} />;
+                      } else if (providerId === 'password') {
+                        return <Image key={providerId} avatar src={passl} />;
+                      } else if (providerId === 'facebook.com') {
+                        return <Image key={providerId} avatar src={fbl} />;
+                      }
+                      return null;
+                    })}
+                  </List.Content>
+                  <List.Content>
+                    <p style={{ marginBottom: 0 }}><b>Connected Accounts</b></p>
+                  </List.Content>
+                </List.Item>
+              </List>
+            </div>
+          </Responsive>
+        </React.Fragment>
       );
     } else if (activeItem === 'notifications') {
       return (
-        <div style={{ maxWidth: '900px', right: 0, marginLeft: '18em' }}>
-          <List divided verticalAlign="middle">
-            <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff' }}>
-              <List.Content floated="right">
-                {this.props.permission ?
-                  <Checkbox toggle checked={this.props.permission} />
-                :
-                  <Checkbox onChange={this.props.requestNotificationsPermission} toggle defaultChecked={this.props.permission} />}
-              </List.Content>
-              <List.Content>
-                <p style={{ marginBottom: 0 }}><b>Enable Notifications</b></p>
-              </List.Content>
-            </List.Item>
-          </List>
-        </div>
+        <React.Fragment>
+          <SEO
+            title="Notifications Settings | CrowdAlert"
+            url={`${DOMAIN_NAME}/user/settings`}
+            description="User notifications settings."
+          />
+          <Responsive fireOnMount getWidth={getWidth} minWidth={720}>
+            <div style={{ maxWidth: '900px', right: 0, marginLeft: '18em' }}>
+              <List divided verticalAlign="middle">
+                <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff' }}>
+                  <List.Content floated="right">
+                    {this.props.permission ?
+                      <Checkbox toggle checked={this.props.permission} />
+                    :
+                      <Checkbox onChange={this.props.requestNotificationsPermission} toggle defaultChecked={this.props.permission} />}
+                  </List.Content>
+                  <List.Content>
+                    <p style={{ marginBottom: 0 }}><b>Enable Notifications</b></p>
+                  </List.Content>
+                </List.Item>
+              </List>
+            </div>
+          </Responsive>
+          <Responsive fireOnMount getWidth={getWidth} maxWidth={720}>
+            <div style={{ maxWidth: '900px', right: 0, marginTop: '0.8em' }}>
+              <List divided verticalAlign="middle">
+                <List.Item style={{ maxHeight: '4em', borderTop: '#ffffff' }}>
+                  <List.Content floated="right">
+                    {this.props.permission ?
+                      <Checkbox toggle checked={this.props.permission} />
+                    :
+                      <Checkbox onChange={this.props.requestNotificationsPermission} toggle defaultChecked={this.props.permission} />}
+                  </List.Content>
+                  <List.Content>
+                    <p style={{ marginBottom: 0 }}><b>Enable Notifications</b></p>
+                  </List.Content>
+                </List.Item>
+              </List>
+            </div>
+          </Responsive>
+        </React.Fragment>
       );
     }
     return (
@@ -332,23 +436,44 @@ class UserSettings extends React.Component {
             <Message.Content data-test="jsx-error-msg">{this.props.message}</Message.Content>
           </Message>
         : null}
-        <Menu secondary vertical style={{ float: 'left' }}>
-          <Menu.Item
-            name="account"
-            active={activeItem === 'account'}
-            onClick={this.handleItemClick}
-          />
-          <Menu.Item
-            name="notifications"
-            active={activeItem === 'notifications'}
-            onClick={this.handleItemClick}
-          />
-          {/* <Menu.Item
-            name="emails"
-            active={activeItem === 'emails'}
-            onClick={this.handleItemClick}
-          /> */}
-        </Menu>
+        <Responsive fireOnMount getWidth={getWidth} minWidth={720}>
+          <Menu secondary vertical style={{ float: 'left' }}>
+            <Menu.Item
+              name="account"
+              active={activeItem === 'account'}
+              onClick={this.handleItemClick}
+            />
+            <Menu.Item
+              name="notifications"
+              active={activeItem === 'notifications'}
+              onClick={this.handleItemClick}
+            />
+            {/* <Menu.Item
+              name="emails"
+              active={activeItem === 'emails'}
+              onClick={this.handleItemClick}
+            /> */}
+          </Menu>
+        </Responsive>
+        <Responsive fireOnMount getWidth={getWidth} maxWidth={720}>
+          <Menu pointing secondary>
+            <Menu.Item
+              name="account"
+              active={activeItem === 'account'}
+              onClick={this.handleItemClick}
+            />
+            <Menu.Item
+              name="notifications"
+              active={activeItem === 'notifications'}
+              onClick={this.handleItemClick}
+            />
+            {/* <Menu.Item
+              name="emails"
+              active={activeItem === 'emails'}
+              onClick={this.handleItemClick}
+            /> */}
+          </Menu>
+        </Responsive>
         <br />
         {this.renderMenu()}
         {this.renderDeleteModal()}
@@ -410,4 +535,4 @@ UserSettings.defaultProps = {
   message: '',
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserSettings);
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(s)(UserSettings));

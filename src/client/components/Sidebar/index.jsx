@@ -58,10 +58,12 @@ const LeftSidebar = props => (
           {props.user.displayName}
           <Menu.Menu icon="labeled">
             <Menu.Item />
-            <Menu.Item name="settings">
-              <Icon name="settings" />
-              Settings
-            </Menu.Item>
+            <Link to="/user/settings" onClick={props.removeSidebarVisibility}>
+              <Menu.Item name="settings">
+                <Icon name="settings" />
+                Settings
+              </Menu.Item>
+            </Link>
             <Menu.Item name="add">
               <Icon name="user" />
               Your Profile
