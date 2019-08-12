@@ -68,8 +68,12 @@ class Image(object):
         db.collection(Event.collection_name).document(incident_id).update({u'images': ArrayUnion([self.to_dict()])})
         return self.uuid
 
-    def put(self, storage):
-        storage.child(Image.path + self.uuid).put(self.name, content_type="image/jpg")
+    def put(self, storage, profile=False):
+        if profile:
+            storage.child('users/' + self.uuid).put(self.name, content_type="image/jpg")
+        else:
+            storage.child(Image.path + self.uuid).put(self.name, content_type="image/jpg")
+        
 
     def create_thumbnail(self, storage):
         self.__create_thumbnail__(self.name, storage)

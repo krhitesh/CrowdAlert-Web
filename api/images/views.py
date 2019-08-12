@@ -1,5 +1,6 @@
 """ Django Views for the api app Images
 """
+import os
 import base64
 import time
 from uuid import uuid4
@@ -38,11 +39,15 @@ class ImagesView(APIView):
         """
         uuid = request.GET.get('uuid', '')
         mode = request.GET.get('mode', 'image')
+        directory = request.GET.get('d', None)
         if uuid == '':
             return HttpResponseBadRequest("Bad request: Specify the image uuid")
 
         if mode == 'image':
-            url = STORAGE.child('images').child(uuid).get_url('')
+            if directory is not None:
+                url = STORAGE.child('users').child(uuid).get_url('')
+            else:
+                url = STORAGE.child('images').child(uuid).get_url('')
         elif mode == 'thumbnail':
             url = STORAGE.child('thumbnails').child(uuid.split('.')[0] + '.svg').get_url('')
         return HttpResponseRedirect(url)
@@ -92,6 +97,14 @@ class ImagesView(APIView):
         else:
             return HttpResponseBadRequest("Bad request: base64 or image field should be given")
         print("File Saved", time.time())
+
+        if request.POST.get('profile', False):
+            image.put(storage=STORAGE, profile=True)
+            try:
+                os.remove(image.uuid)
+            except:
+                pass
+            return JsonResponse({'name': image.uuid})
 
         image.create_thumbnail(storage=STORAGE)
         # Upload files to Cloud storage

@@ -176,11 +176,20 @@ class IncidentReport(object):
         return self.user_uuid
 
     @staticmethod
+    def get(user_uuid, DB):
+        doc = DB.collection(IncidentReport.collection_name).document(user_uuid).get()
+        if doc.exists:
+            return IncidentReport.from_dict(user_uuid, doc.to_dict())
+        else:
+            return None
+
+    @staticmethod
     def from_dict(user_uuid, source_dict):
         incident_report = IncidentReport(
             user_uuid=user_uuid,
-            reports=source_dict['reports']
+            reports=[]
         )
+        incident_report.reports = source_dict['reports']
         return incident_report
 
     def to_dict(self):

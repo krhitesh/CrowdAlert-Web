@@ -45,10 +45,10 @@ class UserSettingsMenu extends Component {
               </Header.Content>
             </Header>
           </Segment>
-          <Dropdown.Item icon="settings" text="Settings" description="Review your account settings" data-test="item-settings" />
-          <Dropdown.Item icon="user" text="Your Profile" description="View your profile" data-test="item-user" />
-          <Dropdown.Item icon="privacy" text="Privacy" description="Review our privacy policy" data-test="item-privacy" />
-          <Dropdown.Item icon="tasks" text="Your Reports" description="Incidents reported by you" data-test="item-tasks" />
+          <Dropdown.Item onClick={() => this.routeChange('/user/settings')} icon="settings" text="Settings" description="Review your account settings" data-test="item-settings" />
+          <Dropdown.Item onClick={() => this.routeChange('/user/profile')} icon="user" text="Your Profile" description="View your profile" data-test="item-user" />
+          <Dropdown.Item onClick={() => this.routeChange('/user/privacy')} icon="privacy" text="Privacy" description="Review our privacy policy" data-test="item-privacy" />
+          <Dropdown.Item onClick={() => this.routeChange('/user/me/reports')} icon="tasks" text="Your Reports" description="Incidents reported by you" data-test="item-tasks" />
           <Dropdown.Divider />
           <Dropdown.Item icon="sign out" text="Sign out." onClick={() => this.signOut()} data-test="item-sign-out" />
         </Dropdown.Menu>

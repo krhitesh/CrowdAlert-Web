@@ -101,6 +101,21 @@ class UserView(APIView):
                     del home_location["lat"]
                     del home_location["lng"]
                     DB.document('users/' + uid).update({u"home_location": home_location})
+                elif field == 'displayName':
+                    displayName = update_fields["displayName"]
+                    print(displayName)
+                    if request.user.name != displayName:
+                        auth.update_user(uid=uid, display_name=displayName)
+                        DB.document('users/' + uid).update({u"displayName": displayName})
+                    else:
+                        return HttpResponseBadRequest("Email already exists")
+                elif field == 'photoURL':
+                    photoURL = update_fields["photoURL"]
+                    if request.user.user_picture != photoURL:
+                        auth.update_user(uid=uid, photo_url=photoURL)
+                        DB.document('users/' + uid).update({u"photoURL": photoURL})
+                    else:
+                        return HttpResponseBadRequest("Email already exists")
             except:
                 return HttpResponseBadRequest("Bad request")
 

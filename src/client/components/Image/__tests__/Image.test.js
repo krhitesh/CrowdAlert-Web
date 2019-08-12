@@ -134,22 +134,12 @@ describe('render', () => {
     describe('modal is open', () => {
       test('renders component', () => {
         const wrapper = setup({ open: true, isTrusted: true, ...stateProps }, stateProps);
-        expect(findByTestAttr(wrapper, 'component-image').length).toBe(2);
+        expect(findByTestAttr(wrapper, 'component-image')).toHaveLength(0);
       });
   
       test('renders header div', () => {
         const wrapper = setup({ open: true, isTrusted: true, ...stateProps }, stateProps);
-        expect(findByTestAttr(wrapper, 'component-modal-header').length).toBe(2);
-      });
-  
-      test('label when image is untrusted 0', () => {
-        const wrapper = setup({ open: true, isTrusted: false, ...stateProps }, stateProps);
-        expect(findByTestAttr(wrapper, 'component-image').at(0).prop('label')).not.toBeNull();
-      });
-
-      test('label when image is untrusted 1', () => {
-        const wrapper = setup({ open: true, isTrusted: false, ...stateProps }, stateProps);
-        expect(findByTestAttr(wrapper, 'component-image').at(1).prop('label')).not.toBeNull();
+        expect(findByTestAttr(wrapper, 'component-modal-header')).toHaveLength(0);
       });
 
     });

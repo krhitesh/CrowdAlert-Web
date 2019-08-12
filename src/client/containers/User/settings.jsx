@@ -491,7 +491,7 @@ const mapStateToProps = (state) => {
   const { permission } = state.notifications;
   const { homeLocation } = state.geoLocator;
   const { providerData } = user;
-  const { isLoading, errors, message } = state.user;
+  const { isLoading, errors, message } = state.user.settings;
   const modifiedProviderData = {};
   providerData.map((provider) => {
     modifiedProviderData[provider.providerId] = { email: provider.email };
