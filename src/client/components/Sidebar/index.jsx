@@ -64,18 +64,24 @@ const LeftSidebar = props => (
                 Settings
               </Menu.Item>
             </Link>
-            <Menu.Item name="add">
-              <Icon name="user" />
-              Your Profile
-            </Menu.Item>
-            <Menu.Item name="add">
-              <Icon name="tasks" />
-              Your Reports
-            </Menu.Item>
-            <Menu.Item name="add">
-              <Icon name="privacy" />
-              Privacy Policy
-            </Menu.Item>
+            <Link to="/user/profile" onClick={props.removeSidebarVisibility}>
+              <Menu.Item name="add">
+                <Icon name="user" />
+                Your Profile
+              </Menu.Item>
+            </Link>
+            <Link to="/user/me/reports" onClick={props.removeSidebarVisibility}>
+              <Menu.Item name="add">
+                <Icon name="tasks" />
+                Your Reports
+              </Menu.Item>
+            </Link>
+            <Link to="/user/privacy" onClick={props.removeSidebarVisibility}>
+              <Menu.Item name="add">
+                <Icon name="privacy" />
+                Privacy Policy
+              </Menu.Item>
+            </Link>
           </Menu.Menu>
         </Menu.Item>
       :

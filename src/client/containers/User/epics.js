@@ -3,7 +3,7 @@ import { of } from 'rxjs/observable/of';
 import { ofType, combineEpics } from 'redux-observable';
 import { mergeMap, map, catchError } from 'rxjs/operators';
 
-import { USER_UPDATE_USER_DATA, USER_DELETE_USER, USER_UPDATE_USER_CREDENTIALS, USER_GET_INFO } from './actionTypes';
+import { USER_UPDATE_USER_DATA, USER_DELETE_USER, USER_UPDATE_USER_CREDENTIALS, USER_GET_INFO, USER_GET_INCIDENTS } from './actionTypes';
 import {
   updateUserDataSuccess,
   updateUserDataError,
@@ -13,8 +13,26 @@ import {
   updateUserCredentialsFailed,
   userGetInfoFailed,
   userGetInfoSuccess,
+  userGetIncidentsError,
+  userGetIncidentsSuccess,
 } from './actions';
-import { USER_PROFILES, USER_DELETE, USER_UPDATE } from '../../utils/apipaths';
+import { USER_PROFILES, USER_DELETE, USER_UPDATE, USER_INCIDENTS_LIST } from '../../utils/apipaths';
+
+const getUserIncidentsEpic = action$ =>
+  action$.pipe(
+    ofType(USER_GET_INCIDENTS),
+    mergeMap(() => {
+      const apiUrl = USER_INCIDENTS_LIST;
+      return ajax
+        .get(apiUrl, {
+          'Content-Type': 'application/json',
+          token: window.sessionStorage.getItem('token'),
+        }).pipe(
+          map(response => userGetIncidentsSuccess(response.response.data)),
+          catchError(error => of(userGetIncidentsError(error.message))),
+        );
+    }),
+  );
 
 const getUserInfoEpic = action$ =>
   action$.pipe(
@@ -48,6 +66,16 @@ const userUpdateCredentialsEpic = action$ =>
         values += 'password';
         body.password = action.payload.password;
       }
+      if (action.payload.displayName !== null) {
+        if (values !== '') values += '&';
+        values += 'displayName';
+        body.displayName = action.payload.displayName;
+      }
+      if (action.payload.photoURL !== null) {
+        if (values !== '') values += '&';
+        values += 'photoURL';
+        body.photoURL = action.payload.photoURL;
+      }
       return ajax
         .patch(apiUrl + values, body, {
           'Content-Type': 'application/json',
@@ -56,7 +84,7 @@ const userUpdateCredentialsEpic = action$ =>
           map(response => updateUserCredentialsSuccess(response)),
           catchError((error) => {
             if (error.status === 400) {
-              return of(updateUserCredentialsFailed('Please enter a valid email.'));
+              return of(updateUserCredentialsFailed('Incorrect detail entered.'));
             }
 
             return of(updateUserCredentialsFailed(error.message));
@@ -104,6 +132,7 @@ const epics = combineEpics(
   userDeleteUserEpic,
   userUpdateCredentialsEpic,
   getUserInfoEpic,
+  getUserIncidentsEpic,
 );
 
 export default epics;

@@ -1,3 +1,4 @@
+import { combineReducers } from 'redux';
 import {
   USER_DELETE_USER,
   USER_DELETE_USER_ERROR,
@@ -8,6 +9,10 @@ import {
   USER_GET_INFO,
   USER_GET_INFO_FAILED,
   USER_GET_INFO_SUCCESS,
+  USER_IMAGE_UPLOAD_ERROR,
+  USER_GET_INCIDENTS,
+  USER_GET_INCIDENTS_ERROR,
+  USER_GET_INCIDENTS_SUCCESS,
 } from './actionTypes';
 import {
   HOME_LOCATION_SAVE_LOCATION_ERROR,
@@ -15,13 +20,13 @@ import {
   HOME_LOCATION_SAVE_LOCATION,
 } from '../../components/HomeLocationModal/actionTypes';
 
-const initialState = {
+const settingsInitialState = {
   isLoading: false,
   errors: false,
   message: null,
 };
 
-function userReducer(state = initialState, action) {
+function settingsReducer(state = settingsInitialState, action) {
   switch (action.type) {
     case USER_DELETE_USER:
       return {
@@ -104,4 +109,79 @@ function userReducer(state = initialState, action) {
   }
 }
 
-export default userReducer;
+const profileInitialState = {
+  isLoading: false,
+  errors: false,
+  message: null,
+};
+
+const profileReducer = (state = profileInitialState, action) => {
+  switch (action.type) {
+    case USER_UPDATE_USER_CREDENTIALS:
+      return {
+        ...state,
+        isLoading: true,
+        errors: false,
+      };
+    case USER_UPDATE_USER_CREDENTIALS_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        errors: true,
+        message: action.payload,
+      };
+    case USER_UPDATE_USER_CREDENTIALS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        errors: false,
+      };
+    case USER_IMAGE_UPLOAD_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        errors: true,
+        message: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+const incidentsListInitialState = {
+  isLoading: false,
+  errors: false,
+  message: null,
+  incidents: [],
+};
+
+const incidentsListReducer = (state = incidentsListInitialState, action) => {
+  switch (action.type) {
+    case USER_GET_INCIDENTS:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case USER_GET_INCIDENTS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        incidents: action.payload,
+      };
+    case USER_GET_INCIDENTS_ERROR:
+      return {
+        ...state,
+        errors: true,
+        message: action.payload,
+        isLoading: false,
+      };
+    default:
+      return state;
+  }
+};
+
+export default combineReducers({
+  settings: settingsReducer,
+  profile: profileReducer,
+  incidents: incidentsListReducer,
+});

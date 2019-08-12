@@ -1,8 +1,11 @@
 """ Django view module
 """
 
+import os
 import json
 import time
+import base64
+import requests
 
 from api.utils.geohash_util import encode
 from asgiref.sync import async_to_sync
@@ -11,6 +14,7 @@ from django.conf import settings
 from django.http import JsonResponse, HttpResponseBadRequest
 from firebase_admin.firestore import GeoPoint
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 from api.comments.models import Comment
 from api.firebase_auth.authentication import TokenAuthentication
@@ -20,9 +24,10 @@ from api.spam.classifier import classify_text
 from api.spam.views import get_spam_report_data
 from api.users.models import User
 from .models import Event, IncidentReport
+from api.utils.event_colors import get_event_color
 
 DB = settings.FIRESTORE
-
+GMAPS = settings.GMAPS
 
 class EventView(APIView):
     """ API view class for events
@@ -114,8 +119,12 @@ class EventView(APIView):
 
         key = event.save(DB)
 
-        incident_report = IncidentReport(uid, [key])
-        incident_report.save(DB)
+        incident_report = IncidentReport.get(uid, DB)
+        if incident_report is None:
+            incident_report = IncidentReport(uid, [key])
+            incident_report.save(DB)
+        else:
+            incident_report.add_report(key, DB)
 
         comment = Comment(participants=[uid])
         comment.save(key, DB)
@@ -244,3 +253,34 @@ class MultipleEventsView(APIView):
             db=DB
         )
         return JsonResponse(data, safe=False)
+
+
+class UserIncidents(APIView):
+    """ API view class for events
+    """
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        uid = str(request.user)
+        incident_report = IncidentReport.get(uid, DB)
+        if incident_report is None:
+            return JsonResponse({ "data": [] }, safe=False)
+
+        data = []
+        for report in incident_report.reports:
+            doc = report.get()
+            event_dict = doc.to_dict()
+            
+            static_map_url = "http://maps.googleapis.com/maps/api/staticmap?key=" + os.getenv('REACT_APP_GOOGLE_MAPS_KEY') + "&zoom=15&size=320x320&maptype=roadmap&markers=color:" + get_event_color(event_dict['category']) + "|" + str(event_dict['location']['coords'].latitude) + "," + str(event_dict['location']['coords'].longitude)
+            static_map_base64_bytes = base64.b64encode(requests.get(static_map_url).content)
+            static_map_base64_string = "data:image/png;base64," + static_map_base64_bytes.decode('utf-8')
+
+            rgc = GMAPS.reverse_geocode(latlng=(event_dict['location']['coords'].latitude, event_dict['location']['coords'].longitude))
+            data.append({'key': doc.id, 'lat': event_dict['location']['coords'].latitude,
+            'long': event_dict['location']['coords'].longitude, 'category': event_dict['category'],
+            'title': event_dict['title'], 'description': event_dict['description'], 'datetime': event_dict['datetime'],
+            'formatted_address': rgc[0]['formatted_address'],
+            'static_map': static_map_base64_string})
+        
+        return JsonResponse({ "data": data }, safe=False)

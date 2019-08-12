@@ -56,6 +56,8 @@ const GET_EVENTS_BY_LOCATION = `${domainNameL}/api/events/geteventsbylocation`;
  */
 const WS_GET_EVENTS_BY_LOCATION = `${websocketURL}/ws/events/geteventsbylocation`;
 
+const USER_INCIDENTS_LIST = `${domainNameL}/api/events/user_incident_list`;
+
 const STATIC_IMAGES = `${domainNameL}/static/images`;
 
 const USER_PROFILES = `${domainNameL}/api/users/user`;
@@ -82,6 +84,7 @@ export {
   GET_DIRECTIONS,
   GET_EVENTS_BY_LOCATION,
   WS_GET_EVENTS_BY_LOCATION,
+  USER_INCIDENTS_LIST,
   UPLOAD_IMAGES,
   STATIC_IMAGES,
   USER_PROFILES,

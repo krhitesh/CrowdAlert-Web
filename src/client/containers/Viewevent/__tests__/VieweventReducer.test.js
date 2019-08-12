@@ -9,6 +9,8 @@ const initialState = {
   data: {},
   imageURLS: [],
   isLoading: true,
+  errors: false,
+  message: null,
 };
 
 describe('testing view event reducer', () => {

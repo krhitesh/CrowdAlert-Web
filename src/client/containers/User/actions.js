@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 import axios from 'axios';
 import { USER_PROFILES } from '../../utils/apipaths';
@@ -15,14 +16,44 @@ import {
   USER_GET_INFO_FAILED,
   USER_GET_INFO_SUCCESS,
   USER_GET_INFO_SSR,
+  USER_IMAGE_UPLOAD_ERROR,
+  USER_GET_INCIDENTS,
+  USER_GET_INCIDENTS_ERROR,
+  USER_GET_INCIDENTS_SUCCESS,
 } from './actionTypes';
 
-export function updateUserCredentials(email = null, password = null) {
+export function userGetIncidentsSuccess(payload = {}) {
+  return {
+    type: USER_GET_INCIDENTS_SUCCESS,
+    payload,
+  };
+}
+export function userGetIncidentsError(payload = {}) {
+  return {
+    type: USER_GET_INCIDENTS_ERROR,
+    payload,
+  };
+}
+export function userGetIncidents(payload = {}) {
+  return {
+    type: USER_GET_INCIDENTS,
+    payload,
+  };
+}
+export function userImageUploadError(payload = {}) {
+  return {
+    type: USER_IMAGE_UPLOAD_ERROR,
+    payload,
+  };
+}
+export function updateUserCredentials(email = null, password = null, displayName = null, photoURL = null) {
   return {
     type: USER_UPDATE_USER_CREDENTIALS,
     payload: {
       email,
       password,
+      displayName,
+      photoURL,
     },
   };
 }
