@@ -29,7 +29,9 @@ test('no render', () => {
       event: null,
       isOpen: false,
     },
-    event: {},
+    event: {
+      errors: false,
+    },
     map: {
       polyline: {
         isVisible: false,
@@ -57,7 +59,9 @@ const reduxPiece = {
     },
     isOpen: false,
   },
-  event: {},
+  event: {
+    errors: false,
+  },
   map: {
     polyline: {
       isVisible: false,
