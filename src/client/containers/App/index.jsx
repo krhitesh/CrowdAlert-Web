@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Redirect, withRouter } from 'react-router-dom';
+import { renderRoutes } from 'react-router-config';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Dimmer, Loader } from 'semantic-ui-react';
@@ -13,12 +14,7 @@ import {
   SpamReport,
   Notifications,
 } from '../../components';
-import Viewevent from '../Viewevent';
-import Feed from '../Feed';
 import CreateEvent from '../CreateEvent';
-import LoginPage from '../Auth/LoginPage';
-import SignUpPage from '../Auth/SignUpPage';
-import ConfirmEmail from '../Auth/confirmEmail';
 
 const PrivateRoute = ({ component: Cmp, auth: Auth, ...rest }) => (
   <Route
@@ -59,13 +55,9 @@ class App extends Component {
           <div>
             <Menu />
           </div>
-          <Route exact path="/view/:eventid" component={Viewevent} />
+          {/* Moved this private route to requireAuth and inside Routes */}
           <PrivateRoute path="/create" component={CreateEvent} auth={this.props.isLoggedIn} />
-          <Route exact path="/" component={Feed} />
-          <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/signup" component={SignUpPage} />
-          <Route exact path="/auth/confirmEmail" component={ConfirmEmail} />
-          <Route exact path="/notifications" component={Notifications.NotificationsPage} />
+          {renderRoutes(this.props.route.routes)}
 
         </Sidebar>
         <BottomBar />
@@ -88,4 +80,6 @@ const mapDispatchToProps = dispatch => (
     checkUserAuthenticationStatus,
   }, dispatch)
 );
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default {
+  component: withRouter(connect(mapStateToProps, mapDispatchToProps)(App)),
+};

@@ -25,4 +25,6 @@ const mapStateToProps = state => ({
   tabs: state.createEvents.tabs,
 });
 
-export default withRouter(connect(mapStateToProps)(CreateEvent));
+export default {
+  component: withRouter(connect(mapStateToProps)(CreateEvent)),
+};
