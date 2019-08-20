@@ -1,93 +1,60 @@
-/**
- * CrowdAlert
- * index.js: main entry point of the app
- * eslint is disabled as there are references to window & documnet object.
- */
+/* eslint-disable arrow-body-style */
+/* eslint-disable array-callback-return */
+/* eslint-disable consistent-return */
+/* eslint-disable quotes */
+import 'babel-polyfill';
+import express from 'express';
+import { gzip } from 'zlib';
+import { matchRoutes } from 'react-router-config';
+import Routes from './client/Routes';
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
-import createHistory from 'history/createBrowserHistory';
-import registerServiceWorker from './registerServiceWorker';
-
-import configureStore from './configureStore';
-import { messaging } from './utils/firebase';
-import App from './containers/App';
-import { receivedNewNotification } from './components/Notifications/actions';
-
-/**
- * [initialState initial state for the App]
- * @type {Object}
- */
-const initialState = {};
-/**
- * [history instantiate a history object containing the browser history
- *  used to push & pop pages using react-router]
- * @type {[type]}
- */
-const history = createHistory();
-/**
- * [store contains the redux store for the app]
- * @type {[type]}
- */
-const store = configureStore(initialState, history);
-/**
- * Dispatch actions on message is received
- */
-messaging.onMessage((payload) => {
-  console.log('Message', payload);
-  store.dispatch(receivedNewNotification(payload));
+const app = express();
+app.use('*.js', (req, res, next) => {
+  req.url += '.br';
+  res.set('Content-Encoding', 'br');
+  res.set('Content-Type', 'text/javascript');
+  next();
 });
 
-/**
- * [ROOT_NODE is the document reference where the app should be mounted]
- * @type {[type]}
- */
-const ROOT_NODE = document.getElementById('root');
+app.use(express.static('public'));
+app.get('*', async (req, res) => {
+  // Use firebase Admin SDK on server to verify
+  // the retrieved ID token. If that ID token is
+  // valid, fetch the user then dispatch appropriate
+  // redux action with that user data.
 
-// Render the app to the specified mount point
-ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <App />
-    </ConnectedRouter>
-  </Provider>, ROOT_NODE);
-/**
- * [registerServiceWorker register the service worker. Required for the PWA
- * behaviour]
- * @param  {none} function [description]
- * @return {none}          [description]
- */
-registerServiceWorker();
 
-/**
- * [Manages the initial loading spinner. Shows the spinner until document is
- * rendered. ]
- * @return {[none]} [description]
- */
-(function () {
-  const delay = 500;
-  const dimmer = document.querySelector('#docs-loading-dimmer');
-  dimmer.style.pointerEvents = 'none';
-  dimmer.style.transition = `opacity ${delay}ms linear`;
+  // UserAuth(TODO) -> Dispatch apt action to inform redux (and state) that hey,
+  // "this" is the auth status of the user who requested the application.
+  // Then use the new state to render the application.
 
-  function removeDimmer() {
-    dimmer.style.opacity = '0';
+  // console.log(matchRoutes(Routes, req.path));
+  const promises = matchRoutes(Routes, req.path).map(({ route, match }) => {
+    // Crank up loadData function from all the 'to be' rendered here and 
+    // return all the dispatches
+    // as promises, when completed will allow us to render the application
+    // on server
+  });
 
-    setTimeout(() => {
-      const dimmer = document.querySelector('#docs-loading-dimmer');
+  Promise.all(promises)
+    .then(() => {
+      // Now is the time to render the application
 
-      document.body.removeChild(dimmer);
-      document.body.setAttribute('class', '');
-      window.removeEventListener('load', removeDimmer);
-      alert("Production Build: 11-Aug");
-    }, delay);
-  }
-  
-  window.addEventListener('load', removeDimmer);
-}());
-/**
- * export the browser history instance so that it could be imported later
- */
-export default history;
+      const content = `<div>Server rendered HTML will come here</div>`;
+
+      gzip(content, (err, gzipped) => {
+        if (err) {
+          // Send the uncompressed content as it is
+          res.send(content);
+        } else {
+          res.set('Content-Encoding', 'gzip');
+          res.set('Content-Type', 'text/html');
+          res.send(gzipped);
+        }
+      });
+    });
+});
+
+app.listen(3000, () => {
+  console.log('listening on port 3000');
+});

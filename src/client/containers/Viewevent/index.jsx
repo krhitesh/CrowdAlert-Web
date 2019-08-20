@@ -238,4 +238,6 @@ const mapStateToProps = state => ({
   map: state.map,
   event: state.event,
 });
-export default connect(mapStateToProps, mapDispatchToProps)(Viewevent);
+export default {
+  component: connect(mapStateToProps, mapDispatchToProps)(Viewevent),
+};
