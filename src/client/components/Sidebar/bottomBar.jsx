@@ -7,7 +7,7 @@ import LoginButton from '../../containers/Auth/Loginbutton';
 import { Notifications } from '../';
 
 const BottomBar = (props) => {
-  if (props.bottomBarIsVisible) {
+  if (props.bottomBarIsVisible && typeof window !== 'undefined') {
     return (
       <Responsive maxWidth={900}>
         <Segment style={styleSheet.bottomBar}>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { fetchUserLocation, fetchEventsByLocation } from './actions';
+import { fetchUserLocation, fetchEventsByLocation, fetchUserLocationSSR, fetchEventsByLocationSSR } from './actions';
 import style from './style';
 import { MapWrapper, Sonar, EventPreviewCard, GeoLocator } from '../../components';
 
@@ -48,17 +48,17 @@ class Feed extends Component {
    * [componentWillMount fetch  the event as soon as the component will mount]
    * @return {[type]} [description]
    */
-  componentWillMount() {
+  componentDidMount() {
     // Fetch the users current approximate location using API
-    this.props.fetchUserLocation({
-      oldLat: this.props.mapProps.lat,
-      oldLng: this.props.mapProps.lng,
-    });
-    this.props.fetchEventsByLocation({
-      lat: this.props.mapProps.lat,
-      lng: this.props.mapProps.lng,
-      zoom: this.props.mapProps.zoom,
-    });
+    // this.props.fetchUserLocation({
+    //   oldLat: this.props.mapProps.lat,
+    //   oldLng: this.props.mapProps.lng,
+    // });
+    // this.props.fetchEventsByLocation({
+    //   lat: this.props.mapProps.lat,
+    //   lng: this.props.mapProps.lng,
+    //   zoom: this.props.mapProps.zoom,
+    // });
   }
   componentWillUnmount() {
     console.log('UNMOUNT');
@@ -104,4 +104,42 @@ const mapDispatchToProps = dispatch => (
     fetchEventsByLocation,
   }, dispatch)
 );
-export default connect(mapStateToProps, mapDispatchToProps)(Feed);
+export default {
+  component: connect(mapStateToProps, mapDispatchToProps)(Feed),
+  loadData: (store, ip = '') => {
+    const { dispatch } = store;
+    // Need to await these actions somehow.
+    // To check that even though we are unable to detect
+    // action completion via promise, the action must be
+    // executed without an issue as per wrapClosableEpic thing.
+    // and must provide data to state. Use redux-logger on server to
+    // check the dispatch status.
+    // Fetches user location by IP
+
+    // dispatch(fetchUserLocation({
+    //   oldLat: 26.512840,
+    //   oldLng: 80.234894,
+    // }));
+
+    // dispatch(fetchEventsByLocation({
+    //   lat: 26.512840,
+    //   lng: 80.234894,
+    //   zoom: 4,
+    // }));
+
+    return dispatch(fetchUserLocationSSR(
+      {
+        oldLat: -26.77,
+        oldLng: 135.17,
+      },
+      ip,
+    )).then(() => {
+      const { lat, lng, zoom } = store.getState().map;
+      return dispatch(fetchEventsByLocationSSR({
+        lat,
+        lng,
+        zoom,
+      }));
+    });
+  },
+};

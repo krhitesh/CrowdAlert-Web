@@ -7,6 +7,9 @@ import express from 'express';
 import { gzip } from 'zlib';
 import { matchRoutes } from 'react-router-config';
 import Routes from './client/Routes';
+import renderer from './helpers/renderer';
+import history from './helpers/history';
+import serverConfigureStore from './helpers/serverConfigureStore';
 
 const app = express();
 app.use('*.js', (req, res, next) => {
@@ -22,7 +25,7 @@ app.get('*', async (req, res) => {
   // the retrieved ID token. If that ID token is
   // valid, fetch the user then dispatch appropriate
   // redux action with that user data.
-
+  const store = serverConfigureStore(req, {}, history);
 
   // UserAuth(TODO) -> Dispatch apt action to inform redux (and state) that hey,
   // "this" is the auth status of the user who requested the application.
@@ -30,21 +33,42 @@ app.get('*', async (req, res) => {
 
   // console.log(matchRoutes(Routes, req.path));
   const promises = matchRoutes(Routes, req.path).map(({ route, match }) => {
-    // Crank up loadData function from all the 'to be' rendered here and 
-    // return all the dispatches
-    // as promises, when completed will allow us to render the application
-    // on server
-  });
+    if (route.loadData) {
+      if (route.component.displayName === 'Connect(Feed)') {
+        return route.loadData(
+          store,
+          req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+        );
+      } else if (route.component.displayName === 'Connect(Viewevent)') {
+        return route.loadData(
+          store,
+          match,
+        );
+      }
+
+      return route.loadData(store);
+    }
+
+    return null;
+  })
+    .map((promise) => {
+      if (promise) {
+        return new Promise((resolve, reject) => {
+          promise.then(resolve).catch(reject);
+        });
+      }
+    });
 
   Promise.all(promises)
     .then(() => {
       // Now is the time to render the application
 
-      const content = `<div>Server rendered HTML will come here</div>`;
+      const content = renderer(req, store, {});
 
       gzip(content, (err, gzipped) => {
         if (err) {
           // Send the uncompressed content as it is
+          res.set('Content-Type', 'text/html');
           res.send(content);
         } else {
           res.set('Content-Encoding', 'gzip');

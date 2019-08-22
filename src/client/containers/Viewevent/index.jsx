@@ -19,9 +19,16 @@ import {
   CommentsSection,
 } from '../../components';
 
-import { fetchEventData } from './actions';
+import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
+import { fetchCommentsThreadSSR } from '../../components/Comments/actions';
 
 import styleSheet from './style';
+
+const isBrowser = () => typeof window !== 'undefined';
+const getWidth = () => {
+  if (isBrowser()) return window.innerWidth;
+  return Infinity;
+};
 
 /**
  * [MapwithSonar Combines the MapWrapper & Sonar component to view a single marker
@@ -137,7 +144,7 @@ class Viewevent extends Component {
     }
     return (
       <div style={{ paddingTop: '1rem', marginBottom: '6rem' }}>
-        <Responsive maxWidth={900}>
+        <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
           <div style={styleSheet.mobile.mapContainer}>
             <MapwithSonar
               latitude={lat}
@@ -172,7 +179,7 @@ class Viewevent extends Component {
             : null }
           </Item>
         </Responsive>
-        <Responsive minWidth={901}>
+        <Responsive fireOnMount getWidth={getWidth} minWidth={901}>
           <Container>
             <Grid columns={2}>
               <Grid.Row>
@@ -240,4 +247,16 @@ const mapStateToProps = state => ({
 });
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Viewevent),
+  loadData: (store, match) => {
+    const { dispatch } = store;
+
+    return Promise.all([
+      dispatch(fetchEventDataSSR({ eventid: match.params.eventid, shouldRefresh: true }))
+        .then(() => {
+          const { lat, lng } = store.getState().map;
+          return dispatch(fetchReverseGeocodeSSR(lat, lng));
+        }),
+      dispatch(fetchCommentsThreadSSR(match.params.eventid, false)),
+    ]);
+  },
 };
