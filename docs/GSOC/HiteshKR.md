@@ -66,7 +66,7 @@ Then, I spent time on developing new features as described in changes section po
 
 ### Merge Requests
  
-1. [Merge Request !1](https://gitlab.com/aossie/CrowdAlert-Web/merge_requests/59): Initial setup and routing, *Status: **not merged***
+1. [Merge Request !1](https://gitlab.com/aossie/CrowdAlert-Web/merge_requests/59): Initial setup and routing, *Status: **merged***
     * Webpack config
 	* Babel config
 	* npm scripts
@@ -78,7 +78,7 @@ Then, I spent time on developing new features as described in changes section po
 	* Implement React Router support and bind with it express Route configuration
 	* Restructuring the webpack and npm scripts for cleaner code
 
-2. [Merge Request !2](https://gitlab.com/aossie/CrowdAlert-Web/merge_requests/60): Redux and server-side data fetching, *Status: **not merged***
+2. [Merge Request !2](https://gitlab.com/aossie/CrowdAlert-Web/merge_requests/60): Redux and server-side data fetching, *Status: **merged***
 	* Create separate stores for the browser and the server
 	* Exporting `loadData` function along with the components that returns a promise
 	* Creating a `Promise.all` to get notified when all of the data fetching
