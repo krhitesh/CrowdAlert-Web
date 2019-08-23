@@ -21,14 +21,10 @@ import {
 
 import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
 import { fetchCommentsThreadSSR } from '../../components/Comments/actions';
+import getWidth from '../../utils/width';
 
 import styleSheet from './style';
 
-const isBrowser = () => typeof window !== 'undefined';
-const getWidth = () => {
-  if (isBrowser()) return window.innerWidth;
-  return Infinity;
-};
 
 /**
  * [MapwithSonar Combines the MapWrapper & Sonar component to view a single marker
@@ -128,7 +124,7 @@ EventCard.defaultProps = {
  * @type {Object}
  */
 class Viewevent extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const { eventid } = this.props.match.params;
     const shouldRefresh =
       this.props.match.params.eventid !== this.props.event.data.eventid;

@@ -16,6 +16,8 @@ import {
   TwitterShareButton,
   WhatsappShareButton,
 } from 'react-share';
+import getWidth from '../../utils/width';
+import { domainName } from '../../utils/apipaths';
 
 /**
 * [ShareModal ShareModal conponent for event sharing events across
@@ -24,13 +26,15 @@ import {
 * @param {[type]} props [description]
 */
 const ShareModal = (props) => {
-  const shareUrl = document.URL;
+  // Note that in development environment (i.e. localhost)
+  // domainName points to the django server at localhost:8000
+  const shareUrl = `${domainName}/view/${props.uuid}`;
   const { title } = props;
   return (
     <Modal trigger={props.children} basic size="small">
       <Header icon="external share" content="Share" />
       <Modal.Content>
-        <Responsive maxWidth={900}>
+        <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
           <FacebookShareButton url={shareUrl} quote={title}>
             <Button color="facebook" fluid>
               <Icon name="facebook" />
@@ -52,7 +56,7 @@ const ShareModal = (props) => {
             </Button>
           </WhatsappShareButton>
         </Responsive>
-        <Responsive minWidth={900}>
+        <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
           <Grid columns={3}>
             <Grid.Column>
               <FacebookShareButton url={shareUrl} quote={title}>

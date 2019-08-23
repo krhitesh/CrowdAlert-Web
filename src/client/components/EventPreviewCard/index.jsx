@@ -14,6 +14,7 @@ import style from './style';
 import { closeEventPreview } from './actions';
 import calcAge from '../../utils/time';
 import getEventColor from '../../utils/eventcolors';
+import getWidth from '../../utils/width';
 
 
 const EventPreviewCard = (props) => {
@@ -22,7 +23,7 @@ const EventPreviewCard = (props) => {
   }
   return (
     <div>
-      <Responsive minWidth={900}>
+      <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
         <div style={style.widescreen}>
           {/* Animation isn't working as it requires component to be mounted
             before visibility is set true. Probably we can achive that using
@@ -60,7 +61,7 @@ const EventPreviewCard = (props) => {
           </Transition>
         </div>
       </Responsive>
-      <Responsive maxWidth={900}>
+      <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
         <div style={style.mobile}>
           <Transition
             style={style.mobile}

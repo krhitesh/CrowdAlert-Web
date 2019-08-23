@@ -10,7 +10,7 @@ import { ShareModal, UpvoteButton, SpamReport } from '../';
 const EventFooter = props => (
   <Button.Group widths={3} basic fluid>
     <UpvoteButton uuid={props.uuid} />
-    <ShareModal title={props.title}>
+    <ShareModal title={props.title} uuid={props.uuid}>
       <Button>
         <Icon color="black" name="external share" />
             Share

@@ -9,12 +9,7 @@ import { toggleSidebarVisibility } from '../Sidebar/actions';
 import LoginButton from '../../containers/Auth/Loginbutton';
 import { UserSettingsMenu, Notifications } from '../';
 import logo from '../../logo.png';
-
-const isBrowser = () => typeof window !== 'undefined';
-const getWidth = () => {
-  if (isBrowser()) return window.innerWidth;
-  return Infinity;
-};
+import getWidth from '../../utils/width';
 
 /**
  * [MenuBar top menu bar for the app. Responsive according to the viewport]

@@ -5,11 +5,12 @@ import { connect } from 'react-redux';
 import styleSheet from './styles';
 import LoginButton from '../../containers/Auth/Loginbutton';
 import { Notifications } from '../';
+import getWidth from '../../utils/width';
 
 const BottomBar = (props) => {
   if (props.bottomBarIsVisible && typeof window !== 'undefined') {
     return (
-      <Responsive maxWidth={900}>
+      <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
         <Segment style={styleSheet.bottomBar}>
           {props.auth.isLoggedIn?
             <Grid columns="equal" inverted>

@@ -4,12 +4,16 @@
 /* eslint-disable quotes */
 import 'babel-polyfill';
 import express from 'express';
+import proxy from 'http-proxy-middleware';
 import { gzip } from 'zlib';
 import { matchRoutes } from 'react-router-config';
+import { getCookie } from './utils/cookie';
+import { performAuthentication, handleNoUser } from './helpers/auth';
 import Routes from './client/Routes';
 import renderer from './helpers/renderer';
 import history from './helpers/history';
 import serverConfigureStore from './helpers/serverConfigureStore';
+import { domainName } from './client/utils/apipaths';
 
 const app = express();
 app.use('*.js', (req, res, next) => {
@@ -19,13 +23,31 @@ app.use('*.js', (req, res, next) => {
   next();
 });
 
+app.use(
+  '/api',
+  proxy({ target: domainName, changeOrigin: true }),
+);
+app.use(
+  '/static',
+  proxy({ target: domainName, changeOrigin: true }),
+);
+
 app.use(express.static('public'));
 app.get('*', async (req, res) => {
+  const cookie = req.get('cookie') || '';
+  const token = getCookie(cookie, 'token');
+
   // Use firebase Admin SDK on server to verify
   // the retrieved ID token. If that ID token is
   // valid, fetch the user then dispatch appropriate
   // redux action with that user data.
+
   const store = serverConfigureStore(req, {}, history);
+  if (token && token !== '') {
+    await performAuthentication(store, token);
+  } else {
+    handleNoUser(store);
+  }
 
   // UserAuth(TODO) -> Dispatch apt action to inform redux (and state) that hey,
   // "this" is the auth status of the user who requested the application.
@@ -62,8 +84,15 @@ app.get('*', async (req, res) => {
   Promise.all(promises)
     .then(() => {
       // Now is the time to render the application
+      const context = {};
+      const content = renderer(req, store, context);
 
-      const content = renderer(req, store, {});
+      if (context.url) {
+        return res.redirect(301, context.url);
+      }
+      if (context.notFound) {
+        res.status(404);
+      }
 
       gzip(content, (err, gzipped) => {
         if (err) {
