@@ -7,6 +7,7 @@ import {
   Responsive,
 } from 'semantic-ui-react';
 import getEventColor from '../../utils/eventcolors';
+import getWidth from '../../utils/width';
 
 import { changeTabCreateEventsForm } from './actions';
 
@@ -19,7 +20,7 @@ const Tabs = (props) => {
         onClick={() => props.handleTabChange(0)}
       >
         <Icon circular color="yellow" name="map outline" size="small" />
-        <Responsive minWidth={901}>
+        <Responsive fireOnMount getWidth={getWidth} minWidth={901}>
           <Step.Content>
             <Step.Title>Location</Step.Title>
             <Step.Description>{props.location.text}</Step.Description>
@@ -33,7 +34,7 @@ const Tabs = (props) => {
         completed={props.tabs.isValid.details}
       >
         <Icon circular color={getEventColor(props.details.eventType)} name="edit" />
-        <Responsive minWidth={901}>
+        <Responsive fireOnMount getWidth={getWidth} minWidth={901}>
           <Step.Content>
             <Step.Title>Description</Step.Title>
             <Step.Description>Enter incident information</Step.Description>
@@ -47,7 +48,7 @@ const Tabs = (props) => {
         completed={props.tabs.isValid.images}
       >
         <Icon circular color="brown" name="camera retro" />
-        <Responsive minWidth={901}>
+        <Responsive fireOnMount getWidth={getWidth} minWidth={901}>
           <Step.Content>
             <Step.Title>Image</Step.Title>
             <Step.Description>Click a photo</Step.Description>

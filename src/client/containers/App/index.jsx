@@ -14,20 +14,7 @@ import {
   SpamReport,
   Notifications,
 } from '../../components';
-import CreateEvent from '../CreateEvent';
 
-const PrivateRoute = ({ component: Cmp, auth: Auth, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) => {
-      if (Auth) {
-        return (<Cmp {...props} />);
-      }
-      return (<Redirect to="/login/" />);
-    }
-  }
-  />
-);
 /**
  * [App Main entry point of the App]
  * @extends Component
@@ -38,9 +25,14 @@ class App extends Component {
     this.state = {};
   }
   componentWillMount() {
-    // if (window.localStorage.getItem('shouldBeLoggedIn') === "true") {
+    // if (window.localStorage.getItem('shouldBeLoggedIn') === 'true') {
     //   this.props.checkUserAuthenticationStatus();
     // }
+  }
+  componentDidMount() {
+    if (window.localStorage.getItem('shouldBeLoggedIn') === 'true') {
+      this.props.checkUserAuthenticationStatus();
+    }
   }
   render() {
     // console.log(this.state);
@@ -55,8 +47,6 @@ class App extends Component {
           <div>
             <Menu />
           </div>
-          {/* Moved this private route to requireAuth and inside Routes */}
-          <PrivateRoute path="/create" component={CreateEvent} auth={this.props.isLoggedIn} />
           {renderRoutes(this.props.route.routes)}
 
         </Sidebar>

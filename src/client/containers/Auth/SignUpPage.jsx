@@ -10,12 +10,7 @@ import { setBottomBarVisibility, removeBottomBarVisibility } from '../../compone
 import SignUpForm from './SignUpform';
 import style from './styles';
 import OAuth from './OAuth';
-
-const isBrowser = () => typeof window !== 'undefined';
-const getWidth = () => {
-  if (isBrowser()) return window.innerWidth;
-  return Infinity;
-};
+import getWidth from '../../utils/width';
 
 class LoginPage extends Component {
   componentDidMount() {

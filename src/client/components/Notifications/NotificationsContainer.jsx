@@ -46,7 +46,7 @@ const NotificationItem = (props) => {
 };
 
 class NotificationsContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.markNotificationAsRead();
   }
   render() {
