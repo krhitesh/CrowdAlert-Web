@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   Icon,
@@ -33,5 +34,14 @@ const mapDispatchToProps = dispatch => (
     reportSpamStart,
   }, dispatch)
 );
+
+Flag.propTypes = {
+  basic: PropTypes.bool,
+  reportSpamStart: PropTypes.func.isRequired,
+};
+
+Flag.defaultProps = {
+  basic: false,
+};
 
 export default connect(null, mapDispatchToProps)(Flag);

@@ -108,7 +108,9 @@ EventPreviewCard.propTypes = {
       long: proptypes.number,
       category: proptypes.string,
       title: proptypes.string,
+      datetime: proptypes.number,
     }),
+    isOpen: proptypes.bool,
   }),
 };
 

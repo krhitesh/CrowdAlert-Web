@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -15,12 +16,22 @@ import {
   Sonar,
   GeoLocator,
 } from '../../components';
-import {saveLocationCreateEvents,} from './actions';
+import { saveLocationCreateEvents } from './actions';
 import getEventColor from '../../utils/eventcolors';
+import { DOMAIN_NAME } from '../../utils/apipaths';
+import SEO from '../../components/SEO';
 
+const head = () => (
+  <SEO
+    title="Add Location | Report Incident"
+    url={`${DOMAIN_NAME}/create/location`}
+    description="Report an incident near you."
+  />
+);
 
 const MapTab = props => (
   <Segment>
+    {head()}
     <Progress
       percent={33}
       attached="top"
@@ -114,4 +125,31 @@ const mapStateToProps = state => ({
   map: state.map,
   reportForm: state.createEvents.form,
 });
+
+MapTab.propTypes = {
+  details: PropTypes.shape({
+    eventType: PropTypes.string,
+  }).isRequired,
+  reportForm: PropTypes.shape({
+    isFreezed: PropTypes.bool,
+  }).isRequired,
+  location: PropTypes.shape({
+    mapCenter: PropTypes.shape({
+      lat: PropTypes.number,
+      lng: PropTypes.number,
+    }).isRequired,
+    text: PropTypes.string,
+  }).isRequired,
+  map: PropTypes.shape({
+    lat: PropTypes.number,
+    lng: PropTypes.number,
+  }).isRequired,
+  tabs: PropTypes.shape({
+    isValid: PropTypes.shape({
+      location: PropTypes.bool,
+    }).isRequired,
+  }).isRequired,
+  handleSaveLocation: PropTypes.func.isRequired,
+};
+
 export default connect(mapStateToProps, mapDispatchToProps)(MapTab);

@@ -17,7 +17,6 @@ export function fetchUserLocation(payload = {}) {
   };
 }
 export function fetchUserLocationFinished(payload = {}) {
-  // console.log(payload);
   return {
     type: FEED_FETCH_USER_LOCATION_FINISHED,
     payload,

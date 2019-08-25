@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Route, Redirect, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { renderRoutes } from 'react-router-config';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -24,18 +25,14 @@ class App extends Component {
     super(props);
     this.state = {};
   }
-  componentWillMount() {
-    // if (window.localStorage.getItem('shouldBeLoggedIn') === 'true') {
-    //   this.props.checkUserAuthenticationStatus();
-    // }
-  }
+
   componentDidMount() {
     if (window.localStorage.getItem('shouldBeLoggedIn') === 'true') {
       this.props.checkUserAuthenticationStatus();
     }
   }
   render() {
-    // console.log(this.state);
+
     return (
       <div>
         {this.props.authenticating ?
@@ -70,6 +67,15 @@ const mapDispatchToProps = dispatch => (
     checkUserAuthenticationStatus,
   }, dispatch)
 );
+
+App.propTypes = {
+  checkUserAuthenticationStatus: PropTypes.func.isRequired,
+  authenticating: PropTypes.bool.isRequired,
+  route: PropTypes.shape({
+    routes: PropTypes.array.isRequired,
+  }).isRequired,
+};
+
 export default {
   component: withRouter(connect(mapStateToProps, mapDispatchToProps)(App)),
 };

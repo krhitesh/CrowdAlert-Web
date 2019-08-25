@@ -22,7 +22,8 @@ import {
 import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
 import { fetchCommentsThreadSSR } from '../../components/Comments/actions';
 import getWidth from '../../utils/width';
-
+import { DOMAIN_NAME, GET_IMAGE_URLS } from '../../utils/apipaths';
+import SEO from '../../components/SEO';
 import styleSheet from './style';
 
 
@@ -112,6 +113,7 @@ EventCard.propTypes = {
     isTrusted: propTypes.bool.isRequired,
     uuid: propTypes.string.isRequired,
   })).isRequired,
+  uuid: propTypes.string.isRequired,
 };
 EventCard.defaultProps = {
   reverse_geocode: { name: '', admin2: '', admin1: '' },
@@ -130,6 +132,35 @@ class Viewevent extends Component {
       this.props.match.params.eventid !== this.props.event.data.eventid;
     this.props.fetchEventData({ eventid, shouldRefresh });
   }
+  // eslint-disable-next-line class-methods-use-this
+  head() {
+    let image = '';
+    // console.log(this.props.event);
+    if (this.props.event.data.images !== undefined && this.props.event.data.images.length > 0) {
+      if (this.props.event.data.images[0].isNsfw) {
+        image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}&mode=thumbnail`;
+      } else {
+        image = `${GET_IMAGE_URLS}?uuid=${this.props.event.data.eventid}`;
+      }
+    }
+
+    const place = this.props.event.reverse_geocode !== undefined ? this.props.event.reverse_geocode.name : '';
+    let coords = {
+      latitude: 0.0,
+      longitude: 0.0,
+    };
+    if (this.props.event.data.location !== undefined) {
+      coords = this.props.event.data.location.coords;
+    }
+    return (
+      <SEO
+        title={`${this.props.event.data.title} near ${place} | Incident Details`}
+        url={`${DOMAIN_NAME}/view/${this.props.event.data.eventid}`}
+        description={`Incident description: ${this.props.event.data.description} | Geo location: Latitude=${coords.latitude} Longitude=${coords.longitude}`}
+        image={image}
+      />
+    );
+  }
   render() {
     let lat = 0;
     let lng = 0;
@@ -140,6 +171,7 @@ class Viewevent extends Component {
     }
     return (
       <div style={{ paddingTop: '1rem', marginBottom: '6rem' }}>
+        {this.head()}
         <Responsive fireOnMount getWidth={getWidth} maxWidth={900}>
           <div style={styleSheet.mobile.mapContainer}>
             <MapwithSonar
@@ -230,6 +262,34 @@ Viewevent.propTypes = {
     }).isRequired,
   }).isRequired,
   fetchEventData: propTypes.func.isRequired,
+  event: propTypes.shape({
+    reverse_geocode: propTypes.object,
+    isLoading: propTypes.bool,
+    data: propTypes.shape({
+      reportedBy: propTypes.object.isRequired,
+      datetime: propTypes.number,
+      title: propTypes.string,
+      description: propTypes.string,
+      images: propTypes.arrayOf(propTypes.shape({
+        isNsfw: propTypes.bool.isRequired,
+        isTrusted: propTypes.bool.isRequired,
+        uuid: propTypes.string.isRequired,
+      })).isRequired,
+      spam: propTypes.object,
+      eventid: propTypes.string,
+      location: propTypes.shape({
+        coords: propTypes.shape({
+          latitude: propTypes.number,
+          longitude: propTypes.number,
+        }),
+      }),
+      category: propTypes.string,
+    }).isRequired,
+  }).isRequired,
+  map: propTypes.shape({
+    lat: propTypes.number,
+    lng: propTypes.number,
+  }).isRequired,
 };
 
 const mapDispatchToProps = dispatch => (
@@ -243,9 +303,8 @@ const mapStateToProps = state => ({
 });
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Viewevent),
-  loadData: (store, match) => {
+  loadData: (store, ip = '', match = { params: { eventid: '' } }) => {
     const { dispatch } = store;
-
     return Promise.all([
       dispatch(fetchEventDataSSR({ eventid: match.params.eventid, shouldRefresh: true }))
         .then(() => {

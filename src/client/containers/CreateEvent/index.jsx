@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Container } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Route, withRouter, Redirect, Switch } from 'react-router-dom';
@@ -25,6 +26,15 @@ const CreateEvent = (props) => {
 const mapStateToProps = state => ({
   tabs: state.createEvents.tabs,
 });
+
+CreateEvent.propTypes = {
+  match: PropTypes.shape({
+    path: PropTypes.string,
+    isExact: PropTypes.bool,
+    params: PropTypes.object,
+    url: PropTypes.string,
+  }).isRequired,
+};
 
 export default {
   component: withRouter(connect(mapStateToProps)(requireAuth(CreateEvent))),

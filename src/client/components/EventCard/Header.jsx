@@ -71,6 +71,12 @@ EventHeader.propTypes = {
   // user_id: PropTypes.string.isRequired,
   /* timestamp of the event */
   dateTime: PropTypes.number.isRequired,
+  reportedBy: PropTypes.shape({
+    original: PropTypes.shape({
+      photoURL: PropTypes.string,
+      displayName: PropTypes.string,
+    }),
+  }).isRequired,
 };
 EventHeader.defaultProps = {
   reverse_geocode: { name: '', admin2: '', admin1: '' },
