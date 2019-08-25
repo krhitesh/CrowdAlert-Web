@@ -36,7 +36,7 @@ def add_thumbnail(name):
     # Where an event would be pushed and a job id is to be returned
     # and expose another endpoint where we can check the status
     print("Generating Thumbnail", time.time())
-    subprocess.run(['node_modules/.bin/sqip', name, '-o', name+'.svg'])
+    subprocess.run(['../app/node_modules/.bin/sqip', name, '-o', name+'.svg'])
     STORAGE.child('thumbnails/'+name+'.svg').put(name+'.svg')
     # Remove the uploaded files for two good reasons:
     # Keep our dyno clean

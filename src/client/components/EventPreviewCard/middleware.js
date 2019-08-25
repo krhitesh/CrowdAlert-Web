@@ -1,7 +1,4 @@
-import {
-  EVENT_PREVIEW_OPEN,
-  EVENT_PREVIEW_CLOSE,
-} from './actionTypes';
+import { EVENT_PREVIEW_OPEN } from './actionTypes';
 import { updateMapCenter } from '../../components/Map/actions';
 import { fetchEventData } from '../../containers/Viewevent/actions';
 

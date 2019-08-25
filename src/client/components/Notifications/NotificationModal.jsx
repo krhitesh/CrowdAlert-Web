@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Modal,
   Header,
@@ -28,7 +29,7 @@ const NotificationsModal = props => (
       </center>
     </Modal.Content>
     <Modal.Actions>
-      {props.permission === false? null : 
+      {props.permission === false ? null :
       <Button color="green" inverted onClick={props.showNotificationPermissionAsk}>
         <Icon name="checkmark" /> Allow
       </Button>
@@ -51,5 +52,21 @@ const mapDispatchToProps = dispatch => (
     showNotificationPermissionAsk,
   }, dispatch)
 );
+
+NotificationsModal.propTypes = {
+  modal: PropTypes.shape({
+    open: PropTypes.bool,
+    icon: PropTypes.string,
+    header: PropTypes.string,
+    text: PropTypes.string,
+  }).isRequired,
+  permission: PropTypes.bool,
+  showNotificationPermissionAsk: PropTypes.func.isRequired,
+  showNotificationPermissionClose: PropTypes.func.isRequired,
+};
+
+NotificationsModal.defaultProps = {
+  permission: null,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsModal);

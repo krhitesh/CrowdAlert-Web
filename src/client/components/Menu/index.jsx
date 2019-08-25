@@ -93,6 +93,7 @@ const MenuBar = props => (
 
 MenuBar.propTypes = {
   toggleSidebarVisibility: propTypes.func.isRequired,
+  isLoggedIn: propTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => {

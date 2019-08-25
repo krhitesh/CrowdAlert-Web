@@ -120,6 +120,12 @@ LeftSidebar.propTypes = {
   isVisible: propTypes.bool.isRequired,
   animation: propTypes.string.isRequired,
   children: propTypes.node.isRequired,
+  isLoggedIn: propTypes.bool.isRequired,
+  signOut: propTypes.func.isRequired,
+  user: propTypes.shape({
+    displayName: propTypes.string,
+    photoURL: propTypes.string,
+  }).isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -137,4 +143,5 @@ const mapDispatchToProps = dispatch => (
     removeSidebarVisibility,
   }, dispatch)
 );
+
 export default connect(mapStateToProps, mapDispatchToProps)(LeftSidebar);

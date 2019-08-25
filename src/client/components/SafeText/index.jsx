@@ -71,7 +71,7 @@ SafeText.propTypes = {
     modal: PropTypes.shape({
       open: PropTypes.bool,
     }),
-  }),
+  }).isRequired,
   children: PropTypes.node.isRequired,
 };
 
