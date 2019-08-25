@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'api.events',
     'api.location',
     'api.images',
@@ -111,7 +112,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'CrowdAlert.wsgi.application'
+ASGI_APPLICATION = "CrowdAlert.routing.application"
+
+CHANNEL_LAYERS={
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+     }
+}
 
 if os.environ.get("HEROKU", False):
     SECURE_SSL_REDIRECT = True

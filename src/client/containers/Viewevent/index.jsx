@@ -18,11 +18,11 @@ import {
   Sonar,
   CommentsSection,
 } from '../../components';
-
+import { WS_NEW_COMMENT_RECEIVED } from '../../components/Comments/actionTypes';
 import { fetchEventData, fetchEventDataSSR, fetchReverseGeocodeSSR } from './actions';
-import { fetchCommentsThreadSSR } from '../../components/Comments/actions';
+import { fetchCommentsThreadSSR, fetchCommentThreadSuccessViaWebSocket } from '../../components/Comments/actions';
 import getWidth from '../../utils/width';
-import { DOMAIN_NAME, GET_IMAGE_URLS } from '../../utils/apipaths';
+import { DOMAIN_NAME, GET_IMAGE_URLS, WS_COMMENTS } from '../../utils/apipaths';
 import SEO from '../../components/SEO';
 import styleSheet from './style';
 
@@ -126,11 +126,60 @@ EventCard.defaultProps = {
  * @type {Object}
  */
 class Viewevent extends Component {
+  constructor(props) {
+    super(props);
+    this.setupSocket = this.setupSocket.bind(this);
+  }
   componentDidMount() {
     const { eventid } = this.props.match.params;
     const shouldRefresh =
       this.props.match.params.eventid !== this.props.event.data.eventid;
     this.props.fetchEventData({ eventid, shouldRefresh });
+
+    if (this.props.isLoggedIn) {
+      this.setupSocket();
+    }
+  }
+  componentWillUnmount() {
+    console.log('unmount');
+
+    // Close the socket connection
+    if (this.state.socket) {
+      window.localStorage.setItem('noReconnect', true);
+      this.state.socket.close(1000, 'socket closed inside componentWillUnmount');
+    }
+  }
+  setupSocket() {
+    // eslint-disable-next-line no-undef
+    const socket = new WebSocket(`${WS_COMMENTS}/${this.props.match.params.eventid}/`);
+
+    socket.onclose = () => {
+      console.log('state', this.state);
+      if (window.localStorage.getItem('noReconnect') === 'false') {
+        console.log('Socket is closed. Reconnect will be attempted in 5 seconds.');
+        setTimeout(this.setupSocket, 5000);
+      } else {
+        console.log('closing socket conn.');
+      }
+    };
+
+    socket.onerror = (err) => {
+      console.log('socket.onerror', err);
+    };
+
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      if (message.actionType === WS_NEW_COMMENT_RECEIVED) {
+        // console.log('socket.onmessage', message.data);
+
+        // dispatch action to add this message to the state
+        // Need to write that action
+        this.props.fetchCommentThreadSuccessViaWebSocket(message.data);
+      }
+    };
+    // eslint-disable-next-line react/no-did-mount-set-state
+    this.setState({ socket });
+    window.localStorage.removeItem('noReconnect');
   }
   // eslint-disable-next-line class-methods-use-this
   head() {
@@ -256,6 +305,8 @@ class Viewevent extends Component {
   }
 }
 Viewevent.propTypes = {
+  isLoggedIn: propTypes.bool.isRequired,
+  fetchCommentThreadSuccessViaWebSocket: propTypes.func.isRequired,
   match: propTypes.shape({
     params: propTypes.shape({
       eventid: propTypes.string.isRequired,
@@ -295,11 +346,13 @@ Viewevent.propTypes = {
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     fetchEventData,
+    fetchCommentThreadSuccessViaWebSocket,
   }, dispatch)
 );
 const mapStateToProps = state => ({
   map: state.map,
   event: state.event,
+  isLoggedIn: state.auth.isLoggedIn,
 });
 export default {
   component: connect(mapStateToProps, mapDispatchToProps)(Viewevent),
