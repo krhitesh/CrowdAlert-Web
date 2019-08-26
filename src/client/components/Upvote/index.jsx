@@ -79,7 +79,7 @@ class Upvote extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
   componentDidMount() {
-    this.props.fetchUpvotesStart(this.props.uuid);
+    this.props.fetchUpvotesStart(this.props.uuid, this.state.count, true);
   }
   static getDerivedStateFromProps(nextProps, prevState) {
     return {

@@ -1,4 +1,5 @@
 import {
+  UPDATE_UPVOTES_LONG_POLL_STATUS,
   FETCH_UPVOTES_SUCCESS,
   UPDATE_UPVOTE_SUCCESS,
 } from './actionTypes';
@@ -7,6 +8,7 @@ const initialState = {
   upvoteData: {},
   errors: false,
   message: null,
+  longpoll: false,
 };
 
 function upvotesReducer(state = initialState, action) {
@@ -25,6 +27,12 @@ function upvotesReducer(state = initialState, action) {
           count,
         },
       },
+    };
+  }
+  if (action.type === UPDATE_UPVOTES_LONG_POLL_STATUS) {
+    return {
+      ...state,
+      longpoll: action.payload.status,
     };
   }
 
