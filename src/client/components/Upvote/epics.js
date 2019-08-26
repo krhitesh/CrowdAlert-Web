@@ -24,8 +24,11 @@ const fetchUpvoteEpic = action$ =>
   action$.pipe(
     ofType(FETCH_UPVOTES_START),
     mergeMap((action) => {
-      const { uuid } = action.payload;
-      const apiUrl = `${UPVOTE}?uuid=${uuid}`;
+      const { uuid, currentCount, initialRequest } = action.payload;
+      let apiUrl = `${UPVOTE}?uuid=${uuid}`;
+      if (!initialRequest) {
+        apiUrl += `&current_count=${currentCount}`;
+      }
       const headers = {
         'Content-Type': 'application/json',
       };
