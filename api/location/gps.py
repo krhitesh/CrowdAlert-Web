@@ -3,6 +3,7 @@
 
 import math
 
+
 def deg_to_rad(deg):
     """ Converts degree to radian
 
@@ -13,7 +14,8 @@ def deg_to_rad(deg):
         [float] -- [the radian value of degree]
     """
 
-    return deg*math.pi/180
+    return deg * math.pi / 180
+
 
 def distance(lat1, long1, lat2, long2):
     """ Calculates the distance between two GPS co-ordinates
@@ -36,7 +38,7 @@ def distance(lat1, long1, lat2, long2):
     lat1 = deg_to_rad(lat1)
     lat2 = deg_to_rad(lat2)
 
-    angle = (math.sin(dlat/2) * math.sin(dlat/2)
-             + math.sin(dlong/2) * math.sin(dlong/2) * math.cos(lat1) * math.cos(lat2))
+    angle = (math.sin(dlat / 2) * math.sin(dlat / 2)
+             + math.sin(dlong / 2) * math.sin(dlong / 2) * math.cos(lat1) * math.cos(lat2))
 
-    return radius * 2 * math.atan2(math.sqrt(angle), math.sqrt(1-angle))
+    return radius * 2 * math.atan2(math.sqrt(angle), math.sqrt(1 - angle))

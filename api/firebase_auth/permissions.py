@@ -3,6 +3,7 @@
 
 from rest_framework import permissions
 
+
 # https://stackoverflow.com/a/49626193
 class FirebasePermissions(permissions.BasePermission):
     """ Implements the Firebase write permission. User should have a verified

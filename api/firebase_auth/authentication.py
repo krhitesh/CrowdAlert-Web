@@ -1,10 +1,12 @@
 """ Implements Authentication mechanism using firebase tokens
 """
 
-from rest_framework import authentication
 from firebase_admin import auth
-from .users import FirebaseUser
+from rest_framework import authentication
+
 from .exceptions import InvalidAuthToken, FirebaseError
+from .users import FirebaseUser
+
 
 class TokenAuthentication(authentication.BaseAuthentication):
     """Token Based Authentication using firebase tokens

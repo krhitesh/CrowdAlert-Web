@@ -3,6 +3,7 @@
 
 from django.contrib.auth.models import User
 
+
 class FirebaseUser(User):
     """ Stores user specific information
     
