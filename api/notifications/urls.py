@@ -1,4 +1,5 @@
 from django.urls import path
+
 from api.notifications.views import FCMTokenView
 
 urlpatterns = [

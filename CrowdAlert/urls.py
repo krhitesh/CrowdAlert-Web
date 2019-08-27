@@ -20,9 +20,9 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     # API paths
-    path('api/events/',include('api.events.urls')),
-    path('api/images/',include('api.images.urls')),
-    path('api/location/',include('api.location.urls')),
+    path('api/events/', include('api.events.urls')),
+    path('api/images/', include('api.images.urls')),
+    path('api/location/', include('api.location.urls')),
     path('api/users/', include('api.users.urls')),
     path('api/comments/', include('api.comments.urls')),
     path('api/upvote/', include('api.upvote.urls')),

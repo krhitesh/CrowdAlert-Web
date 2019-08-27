@@ -2,7 +2,9 @@
 """
 
 from rest_framework.permissions import IsAuthenticated
+
 from .authentication import TokenAuthentication
+
 
 class FirebaseAuthMixin():
     """ Firebase Token Authentication Mixin

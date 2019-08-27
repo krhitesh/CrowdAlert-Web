@@ -10,37 +10,39 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
-import os
 import json
+import os
+
 import dj_database_url
-import pyrebase
-import googlemaps
 import firebase_admin
+import googlemaps
+import pyrebase
+from firebase_admin import firestore
 
 # Generate the Firebase Service Account Credential json file
-with open('serviceAccountCredentials.json','w') as f:
+with open('serviceAccountCredentials.json', 'w') as f:
     jsonData = {}
     for key in os.environ.keys():
         if 'DJANGO_FIREBASE_' in key:
-            jsonData[key.strip('DJANGO_FIREBASE_')] = os.environ[key].replace("\\n",'\n')
+            jsonData[key.strip('DJANGO_FIREBASE_')] = os.environ[key].replace("\\n", '\n')
     # print(jsonData)
     f.writelines(json.dumps(jsonData))
 
 config = {
-  "apiKey": os.environ['REACT_APP_FIREBASE_API_KEY'],
-  "authDomain": os.environ['REACT_APP_FIREBASE_AUTH_DOMAIN'],
-  "databaseURL": os.environ['REACT_APP_FIREBASE_DATABASE_URL'],
-  "storageBucket": os.environ['REACT_APP_FIREBASE_PROJECT_ID'] + ".appspot.com",
-  "serviceAccount": "./serviceAccountCredentials.json"
+    "apiKey": os.environ['REACT_APP_FIREBASE_API_KEY'],
+    "authDomain": os.environ['REACT_APP_FIREBASE_AUTH_DOMAIN'],
+    "databaseURL": os.environ['REACT_APP_FIREBASE_DATABASE_URL'],
+    "storageBucket": os.environ['REACT_APP_FIREBASE_PROJECT_ID'] + ".appspot.com",
+    "serviceAccount": "./serviceAccountCredentials.json"
 }
 
 cred = firebase_admin.credentials.Certificate(config["serviceAccount"])
 FIREBASE_ADMIN = firebase_admin.initialize_app(cred)
+FIRESTORE = firestore.client()
 
 # Instantiate a Firebase - Pyrebase object so that we can import later
 FIREBASE = pyrebase.initialize_app(config)
 GMAPS = googlemaps.Client(key=os.environ['REACT_APP_GOOGLE_MAPS_KEY'])
-
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -56,7 +58,6 @@ SECRET_KEY = 'z=(8l%o$v8-l-cx9kaah(+be@cwu0w5=pqnul24yf7w%svk87w'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -89,7 +90,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',    
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'CrowdAlert.urls'
@@ -114,10 +115,10 @@ TEMPLATES = [
 
 ASGI_APPLICATION = "CrowdAlert.routing.application"
 
-CHANNEL_LAYERS={
+CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
-     }
+    }
 }
 
 if os.environ.get("HEROKU", False):
@@ -135,7 +136,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -157,8 +157,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Collectstatic will copy js & css files
 STATICFILES_DIRS = [
-  os.path.join(BASE_DIR, 'build/static'),
-#   os.path.join(BASE_DIR, 'build/'),
+    os.path.join(BASE_DIR, 'build/static'),
+    #   os.path.join(BASE_DIR, 'build/'),
 ]
 # If we plan to use API wide authentication,
 # REST_FRAMEWORK = {
@@ -179,7 +179,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Update database configuration with $DATABASE_URL.
 DB_ENV = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(DB_ENV)
@@ -187,7 +186,7 @@ DATABASES['default'].update(DB_ENV)
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-CORS_ORIGIN_WHITELIST = (    
+CORS_ORIGIN_WHITELIST = (
     'crowdalert.herokuapp.com',
     'crowdalert-dev.herokuapp.com',
     'localhost:3000',
