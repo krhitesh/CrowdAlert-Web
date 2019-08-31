@@ -12,17 +12,15 @@ db = settings.FIRESTORE
 
 
 class CommentViewTest(TestCase):
+    """
+    Tests comment app's APIViews
+    """
     def setUp(self):
         self.token = get_anonymous_user_token()
         self.factory = RequestFactory()
-        firebase_data = {
-            'uid': '',
-            'user_id': '',
-            'name': '',
-            'picture': '',
-            'email_verified': True
-        }
-        self.user = FirebaseUser(firebase_data)
+        with open('api/test_data/test_data.json') as f:
+            self.test_data = json.load(f)
+            self.user = FirebaseUser(self.test_data["users"]["firebase_data"])
 
     def test_get_comment_thread(self):
         request = self.factory.get('/api/comments/comment', {'thread': '1234'})
@@ -39,7 +37,7 @@ class CommentViewTest(TestCase):
         c = Comment()
         c.save('sl6NOrYyjvTQwUtCsOha', db)
         settings.COVERAGE = True
-        data = json.dumps({"commentData": '{"text":"test", "thread":"sl6NOrYyjvTQwUtCsOha"}'})
+        data = json.dumps({"commentData": self.test_data["comments"]["commentData"]})
         request = self.factory.post(path='/api/comments/comment', data=data, content_type='application/json',
                                     secure=False, HTTP_TOKEN=self.token)
         request.user = self.user

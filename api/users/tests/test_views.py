@@ -8,25 +8,25 @@ from django.test import TestCase, RequestFactory
 from api.firebase_auth.users import FirebaseUser
 from api.users.models import User
 from api.users.views import UserView
-from api.utils.firebase_utils import get_anonymous_user_token, delete_collection, delete_anonymous_user, get_authenticated_user_token
+from api.utils.firebase_utils import get_anonymous_user_token, delete_collection, delete_anonymous_user, \
+    get_authenticated_user_token
 
 db = settings.FIRESTORE
 
 
 class UserViewTest(TestCase):
+    """
+    Tests UserView
+    """
     def setUp(self):
+        with open('api/test_data/test_data.json') as f:
+            self.test_data = json.load(f)
+
         self.factory = RequestFactory()
         self.token = get_anonymous_user_token()
         self.auth_token = get_authenticated_user_token()
         self.test_uuid = str(uuid.uuid4())
-        firebase_data = {
-            'uid': self.test_uuid,
-            'user_id': self.test_uuid,
-            'name': 'display name',
-            'picture': '',
-            'email_verified': True
-        }
-        self.user = FirebaseUser(firebase_data)
+        self.user = FirebaseUser(self.test_data["users"]["firebase_data"])
         u = User(self.test_uuid, 'display name', photo_url='')
         u.save(db)
 

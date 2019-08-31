@@ -11,18 +11,16 @@ FCMTokenView.collection_name = 'test_' + FCMTokenView.collection_name
 
 
 class FCMTokenViewTest(TestCase):
+    """
+    Tests FCMTokenView
+    """
     def setUp(self):
         self.factory = RequestFactory()
         self.auth_token = get_authenticated_user_token()
         self.token = get_anonymous_user_token()
-        firebase_data = {
-            'uid': '',
-            'user_id': '',
-            'name': '',
-            'picture': '',
-            'email_verified': True
-        }
-        self.user = FirebaseUser(firebase_data)
+        with open('api/test_data/test_data.json') as f:
+            self.test_data = json.load(f)
+            self.user = FirebaseUser(self.test_data["users"]["firebase_data"])
 
     def test_get(self):
         request = self.factory.get('/api/notifications/register', data=None, secure=False, HTTP_TOKEN=self.token)
