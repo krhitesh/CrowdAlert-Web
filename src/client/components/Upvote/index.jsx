@@ -115,6 +115,7 @@ class Upvote extends Component {
           hasUpvoted={this.state.hasUpvoted || false}
           count={this.state.count || 0}
           click={this.handleClick}
+          data-test="upvote-btn-basic"
         />
       );
     }
@@ -123,6 +124,7 @@ class Upvote extends Component {
         hasUpvoted={this.state.hasUpvoted || false}
         count={this.state.count}
         click={this.handleClick}
+        data-test="upvote-btn"
       />
     );
   }

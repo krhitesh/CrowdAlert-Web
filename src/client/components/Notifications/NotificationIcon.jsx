@@ -6,12 +6,12 @@ import { Icon } from 'semantic-ui-react';
 
 const NotificationIcon = (props) => {
   return (
-    <div>
+    <div data-test="component-notification-icon">
       <Icon circular>
         <Icon.Group >
           <Icon name="bell" color="teal" />
           {props.unread ?
-            <Icon corner name="circle" color="red" />
+            <Icon corner name="circle" color="red" data-test="component-icon" />
           : null }
         </Icon.Group>
       </Icon>

@@ -179,7 +179,7 @@ export default class Webcam extends Component {
           sourceSelected(audioSource, videoSource);
         })
         .catch((error) => {
-          console.log(`${error.name}: ${error.message}`); // eslint-disable-line no-console
+          console.log(`${error.name}: ${error.message}`, error); // eslint-disable-line no-console
         });
     } else {
       MediaStreamTrack.getSources((sources) => {
@@ -241,6 +241,7 @@ export default class Webcam extends Component {
         ref={(ref) => {
           this.video = ref;
         }}
+        data-test="component-webcam"
       />
     );
   }

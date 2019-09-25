@@ -14,17 +14,19 @@ class UserSettingsMenu extends Component {
     const { displayName, photoURL, email } = this.props.user;
     return (
       <Dropdown
+        open={this.props.open}
         trigger={
           <span>
             <Image avatar src={photoURL || userImage} />
           </span>
         }
+        data-test="component-user-settings-menu"
       >
         <Dropdown.Menu>
           <Segment secondary basic>
             <Header>
-              <Image avatar src={photoURL || userImage} />
-              <Header.Content>
+              <Image avatar src={photoURL || userImage} data-test="component-image" />
+              <Header.Content data-test="component-header-content">
                 {displayName}
                 <Header.Subheader>
                   {email}
@@ -32,12 +34,12 @@ class UserSettingsMenu extends Component {
               </Header.Content>
             </Header>
           </Segment>
-          <Dropdown.Item icon="settings" text="Settings" description="Review your account settings" />
-          <Dropdown.Item icon="user" text="Your Profile" description="View your profile" />
-          <Dropdown.Item icon="privacy" text="Privacy" description="Review our privacy policy" />
-          <Dropdown.Item icon="tasks" text="Your Reports" description="Incidents reported by you" />
+          <Dropdown.Item icon="settings" text="Settings" description="Review your account settings" data-test="item-settings" />
+          <Dropdown.Item icon="user" text="Your Profile" description="View your profile" data-test="item-user" />
+          <Dropdown.Item icon="privacy" text="Privacy" description="Review our privacy policy" data-test="item-privacy" />
+          <Dropdown.Item icon="tasks" text="Your Reports" description="Incidents reported by you" data-test="item-tasks" />
           <Dropdown.Divider />
-          <Dropdown.Item icon="sign out" text="Sign out." onClick={() => this.signOut()} />
+          <Dropdown.Item icon="sign out" text="Sign out." onClick={() => this.signOut()} data-test="item-sign-out" />
         </Dropdown.Menu>
       </Dropdown>
     );
@@ -51,6 +53,12 @@ UserSettingsMenu.propTypes = {
     email: PropTypes.string,
     photoURL: PropTypes.string,
   }).isRequired,
+  isLoggedIn: PropTypes.bool,
+  open: PropTypes.bool,
+};
+
+UserSettingsMenu.defaultProps = {
+  open: false,
 };
 
 const mapStateToProps = (state) => {

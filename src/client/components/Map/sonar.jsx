@@ -46,10 +46,11 @@ const Sonar = props => (
           props.openEventPreview({ ...props.payload });
         }
       }}
+      data-test="component-sonar"
   >
     <div>
-      <div className={`sonar-emitter sonar_${props.type}`}>
-        <div className={`sonar-wave sonar_${props.type}`} />
+      <div className={`sonar-emitter sonar_${props.type}`} data-test="jsx-emitter">
+        <div className={`sonar-wave sonar_${props.type}`} data-test="jsx-wave" />
       </div>
     </div>
   </MarkerWithLabel>

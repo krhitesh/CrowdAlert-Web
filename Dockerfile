@@ -3,9 +3,9 @@ FROM nikolaik/python-nodejs:python3.6-nodejs10
 #############################################################################
 # Python: Install updates, build files, dependencies, finally cleanup
 
-WORKDIR /app
+WORKDIR /django
 
-ADD requirements.txt /app
+ADD requirements.txt /django
 
 RUN  apt-get update && \
     apt-get install -y \
@@ -14,7 +14,7 @@ RUN  apt-get update && \
         gcc \
         locales \
         libgdal20 libgdal-dev && \
-    python -m pip install -r /app/requirements.txt && \
+    python -m pip install -r /django/requirements.txt && \
     rm -r /root/.cache/pip && \
     apt-get remove -y --purge libgdal-dev make gcc build-essential && \
     apt-get autoremove -y && \
@@ -63,12 +63,12 @@ COPY *.js /app/
 
 RUN npm run-script build
 
-WORKDIR /app
+WORKDIR /django
 
-COPY api /app/api
-COPY CrowdAlert /app/CrowdAlert
-COPY staticfiles /app/staticfiles
-COPY manage.py /app
+COPY api /django/api
+COPY CrowdAlert /django/CrowdAlert
+COPY staticfiles /django/staticfiles
+COPY manage.py /django
 
 #############################################################################
 # Set port, expose it, change working directory and execute the boot script

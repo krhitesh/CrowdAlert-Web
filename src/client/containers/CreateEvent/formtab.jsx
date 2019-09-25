@@ -44,10 +44,10 @@ const head = () => (
 
 const FormTab = (props) => {
   if (props.reportForm.isFreezed && !props.reportForm.loading) {
-    return (<Redirect to="/create/images" />);
+    return (<Redirect to="/create/images" data-test="redirect-images" />);
   }
   return (
-    <Segment>
+    <Segment data-test="component-formtab">
       {head()}
       <Progress
         percent={66}
@@ -81,17 +81,18 @@ const FormTab = (props) => {
                     icon="ban"
                     header={props.reportForm.message.header}
                     content={props.reportForm.message.body}
+                    data-test="form-validation-error"
                   />
                 : null }
                 <Header as="h4">
                   <Icon name="marker" />
                   <Header.Content>
                     Incident Location
-                    <Header.Subheader>
+                    <Header.Subheader data-test="location-text">
                       {props.location.text}
                     </Header.Subheader>
                     <Header.Subheader>
-                      <Link to="/create/location">Change</Link>
+                      <Link to="/create/location" data-test="link-change">Change</Link>
                     </Header.Subheader>
                   </Header.Content>
                 </Header>
@@ -121,6 +122,7 @@ const FormTab = (props) => {
                             },
                           })
                         }
+                        data-test="select-event-type"
                       />
                     </Header.Subheader>
                   </Header.Content>
@@ -147,13 +149,14 @@ const FormTab = (props) => {
                         value={props.details.title}
                         autoComplete="off"
                         maxLength={50}
+                        data-test="input-title"
                       />
                     </Header.Subheader>
                   </Header.Content>
                 </Header>
               </Form.Field>
 
-              <Form.Field disabled={props.reportForm.isFreezed}>
+              <Form.Field disabled={props.reportForm.isFreezed} data-test="field-event-desc">
                 <TextArea
                   placeholder="Tell us more"
                   style={{ minHeight: 100 }}
@@ -162,7 +165,7 @@ const FormTab = (props) => {
                   name="description"
                 />
               </Form.Field>
-              <Form.Field disabled={props.reportForm.isFreezed}>
+              <Form.Field disabled={props.reportForm.isFreezed} data-test="cb-public-visibility">
                 <Checkbox
                   label={{ children: 'Make incident publicly visible' }}
                   checked={props.details.public}
@@ -175,7 +178,7 @@ const FormTab = (props) => {
                     })}
                 />
               </Form.Field>
-              <Form.Field disabled={props.reportForm.isFreezed}>
+              <Form.Field disabled={props.reportForm.isFreezed} data-test="cb-report-anonm">
                 <Checkbox
                   label={{ children: 'Report incident anonymously' }}
                   checked={props.details.anonymous}
@@ -188,7 +191,7 @@ const FormTab = (props) => {
                     })}
                 />
               </Form.Field>
-              <Form.Field disabled={props.reportForm.isFreezed}>
+              <Form.Field disabled={props.reportForm.isFreezed} data-test="cb-public-help">
                 <Checkbox
                   label={{ children: 'Ask for public help' }}
                   checked={props.details.help}
@@ -218,6 +221,7 @@ const FormTab = (props) => {
                   }
                 labelPosition="left"
                 icon
+                data-test="btn-report-incident"
               >
                 <Icon name="check" /> Report Incident
               </Form.Button>

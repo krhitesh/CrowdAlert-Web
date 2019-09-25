@@ -25,16 +25,16 @@ const altpic = 'https://crowdalert.herokuapp.com/static/images/meerkat.svg';
 const NotificationItem = (props) => {
   const { data } = props;
   return (
-    <List.Item>
-      <Image avatar src={data.userPicture || altpic} />
+    <List.Item data-test="component-notification-item">
+      <Image avatar src={data.userPicture || altpic} data-test="component-user-image" />
       <List.Content>
-        <Link to={`${data.link}`}>
-          <List.Header>
+        <Link to={`${data.link}`} data-test="link-data">
+          <List.Header data-test="component-list-header">
             {NotificationHeader(data.type, data.userName, data.category)}
           </List.Header>
           <List.Description>
-            <p>{data.title}</p>
-            <span>{calcAge(data.datetime)}</span>
+            <p data-test="jsx-title">{data.title}</p>
+            <span data-test="jsx-datetime">{calcAge(data.datetime)}</span>
 
           </List.Description>
         </Link>
@@ -67,11 +67,11 @@ class NotificationsContainer extends Component {
       ...this.props.notifications[key],
     }));
     return (
-      <div style={{ minWidth: '350px', overflowWrap: 'break-word' }}>
+      <div style={{ minWidth: '350px', overflowWrap: 'break-word' }} data-test="component-notifications-container">
         {notifications.length ?
           null
         :
-          <center>
+          <center data-test="jsx-center-nothing">
             <Image
               src={`${STATIC_IMAGES}/meerkat.svg`}
               size="tiny"
@@ -86,7 +86,7 @@ class NotificationsContainer extends Component {
         }
         <List divided relaxed>
           {notifications.map(data => (
-            <NotificationItem data={data} key={data.key} />
+            <NotificationItem data={data} key={data.key} data-test="component-notification-item" />
           ))}
         </List>
       </div>

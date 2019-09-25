@@ -41,9 +41,10 @@ export default class ImageModal extends Component {
   }
   render() {
     if (this.state.loading !== true
-      && this.state.imageUrls.url !== '') {
+      && this.state.imageUrls !== undefined && this.state.imageUrls.url !== '') {
       return (
         <Modal
+          open={!!this.props.open}
           trigger={
             this.props.children ? this.props.children :
             <Image
@@ -56,11 +57,13 @@ export default class ImageModal extends Component {
                 width: '10rem',
                 backgroundImage: `url(${this.state.imageUrls.thumbnail})`,
               }}
+              data-test="component-modal-trigger-image"
             />
           }
           closeIcon
+          data-test="component-image-modal"
         >
-          <Modal.Header>
+          <Modal.Header data-test="component-modal-header">
             <div>
               <p>Photo</p>
             </div>
@@ -81,6 +84,7 @@ export default class ImageModal extends Component {
                   background: `url(${this.state.imageUrls.thumbnail}) no-repeat`,
                   minHeight: '28vh',
                 }}
+                data-test="component-image"
               />
             </Responsive>
             <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
@@ -98,6 +102,7 @@ export default class ImageModal extends Component {
                   background: `url(${this.state.imageUrls.thumbnail}) no-repeat`,
                   minHeight: '60vh',
                 }}
+                data-test="component-image"
               />
             </Responsive>
           </Modal.Content>

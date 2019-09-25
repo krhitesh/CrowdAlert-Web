@@ -17,14 +17,15 @@ const Flag = (props) => {
         basic
         size="tiny"
         onClick={() => props.reportSpamStart(props.uuid)}
+        data-test="component-flag-basic"
       >
-        <Icon name="flag" fitted />
+        <Icon name="flag" fitted data-test="icon-flag" />
       </Button>
     );
   }
   return (
-    <Button onClick={() => props.reportSpamStart(props.uuid)}>
-      <Icon color="black" name="flag" /> Flag
+    <Button onClick={() => props.reportSpamStart(props.uuid)} data-test="component-flag-non-basic">
+      <Icon color="black" name="flag" data-test="icon-flag" /> Flag
     </Button>
   );
 };

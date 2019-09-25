@@ -13,10 +13,10 @@ const ConfirmationModal = props => (
   <Modal open={props.isOpen} basic size="small">
     <Header icon="archive" content="Permissions Required" />
     <Modal.Content>
-      <p>{props.text}</p>
+      <p data-test="jsx-prop-text">{props.text}</p>
     </Modal.Content>
     <Modal.Actions>
-      <Button color="teal" inverted onClick={() => props.closeModal()}>
+      <Button color="teal" inverted onClick={() => props.closeModal()} data-test="jsx-ok-btn">
         <Icon name="checkmark" />
         Okay
       </Button>
@@ -39,7 +39,7 @@ class GeoLocator extends Component {
 
   render() {
     return (
-      <div style={this.props.static ? null : style.crosshair}>
+      <div style={this.props.static ? null : style.crosshair} data-test="component-geolocator">
         <Button
           icon="crosshairs"
           circular={this.props.circular}
@@ -47,11 +47,13 @@ class GeoLocator extends Component {
           size={this.props.size}
           onClick={() => this.props.getLocation(this.props)}
           floated={this.props.floated}
+          data-test="jsx-geolocator-btn"
         />
         <ConfirmationModal
           text={this.props.modal.modalText}
           isOpen={this.props.modal.isOpen}
           closeModal={this.props.closeModal}
+          data-test="component-confirmation-modal"
         />
       </div>
     );

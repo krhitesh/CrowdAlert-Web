@@ -22,7 +22,7 @@ const EventPreviewCard = (props) => {
     return null;
   }
   return (
-    <div>
+    <div data-test="component-event-preview-card">
       <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
         <div style={style.widescreen}>
           {/* Animation isn't working as it requires component to be mounted
@@ -37,7 +37,7 @@ const EventPreviewCard = (props) => {
           >
             <Segment color={getEventColor(props.eventPreview.event.category)}>
               <div>
-                <Header as="h3" floated="left">
+                <Header as="h3" floated="left" data-test="component-header">
                   {props.eventPreview.event.category.toLocaleUpperCase()}
                 </Header>
                 <Header
@@ -49,8 +49,8 @@ const EventPreviewCard = (props) => {
                 </Header>
               </div>
               <br />
-              <Header as="h4">{props.eventPreview.event.title}</Header>
-              <p>{calcAge(props.eventPreview.event.datetime)}</p>
+              <Header as="h4" data-test="component-title">{props.eventPreview.event.title}</Header>
+              <p data-test="jsx-datetime">{calcAge(props.eventPreview.event.datetime)}</p>
               <Link
                 to={`/view/${props.eventPreview.event.key}`}
                 onClick={() => props.closeEventPreview()}
@@ -71,7 +71,7 @@ const EventPreviewCard = (props) => {
           >
             <Segment color={getEventColor(props.eventPreview.event.category)}>
               <div>
-                <Header as="h3" floated="left">
+                <Header as="h3" floated="left" data-test="component-header">
                   {props.eventPreview.event.category.toLocaleUpperCase()}
                 </Header>
                 <Header
@@ -83,8 +83,8 @@ const EventPreviewCard = (props) => {
                 </Header>
               </div>
               <br />
-              <Header as="h4">{props.eventPreview.event.title}</Header>
-              <p>{calcAge(props.eventPreview.event.datetime)}</p>
+              <Header as="h4" data-test="component-title">{props.eventPreview.event.title}</Header>
+              <p data-test="jsx-datetime">{calcAge(props.eventPreview.event.datetime)}</p>
               <Link
                 to={`/view/${props.eventPreview.event.key}`}
                 onClick={() => props.closeEventPreview()}
@@ -120,13 +120,9 @@ EventPreviewCard.defaultProps = {
 
 
 const mapStateToProps = (state) => {
-  const { map } = state;
   const { eventPreview } = state;
-  const { event } = state;
   return {
-    mapProps: map,
-    eventPreview,
-    event,
+    eventPreview
   };
 };
 const mapDispatchToProps = dispatch => (

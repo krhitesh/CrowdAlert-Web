@@ -96,7 +96,6 @@ class Event(object):
     def get(incident_id, db):
         doc = db.collection(Event.collection_name).document(incident_id).get()
         if doc.exists:
-            print(doc.to_dict())
             return Event.from_dict(doc.to_dict())
         else:
             return None
@@ -164,13 +163,15 @@ class IncidentReport(object):
         db.collection(self.collection_name).document(self.user_uuid).set(self.to_dict())
 
     def add_report(self, incident_id, db):
-        self.reports.append(incident_id)
+        self.reports.append(db.collection(Event.collection_name).document(incident_id))
         db.collection(self.collection_name).document(self.user_uuid).update(
             {u'reports': ArrayUnion([db.collection(Event.collection_name).document(incident_id)])})
         return self.user_uuid
 
     def remove_report(self, incident_id, db):
-        self.reports.remove(incident_id)
+        for report in self.reports:
+            if report.id == incident_id:
+                self.reports.remove(report)
         db.collection(self.collection_name).document(self.user_uuid).update(
             {u'reports': ArrayRemove([db.collection(Event.collection_name).document(incident_id)])})
         return self.user_uuid

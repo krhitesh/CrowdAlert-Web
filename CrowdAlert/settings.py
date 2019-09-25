@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     'api.upvote',
     'api.spam',
     'api.notifications',
+    'coverage'
 ]
 
 MIDDLEWARE = [
@@ -213,3 +214,6 @@ STATIC_URL = '/static/'
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+# Coverage is not running by default. Set it to True in one of the test files.
+COVERAGE = False

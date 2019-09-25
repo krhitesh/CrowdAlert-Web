@@ -121,33 +121,34 @@ class EventView(APIView):
 
         user_name = request.user.name
         user_picture = request.user.user_picture
-        if event.local_assistance:
+        if event.local_assistance and not settings.COVERAGE:
             notify_incident(sender_uid=uid, datetime=datetime,
                             event_id=key, event_type=event.category,
                             lat=latitude, lng=longitude,
                             user_text=event.title,
                             user_name=user_name, user_picture=user_picture)
 
-        classify_text(event.description, key)
+        if not settings.COVERAGE:
+            classify_text(event.description, key)
 
-        channel_layer = get_channel_layer()
-        # Send the event to all the websocket channels
-        async_to_sync(channel_layer.group_send)(
-            "geteventsbylocation_", {
-                "type": 'event_message',
-                "message": {
-                    "actionType": 'WS_NEW_EVENT_RECEIVED',
-                    "data": {
-                        "lat": latitude,
-                        "long": longitude,
-                        "key": str(key),
-                        "datetime": datetime,
-                        "category": event.category,
-                        "title": event.title
+            channel_layer = get_channel_layer()
+            # Send the event to all the websocket channels
+            async_to_sync(channel_layer.group_send)(
+                "geteventsbylocation_", {
+                    "type": 'event_message',
+                    "message": {
+                        "actionType": 'WS_NEW_EVENT_RECEIVED',
+                        "data": {
+                            "lat": latitude,
+                            "long": longitude,
+                            "key": str(key),
+                            "datetime": datetime,
+                            "category": event.category,
+                            "title": event.title
+                        }
                     }
                 }
-            }
-        )
+            )
 
         return JsonResponse({"eventId": str(key)})
 
