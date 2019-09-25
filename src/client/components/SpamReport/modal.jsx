@@ -16,22 +16,23 @@ const SpamReportModal = props => (
     open={props.modal.open}
     basic
     size="small"
+    data-test="component-spamreportmodal"
   >
-    <Header icon>
+    <Header icon data-test="component-header">
       <Icon name={`${props.errors ? 'meh' : 'smile'}`} />
 
       {props.errors ?
       'We are unable to process your request'
       : 'Thank you for making crowdalert a better place' }
     </Header>
-    <Modal.Content>
+    <Modal.Content data-test="modal-content">
       <center>
         {props.message}
 
       </center>
     </Modal.Content>
-    <Modal.Actions>
-      <Button color="green" inverted onClick={props.reportSpamModalClose}>
+    <Modal.Actions data-test="modal-actions">
+      <Button color="green" inverted onClick={props.reportSpamModalClose} data-test="modal-action-btn">
         <Icon name="checkmark" /> Got it
       </Button>
     </Modal.Actions>

@@ -54,10 +54,10 @@ class SafeText extends Component {
     alttext += 'click to view text';
 
     return (
-      <div>
+      <div data-test="component-safe-text">
         {this.state.visible ? this.props.children :
           // eslint-disable-next-line
-          <a onClick={this.handleClick}>{alttext}</a>
+          <a onClick={this.handleClick} data-test="jsx-a">{alttext}</a>
         }
       </div>
     );

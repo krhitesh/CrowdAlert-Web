@@ -1,0 +1,27 @@
+{
+    "events": {
+        "centerLocation": {"lat": 26.9483, "long": 80.2321, "dist": 19.2, "min": 0.2},
+        "eventData": {"eventData": "{\"category\":\"health\",\"description\":\"testing\",\"local_assistance\":false,\"title\":\"test\",\"public\":{\"view\":true,\"share\":false},\"anonymous\":false,\"location\":{\"coords\":{\"latitude\":26.50987842895997,\"longitude\":80.23057773442383}}}"}
+        
+    },
+    "users": {
+        "firebase_data": {
+            "uid": "",
+            "user_id": "",
+            "name": "",
+            "picture": "",
+            "email_verified": true
+        }
+    },
+    "comments": {
+        "commentData": "{\"text\":\"test\", \"thread\":\"sl6NOrYyjvTQwUtCsOha\"}"
+    },
+    "images": {
+        "image": {"uuid": "84c7ed21-2a02-414b-a700-89d4b8084ee9.jpg", "mode": "thumbnail"}
+    },
+    "location": {
+        "high accuracy": {"lat": 26.3423, "long": 80.4323, "accuracy": "high"},
+        "low accuracy": {"lat": 26.3423, "long": 80.4323, "accuracy": "low"},
+        "HTTP_X_FORWARDED_FOR": "14.139.38.127"
+    }
+}

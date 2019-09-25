@@ -33,11 +33,11 @@ class LoginPage extends Component {
   render() {
     if (this.props.isLoggedIn) {
       return (
-        <Redirect to="/" />
+        <Redirect to="/" data-test="redirect-root" />
       );
     }
     return (
-      <Container>
+      <Container data-test="component-login-page">
         {this.head()}
         <Responsive fireOnMount getWidth={getWidth} minWidth={900}>
           <Grid columns={3} stackable verticalAlign="middle" centered>
@@ -54,10 +54,10 @@ class LoginPage extends Component {
                           <Header as="h3">CrowdAlert</Header>
                         </Segment>
                         <Segment>
-                          <LoginForm />
+                          <LoginForm data-test="component-login-form" />
                         </Segment>
                         <Segment secondary attached basic style={{ minHeight: '20vh' }}>
-                          <OAuth />
+                          <OAuth data-test="component-oauth" />
                         </Segment>
                       </Segment.Group>
                     </Grid.Column>
@@ -78,16 +78,16 @@ class LoginPage extends Component {
                     <Header as="h3">CrowdAlert</Header>
                   </Segment>
                   <Segment>
-                    <LoginForm />
+                    <LoginForm data-test="res-login-form" />
                   </Segment>
                   <Segment secondary attached basic style={{ padding: '2vh' }}>
-                    <Link to="/signup">
+                    <Link to="/signup" data-test="link-signup">
                       <Button secondary fluid basic>
                         Sign Up Now
                       </Button>
                     </Link>
                     <Divider horizontal>Or</Divider>
-                    <OAuth />
+                    <OAuth data-test="res-component-oauth" />
                   </Segment>
                 </Segment.Group>
               </Grid.Column>

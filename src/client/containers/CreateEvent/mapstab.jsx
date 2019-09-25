@@ -30,7 +30,7 @@ const head = () => (
 );
 
 const MapTab = props => (
-  <Segment>
+  <Segment data-test="component-mapstab">
     {head()}
     <Progress
       percent={33}
@@ -63,12 +63,14 @@ const MapTab = props => (
             <MapWrapper
               dispatchOnClick={!props.reportForm.isFreezed}
               shouldFetch={false}
+              data-test="mapwrapper"
             >
               {props.location.mapCenter.lat ?
                 <Sonar
                   lat={props.location.mapCenter.lat || props.map.lat}
                   lng={props.location.mapCenter.lng || props.map.lng}
                   id={null}
+                  data-test="location-sonar"
                 />
               : null }
 
@@ -94,6 +96,7 @@ const MapTab = props => (
             circular={false}
             size={null}
             zoom={16}
+            data-test="geolocator"
           />
           <Button
             as={Link}
@@ -104,6 +107,7 @@ const MapTab = props => (
             icon
             labelPosition="right"
             to="/create/details"
+            data-test="details-btn"
           >
             <Icon name="right arrow" />
             Proceed

@@ -10,12 +10,12 @@ import styleSheet from './style';
  * @param {Object} props
  */
 const LoaderCard = props => (
-  <Card style={styleSheet.cardContainer}>
+  <Card style={styleSheet.cardContainer} data-test="component-loading-card">
     <Item.Content>
       <Item.Description>
-        <Image src={paragraph} />
-        <Dimmer active={props.loading} inverted>
-          <Loader />
+        <Image src={paragraph} data-test="component-image" />
+        <Dimmer active={props.loading} inverted data-test="component-dimmer">
+          <Loader data-test="component-loader" />
         </Dimmer>
       </Item.Description>
     </Item.Content>

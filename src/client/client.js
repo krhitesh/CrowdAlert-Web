@@ -3,50 +3,27 @@
 /**
  * CrowdAlert
  * index.js: main entry point of the app
+ * client.js: main entry point of client rendered application
  * eslint is disabled as there are references to window & documnet object.
  */
 
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
-import { renderRoutes } from 'react-router-config';
-import StyleContext from 'isomorphic-style-loader/StyleContext';
-import Routes from './Routes';
 import history from '../helpers/history';
 import registerServiceWorker from './registerServiceWorker';
 import runtime from 'serviceworker-webpack-plugin/lib/runtime';
 
-import configureStore from './configureStore';
+import client from './index';
 import { messaging } from './utils/firebase';
 import { receivedNewNotification } from './components/Notifications/actions';
 
-/**
- * [initialState initial state for the App]
- * @type {Object}
- */
-const initialState = window.__INITIAL_STATE__;
-
-delete window.__INITIAL_STATE__;
-
-/**
- * [history instantiate a history object containing the browser history
- *  used to push & pop pages using react-router]
- * @type {[type]}
- */
-
-/**
- * [store contains the redux store for the app]
- * @type {[type]}
- */
-const store = configureStore(initialState, history);
 /**
  * Dispatch actions on message is received
  */
 messaging.onMessage((payload) => {
   // console.log('Message', payload);
-  store.dispatch(receivedNewNotification(payload));
+  client.store.dispatch(receivedNewNotification(payload));
 });
 
 const removeDimmer = () => {
@@ -63,11 +40,6 @@ const removeDimmer = () => {
   }, delay);
 };
 
-const insertCss = (...styles) => {
-  const removeCss = styles.map(style => style._insertCss());
-  return () => removeCss.forEach(dispose => dispose());
-};
-
 /**
  * [ROOT_NODE is the document reference where the app should be mounted]
  * @type {[type]}
@@ -76,13 +48,7 @@ const ROOT_NODE = document.getElementById('root');
 
 // Render the app to the specified mount point
 ReactDOM.hydrate(
-  <StyleContext.Provider value={{ insertCss }}>
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <div>{renderRoutes(Routes)}</div>
-      </ConnectedRouter>
-    </Provider>
-  </StyleContext.Provider>,
+  <client.Component />,
   ROOT_NODE,
   // removeDimmer,
 );

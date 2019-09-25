@@ -52,9 +52,6 @@ class SpamReportView(APIView):
             return HttpResponseBadRequest("Bad request: uuid is not specified")
 
         classifier = Classifier.get(uuid, DB)
-        if classifier is None:
-            classifier = Classifier(0, [])
-            classifier.save(uuid, DB)
 
         user_id = str(request.user)
 

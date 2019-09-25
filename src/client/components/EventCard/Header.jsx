@@ -17,23 +17,24 @@ const EventHeader = (props) => {
   const reporters = Object.keys(reportedBy).map(k => reportedBy[k]);
 
   return (
-    <Feed style={eventStyles.header}>
+    <Feed style={eventStyles.header} data-test="component-header">
       <Feed.Event>
         <Feed.Label>
           <Image
             src={reporters[0].photoURL || `${STATIC_IMAGES}/meerkat.svg`}
+            data-test="component-image"
           />
         </Feed.Label>
         <Feed.Content>
-          <Feed.Date>
+          <Feed.Date data-test="component-feed-date">
             {calcAge(props.dateTime)}
           </Feed.Date>
           <Feed.Summary>
-            <p>{reporters[0].displayName } reported an incident</p>
+            <p data-test="jsx-feed-summary-inner-p">{reporters[0].displayName } reported an incident</p>
           </Feed.Summary>
           <br />
           {props.reverse_geocode ?
-            <div>
+            <div data-test="jsx-rev-geocode">
               {props.reverse_geocode.name ?
                 <Label as="a" basic color="purple">
                   {props.reverse_geocode.name}
