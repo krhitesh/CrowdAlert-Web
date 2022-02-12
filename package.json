@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "ajv": "6.4.0",
+    "ajv": "6.12.3",
     "aphrodite": "^2.2.2",
     "axios": "0.16.2",
     "babel-cli": "6.26.0",
